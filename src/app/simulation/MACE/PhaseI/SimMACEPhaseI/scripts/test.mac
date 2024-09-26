@@ -1,7 +1,9 @@
 /control/verbose 0
 /run/verbose 0
 
-/MACE/Physics/UseOpticalPhysics
+/MACE/Physics/UseRadioactiveDecayPhysics
+#/MACE/Physics/UseOpticalPhysics
+
 /Mustard/Detector/Description/Import test.yaml
 
 /run/initialize

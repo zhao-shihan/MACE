@@ -6,10 +6,10 @@
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/Collimator.h++"
-#include "MACE/Detector/Description/ECal.h++"
-#include "MACE/Detector/Description/ECalField.h++"
-#include "MACE/Detector/Description/ECalMagnet.h++"
-#include "MACE/Detector/Description/ECalShield.h++"
+#include "MACE/Detector/Description/ECAL.h++"
+#include "MACE/Detector/Description/ECALField.h++"
+#include "MACE/Detector/Description/ECALMagnet.h++"
+#include "MACE/Detector/Description/ECALShield.h++"
 #include "MACE/Detector/Description/FieldOption.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
@@ -23,6 +23,7 @@
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/Vacuum.h++"
 #include "MACE/Detector/Description/World.h++"
+#include "MACE/SimMACE/Messenger/PhysicsMessenger.h++"
 #include "MACE/Simulation/Messenger/NumericMessenger.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
@@ -49,6 +50,8 @@ public:
     auto MinDriverStep(double val) -> void { fMinDriverStep = val; }
     auto DeltaChord(double val) -> void { fDeltaChord = val; }
 
+    auto ApplyProductionCutNearTarget(bool apply) const -> void;
+
     auto Construct() -> G4VPhysicalVolume* override;
 
 public:
@@ -58,10 +61,10 @@ public:
                    Detector::Description::BeamDegrader,
                    Detector::Description::BeamMonitor,
                    Detector::Description::Collimator,
-                   Detector::Description::ECal,
-                   Detector::Description::ECalField,
-                   Detector::Description::ECalMagnet,
-                   Detector::Description::ECalShield,
+                   Detector::Description::ECAL,
+                   Detector::Description::ECALField,
+                   Detector::Description::ECALMagnet,
+                   Detector::Description::ECALShield,
                    Detector::Description::MCP,
                    Detector::Description::MCPChamber,
                    Detector::Description::ShieldingWall,
@@ -78,6 +81,7 @@ private:
 
     std::unique_ptr<Mustard::Detector::Definition::DefinitionBase> fWorld;
 
+    PhysicsMessenger::Register<DetectorConstruction> fPhysicsMessengerRegister;
     NumericMessenger<DetectorConstruction>::Register<DetectorConstruction> fNumericMessengerRegister;
 };
 

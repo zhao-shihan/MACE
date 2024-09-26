@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/SimMACE/Messenger/PhysicsListMessenger.h++"
+#include "MACE/SimMACE/Messenger/PhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
@@ -17,14 +17,19 @@ class PhysicsList final : public Mustard::Env::Memory::PassiveSingleton<PhysicsL
 public:
     PhysicsList();
 
-    auto ApplyMACEPxyCut(bool apply) -> void;
+    auto MACECutMaxLowerPositronEk() const -> auto { return fMACECutMaxLowerPositronEk; }
+    auto MACECutMaxLowerPositronEk(double val) -> void { fMACECutMaxLowerPositronEk = val; }
+
+    auto ApplyMACECut(bool apply) -> void;
 
 private:
     template<std::derived_from<G4VDecayChannel> C, std::derived_from<G4ParticleDefinition> P>
-    auto FindIPPDecayChannel(const P* particle) -> C&;
+    auto FindICDecayChannel(const P* particle) -> C&;
 
 private:
-    PhysicsListMessenger::Register<PhysicsList> fMessengerRegister;
+    double fMACECutMaxLowerPositronEk; // for mu+ and M IC decay
+
+    PhysicsMessenger::Register<PhysicsList> fMessengerRegister;
 };
 
 } // namespace MACE::SimMACE

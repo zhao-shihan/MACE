@@ -229,13 +229,15 @@ auto CDC::CalculateCellMap() const -> std::vector<CellInformation> {
                                        (stereoRotation * Eigen::Vector3d{0, 0, 1}),
                                    senseWireHalfLength,
                                    cell.centerAzimuth}); // clang-format on
-                // const auto& x0{cellMap.back().position};
-                // const auto& t0{cellMap.back().direction};
-                // const auto oldCoutPrecision = std::cout.precision(std::numeric_limits<double>::max_digits10);
-                // std::cout << cell.cellID << '\t' << x0.x() << '\t' << x0.y() << '\t' << t0.x() << '\t' << t0.y() << '\t' << t0.z() << '\t' << 2 * senseWireHalfLength << std::endl;
-                // std::cout.precision(oldCoutPrecision);
+                /* const auto& x0{cellMap.back().position};
+                const auto& t0{cellMap.back().direction};
+                const auto oldCoutPrecision{std::cout.precision(std::numeric_limits<double>::max_digits10)};
+                std::cout << cell.cellID << ',' << x0.x() << ',' << x0.y() << ',' << t0.x() << ',' << t0.y() << ',' << t0.z() << ',' << 2 * senseWireHalfLength << ',' << '\n';
+                std::cout.precision(oldCoutPrecision); */
                 ++cellLocalID;
             }
+            /* fmt::println("{},{},{},{},{},{},{},{},{}",
+                         superLayerID, sense.senseLayerID, sense.cell.front().cellID, sense.cell.back().cellID, muc::midpoint(sense.innerRadius, sense.outerRadius) + fFieldWireDiameter / 2, sense.stereoAzimuthAngle, sense.cell.front().centerAzimuth, sense.cellWidth, 2 * sense.halfLength); */
             ++senseLayerLocalID;
         }
         ++superLayerID;

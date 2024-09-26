@@ -247,8 +247,8 @@ Target::MultiLayerTarget::MultiLayerTarget() :
 
 Target::MultiLayerTarget::PerforatedMultiLayer::PerforatedMultiLayer() :
     DetailBase{},
-    fHalfExtentZ{5_cm / 2},
-    fHalfExtentY{4_cm / 2},
+    fHalfExtentZ{6_cm / 2},
+    fHalfExtentY{5_cm / 2},
     fSpacing{55_um},
     fRadius{184_um / 2} {}
 

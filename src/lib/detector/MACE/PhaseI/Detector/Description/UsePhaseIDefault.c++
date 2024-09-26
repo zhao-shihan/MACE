@@ -1,5 +1,5 @@
 #include "MACE/Detector/Description/Accelerator.h++"
-#include "MACE/Detector/Description/ECal.h++"
+#include "MACE/Detector/Description/ECAL.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/PhaseI/Detector/Description/UsePhaseIDefault.h++"
 
@@ -12,17 +12,18 @@ auto UsePhaseIDefault() -> void {
     namespace MACE = MACE::Detector::Description;
     { // set accelerator up/downstream length to a random equal value
         auto& accelerator{MACE::Accelerator::Instance()};
-        accelerator.UpstreamLength(2);
-        accelerator.DownstreamLength(2);
+        accelerator.MaxPotentialPosition(0);
+        accelerator.AccelerateFieldLength(2);
+        accelerator.DecelerateFieldLength(2);
     }
     { // Use cylinder target
         auto& target{MACE::Target::Instance()};
         target.ShapeType(MACE::Target::TargetShapeType::Cylinder);
     }
-    { // bigger windows for ECal
-        auto& eCal{MACE::ECal::Instance()};
-        eCal.UpstreamWindowRadius(100_mm);
-        eCal.DownstreamWindowRadius(100_mm);
+    { // bigger windows for ECAL
+        auto& ecal{MACE::ECAL::Instance()};
+        ecal.UpstreamWindowRadius(100_mm);
+        ecal.DownstreamWindowRadius(100_mm);
     }
 }
 

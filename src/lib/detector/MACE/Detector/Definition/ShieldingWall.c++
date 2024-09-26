@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/ShieldingWall.h++"
-#include "MACE/Detector/Description/ECalField.h++"
-#include "MACE/Detector/Description/ECalShield.h++"
+#include "MACE/Detector/Description/ECALField.h++"
+#include "MACE/Detector/Description/ECALShield.h++"
 #include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
@@ -35,13 +35,13 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
     const auto& world{Description::World::Instance()};
     const auto& solenoid{Description::Solenoid::Instance()};
     const auto& mmsShield{Description::MMSShield::Instance()};
-    const auto& eCalField{Description::ECalField::Instance()};
-    const auto& eCalShield{Description::ECalShield::Instance()};
+    const auto& ecalField{Description::ECALField::Instance()};
+    const auto& ecalShield{Description::ECALShield::Instance()};
 
     const G4ThreeVector mmsShieldCorner{mmsShield.InnerRadius() + mmsShield.Thickness(), 0, mmsShield.InnerLength() / 2 + mmsShield.Thickness()}; // clang-format off
-    const auto eCalShieldCorner{Mustard::VectorCast<G4ThreeVector>(eCalField.Center()) + 
-                               G4ThreeVector{-eCalShield.InnerRadius() - eCalShield.Thickness(), 0 , -eCalShield.InnerLength() / 2 - eCalShield.Thickness()}}; // clang-format on
-    const auto wall1Displacement{muc::midpoint(mmsShieldCorner, eCalShieldCorner)};
+    const auto ecalShieldCorner{Mustard::VectorCast<G4ThreeVector>(ecalField.Center()) + 
+                               G4ThreeVector{-ecalShield.InnerRadius() - ecalShield.Thickness(), 0 , -ecalShield.InnerLength() / 2 - ecalShield.Thickness()}}; // clang-format on
+    const auto wall1Displacement{muc::midpoint(mmsShieldCorner, ecalShieldCorner)};
 
     const auto concrete{G4NistManager::Instance()->FindOrBuildMaterial("G4_CONCRETE")};
 

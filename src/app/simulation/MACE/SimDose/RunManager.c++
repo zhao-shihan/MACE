@@ -5,11 +5,12 @@
 #include "MACE/SimDose/RunManager.h++"
 
 #include "Mustard/Env/BasicEnv.h++"
-#include "Mustard/Extension/Geant4X/Physics/MuonPrecisionDecayPhysics.h++"
+#include "Mustard/Extension/Geant4X/Physics/MuonNLODecayPhysics.h++"
+#include "Mustard/Extension/Geant4X/Physics/MuoniumNLODecayPhysics.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPhysics.h++"
-#include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
+#include "G4RadioactiveDecayPhysics.hh"
 #include "G4SpinDecayPhysics.hh"
 #include "G4StepLimiterPhysics.hh"
 #include "G4VModularPhysicsList.hh"
@@ -26,12 +27,13 @@ RunManager::RunManager(Mustard::Env::CLI::Geant4ReferencePhysicsListModule<"QBBC
     const auto verboseLevel{muc::to_underlying(Mustard::Env::BasicEnv::Instance().VerboseLevel())};
 
     const auto physicsList{cli.PhysicsList()};
+    // Radioactivity
+    physicsList->RegisterPhysics(new G4RadioactiveDecayPhysics{verboseLevel});
     // Muonium physics
     physicsList->RegisterPhysics(new Mustard::Geant4X::MuoniumPhysics<Detector::Description::Target>{verboseLevel});
     // HP decay for muon and muonium
-    physicsList->ReplacePhysics(new G4SpinDecayPhysics{verboseLevel});
-    physicsList->RegisterPhysics(new Mustard::Geant4X::MuonPrecisionDecayPhysics{verboseLevel});
-    physicsList->RegisterPhysics(new Mustard::Geant4X::MuoniumPrecisionDecayPhysics{verboseLevel});
+    physicsList->RegisterPhysics(new Mustard::Geant4X::MuonNLODecayPhysics{verboseLevel});
+    physicsList->RegisterPhysics(new Mustard::Geant4X::MuoniumNLODecayPhysics{verboseLevel});
     // Step limit
     physicsList->ReplacePhysics(new G4StepLimiterPhysics);
     SetUserInitialization(physicsList);

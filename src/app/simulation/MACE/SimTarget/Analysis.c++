@@ -7,6 +7,7 @@
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -74,8 +75,8 @@ auto Analysis::OpenResultFile() -> void {
     fResultFile = TFile::Open(fullFilePath.c_str(), fFileMode.c_str(),
                               "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fResultFile == nullptr) {
-        throw std::runtime_error{fmt::format("MACE::SimTarget::Analysis::OpenResultFile: Cannot open file '{}' with mode '{}'",
-                                             fullFilePath, fFileMode)};
+        throw std::runtime_error{Mustard::PrettyException(fmt::format("Cannot open file '{}' with mode '{}'",
+                                                                      fullFilePath, fFileMode))};
     }
     if (Mustard::Env::MPIEnv::Instance().OnCommWorldMaster()) {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimTarget_gdml", "SimTarget.gdml")->Write();
@@ -104,7 +105,7 @@ auto Analysis::OpenYieldFile() -> void {
 auto Analysis::AnalysisAndWriteYield() -> void {
     std::array<unsigned long long, 5> yieldData;
     auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay]{yieldData};
-    nMuon = static_cast<unsigned long long>(PrimaryGeneratorAction::Instance().NParticlePerEvent()) *
+    nMuon = static_cast<unsigned long long>(PrimaryGeneratorAction::Instance().NVertex()) *
             static_cast<unsigned long long>(fThisRun->GetNumberOfEvent());
     nFormed = fMuoniumTrack.size();
     nTargetDecay = 0;

@@ -24,11 +24,13 @@
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    1
 
+/MACE/Physics/ApplyProductionCutNearTarget                         yes
+
 /MACE/Analysis/SavePrimaryVertexData  yes
 /MACE/Analysis/SaveDecayVertexData    yes
 /MACE/Analysis/CoincidenceWithMMS     yes
 /MACE/Analysis/CoincidenceWithMCP     yes
-/MACE/Analysis/CoincidenceWithECal    yes
+/MACE/Analysis/CoincidenceWithECAL    yes
 /MACE/Analysis/SaveTTCHitData         yes
 /MACE/Analysis/SaveCDCHitData         yes
 

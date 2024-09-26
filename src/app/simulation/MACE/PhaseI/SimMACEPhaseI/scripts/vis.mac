@@ -6,6 +6,7 @@
 /control/saveHistory
 /run/verbose 2
 
+#/MACE/Physics/UseRadioactiveDecayPhysics
 #/MACE/Physics/UseOpticalPhysics
 
 #/Mustard/Detector/Description/Import SimMACEPhaseI_geom.yaml
@@ -13,15 +14,9 @@
 /run/initialize
 
 /MACE/Generator/SwitchToGPSX
-#/gps/particle gamma
-#/gps/ene/mono 53.085 MeV
-#/gps/pos/centre 0. 0. 0. cm
-#/gps/direction 0 0.370438 -0.599382
-#/gps/ang/type iso
-
 /gps/particle             mu+
 /gps/direction            0 0 1        # 0 deg
-/gps/pos/centre           0 0 -50 cm     # 0 deg
+/gps/pos/centre           0 0 -50 cm   # 0 deg
 /gps/pos/type             Beam
 /gps/pos/shape            Circle
 /gps/pos/radius           0 mm
@@ -32,8 +27,10 @@
 /GPSX/NVertex             1
 /GPSX/PulseWidth          0 ns
 
-/Mustard/Physics/MuoniumDecay/AnnihilationDecay/BR 1
-/Mustard/Physics/MuoniumDecay/M2eeDecay/BR 0
+/Mustard/Physics/MuonDecay/RadiativeDecay/BR 0
+/Mustard/Physics/MuonDecay/ICDecay/BR 0
+/Mustard/Physics/MuoniumDecay/DoubleRadiativeDecay/BR 0
+/Mustard/Physics/MuoniumDecay/ElectronPairDecay/BR 1
 /Mustard/Physics/MuoniumDecay/UpdateDecayBR
 
 /MACE/Analysis/FilePath SimMACEPhaseI_vis
@@ -63,13 +60,15 @@
 # Visibility
 /vis/geometry/set/visibility CentralBeamPipeVacuum     0 no
 /vis/geometry/set/visibility World                     0 no
+/vis/geometry/set/visibility ECALPMTCathode        0 no
+/vis/geometry/set/visibility ECALPMTCoupler        0 no
 
 # Colors
 /vis/geometry/set/colour CentralBeamPipe               0     1     1     1     0.1
-/vis/geometry/set/colour ECalCrystal                   0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTCathode                0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTCoupler                0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTShell                  0     1     1     1     0.1
+/vis/geometry/set/colour ECALCrystal                   0     1     1     1     0.1
+/vis/geometry/set/colour ECALPMTCathode                0     1     1     1     0.1
+/vis/geometry/set/colour ECALPMTCoupler                0     1     1     1     0.1
+/vis/geometry/set/colour ECALPMTShell                  0     1     1     1     0.1
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 
 /vis/scene/add/date

@@ -9,6 +9,7 @@
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
 #include "Mustard/Utility/MPIReseedRandomEngine.h++"
 #include "Mustard/Utility/MakeTextTMacro.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
 
 #include "TFile.h"
@@ -40,7 +41,9 @@ auto main(int argc, char* argv[]) -> int {
 
     const auto outputName{Mustard::MPIX::ParallelizePath(cli.OutputFilePath()).replace_extension(".root").generic_string()};
     TFile file{outputName.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
-    if (not file.IsOpen()) { throw std::runtime_error{fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode())}; }
+    if (not file.IsOpen()) {
+        throw std::runtime_error{Mustard::PrettyException(fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode()))};
+    }
     do {
         if (env.OnCommNodeWorker()) { break; }
         std::stringstream smearingConfigText;
@@ -58,7 +61,7 @@ auto main(int argc, char* argv[]) -> int {
         AppendConfigText("TTCSimHit", cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
         AppendConfigText("MMSSimTrack", cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
         AppendConfigText("MCPSimHit", cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
-        AppendConfigText("ECalSimHit", cli.ECalSimHitSmearingConfig(), cli.ECalSimHitIdentity());
+        AppendConfigText("ECALSimHit", cli.ECALSimHitSmearingConfig(), cli.ECALSimHitIdentity());
         Mustard::MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
     } while (false);
     {
@@ -82,7 +85,7 @@ auto main(int argc, char* argv[]) -> int {
         Smear(std::type_identity<Data::TTCSimHit>{}, cli.TTCSimHitNameFormat(), cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
         Smear(std::type_identity<Data::MMSSimTrack>{}, cli.MMSSimTrackNameFormat(), cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
         Smear(std::type_identity<Data::MCPSimHit>{}, cli.MCPSimHitNameFormat(), cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
-        Smear(std::type_identity<Data::ECalSimHit>{}, cli.ECalSimHitNameFormat(), cli.ECalSimHitSmearingConfig(), cli.ECalSimHitIdentity());
+        Smear(std::type_identity<Data::ECALSimHit>{}, cli.ECALSimHitNameFormat(), cli.ECALSimHitSmearingConfig(), cli.ECALSimHitIdentity());
     }
 
     return EXIT_SUCCESS;

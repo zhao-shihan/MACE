@@ -20,8 +20,8 @@
 class TFile;
 
 namespace MACE::inline Simulation::inline Hit {
-class ECalHit;
-class ECalPMTHit;
+class ECALHit;
+class ECALPMTHit;
 } // namespace MACE::inline Simulation::inline Hit
 
 namespace MACE::PhaseI::SimMACEPhaseI {
@@ -32,14 +32,14 @@ public:
 
     auto FilePath(std::filesystem::path path) -> void { fFilePath = std::move(path); }
     auto FileMode(std::string mode) -> void { fFileMode = std::move(mode); }
-    auto CoincidenceWithECal(G4bool val) -> void { fCoincidenceWithECal = val; }
+    auto CoincidenceWithECAL(G4bool val) -> void { fCoincidenceWithECAL = val; }
 
     auto RunBegin(G4int runID) -> void;
 
     auto SubmitPrimaryVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>& data) -> void { fPrimaryVertex = &data; }
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
-    auto SubmitECalHC(const std::vector<gsl::owner<ECalHit*>>& hc) -> void { fECalHit = &hc; }
-    auto SubmitECalPMTHC(const std::vector<gsl::owner<ECalPMTHit*>>& hc) -> void { fECalPMTHit = &hc; }
+    auto SubmitECALHC(const std::vector<gsl::owner<ECALHit*>>& hc) -> void { fECALHit = &hc; }
+    auto SubmitECALPMTHC(const std::vector<gsl::owner<ECALPMTHit*>>& hc) -> void { fECALPMTHit = &hc; }
     auto EventEnd() -> void;
 
     auto RunEnd(Option_t* option = {}) -> void;
@@ -47,20 +47,20 @@ public:
 private:
     std::filesystem::path fFilePath;
     std::string fFileMode;
-    G4bool fCoincidenceWithECal;
+    G4bool fCoincidenceWithECAL;
 
     std::filesystem::path fLastUsedFullFilePath;
 
     gsl::owner<TFile*> fFile;
     std::optional<Mustard::Data::Output<Data::SimPrimaryVertex>> fPrimaryVertexOutput;
     std::optional<Mustard::Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
-    std::optional<Mustard::Data::Output<Data::ECalSimHit>> fECalSimHitOutput;
-    std::optional<Mustard::Data::Output<Data::ECalPMTHit>> fECalPMTHitOutput;
+    std::optional<Mustard::Data::Output<Data::ECALSimHit>> fECALSimHitOutput;
+    std::optional<Mustard::Data::Output<Data::ECALPMTHit>> fECALPMTHitOutput;
 
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>* fPrimaryVertex;
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
-    const std::vector<gsl::owner<ECalHit*>>* fECalHit;
-    const std::vector<gsl::owner<ECalPMTHit*>>* fECalPMTHit;
+    const std::vector<gsl::owner<ECALHit*>>* fECALHit;
+    const std::vector<gsl::owner<ECALPMTHit*>>* fECALPMTHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

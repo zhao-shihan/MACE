@@ -10,7 +10,7 @@ namespace MACE::SimTarget::inline Action {
 class PrimaryGeneratorAction final : public Mustard::Env::Memory::PassiveSingleton<PrimaryGeneratorAction>,
                                      public G4VUserPrimaryGeneratorAction {
 public:
-    auto NParticlePerEvent() const -> auto { return fGPSX.GetNumberOfParticles(); }
+    auto NVertex() const -> auto { return fGPSX.NVertex(); }
 
     auto GeneratePrimaries(G4Event* event) -> void override { fGPSX.GeneratePrimaryVertex(event); }
 

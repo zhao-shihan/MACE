@@ -22,20 +22,22 @@
 /GPSX/NVertex             10
 /GPSX/PulseWidth          1.5 us
 
-/Mustard/Physics/MuonDecay/IPPDecay/BR                   1
-/Mustard/Physics/MuonDecay/IPPDecay/MetropolisDelta      0.0025
-/Mustard/Physics/MuonDecay/IPPDecay/MetropolisDiscard    10
-/MACE/Physics/MuonDecay/IPPDecay/ApplyMACEPxyCut         yes
+/Mustard/Physics/MuonDecay/ICDecay/BR                   1
+/Mustard/Physics/MuonDecay/ICDecay/MetropolisDelta      0.0025
+/Mustard/Physics/MuonDecay/ICDecay/MetropolisDiscard    10
+/MACE/Physics/MuonDecay/ICDecay/ApplyMACECut            yes
 /Mustard/Physics/MuonDecay/RadiativeDecay/BR             0
 /Mustard/Physics/MuonDecay/UpdateDecayBR
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
+/MACE/Physics/ApplyProductionCutNearTarget                         yes
+
 /MACE/Analysis/SavePrimaryVertexData  yes
 /MACE/Analysis/SaveDecayVertexData    yes
 /MACE/Analysis/CoincidenceWithMMS     yes
 /MACE/Analysis/CoincidenceWithMCP     yes
-/MACE/Analysis/CoincidenceWithECal    yes
+/MACE/Analysis/CoincidenceWithECAL    yes
 /MACE/Analysis/SaveTTCHitData         yes
 /MACE/Analysis/SaveCDCHitData         yes
 

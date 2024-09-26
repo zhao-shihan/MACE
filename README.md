@@ -1,7 +1,5 @@
 # MACE
 
-<img align="right" src="document/picture/MACE_logo_100x100.png"/>
-
 - [MACE](#mace)
   - [Pre-built binaries](#pre-built-binaries)
   - [Dependencies](#dependencies)
@@ -9,7 +7,7 @@
     - [Libraries](#libraries)
   - [Cite](#cite)
 
-![SimMACE](document/picture/SimMACE_20240315.png)
+![MACE](document/picture/MACE_logo_v2.svg)
 
 ## Pre-built binaries
 
@@ -30,7 +28,7 @@ For more information, please check out [the image repository homepage](https://g
 
 Required:
 
-1. [Mustard (A modern, distributed offline software framework for HEP experiments)](https://github.com/zhao-shihan/Mustard) (≥ 0.2.0, built-in if not found)
+1. [Mustard (A modern, distributed offline software framework for HEP experiments)](https://github.com/zhao-shihan/Mustard) (≥ 0.8.0, built-in if not found)
 
 Required, built-in if not found (network or pre-downloaded source is required):
 

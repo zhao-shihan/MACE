@@ -23,7 +23,7 @@ auto SteppingAction::UserSteppingAction(const G4Step* step) -> void {
     if (fKillIrrelevants) {
         const auto particle = step->GetTrack()->GetParticleDefinition();
         if (particle != fMuonPlus and particle != fMuonium and particle != fAntimuonium) {
-            step->GetTrack()->SetTrackStatus(fStopAndKill);
+            step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
         }
     }
 }
