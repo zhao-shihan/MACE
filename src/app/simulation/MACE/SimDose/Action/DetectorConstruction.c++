@@ -11,7 +11,7 @@
 #include "MACE/Detector/Definition/ECALCrystal.h++"
 #include "MACE/Detector/Definition/ECALField.h++"
 #include "MACE/Detector/Definition/ECALMagnet.h++"
-#include "MACE/Detector/Definition/ECALPMTAssemblies.h++"
+#include "MACE/Detector/Definition/ECALPhotoSensor.h++"
 #include "MACE/Detector/Definition/ECALShield.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
@@ -125,7 +125,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& ecalCrystal{ecalField.NewDaughter<Detector::Definition::ECALCrystal>(fCheckOverlap)};
     auto& ecalMagnet{ecalField.NewDaughter<Detector::Definition::ECALMagnet>(fCheckOverlap)};
-    auto& ecalPMTAssemblies{ecalField.NewDaughter<Detector::Definition::ECALPMTAssemblies>(fCheckOverlap)};
+    auto& ecalPhotoSensor{ecalField.NewDaughter<Detector::Definition::ECALPhotoSensor>(fCheckOverlap)};
     auto& mcpChamber{ecalField.NewDaughter<Detector::Definition::MCPChamber>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};

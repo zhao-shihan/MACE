@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class ECalPhotoSensor final : public Mustard::Detector::Definition::DefinitionBase {
+class ECALPhotoSensor final : public Mustard::Detector::Definition::DefinitionBase {
 private:
     auto Construct(bool checkOverlaps) -> void override;
     

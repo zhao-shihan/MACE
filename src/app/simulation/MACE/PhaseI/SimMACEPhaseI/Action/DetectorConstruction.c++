@@ -1,5 +1,5 @@
 #include "MACE/Detector/Definition/ECALCrystal.h++"
-#include "MACE/Detector/Definition/ECALPMTAssemblies.h++"
+#include "MACE/Detector/Definition/ECALPhotoSensor.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Description/ECAL.h++"
 #include "MACE/PhaseI/Detector/Definition/CentralBeamPipe.h++"
@@ -49,7 +49,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     fWorld = std::make_unique<PhaseI::World>();
     auto& ecalCrystal{fWorld->NewDaughter<ECALCrystal>(fCheckOverlap)};
-    auto& ecalPMTAssemblies{fWorld->NewDaughter<ECALPMTAssemblies>(fCheckOverlap)};
+    auto& ecalPhotoSensor{fWorld->NewDaughter<ECALPhotoSensor>(fCheckOverlap)};
     auto& centralBeamPipe{fWorld->NewDaughter<PhaseI::CentralBeamPipe>(fCheckOverlap)};
 
     auto& target{centralBeamPipe.NewDaughter<Target>(fCheckOverlap)};
@@ -71,7 +71,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     const auto& ecalName{MACE::Detector::Description::ECAL::Instance().Name()};
 
     fECALPMTSD = new SD::ECALPMTSD{ecalName + "PMT"};
-    ecalPMTAssemblies.RegisterSD("ECALPMTCathode", fECALPMTSD);
+    ecalPhotoSensor.RegisterSD("ECALPMTCathode", fECALPMTSD);
 
     fECALSD = new SD::ECALSD{ecalName, fECALPMTSD};
     ecalCrystal.RegisterSD(fECALSD);

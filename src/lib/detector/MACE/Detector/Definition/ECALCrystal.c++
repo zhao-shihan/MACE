@@ -1,5 +1,5 @@
 #include "MACE/Detector/Definition/ECALCrystal.h++"
-#include "MACE/Detector/Definition/ECALPMTAssemblies.h++"
+#include "MACE/Detector/Definition/ECALPhotoSensor.h++"
 #include "MACE/Detector/Description/ECAL.h++"
 
 #include "Mustard/Detector/Definition/DefinitionBase.h++"
@@ -219,7 +219,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
         new G4LogicalBorderSurface{"airPaintSurface", Mother().PhysicalVolume(), physicalCrystal, airPaintSurface};
         airPaintSurface->SetMaterialPropertiesTable(airPaintSurfacePropertiesTable);
 
-        const auto ecalPMTCoupler{FindSibling<ECALPMTAssemblies>()};
+        const auto ecalPMTCoupler{FindSibling<ECALPhotoSensor>()};
         if (ecalPMTCoupler) {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",

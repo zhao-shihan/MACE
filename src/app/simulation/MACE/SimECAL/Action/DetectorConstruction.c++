@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/ECALCrystal.h++"
-#include "MACE/Detector/Definition/ECALMPPC.h++"
-#include "MACE/Detector/Definition/ECALPMTAssemblies.h++"
+#include "MACE/Detector/Definition/ECALPhotoSensor.h++"
+#include "MACE/Detector/Definition/ECALPhotoSensor.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/World.h++"
@@ -49,7 +49,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     fWorld = std::make_unique<World>();
     auto& ecalCrystal{fWorld->NewDaughter<ECALCrystal>(fCheckOverlap)};
-    auto& ecalPMTAssemblies{fWorld->NewDaughter<ECALPMTAssemblies>(fCheckOverlap)};
+    auto& ecalPhotoSensor{fWorld->NewDaughter<ECALPhotoSensor>(fCheckOverlap)};
     auto& mcpChamber{fWorld->NewDaughter<MCPChamber>(fCheckOverlap)};
 
     auto& ecalMagnet = fWorld->NewDaughter<SimECAL::Detector::ECALMagnet>(fCheckOverlap);
@@ -65,11 +65,11 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // const auto shieldRegion{new G4Region{"Shield"}};
     // shieldRegion->SetProductionCuts(shieldRegionCut);
 
-    ecalShield.RegisterRegion(shieldRegion);
+    // ecalShield.RegisterRegion(shieldRegion);
 
     const auto& ecalName{MACE::Detector::Description::ECAL::Instance().Name()};
     const auto ecalPMTSD{new SD::ECALPMTSD{ecalName + "PMT"}};
-    ecalPMTAssemblies.RegisterSD("ECALPMTCathode", ecalPMTSD);
+    ecalPhotoSensor.RegisterSD("ECALPMTCathode", ecalPMTSD);
     ecalCrystal.RegisterSD(new SD::ECALSD{ecalName, ecalPMTSD});
 
     // mcp.RegisterSD(new SD::MCPSD{MACE::Detector::Description::MCP::Instance().Name()});
