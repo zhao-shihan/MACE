@@ -1,5 +1,5 @@
 #include "MACE/Data/SimHit.h++"
-#include "MACE/Detector/Description/ECal.h++"
+#include "MACE/Detector/Description/ECAL.h++"
 
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Data/Processor.h++"
@@ -32,9 +32,9 @@ auto main(int argc, char* argv[]) -> int {
     std::string fileName{argv[1]};
     std::string filePath{"../../../simulation/MACE/PhaseI/SimMACEPhaseI/"};
 
-    const auto& eCal{Detector::Description::ECal::Instance()};
-    const auto& faceList{eCal.Mesh().fFaceList};
-    const auto& clusterMap{eCal.Mesh().fClusterMap};
+    const auto& ecal{Detector::Description::ECAL::Instance()};
+    const auto& faceList{ecal.Mesh().fFaceList};
+    const auto& clusterMap{ecal.Mesh().fClusterMap};
 
     std::map<int, CLHEP::Hep3Vector> centroidMap;
 
@@ -48,8 +48,8 @@ auto main(int argc, char* argv[]) -> int {
     Mustard::Data::Output<ECALEnergy> reconEnergy{"G4Run0/ReconECAL"};
 
     Mustard::Data::Processor processor;
-    processor.Process<Data::ECalSimHit>(
-        ROOT::RDataFrame{"G4Run0/ECalSimHit", filePath + fileName}, "EvtID",
+    processor.Process<Data::ECALSimHit>(
+        ROOT::RDataFrame{"G4Run0/ECALSimHit", filePath + fileName}, "EvtID",
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             muc::timsort(event,
@@ -57,7 +57,7 @@ auto main(int argc, char* argv[]) -> int {
                              return Get<"Edep">(*hit1) > Get<"Edep">(*hit2);
                          });
 
-            std::unordered_map<short, std::shared_ptr<Mustard::Data::Tuple<Data::ECalSimHit>>> hitDict;
+            std::unordered_map<short, std::shared_ptr<Mustard::Data::Tuple<Data::ECALSimHit>>> hitDict;
 
             std::vector<short> potentialSeed;
 

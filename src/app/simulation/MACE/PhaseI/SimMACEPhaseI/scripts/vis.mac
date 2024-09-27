@@ -60,15 +60,15 @@
 # Visibility
 /vis/geometry/set/visibility CentralBeamPipeVacuum     0 no
 /vis/geometry/set/visibility World                     0 no
-/vis/geometry/set/visibility ECalPMTCathode        0 no
-/vis/geometry/set/visibility ECalPMTCoupler        0 no
+/vis/geometry/set/visibility ECALPMTCathode        0 no
+/vis/geometry/set/visibility ECALPMTCoupler        0 no
 
 # Colors
 /vis/geometry/set/colour CentralBeamPipe               0     1     1     1     0.1
-/vis/geometry/set/colour ECalCrystal                   0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTCathode                0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTCoupler                0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTShell                  0     1     1     1     0.1
+/vis/geometry/set/colour ECALCrystal                   0     1     1     1     0.1
+/vis/geometry/set/colour ECALPMTCathode                0     1     1     1     0.1
+/vis/geometry/set/colour ECALPMTCoupler                0     1     1     1     0.1
+/vis/geometry/set/colour ECALPMTShell                  0     1     1     1     0.1
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 
 /vis/scene/add/date

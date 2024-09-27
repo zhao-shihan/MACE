@@ -11,11 +11,11 @@ StandardPhysicsListMessenger::StandardPhysicsListMessenger() :
     fUseRadioactiveDecayPhysics{},
     fUseOpticalPhysics{} {
 
-    fUseRadioactiveDecayPhysics = std::make_unique<G4UIcommand>("/MACE/Physics/UseRadioactiveDecayPhysics", this);
+    fUseRadioactiveDecayPhysics = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Physics/UseRadioactiveDecayPhysics", this);
     fUseRadioactiveDecayPhysics->SetGuidance("If set, the G4RadioactiveDecayPhysics will be registered in the physics list.");
     fUseRadioactiveDecayPhysics->AvailableForStates(G4State_PreInit);
 
-    fUseOpticalPhysics = std::make_unique<G4UIcommand>("/MACE/Physics/UseOpticalPhysics", this);
+    fUseOpticalPhysics = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Physics/UseOpticalPhysics", this);
     fUseOpticalPhysics->SetGuidance("If set, the G4OpticalPhysics will be registered in the physics list.");
     fUseOpticalPhysics->AvailableForStates(G4State_PreInit);
 }

@@ -2,9 +2,9 @@
 
 #include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/Collimator.h++"
-#include "MACE/Detector/Description/ECalField.h++"
-#include "MACE/Detector/Description/ECalMagnet.h++"
-#include "MACE/Detector/Description/ECalShield.h++"
+#include "MACE/Detector/Description/ECALField.h++"
+#include "MACE/Detector/Description/ECALMagnet.h++"
+#include "MACE/Detector/Description/ECALShield.h++"
 #include "MACE/Detector/Description/FieldOption.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
 #include "MACE/Detector/Description/MMSBeamPipe.h++"
@@ -54,9 +54,9 @@ public:
                    Detector::Description::VirtualDetectorD,
                    MACE::Detector::Description::Accelerator,
                    MACE::Detector::Description::Collimator,
-                   MACE::Detector::Description::ECalField,
-                   MACE::Detector::Description::ECalMagnet,
-                   MACE::Detector::Description::ECalShield,
+                   MACE::Detector::Description::ECALField,
+                   MACE::Detector::Description::ECALMagnet,
+                   MACE::Detector::Description::ECALShield,
                    MACE::Detector::Description::FieldOption,
                    MACE::Detector::Description::MCPChamber,
                    MACE::Detector::Description::MMSBeamPipe,

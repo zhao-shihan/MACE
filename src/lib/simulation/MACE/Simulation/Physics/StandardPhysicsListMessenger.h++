@@ -22,8 +22,8 @@ public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    std::unique_ptr<G4UIcommand> fUseRadioactiveDecayPhysics;
-    std::unique_ptr<G4UIcommand> fUseOpticalPhysics;
+    std::unique_ptr<G4UIcmdWithoutParameter> fUseRadioactiveDecayPhysics;
+    std::unique_ptr<G4UIcmdWithoutParameter> fUseOpticalPhysics;
 };
 
-} // namespace MACE::PhaseI::SimMACEPhaseI
+} // namespace MACE::inline Simulation::inline Physics

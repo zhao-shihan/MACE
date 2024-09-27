@@ -8,6 +8,7 @@
 #include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "G4DecayTable.hh"
 #include "G4MuonPlus.hh"
@@ -71,9 +72,9 @@ auto PhysicsList::FindICDecayChannel(const P* particle) -> C& {
         }
     }
     if (ippDecay == nullptr) {
-        throw std::logic_error{fmt::format(
-            "MACE::SimMACE::PhysicsList: No decay channel '{}' in particle '{}'",
-            typeid(C).name(), typeid(P).name())};
+        throw std::logic_error{Mustard::PrettyException(fmt::format(
+            "No decay channel '{}' in particle '{}'",
+            typeid(C).name(), typeid(P).name()))};
     }
     return *ippDecay;
 }

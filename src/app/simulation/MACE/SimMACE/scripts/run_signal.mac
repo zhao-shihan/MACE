@@ -30,7 +30,7 @@
 /MACE/Analysis/SaveDecayVertexData    yes
 /MACE/Analysis/CoincidenceWithMMS     yes
 /MACE/Analysis/CoincidenceWithMCP     yes
-/MACE/Analysis/CoincidenceWithECal    yes
+/MACE/Analysis/CoincidenceWithECAL    yes
 /MACE/Analysis/SaveTTCHitData         yes
 /MACE/Analysis/SaveCDCHitData         yes
 

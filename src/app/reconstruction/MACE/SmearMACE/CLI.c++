@@ -89,19 +89,19 @@ CLIModule::CLIModule(argparse::ArgumentParser& argParser) :
         .add_argument("--mcp-hit-name")
         .help("Set dataset name format. Default to 'G4Run{}/MCPSimHit'.");
 
-    auto& eCalHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
-    eCalHitMutexGroup
+    auto& ecalHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
+    ecalHitMutexGroup
         .add_argument("--ecal-hit")
         .nargs(2)
         .append()
-        .help("Smear a simulated ECal hit variable by a smearing expression (e.g. --ecal-hit Edep 'gRandom->Gaus(Edep, 0.041*sqrt(E/0.511))').");
-    eCalHitMutexGroup
+        .help("Smear a simulated ECAL hit variable by a smearing expression (e.g. --ecal-hit Edep 'gRandom->Gaus(Edep, 0.041*sqrt(E/0.511))').");
+    ecalHitMutexGroup
         .add_argument("--ecal-hit-id")
         .flag()
-        .help("Save ECal hit data in output file without smearing.");
+        .help("Save ECAL hit data in output file without smearing.");
     ArgParser()
         .add_argument("--ecal-hit-name")
-        .help("Set dataset name format. Default to 'G4Run{}/ECalSimHit'.");
+        .help("Set dataset name format. Default to 'G4Run{}/ECALSimHit'.");
 }
 
 auto CLIModule::DatasetIndexRange() const -> std::pair<gsl::index, gsl::index> {

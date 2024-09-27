@@ -1,5 +1,5 @@
 #include "MACE/Detector/Definition/MCPChamber.h++"
-#include "MACE/Detector/Description/ECalField.h++"
+#include "MACE/Detector/Description/ECALField.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
 #include "MACE/Detector/Description/SolenoidBeamPipe.h++"
 #include "MACE/Detector/Description/Vacuum.h++"
@@ -26,7 +26,7 @@ using namespace Mustard::LiteralUnit::Temperature;
 auto MCPChamber::Construct(G4bool checkOverlaps) -> void {
     const auto& mcpChamber{Description::MCPChamber::Instance()};
     const auto& beamPipe{Description::SolenoidBeamPipe::Instance()};
-    const auto& eCalField{Description::ECalField::Instance()};
+    const auto& ecalField{Description::ECALField::Instance()};
     const auto& vacuum{Description::Vacuum::Instance()};
 
     const auto nist{G4NistManager::Instance()};
@@ -90,7 +90,7 @@ auto MCPChamber::Construct(G4bool checkOverlaps) -> void {
 
     { // Pipe
         const auto pipeName{mcpChamber.Name() + "Pipe"};
-        const auto halfLength{(eCalField.Length() / 2 - zWeld) / 2};
+        const auto halfLength{(ecalField.Length() / 2 - zWeld) / 2};
         const auto solidPipe{Make<G4Tubs>(
             pipeName,
             0,

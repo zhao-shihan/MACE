@@ -30,8 +30,8 @@ using MCPHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     MCPRawHit>;
 
-using ECalHit = Mustard::Data::TupleModel<
+using ECALHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
-    ECalRawHit>;
+    ECALRawHit>;
 
 } // namespace MACE::Data
