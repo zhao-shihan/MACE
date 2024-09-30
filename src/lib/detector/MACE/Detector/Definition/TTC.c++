@@ -32,7 +32,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     for (int i{}; i < ttc.NAlongZ(); ++i) { // clang-format off
         const auto transform{G4RotateZ3D{Mustard::Math::IsEven(i) ? 0 : deltaPhi / 2} *
                              G4Translate3D{ttc.Radius(), 0, (1 - ttc.NAlongZ()) * ttc.Width() / 2 + i * ttc.Width()} *
-                             G4RotateZ3D{Mustard::Math::IsEven(i) ? ttc.SlantAngle() : -ttc.SlantAngle()}}; // clang-format on
+                             G4RotateZ3D{ttc.SlantAngle()}}; // clang-format on
         for (int j{}; j < ttc.NAlongPhi(); ++j, ++tileID) {
             Make<G4PVPlacement>(
                 G4RotateZ3D{j * deltaPhi} * transform,
