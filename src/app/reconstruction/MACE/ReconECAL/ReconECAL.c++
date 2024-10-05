@@ -63,9 +63,9 @@ auto main(int argc, char* argv[]) -> int {
 
             for (int i{}; auto&& hit : event) {
                 if (i < 3) {
-                    potentialSeed.emplace_back(Get<"UnitID">(*hit));
+                    potentialSeed.emplace_back(Get<"ModID">(*hit));
                 }
-                hitDict.try_emplace(Get<"UnitID">(*hit), hit);
+                hitDict.try_emplace(Get<"ModID">(*hit), hit);
                 i++;
             }
 

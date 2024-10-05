@@ -79,17 +79,17 @@ auto ECALSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& touchable{*preStepPoint.GetTouchable()};
-    const auto unitID{touchable.GetReplicaNumber()};
+    const auto modID{touchable.GetReplicaNumber()};
     // calculate (Ek0, p0)
     const auto vertexEk{track.GetVertexKineticEnergy()};
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
     // new a hit
-    const auto& hit{fSplitHit[unitID].emplace_back(std::make_unique_for_overwrite<ECALHit>())};
+    const auto& hit{fSplitHit[modID].emplace_back(std::make_unique_for_overwrite<ECALHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
-    Get<"UnitID">(*hit) = unitID;
+    Get<"ModID">(*hit) = modID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"nOptPho">(*hit) = -1; // to be determined
@@ -115,14 +115,14 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                 }));
 
     for (int hitID{};
-         auto&& [unitID, splitHit] : fSplitHit) {
+         auto&& [modID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
             muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;
-            assert(Get<"UnitID">(*hit) == unitID);
+            assert(Get<"ModID">(*hit) == modID);
             fHitsCollection->insert(hit.release());
         } break;
         default: {
@@ -153,7 +153,7 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                        })};
                 // construct real hit
                 Get<"HitID">(*topHit) = hitID++;
-                assert(Get<"UnitID">(*topHit) == unitID);
+                assert(Get<"ModID">(*topHit) == modID);
                 for (const auto& hit : cluster) {
                     if (hit == topHit) { continue; }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
@@ -174,7 +174,7 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
     if (fECALPMTSD) {
         auto nHit{fECALPMTSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            Get<"nOptPho">(*hit) = nHit[Get<"UnitID">(*hit)];
+            Get<"nOptPho">(*hit) = nHit[Get<"ModID">(*hit)];
         }
     }
 }
