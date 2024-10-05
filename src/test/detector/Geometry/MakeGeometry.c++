@@ -139,8 +139,9 @@ int main(int argc, char* argv[]) {
     mms.Get<CDCSenseLayer>().RemoveDaughter<CDCCell>(); // ROOT does not support twisted tube.
     fWorld->Export("test_no_cell.gdml");
 
-    const auto geoManager{std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry")};
-    geoManager->Import("test_no_cell.gdml");
+    const auto geoManager{std::unique_ptr<TGeoManager>{TGeoManager::Import("test_no_cell.gdml")}};
+    geoManager->SetNameTitle("MACEGeom", "MACE Geometry");
+    geoManager->SetMaxVisNodes(0);
 
     /* // set transparency for jsroot display
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
