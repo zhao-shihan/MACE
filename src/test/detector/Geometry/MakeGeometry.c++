@@ -1,3 +1,4 @@
+#include "MACE/Detector/Assembly/MMS.h++"
 #include "MACE/Detector/Definition/Accelerator.h++"
 #include "MACE/Detector/Definition/AcceleratorField.h++"
 #include "MACE/Detector/Definition/BeamDegrader.h++"
@@ -71,10 +72,10 @@ int main(int argc, char* argv[]) {
 
     // 1
 
+    MACE::Detector::Assembly::MMS mms{*fWorld, fCheckOverlap};
+
     [[maybe_unused]] auto& ecalField{fWorld->NewDaughter<ECALField>(fCheckOverlap)};
     [[maybe_unused]] auto& ecalShield{fWorld->NewDaughter<ECALShield>(fCheckOverlap)};
-    [[maybe_unused]] auto& mmsField{fWorld->NewDaughter<MMSField>(fCheckOverlap)};
-    [[maybe_unused]] auto& mmsShield{fWorld->NewDaughter<MMSShield>(fCheckOverlap)};
     [[maybe_unused]] auto& shieldingWall{fWorld->NewDaughter<ShieldingWall>(fCheckOverlap)};
     [[maybe_unused]] auto& solenoidFieldS1{fWorld->NewDaughter<SolenoidFieldS1>(fCheckOverlap)};
     [[maybe_unused]] auto& solenoidFieldS2{fWorld->NewDaughter<SolenoidFieldS2>(fCheckOverlap)};
@@ -109,20 +110,13 @@ int main(int argc, char* argv[]) {
     [[maybe_unused]] auto& solenoidShieldT2{solenoidFieldT2.NewDaughter<SolenoidShieldT2>(fCheckOverlap)};
     [[maybe_unused]] auto& solenoidT2{solenoidFieldT2.NewDaughter<SolenoidT2>(fCheckOverlap)};
 
-    [[maybe_unused]] auto& cdcBody{mmsField.NewDaughter<CDCBody>(fCheckOverlap)};
-    [[maybe_unused]] auto& mmsBeamPipe{mmsField.NewDaughter<MMSBeamPipe>(fCheckOverlap)};
-    [[maybe_unused]] auto& mmsMagnet{mmsField.NewDaughter<MMSMagnet>(fCheckOverlap)};
-    [[maybe_unused]] auto& ttc{mmsField.NewDaughter<TTC>(fCheckOverlap)};
-
     // 3
 
     [[maybe_unused]] auto& mcp{mcpChamber.NewDaughter<MCP>(fCheckOverlap)};
 
-    [[maybe_unused]] auto& acceleratorField{mmsBeamPipe.NewDaughter<AcceleratorField>(fCheckOverlap)};
+    [[maybe_unused]] auto& acceleratorField{mms.Get<MMSBeamPipe>().NewDaughter<AcceleratorField>(fCheckOverlap)};
 
     [[maybe_unused]] auto& collimator{solenoidBeamPipeS2.NewDaughter<Collimator>(fCheckOverlap)};
-
-    [[maybe_unused]] auto& cdcGas{cdcBody.NewDaughter<CDCGas>(fCheckOverlap)};
 
     // 4
 
@@ -130,16 +124,6 @@ int main(int argc, char* argv[]) {
     [[maybe_unused]] auto& beamDegrader{acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap)};
     [[maybe_unused]] auto& beamMonitor{acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap)};
     [[maybe_unused]] auto& target{acceleratorField.NewDaughter<Target>(fCheckOverlap)};
-
-    [[maybe_unused]] auto& cdcSuperLayer{cdcGas.NewDaughter<CDCSuperLayer>(fCheckOverlap)};
-
-    // 5
-
-    [[maybe_unused]] auto& cdcSenseLayer{cdcSuperLayer.NewDaughter<CDCSenseLayer>(fCheckOverlap)};
-
-    // 6
-
-    [[maybe_unused]] auto& cdcCell{cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap)};
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,10 +136,10 @@ int main(int argc, char* argv[]) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     fWorld->Export("test.gdml");
-    cdcSenseLayer.RemoveDaughter<CDCCell>(); // ROOT does not support twisted tube.
+    mms.Get<CDCSenseLayer>().RemoveDaughter<CDCCell>(); // ROOT does not support twisted tube.
     fWorld->Export("test_no_cell.gdml");
 
-    auto geoManager = std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry");
+    const auto geoManager{std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry")};
     geoManager->Import("test_no_cell.gdml");
 
     /* // set transparency for jsroot display
