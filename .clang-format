@@ -52,9 +52,9 @@ IncludeCategories:
   - Regex: '"TrackPoint\.h"'
     Priority: 2
   - Regex: '"Randomize\.hh"'
-    Priority: 4
+    Priority: 5
   - Regex: '"globals\.hh"'
-    Priority: 4
+    Priority: 5
   # general
   - Regex: '"MACE/.*\.h.*"'
     Priority: 0
