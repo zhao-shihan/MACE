@@ -129,14 +129,12 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                     return count + cellHit.second.size();
                                 }));
 
-    for (int hitID{};
-         auto&& [cellID, splitHit] : fSplitHit) {
+    for (auto&& [cellID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
             muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
-            Get<"HitID">(*hit) = hitID++;
             assert(Get<"CellID">(*hit) == cellID);
             fHitsCollection->insert(hit.release());
         } break;
@@ -167,7 +165,6 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                        })};
                 // construct real hit
-                Get<"HitID">(*topHit) = hitID++;
                 assert(Get<"CellID">(*topHit) == cellID);
                 auto nTopHit{1};
                 for (const auto& hit : cluster) {
@@ -190,9 +187,13 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
     muc::timsort(*fHitsCollection->GetVector(),
                  [](const auto& hit1, const auto& hit2) {
-                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
-                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                     return std::tie(Get<"TrkID">(*hit1), Get<"tHit">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"tHit">(*hit2));
                  });
+
+    for (int hitID{}; auto&& hit : *fHitsCollection->GetVector()) {
+        Get<"HitID">(*hit) = hitID++;
+    }
 }
 
 } // namespace MACE::inline Simulation::inline SD

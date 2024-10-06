@@ -114,14 +114,12 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                     return count + cellHit.second.size();
                                 }));
 
-    for (int hitID{};
-         auto&& [modID, splitHit] : fSplitHit) {
+    for (auto&& [modID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
             muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
-            Get<"HitID">(*hit) = hitID++;
             assert(Get<"ModID">(*hit) == modID);
             fHitsCollection->insert(hit.release());
         } break;
@@ -152,7 +150,6 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                        })};
                 // construct real hit
-                Get<"HitID">(*topHit) = hitID++;
                 assert(Get<"ModID">(*topHit) == modID);
                 for (const auto& hit : cluster) {
                     if (hit == topHit) { continue; }
@@ -167,9 +164,13 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
     muc::timsort(*fHitsCollection->GetVector(),
                  [](const auto& hit1, const auto& hit2) {
-                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
-                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                     return std::tie(Get<"TrkID">(*hit1), Get<"t">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"t">(*hit2));
                  });
+
+    for (int hitID{}; auto&& hit : *fHitsCollection->GetVector()) {
+        Get<"HitID">(*hit) = hitID++;
+    }
 
     if (fECALPMTSD) {
         auto nHit{fECALPMTSD->NOpticalPhotonHit()};
