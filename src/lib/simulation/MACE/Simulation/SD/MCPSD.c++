@@ -1,7 +1,6 @@
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Simulation/SD/MCPSD.h++"
 
-#include "Mustard/Env/Print.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PrettyLog.h++"
 
@@ -133,7 +132,7 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
             const auto windowClosingTime{tFirst + timeResolutionFWHM};
             if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                 timeResolutionFWHM != 0) [[unlikely]] {
-                Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
+                Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
             }
             cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), fSplitHit.end(),
                                                                [&windowClosingTime](const auto& hit) {
