@@ -98,6 +98,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
 
     for (int moduleID{};
          auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all ECAL face
+
         const auto centroidMagnitude{centroid.mag()};
         const auto crystalLength{crystalHypotenuse * centroidMagnitude};
         const auto outerHypotenuse{innerRadius + crystalHypotenuse};
@@ -219,12 +220,12 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
         new G4LogicalBorderSurface{"airPaintSurface", Mother().PhysicalVolume(), physicalCrystal, airPaintSurface};
         airPaintSurface->SetMaterialPropertiesTable(airPaintSurfacePropertiesTable);
 
-        const auto ecalPMTCoupler{FindSibling<ECALPhotoSensor>()};
-        if (ecalPMTCoupler) {
+        const auto ecalPMCoupler{FindSibling<ECALPhotoSensor>()};
+        if (ecalPMCoupler) {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",
                                        physicalCrystal,
-                                       ecalPMTCoupler->PhysicalVolume("ECALPMTCoupler", moduleID),
+                                       ecalPMCoupler->PhysicalVolume("ECALPMCoupler", moduleID),
                                        couplerSurface};
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }

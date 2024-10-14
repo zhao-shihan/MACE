@@ -8,6 +8,7 @@
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
 
+#include "G4AssemblyVolume.hh"
 #include "G4Box.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
@@ -42,42 +43,8 @@ auto ECALPhotoSensor::Construct(G4bool checkOverlaps) -> void {
 
 auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
 
-    class MPPCParameterisation : public G4VPVParameterisation {
-    public:
-        MPPCParameterisation(G4int nPixelRows, G4double pixelSize, G4double pitch, G4double windowThickness, G4double mppcThickness) :
-            fNPixelRows{nPixelRows},
-            fPitch{pitch},
-            fwindowThickness{windowThickness},
-            fmppcThickness{mppcThickness} {}
-
-        auto ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const -> void override {
-            int rowNum{copyNo / fNPixelRows};
-            int colNum{copyNo % fNPixelRows};
-            // row&col start from 0
-            double xOffSet{(2 * rowNum + 1 - fNPixelRows) * ((fPixelSize + fPitch) / 2)};
-            double yOffset{(2 * colNum + 1 - fNPixelRows) * ((fPixelSize + fPitch) / 2)};
-            double zOffset{(fwindowThickness - fmppcThickness) / 2};
-            physVol->SetTranslation({xOffSet, yOffset, zOffset});
-        }
-
-        auto ComputeDimensions(G4Box& SiPixel, const G4int copyNo, const G4VPhysicalVolume* physVol) const -> void override {
-            SiPixel.SetXHalfLength(fPixelSize / 2);
-            SiPixel.SetYHalfLength(fPixelSize / 2);
-            SiPixel.SetZHalfLength(fmppcThickness / 2);
-        }
-
-    private:
-        G4int fNPixelRows;
-        G4double fPixelSize;
-        G4double fPitch;
-        G4double fwindowThickness;
-        G4double fmppcThickness;
-    };
-
     const auto& ecal{Description::ECAL::Instance()};
     const auto name{ecal.Name()};
-    const auto& faceList{ecal.Mesh().fFaceList};
-    const auto& typeMap{ecal.Mesh().fTypeMap};
 
     const auto mppcNPixelRows{ecal.MPPCNPixelRows()};
     const auto mppcPixelSizeSet{ecal.MPPCPixelSizeSet()};
@@ -140,17 +107,19 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", fEnergyPair, {1, 1});
 
-    const auto mppcSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    mppcSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0., 0.});
-    mppcSurfacePropertiesTable->AddProperty("EFFICIENCY", mppcSurfacePropertiesEnergy, mppcSurfacePropertiesEfficiency);
+    const auto cathodeSurfacePropertiesTable{new G4MaterialPropertiesTable};
+    cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0., 0.});
+    cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", mppcSurfacePropertiesEnergy, mppcSurfacePropertiesEfficiency);
 
     if (Mustard::Env::VerboseLevelReach<'V'>()) {
-        mppcSurfacePropertiesTable->DumpTable();
+        cathodeSurfacePropertiesTable->DumpTable();
     }
 
     /////////////////////////////////////////////
     // Construct Volumes
     /////////////////////////////////////////////
+    const auto& faceList{ecal.Mesh().fFaceList};
+    const auto& typeMap{ecal.Mesh().fTypeMap};
 
     for (int moduleID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all ECAL face
@@ -180,6 +149,22 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
         // change volume window from epoxy to epoxy&silicon Pixels, may change name "window" later
         const auto solidWindow{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcWindowThickness / 2)};
         const auto logicWindow{Make<G4LogicalVolume>(solidWindow, epoxy, "ECALMPPCWindow")};
+
+        const auto solidPixel{Make<G4Box>("temp", mppcPixelSize / 2, mppcPixelSize / 2, mppcThickness / 2)};
+        const auto logicPixel{Make<G4LogicalVolume>(solidPixel, silicon, "ECALPMCathode")};
+        auto assemblyMPPC{new G4AssemblyVolume()};
+        for (int copyNo = 0; copyNo < mppcNPixelRow * mppcNPixelRow; copyNo++) {
+            int rowNum{copyNo / mppcNPixelRow};
+            int colNum{copyNo % mppcNPixelRow};
+            double xOffSet{(2 * rowNum + 1 - mppcNPixelRow) * ((mppcPixelSize + mppcPitch) / 2)};
+            double yOffset{(2 * colNum + 1 - mppcNPixelRow) * ((mppcPixelSize + mppcPitch) / 2)};
+            double zOffset{(mppcWindowThickness - mppcThickness) / 2};
+            G4Transform3D Tr{G4Transform3D(G4RotationMatrix::IDENTITY, G4ThreeVector(xOffSet, yOffset, zOffset))};
+            assemblyMPPC->AddPlacedVolume(logicPixel, Tr);
+        }
+        G4Transform3D transformInWindow{G4Transform3D(G4RotationMatrix::IDENTITY, G4ThreeVector(0, 0, 0))};
+        assemblyMPPC->MakeImprint(logicWindow, transformInWindow);
+
         Make<G4PVPlacement>(windowTransform,
                             logicWindow,
                             "ECALMPPCWindow",
@@ -187,17 +172,6 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
                             true,
                             moduleID,
                             checkOverlaps);
-
-        const auto solidMPPC{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcThickness / 2)};
-        const auto logicMPPC{Make<G4LogicalVolume>(solidMPPC, silicon, "ECALMPPC")};
-        const auto mppcParam{new MPPCParameterisation(mppcNPixelRow, mppcPixelSize, mppcPitch, mppcWindowThickness, mppcThickness)};
-        Make<G4PVParameterised>("SiPixels",
-                                logicMPPC,
-                                logicWindow,
-                                kUndefined,
-                                mppcNPixelRow,
-                                mppcParam,
-                                checkOverlaps);
 
         /////////////////////////////////////////////
         // Construct Optical Surface
@@ -213,15 +187,18 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }
 
-        const auto cathodeSurface{new G4OpticalSurface("MPPC", unified, polished, dielectric_metal)};
-        new G4LogicalSkinSurface{"mppcSkinSurface", logicMPPC, cathodeSurface};
-        cathodeSurface->SetMaterialPropertiesTable(mppcSurfacePropertiesTable);
+        const auto cathodeSurface{new G4OpticalSurface("Cathode", unified, polished, dielectric_metal)};
+        new G4LogicalSkinSurface{"cathodeSkinSurface", logicPixel, cathodeSurface};
+        cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 
         ++moduleID;
     }
-};
+}
+
 auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
+
     const auto& ecal{Description::ECAL::Instance()};
+    const auto name{ecal.Name()};
 
     const auto pmtCouplerThickness{ecal.PMTCouplerThickness()};
     const auto pmtWindowThickness{ecal.PMTWindowThickness()};
@@ -298,14 +275,9 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     const auto& faceList{ecal.Mesh().fFaceList};
     const auto& typeMap{ecal.Mesh().fTypeMap};
     const auto& pmtDimensions{ecal.PMTDimensions()};
-
     for (int moduleID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all ECAL face
 
-        // if(moduleID != 213){
-        //     moduleID++;
-        //     continue;
-        // }
 
         auto typeMapIt = typeMap.find(moduleID);
         auto pmtDiameter = pmtDimensions.at(typeMapIt->second).at(0);
@@ -344,10 +316,10 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
                             checkOverlaps);
 
         const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
-        const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "ECALPMTCathode")};
+        const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "ECALPMCathode")};
         Make<G4PVPlacement>(cathodeTransform,
                             logicCathode,
-                            "ECALPMTCathode",
+                            "ECALPMCathode",
                             Mother().LogicalVolume(),
                             true,
                             moduleID,
@@ -356,7 +328,6 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
         /////////////////////////////////////////////
         // Construct Optical Surface
         /////////////////////////////////////////////
-
         const auto ecalCrystal{FindSibling<ECALCrystal>()};
         if (ecalCrystal) {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
@@ -370,7 +341,6 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
         const auto cathodeSurface{new G4OpticalSurface("Cathode", unified, polished, dielectric_metal)};
         new G4LogicalSkinSurface{"cathodeSkinSurface", logicCathode, cathodeSurface};
         cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
-
         ++moduleID;
     }
 }

@@ -21,7 +21,7 @@ class TFile;
 
 namespace MACE::inline Simulation::inline Hit {
 class ECALHit;
-class ECALPMTHit;
+class ECALPMHit;
 class MCPHit;
 } // namespace MACE::inline Simulation::inline Hit
 
@@ -41,7 +41,7 @@ public:
     auto SubmitPrimaryVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>& data) -> void { fPrimaryVertex = &data; }
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
     auto SubmitECALHC(const std::vector<gsl::owner<ECALHit*>>& hc) -> void { fECALHit = &hc; }
-    auto SubmitECALPMTHC(const std::vector<gsl::owner<ECALPMTHit*>>& hc) -> void { fECALPMTHit = &hc; }
+    auto SubmitECALPMHC(const std::vector<gsl::owner<ECALPMHit*>>& hc) -> void { fECALPMHit = &hc; }
     auto SubmitMCPHC(const std::vector<gsl::owner<MCPHit*>>& hc) -> void { fMCPHit = &hc; }
     auto EventEnd() -> void;
 
@@ -59,13 +59,13 @@ private:
     std::optional<Mustard::Data::Output<Data::SimPrimaryVertex>> fPrimaryVertexOutput;
     std::optional<Mustard::Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
     std::optional<Mustard::Data::Output<Data::ECALSimHit>> fECALSimHitOutput;
-    std::optional<Mustard::Data::Output<Data::ECALPMTHit>> fECALPMTHitOutput;
+    std::optional<Mustard::Data::Output<Data::ECALPMHit>> fECALPMHitOutput;
     std::optional<Mustard::Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
 
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>* fPrimaryVertex;
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
     const std::vector<gsl::owner<ECALHit*>>* fECALHit;
-    const std::vector<gsl::owner<ECALPMTHit*>>* fECALPMTHit;
+    const std::vector<gsl::owner<ECALPMHit*>>* fECALPMHit;
     const std::vector<gsl::owner<MCPHit*>>* fMCPHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;

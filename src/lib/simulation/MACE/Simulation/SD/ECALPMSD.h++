@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Simulation/Hit/ECALPMTHit.h++"
+#include "MACE/Simulation/Hit/ECALPMHit.h++"
 
 #include "Mustard/Utility/NonMoveableBase.h++"
 
@@ -13,10 +13,10 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-class ECALPMTSD : public Mustard::NonMoveableBase,
+class ECALPMSD : public Mustard::NonMoveableBase,
                  public G4VSensitiveDetector {
 public:
-    ECALPMTSD(const G4String& sdName);
+    ECALPMSD(const G4String& sdName);
 
     virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
@@ -25,8 +25,8 @@ public:
     auto NOpticalPhotonHit() const -> std::unordered_map<int, int>;
 
 protected:
-    std::unordered_map<int, std::vector<std::unique_ptr<ECALPMTHit>>> fHit;
-    ECALPMTHitCollection* fHitsCollection;
+    std::unordered_map<int, std::vector<std::unique_ptr<ECALPMHit>>> fHit;
+    ECALPMHitCollection* fHitsCollection;
 };
 
 } // namespace MACE::inline Simulation::inline SD
