@@ -40,7 +40,7 @@ auto ECALPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     step.GetTrack()->SetTrackStatus(fStopAndKill);
 
     const auto postStepPoint{*step.GetPostStepPoint()};
-    const auto unitID{postStepPoint.GetTouchable()->GetReplicaNumber()};
+    const auto unitID{postStepPoint.GetTouchable()->GetReplicaNumber(1)};
     // new a hit
     const auto& hit{fHit[unitID].emplace_back(std::make_unique_for_overwrite<ECALPMHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();

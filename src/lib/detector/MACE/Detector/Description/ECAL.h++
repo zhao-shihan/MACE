@@ -125,7 +125,7 @@ private:
     double fUpstreamWindowRadius;
     double fDownstreamWindowRadius;
 
-    bool fUseMPPC {true};
+    bool fUseMPPC {false};
 
     std::vector<muc::array3d> fPMTDimensions;
     double fPMTCouplerThickness;

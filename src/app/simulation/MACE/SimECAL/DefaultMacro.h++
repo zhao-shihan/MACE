@@ -47,14 +47,13 @@ constexpr auto defaultMacro = {
     "# Colors",
     "/vis/geometry/set/colour ECALCrystal                   0     1     1     1     0.1",
 
-    //PMT colour set
-    "/vis/geometry/set/colour ECALPMCathode                0     1     1     1     0.1",
+
+    "/vis/geometry/set/colour ECALPMCathode                0     1     1     1     0.3",
     "/vis/geometry/set/colour ECALPMTCoupler                0     1     1     1     0.1",
     "/vis/geometry/set/colour ECALPMTShell                  0     1     1     1     0.1",
-    //MPPC colour sets
+    "/vis/geometry/set/colour ECALPMTVacuum                 0       1       1       1       0.",
     "/vis/geometry/set/colour ECALMPPCWindow                0     1     1     1     0.2",
     "/vis/geometry/set/colour ECALMPPCCoupler                0     1     1     1     0.1",
-    "/vis/geometry/set/colour ECALPMCatode                  0     1     1     1     1",
     "/vis/geometry/set/colour ECALTunnel                    0     1     1     1     0.1",
     "/vis/geometry/set/colour ECALShield                    0     1     1     1     0.1",
     "/vis/geometry/set/colour ECALMagnet                    0     1     1     1     0.1",
