@@ -62,7 +62,7 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/visibility CDCCell             -1 false",
     "/vis/geometry/set/visibility CDCSuperLayer        0 false",
     "/vis/geometry/set/visibility ECALField             0 false",
-    "/vis/geometry/set/visibility ECALPMCathode        0 false",
+    "/vis/geometry/set/visibility ECALSensorCathode        0 false",
     "/vis/geometry/set/visibility ECALPMTCoupler        0 false",
     "/vis/geometry/set/visibility MMSField             0 false",
     "/vis/geometry/set/visibility SolenoidFieldS1      0 false",
@@ -95,7 +95,7 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/colour ECALPMTVacuum                 0     1     1     1     0.",
     "/vis/geometry/set/colour ECALMPPCWindow                0     1     1     1     0.2",
     "/vis/geometry/set/colour ECALMPPCCoupler               0     1     1     1     0.1",
-    "/vis/geometry/set/colour ECALPMCathode                0     1     1     1     0.3",
+    "/vis/geometry/set/colour ECALSensorCathode                0     1     1     1     0.3",
 
     "/vis/geometry/set/colour MCP                           0     1     1     1     0.1",
     "/vis/geometry/set/colour MCPAnode                      0     1     1     1     0.1",

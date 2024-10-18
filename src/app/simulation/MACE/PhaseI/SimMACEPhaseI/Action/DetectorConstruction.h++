@@ -4,7 +4,7 @@
 #include "MACE/PhaseI/Detector/Description/CentralBeamPipe.h++"
 #include "MACE/PhaseI/Detector/Description/World.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Region.h++"
-#include "MACE/PhaseI/SimMACEPhaseI/SD/ECALPMSD.h++"
+#include "MACE/PhaseI/SimMACEPhaseI/SD/ECALSensorSD.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/ECALSD.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
@@ -39,7 +39,7 @@ public:
     auto VacuumRegion() const -> const auto& { return fVacuumRegion; }
 
     auto ECALSD() const -> auto& { return *fECALSD; }
-    auto ECALPMSD() const -> auto& { return *fECALPMSD; }
+    auto ECALSensorSD() const -> auto& { return *fECALSensorSD; }
 
 public:
     using DescriptionInUse = std::tuple<MACE::Detector::Description::ECAL,
@@ -59,7 +59,7 @@ private:
     Region* fVacuumRegion;
 
     SD::ECALSD* fECALSD;
-    SD::ECALPMSD* fECALPMSD;
+    SD::ECALSensorSD* fECALSensorSD;
 };
 
 } // namespace PhaseI::SimMACEPhaseI::inline Action

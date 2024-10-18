@@ -7,7 +7,7 @@
 #include "MACE/PhaseI/Detector/Description/UsePhaseIDefault.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Action/DetectorConstruction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Messenger/DetectorMessenger.h++"
-#include "MACE/PhaseI/SimMACEPhaseI/SD/ECALPMSD.h++"
+#include "MACE/PhaseI/SimMACEPhaseI/SD/ECALSensorSD.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/ECALSD.h++"
 
 #include "Mustard/Detector/Definition/DefinitionBase.h++"
@@ -38,7 +38,7 @@ DetectorConstruction::DetectorConstruction() :
     fTargetRegion{},
     fVacuumRegion{},
     fECALSD{},
-    fECALPMSD{} {
+    fECALSensorSD{} {
     DetectorMessenger::EnsureInstantiation();
     Detector::Description::UsePhaseIDefault();
 }
@@ -70,10 +70,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     const auto& ecalName{MACE::Detector::Description::ECAL::Instance().Name()};
 
-    fECALPMSD = new SD::ECALPMSD{ecalName + "PM"};
-    ecalPhotoSensor.RegisterSD("ECALPMCathode", fECALPMSD);
+    fECALSensorSD = new SD::ECALSensorSD{ecalName + "PM"};
+    ecalPhotoSensor.RegisterSD("ECALSensorCathode", fECALSensorSD);
 
-    fECALSD = new SD::ECALSD{ecalName, fECALPMSD};
+    fECALSD = new SD::ECALSD{ecalName, fECALSensorSD};
     ecalCrystal.RegisterSD(fECALSD);
 
     return fWorld->PhysicalVolume();

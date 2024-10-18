@@ -204,7 +204,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",
                                        physicalCrystal,
-                                       ecalPMCoupler->PhysicalVolume("ECALPMCoupler", moduleID),
+                                       ecalPMCoupler->PhysicalVolume("ECALSensorCoupler", moduleID),
                                        couplerSurface};
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }

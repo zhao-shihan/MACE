@@ -3,7 +3,7 @@
 #include "MACE/Detector/Description/ECAL.h++"
 #include "MACE/Detector/Description/Vacuum.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "MACE/SimECAL/SD/ECALPMSD.h++"
+#include "MACE/SimECAL/SD/ECALSensorSD.h++"
 #include "MACE/SimECAL/SD/ECALSD.h++"
 #include "MACE/SimECAL/SD/MCPSD.h++"
 
