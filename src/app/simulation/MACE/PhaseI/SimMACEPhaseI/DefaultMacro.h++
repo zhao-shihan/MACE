@@ -75,7 +75,7 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/colour ECALPMTVacuum                 0     1     1     1     0.",
     "/vis/geometry/set/colour ECALMPPCWindow                0     1     1     1     0.2",
     "/vis/geometry/set/colour ECALMPPCCoupler               0     1     1     1     0.1",
-    "/vis/geometry/set/colour ECALSensorCathode                0     1     1     1     0.3",
+    "/vis/geometry/set/colour ECALPMCathode                0     1     1     1     0.3",
     "/vis/geometry/set/colour Target                        0     1     1     1     0.1",
     "",
     "/vis/scene/add/date",

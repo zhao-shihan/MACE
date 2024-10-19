@@ -12,19 +12,19 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-class ECALSensorSD;
+class ECALPMSD;
 
 class ECALSD : public Mustard::NonMoveableBase,
               public G4VSensitiveDetector {
 public:
-    ECALSD(const G4String& sdName, const ECALSensorSD* ecalPMSD = {});
+    ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD = {});
 
     virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
 protected:
-    const ECALSensorSD* const fECALSensorSD;
+    const ECALPMSD* const fECALPMSD;
 
     double fEnergyDepositionThreshold;
 

@@ -127,7 +127,7 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
         const auto logicWindow{Make<G4LogicalVolume>(solidWindow, epoxy, "ECALMPPCWindow")};
 
         const auto solidPixel{Make<G4Box>("temp", mppcPixelSize / 2, mppcPixelSize / 2, mppcThickness / 2)};
-        const auto logicPixel{Make<G4LogicalVolume>(solidPixel, silicon, "ECALSensorCathode")};
+        const auto logicPixel{Make<G4LogicalVolume>(solidPixel, silicon, "ECALPMCathode")};
         auto assemblyMPPC{new G4AssemblyVolume()};
         for (int copyNo = 0; copyNo < mppcNPixelRow * mppcNPixelRow; copyNo++) {
             int rowNum{copyNo / mppcNPixelRow};
@@ -278,7 +278,7 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
         const auto logicPMTVacuum{Make<G4LogicalVolume>(solidPMTVacuum, nistManager->FindOrBuildMaterial("G4_Galactic"), "ECALPMTVacuum")};
 
         const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
-        const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "ECALSensorCathode")};
+        const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "ECALPMCathode")};
 
         int debugCount{};
 
@@ -324,7 +324,7 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
                                 checkOverlaps);
             Make<G4PVPlacement>(G4Transform3D{CLHEP::HepRotation::IDENTITY, G4ThreeVector(0, 0, -(pmtLength - 2 * pmtWindowThickness - pmtCathodeThickness) / 2)},
                                 logicCathode,
-                                "ECALSensorCathode",
+                                "ECALPMCathode",
                                 logicPMTShell,
                                 true,
                                 // moduleID,

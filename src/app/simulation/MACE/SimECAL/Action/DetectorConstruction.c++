@@ -12,7 +12,7 @@
 #include "MACE/SimECAL/Detector/ECALShield.h++"
 #include "MACE/SimECAL/Detector/ECALTunnel.h++"
 #include "MACE/SimECAL/Messenger/DetectorMessenger.h++"
-#include "MACE/SimECAL/SD/ECALSensorSD.h++"
+#include "MACE/SimECAL/SD/ECALPMSD.h++"
 #include "MACE/SimECAL/SD/ECALSD.h++"
 #include "MACE/SimECAL/SD/MCPSD.h++"
 
@@ -69,12 +69,12 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     const auto& ecalName{MACE::Detector::Description::ECAL::Instance().Name()};
     std::cout <<"ECALname got."<<"\n";
-    const auto ecalPMSD{new SD::ECALSensorSD{ecalName + "PM"}};
+    const auto ecalPMSD{new SD::ECALPMSD{ecalName + "PM"}};
     std::cout <<"PMSD instance completed."<<"\n";
     ecalCrystal.RegisterSD(new SD::ECALSD{ecalName, ecalPMSD});
     std::cout <<"crystalSD register completed."<<"\n";
 
-    ecalPhotoSensor.RegisterSD("ECALSensorCathode", ecalPMSD);
+    ecalPhotoSensor.RegisterSD("ECALPMCathode", ecalPMSD);
     std::cout <<"PMSD register completed."<<"\n";
 
 

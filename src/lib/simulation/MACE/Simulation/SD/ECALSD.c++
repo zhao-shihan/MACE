@@ -1,5 +1,5 @@
 #include "MACE/Detector/Description/ECAL.h++"
-#include "MACE/Simulation/SD/ECALSensorSD.h++"
+#include "MACE/Simulation/SD/ECALPMSD.h++"
 #include "MACE/Simulation/SD/ECALSD.h++"
 
 #include "Mustard/Env/Print.h++"
@@ -35,10 +35,10 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-ECALSD::ECALSD(const G4String& sdName, const ECALSensorSD* ecalPMSD) :
+ECALSD::ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD) :
     Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
-    fECALSensorSD{ecalPMSD},
+    fECALPMSD{ecalPMSD},
     fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
@@ -171,8 +171,8 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                             std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
                  });
 
-    if (fECALSensorSD) {
-        auto nHit{fECALSensorSD->NOpticalPhotonHit()};
+    if (fECALPMSD) {
+        auto nHit{fECALPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
             Get<"nOptPho">(*hit) = nHit[Get<"UnitID">(*hit)];
         }

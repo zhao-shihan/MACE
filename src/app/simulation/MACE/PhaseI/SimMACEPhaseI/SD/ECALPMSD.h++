@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Simulation/SD/ECALSensorSD.h++"
+#include "MACE/Simulation/SD/ECALPMSD.h++"
 
 namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 
-class ECALSensorSD final : public Simulation::ECALSensorSD {
+class ECALPMSD final : public Simulation::ECALPMSD {
 public:
-    using Simulation::ECALSensorSD::ECALSensorSD;
+    using Simulation::ECALPMSD::ECALPMSD;
 
     auto EndOfEvent(G4HCofThisEvent* hc) -> void override;
 };

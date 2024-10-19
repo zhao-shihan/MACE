@@ -10,10 +10,10 @@
 
 namespace MACE::inline Simulation::inline Hit {
 
-class ECALSensorHit final : public Mustard::Geant4X::UseG4Allocator<ECALSensorHit>,
+class ECALPMHit final : public Mustard::Geant4X::UseG4Allocator<ECALPMHit>,
                         public G4VHit,
-                        public Mustard::Data::Tuple<Data::ECALSensorHit> {};
+                        public Mustard::Data::Tuple<Data::ECALPMHit> {};
 
-using ECALSensorHitCollection = G4THitsCollection<ECALSensorHit>;
+using ECALPMHitCollection = G4THitsCollection<ECALPMHit>;
 
 } // namespace MACE::inline Simulation::inline Hit
