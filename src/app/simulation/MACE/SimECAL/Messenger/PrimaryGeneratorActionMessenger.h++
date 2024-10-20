@@ -4,7 +4,7 @@
 
 #include <memory>
 
-class G4UIcommand;
+class G4UIcmdWithoutParameter;
 
 namespace MACE::SimECAL {
 
@@ -26,8 +26,8 @@ public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    std::unique_ptr<G4UIcommand> fSwitchToGPSX;
-    std::unique_ptr<G4UIcommand> fSwitchToEcoMug;
+    std::unique_ptr<G4UIcmdWithoutParameter> fSwitchToGPSX;
+    std::unique_ptr<G4UIcmdWithoutParameter> fSwitchToEcoMug;
 };
 
 } // namespace Messenger
