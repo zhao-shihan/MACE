@@ -48,6 +48,8 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto& vertex{ecal.Mesh().fVertex};
     const auto& faceList{ecal.Mesh().fFaceList};
 
+    const auto& moduleSelection{ecal.ModuleSelection()};
+
     /////////////////////////////////////////////
     // Construct Element and Material
     /////////////////////////////////////////////
@@ -67,11 +69,11 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Material Optical Properties Tables
     //////////////////////////////////////////////////
 
-    const auto [minPhotonEnergy, maxPhotonEnergy]{std::ranges::minmax(ecal.ScintillationWavelengthBin())};
+    const auto [minPhotonEnergy, maxPhotonEnergy]{std::ranges::minmax(ecal.ScintillationEnergyBin())};
     const auto crystalPropertiesTable{new G4MaterialPropertiesTable};
     crystalPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.79, 1.79});
     crystalPropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, {370_mm, 370_mm});
-    crystalPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", ecal.ScintillationWavelengthBin(), ecal.ScintillationComponent1());
+    crystalPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", ecal.ScintillationEnergyBin(), ecal.ScintillationComponent1());
     crystalPropertiesTable->AddConstProperty("SCINTILLATIONYIELD", ecal.ScintillationYield());
     crystalPropertiesTable->AddConstProperty("SCINTILLATIONTIMECONSTANT1", ecal.ScintillationTimeConstant1());
     crystalPropertiesTable->AddConstProperty("RESOLUTIONSCALE", ecal.ResolutionScale());
@@ -98,6 +100,12 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
          auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) {
         // loop over all ECAL face
         // centroid here refer to the face 'center' of normalized ball
+
+        if ((not moduleSelection.empty()) and std::find(moduleSelection.begin(), moduleSelection.end(), moduleID) == moduleSelection.end()) {
+            moduleID++;
+            continue;
+        }
+
         const auto centroidMagnitude{centroid.mag()};
         const auto crystalLength{crystalHypotenuse * centroidMagnitude};
         const auto outerRadius{innerRadius + crystalHypotenuse};

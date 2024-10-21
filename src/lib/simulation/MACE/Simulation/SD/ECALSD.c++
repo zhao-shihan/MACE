@@ -45,14 +45,14 @@ ECALSD::ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD) :
     collectionName.insert(sdName + "HC");
 
     const auto& ecal{Detector::Description::ECAL::Instance()};
-    assert(ecal.ScintillationWavelengthBin().size() == ecal.ScintillationComponent1().size());
-    std::vector<double> dE(ecal.ScintillationWavelengthBin().size());
-    muc::ranges::adjacent_difference(ecal.ScintillationWavelengthBin(), dE.begin());
+    assert(ecal.ScintillationEnergyBin().size() == ecal.ScintillationComponent1().size());
+    std::vector<double> dE(ecal.ScintillationEnergyBin().size());
+    muc::ranges::adjacent_difference(ecal.ScintillationEnergyBin(), dE.begin());
     std::vector<double> spectrum(ecal.ScintillationComponent1().size());
-    muc::ranges::adjacent_difference(ecal.ScintillationWavelengthBin(), spectrum.begin(), muc::midpoint<double>);
+    muc::ranges::adjacent_difference(ecal.ScintillationEnergyBin(), spectrum.begin(), muc::midpoint<double>);
     const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
-    std::vector<double> meanE(ecal.ScintillationWavelengthBin().size());
-    muc::ranges::adjacent_difference(ecal.ScintillationWavelengthBin(), meanE.begin(), muc::midpoint<double>);
+    std::vector<double> meanE(ecal.ScintillationEnergyBin().size());
+    muc::ranges::adjacent_difference(ecal.ScintillationEnergyBin(), meanE.begin(), muc::midpoint<double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 

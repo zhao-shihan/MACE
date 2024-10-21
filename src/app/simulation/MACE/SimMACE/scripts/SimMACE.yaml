@@ -63,7 +63,7 @@ ECAL:
   PMTCouplerThickness: 0.10000000000000001
   PMTWindowThickness: 1
   PMTCathodeThickness: 2.0000000000000005e-05
-  PMTWaveLengthBin:
+  PMTEnergyBin:
     - 715.75900000000001
     - 704.54100000000005
     - 687.71400000000006

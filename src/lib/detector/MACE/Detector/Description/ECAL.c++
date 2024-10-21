@@ -174,7 +174,7 @@ ECAL::ECAL() : // clang-format off
     fPMTCouplerThickness{0.1_mm},
     fPMTWindowThickness{1_mm},
     fPMTCathodeThickness{20_nm},
-    fPMTWaveLengthBin{1.732649965_eV,1.760237951_eV,1.803307489_eV,1.848537542_eV,1.896094863_eV,1.946160761_eV,1.997657575_eV,
+    fPMTEnergyBin{1.732649965_eV,1.760237951_eV,1.803307489_eV,1.848537542_eV,1.896094863_eV,1.946160761_eV,1.997657575_eV,
                       2.045172376_eV,2.092877718_eV,2.123492226_eV,2.145831664_eV,2.168816794_eV,2.18850057_eV,2.204563937_eV,
                       2.221286508_eV,2.242202221_eV,2.265173439_eV,2.290315074_eV,2.319490762_eV,2.352989916_eV,2.387857013_eV,
                       2.422646099_eV,2.453711564_eV,2.48323493_eV,2.511441394_eV,2.542243582_eV,2.574809989_eV,2.617165988_eV,
@@ -216,7 +216,7 @@ ECAL::ECAL() : // clang-format off
     fMPPCWindowThickness{0.2_mm},
     // 0.1(epoxy)+0.1(cathode),window change  from epoxy to epoxy&silicon Pixels, may change name "window" later
 
-    // fMPPCWaveLengthBin{1.407369076_eV,1.422085648_eV,1.442830806_eV,1.464190179_eV,1.486191453_eV,1.508864008_eV,
+    // fMPPCEnergyBin{1.407369076_eV,1.422085648_eV,1.442830806_eV,1.464190179_eV,1.486191453_eV,1.508864008_eV,
     //                    1.530258702_eV,1.555793318_eV,1.572125751_eV,1.586354798_eV,1.614073306_eV,1.640850675_eV,
     //                    1.668531503_eV,1.697162296_eV,1.726792811_eV,1.755271018_eV,1.779029795_eV,1.810359289_eV,
     //                    1.831437642_eV,1.860246993_eV,1.88702694_eV,1.911897577_eV,1.935709016_eV,1.960121047_eV,1.985156683_eV,2.010840129_eV,2.037196857_eV,2.064253693_eV,2.092038909_eV,2.120582319_eV,
@@ -243,7 +243,7 @@ ECAL::ECAL() : // clang-format off
     //                 0.172264774,0.159117007,0.138037117,0.125470677,0.113099824,0.100810465,0.081365896,0.091701006,0.066403521,
     //                 0.053054734,0.037798979,0.02492286}, // S13361
 
-    fMPPCWaveLengthBin{1.391655126_eV,1.413303953_eV,1.436778788_eV,1.461046623_eV,1.486148332_eV,1.512127645_eV,1.533451437_eV,
+    fMPPCEnergyBin{1.391655126_eV,1.413303953_eV,1.436778788_eV,1.461046623_eV,1.486148332_eV,1.512127645_eV,1.533451437_eV,
                        1.553243676_eV,1.579239384_eV,1.601331725_eV,1.618380329_eV,1.644070091_eV,1.668575932_eV,1.695332333_eV,
                        1.722960822_eV,1.750124077_eV,1.769418592_eV,1.796139112_eV,1.823679036_eV,1.850275906_eV,1.880443107_eV,
                        1.905389876_eV,1.927096598_eV,1.948591293_eV,1.968750142_eV,1.989552718_eV,2.012699006_eV,2.044509747_eV,
@@ -267,7 +267,7 @@ ECAL::ECAL() : // clang-format off
                     0.034501313}, // S14161
     // crystal
     // CsI(Tl) optical param.s
-     fScintillationWavelengthBin{1.75799786_eV, 1.77994996_eV, 1.798603934_eV, 1.814143751_eV, 1.834661538_eV,
+     fScintillationEnergyBin{1.75799786_eV, 1.77994996_eV, 1.798603934_eV, 1.814143751_eV, 1.834661538_eV,
                                  1.854466567_eV, 1.871980063_eV, 1.882407862_eV, 1.891871096_eV, 1.9032009_eV,
                                  1.912954443_eV, 1.919168532_eV, 1.929448247_eV, 1.942512233_eV, 1.957597106_eV,
                                  1.973052378_eV, 1.99079904_eV, 2.001754016_eV, 2.015391308_eV, 2.031355015_eV,
@@ -297,7 +297,7 @@ ECAL::ECAL() : // clang-format off
      fScintillationTimeConstant1{1000_ns},
 
     // BGO optical param.s
-    // fScintillationWavelengthBin{1.945507481_eV, 1.956691365_eV, 1.974526166_eV, 1.992686315_eV, 2.011182111_eV,
+    // fScintillationEnergyBin{1.945507481_eV, 1.956691365_eV, 1.974526166_eV, 1.992686315_eV, 2.011182111_eV,
     //                             2.030023135_eV, 2.049218172_eV, 2.068776498_eV, 2.088712977_eV, 2.109036_eV,
     //                             2.12975713_eV, 2.150887751_eV, 2.171451222_eV, 2.190391881_eV, 2.209663573_eV,
     //                             2.229274743_eV, 2.247116958_eV, 2.265244608_eV, 2.283666187_eV, 2.301276603_eV,
@@ -480,7 +480,7 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-    ImportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
+    ImportValue(node, fPMTEnergyBin, "PMTEnergyBin");
     ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
     ImportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
     ImportValue(node, fMPPCPixelSizeSet,
@@ -489,13 +489,14 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fMPPCThickness, "MPPCThickness");
     ImportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
     ImportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
-    ImportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
+    ImportValue(node, fMPPCEnergyBin, "MPPCEnergyBin");
     ImportValue(node, fMPPCEfficiency, "MPPCEfficiency");
-    ImportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
+    ImportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");
     ImportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ImportValue(node, fScintillationYield, "ScintillationYield");
     ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ImportValue(node, fResolutionScale, "ResolutionScale");
+    ImportValue(node, moduleSelection, "moduleSelection");
 
     SetGeometryOutdated();
 }
@@ -510,7 +511,7 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-    ExportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
+    ExportValue(node, fPMTEnergyBin, "PMTEnergyBin");
     ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
     ExportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
     ExportValue(node, fMPPCPixelSizeSet,
@@ -519,13 +520,14 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fMPPCThickness, "MPPCThickness");
     ExportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
     ExportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
-    ExportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
+    ExportValue(node, fMPPCEnergyBin, "MPPCEnergyBin");
     ExportValue(node, fMPPCEfficiency, "MPPCEfficiency");
-    ExportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
+    ExportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");
     ExportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ExportValue(node, fScintillationYield, "ScintillationYield");
     ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ExportValue(node, fResolutionScale, "ResolutionScale");
+    ExportValue(node, moduleSelection, "moduleSelection");
 }
 
 } // namespace MACE::Detector::Description

@@ -32,7 +32,7 @@ public:
     auto PMTCouplerThickness() const -> auto { return fPMTCouplerThickness; }
     auto PMTWindowThickness() const -> auto { return fPMTWindowThickness; }
     auto PMTCathodeThickness() const -> auto { return fPMTCathodeThickness; }
-    auto PMTWaveLengthBin() const -> const auto& { return fPMTWaveLengthBin; }
+    auto PMTEnergyBin() const -> const auto& { return fPMTEnergyBin; }
     auto PMTQuantumEfficiency() const -> const auto& { return fPMTQuantumEfficiency; }
 
     auto MPPCNPixelRows() const -> const auto& { return fMPPCNPixelRows; }
@@ -41,10 +41,10 @@ public:
     auto MPPCThickness() const -> auto { return fMPPCThickness; }
     auto MPPCCouplerThickness() const -> auto { return fMPPCCouplerThickness; }
     auto MPPCWindowThickness() const -> auto { return fMPPCWindowThickness; }
-    auto MPPCWaveLengthBin() const -> const auto& { return fMPPCWaveLengthBin; }
+    auto MPPCEnergyBin() const -> const auto& { return fMPPCEnergyBin; }
     auto MPPCEfficiency() const -> const auto& { return fMPPCEfficiency; }
 
-    auto ScintillationWavelengthBin() const -> const auto& { return fScintillationWavelengthBin; }
+    auto ScintillationEnergyBin() const -> const auto& { return fScintillationEnergyBin; }
     auto ScintillationComponent1() const -> const auto& { return fScintillationComponent1; }
     auto ScintillationYield() const -> auto { return fScintillationYield; }
     auto ScintillationTimeConstant1() const -> auto { return fScintillationTimeConstant1; }
@@ -53,6 +53,8 @@ public:
     auto Mesh() const -> const auto& { return fMeshManager.Get(this); }
     auto NUnit() const -> auto { return Mesh().fFaceList.size(); }
     auto ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D;
+
+    auto ModuleSelection() const->const auto& {return moduleSelection;}
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +70,7 @@ public:
     auto PMTCouplerThickness(double val) -> void { fPMTCouplerThickness = val; }
     auto PMTWindowThickness(double val) -> void { fPMTWindowThickness = val; }
     auto PMTCathodeThickness(double val) -> void { fPMTCathodeThickness = val; }
-    auto PMTWaveLengthBin(std::vector<double> val) -> void { fPMTWaveLengthBin = std::move(val); }
+    auto PMTEnergyBin(std::vector<double> val) -> void { fPMTEnergyBin = std::move(val); }
     auto PMTQuantumEfficiency(std::vector<double> val) -> void { fPMTQuantumEfficiency = std::move(val); }
 
     auto MPPCNPixelRows(std::vector<int> val) -> void { fMPPCNPixelRows = std::move(val); }
@@ -77,14 +79,16 @@ public:
     auto MPPCThickness(double val) -> void { fMPPCThickness = val; }
     auto MPPCCouplerThickness(double val) -> void { fMPPCCouplerThickness = val; }
     auto MPPCWindowThickness(double val) -> void { fMPPCWindowThickness = val; }
-    auto MPPCWaveLengthBin(std::vector<double> val) -> void { fMPPCWaveLengthBin = std::move(val); }
+    auto MPPCEnergyBin(std::vector<double> val) -> void { fMPPCEnergyBin = std::move(val); }
     auto MPPCEfficiency(std::vector<double> val) -> void { fMPPCEfficiency = std::move(val); }
 
-    auto ScintillationWavelengthBin(std::vector<double> val) -> void { fScintillationWavelengthBin = std::move(val); }
+    auto ScintillationEnergyBin(std::vector<double> val) -> void { fScintillationEnergyBin = std::move(val); }
     auto ScintillationComponent1(std::vector<double> val) -> void { fScintillationComponent1 = std::move(val); }
     auto ScintillationYield(double val) -> void { fScintillationYield = val; }
     auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
     auto ResolutionScale(double val) -> void { fResolutionScale = val; }
+
+    auto ModuleSelection(std::vector<int> val){moduleSelection = std::move(val);}
 
     struct MeshInformation {
     private:
@@ -131,7 +135,7 @@ private:
     double fPMTCouplerThickness;
     double fPMTWindowThickness;
     double fPMTCathodeThickness;
-    std::vector<double> fPMTWaveLengthBin;
+    std::vector<double> fPMTEnergyBin;
     std::vector<double> fPMTQuantumEfficiency;
 
     std::vector<int> fMPPCNPixelRows;
@@ -140,16 +144,18 @@ private:
     double fMPPCThickness;
     double fMPPCCouplerThickness;
     double fMPPCWindowThickness;
-    std::vector<double> fMPPCWaveLengthBin;
+    std::vector<double> fMPPCEnergyBin;
     std::vector<double> fMPPCEfficiency;
 
-    std::vector<double> fScintillationWavelengthBin;
+    std::vector<double> fScintillationEnergyBin;
     std::vector<double> fScintillationComponent1;
     double fScintillationYield;
     double fScintillationTimeConstant1;
     double fResolutionScale;
 
     mutable MeshManager fMeshManager;
+
+    std::vector<int> moduleSelection;
 };
 
 } // namespace MACE::Detector::Description
