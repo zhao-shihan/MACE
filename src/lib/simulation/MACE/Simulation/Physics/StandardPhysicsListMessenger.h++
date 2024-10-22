@@ -24,6 +24,7 @@ public:
 private:
     std::unique_ptr<G4UIcmdWithoutParameter> fUseRadioactiveDecayPhysics;
     std::unique_ptr<G4UIcmdWithoutParameter> fUseOpticalPhysics;
+    std::unique_ptr<G4UIcmdWithoutParameter> fDisableMuonMinusCapture;
 };
 
 } // namespace MACE::inline Simulation::inline Physics

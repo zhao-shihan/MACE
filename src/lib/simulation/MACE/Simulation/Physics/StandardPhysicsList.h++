@@ -15,6 +15,7 @@ public:
 
     auto UseRadioactiveDecayPhysics() -> void;
     auto UseOpticalPhysics() -> void;
+    auto DisableMuonMinusCapture() -> void;
 
 private:
     StandardPhysicsListMessenger::Register<StandardPhysicsListBase> fMessengerRegister;

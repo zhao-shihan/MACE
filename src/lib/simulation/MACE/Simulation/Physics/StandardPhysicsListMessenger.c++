@@ -9,7 +9,8 @@ namespace MACE::inline Simulation::inline Physics {
 StandardPhysicsListMessenger::StandardPhysicsListMessenger() :
     SingletonMessenger{},
     fUseRadioactiveDecayPhysics{},
-    fUseOpticalPhysics{} {
+    fUseOpticalPhysics{},
+    fDisableMuonMinusCapture{} {
 
     fUseRadioactiveDecayPhysics = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Physics/UseRadioactiveDecayPhysics", this);
     fUseRadioactiveDecayPhysics->SetGuidance("If set, the G4RadioactiveDecayPhysics will be registered in the physics list.");
@@ -18,6 +19,10 @@ StandardPhysicsListMessenger::StandardPhysicsListMessenger() :
     fUseOpticalPhysics = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Physics/UseOpticalPhysics", this);
     fUseOpticalPhysics->SetGuidance("If set, the G4OpticalPhysics will be registered in the physics list.");
     fUseOpticalPhysics->AvailableForStates(G4State_PreInit);
+
+    fDisableMuonMinusCapture = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Physics/DisableMuonMinusCapture", this);
+    fDisableMuonMinusCapture->SetGuidance("If set, nuclear stopping of mu- will not be constructed in G4StoppingPhysics.");
+    fDisableMuonMinusCapture->AvailableForStates(G4State_PreInit);
 }
 
 StandardPhysicsListMessenger::~StandardPhysicsListMessenger() = default;
@@ -30,6 +35,10 @@ auto StandardPhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String) -
     } else if (command == fUseOpticalPhysics.get()) {
         Deliver<StandardPhysicsListBase>([&](auto&& r) {
             r.UseOpticalPhysics();
+        });
+    } else if (command == fDisableMuonMinusCapture.get()) {
+        Deliver<StandardPhysicsListBase>([&](auto&& r) {
+            r.DisableMuonMinusCapture();
         });
     }
 }

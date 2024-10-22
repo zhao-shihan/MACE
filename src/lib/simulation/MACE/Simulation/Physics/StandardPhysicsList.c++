@@ -6,7 +6,9 @@
 #include "Mustard/Extension/Geant4X/Physics/MuoniumNLODecayPhysics.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPhysics.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
+#include "G4BuilderType.hh"
 #include "G4EmParameters.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4MscStepLimitType.hh"
@@ -14,10 +16,12 @@
 #include "G4OpticalPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4SpinDecayPhysics.hh"
+#include "G4StoppingPhysics.hh"
 
 #include "muc/utility"
 
 #include <algorithm>
+#include <typeinfo>
 
 namespace MACE::inline Simulation::inline Physics {
 
@@ -50,6 +54,18 @@ auto StandardPhysicsListBase::UseRadioactiveDecayPhysics() -> void {
 auto StandardPhysicsListBase::UseOpticalPhysics() -> void {
     RegisterPhysics(new G4OpticalPhysics{verboseLevel});
     G4OpticalParameters::Instance()->SetBoundaryInvokeSD(true);
+}
+
+auto StandardPhysicsListBase::DisableMuonMinusCapture() -> void {
+    const auto stopping{dynamic_cast<const G4StoppingPhysics*>(GetPhysicsWithType(bStopping))};
+    if (stopping == nullptr) {
+        Mustard::PrettyError("Stopping physics not found");
+        return;
+    }
+    if (typeid(*stopping) == typeid(G4StoppingPhysics)) {
+        Mustard::PrettyWarning("Replacing stopping physics {} with {}", typeid(*stopping), typeid(G4StoppingPhysics));
+    }
+    ReplacePhysics(new G4StoppingPhysics("stopping", verboseLevel, false));
 }
 
 } // namespace MACE::inline Simulation::inline Physics
