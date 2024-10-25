@@ -20,6 +20,8 @@
 
 #include "muc/utility"
 
+#include "fmt/core.h"
+
 #include <algorithm>
 #include <typeinfo>
 
@@ -63,7 +65,7 @@ auto StandardPhysicsListBase::DisableMuonMinusCapture() -> void {
         return;
     }
     if (typeid(*stopping) == typeid(G4StoppingPhysics)) {
-        Mustard::PrettyWarning("Replacing stopping physics {} with {}", typeid(*stopping), typeid(G4StoppingPhysics));
+        Mustard::PrettyWarning(fmt::format("Replacing stopping physics {} with {}", typeid(*stopping).name(), typeid(G4StoppingPhysics).name()));
     }
     ReplacePhysics(new G4StoppingPhysics("stopping", verboseLevel, false));
 }
