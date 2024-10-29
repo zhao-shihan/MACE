@@ -43,6 +43,7 @@
 #include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
+#include "MACE/Detector/Definition/PDSVeto.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/ECAL.h++"
 #include "MACE/Detector/Description/MCP.h++"
@@ -125,13 +126,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& solenoidFieldS3{fWorld->NewDaughter<Detector::Definition::SolenoidFieldS3>(fCheckOverlap)};
     auto& solenoidFieldT1{fWorld->NewDaughter<Detector::Definition::SolenoidFieldT1>(fCheckOverlap)};
     auto& solenoidFieldT2{fWorld->NewDaughter<Detector::Definition::SolenoidFieldT2>(fCheckOverlap)};
-
+    auto& veto{fWorld->NewDaughter<Detector::Definition::PDSVeto>(fCheckOverlap)};
     // 2
 
-    auto& ecalCrystal{ecalField.NewDaughter<Detector::Definition::ECALCrystal>(fCheckOverlap)};
-    auto& ecalMagnet{ecalField.NewDaughter<Detector::Definition::ECALMagnet>(fCheckOverlap)};
-    auto& ecalPhotoSensor{ecalField.NewDaughter<Detector::Definition::ECALPhotoSensor>(fCheckOverlap)};
-    auto& mcpChamber{ecalField.NewDaughter<Detector::Definition::MCPChamber>(fCheckOverlap)};
+    // auto& ecalCrystal{ecalField.NewDaughter<Detector::Definition::ECALCrystal>(fCheckOverlap)};
+    // auto& ecalMagnet{ecalField.NewDaughter<Detector::Definition::ECALMagnet>(fCheckOverlap)};
+    // auto& ecalPhotoSensor{ecalField.NewDaughter<Detector::Definition::ECALPhotoSensor>(fCheckOverlap)};
+    // auto& mcpChamber{ecalField.NewDaughter<Detector::Definition::MCPChamber>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};
     auto& solenoidS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidS1>(fCheckOverlap)};
@@ -155,7 +156,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 3
 
-    auto& mcp{mcpChamber.NewDaughter<Detector::Definition::MCP>(fCheckOverlap)};
+    // auto& mcp{mcpChamber.NewDaughter<Detector::Definition::MCP>(fCheckOverlap)};
 
     auto& acceleratorField{mms.Get<Detector::Definition::MMSBeamPipe>().NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
 
@@ -235,8 +236,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     {
         mms.Get<Detector::Definition::CDCCell>().RegisterSD("CDCSensitiveVolume", new SD::CDCSD{Detector::Description::CDC::Instance().Name()});
         mms.Get<Detector::Definition::TTC>().RegisterSD(new SD::TTCSD{Detector::Description::TTC::Instance().Name()});
-        mcp.RegisterSD(new SD::MCPSD{Detector::Description::MCP::Instance().Name()});
-        ecalCrystal.RegisterSD(new SD::ECALSD{Detector::Description::ECAL::Instance().Name()});
+        // mcp.RegisterSD(new SD::MCPSD{Detector::Description::MCP::Instance().Name()});
+        // ecalCrystal.RegisterSD(new SD::ECALSD{Detector::Description::ECAL::Instance().Name()});
     }
 
     ////////////////////////////////////////////////////////////////

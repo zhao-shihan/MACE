@@ -52,8 +52,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& ecalPhotoSensor{fWorld->NewDaughter<ECALPhotoSensor>(fCheckOverlap)};
     // auto& mcpChamber{fWorld->NewDaughter<MCPChamber>(fCheckOverlap)};
     // auto& ecalMagnet = fWorld->NewDaughter<SimECAL::Detector::ECALMagnet>(fCheckOverlap);
-    // auto& ecalShield = fWorld->NewDaughter<SimECAL::Detector::ECALShield>(fCheckOverlap);
-
+    auto& ecalShield = fWorld->NewDaughter<SimECAL::Detector::ECALShield>(fCheckOverlap);
+    
     // auto& ecalTunnel = fWorld->NewDaughter<SimECAL::Detector::ECALTunnel>(fCheckOverlap);
 
     // auto& mcp{mcpChamber.NewDaughter<MCP>(fCheckOverlap)};

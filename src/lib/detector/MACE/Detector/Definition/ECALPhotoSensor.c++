@@ -93,7 +93,6 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     const auto windowPropertiesTable{new G4MaterialPropertiesTable};
     windowPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.57, 1.57});
     epoxy->SetMaterialPropertiesTable(windowPropertiesTable);
-
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1, 1});
 
@@ -235,8 +234,8 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     //////////////////////////////////////////////////
     const auto [minPhotonEnergy, maxPhotonEnergy]{std::ranges::minmax(ecal.ScintillationEnergyBin())};
     const auto siliconeGreasePropertiesTable{new G4MaterialPropertiesTable};
-    siliconeGreasePropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.79, 1.79});
-    siliconeGreasePropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, {370_mm, 370_mm});
+    siliconeGreasePropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.46, 1.46});
+    siliconeGreasePropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, {100_cm, 100_cm});
     siliconeGrease->SetMaterialPropertiesTable(siliconeGreasePropertiesTable);
 
     const auto windowPropertiesTable{new G4MaterialPropertiesTable};
