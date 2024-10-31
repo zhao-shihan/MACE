@@ -3,6 +3,7 @@
 
 #include "Mustard/Math/Parity.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/VectorCast.h++"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"
@@ -11,6 +12,8 @@
 #include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4OpticalSurface.hh"
+
+#include "gsl/gsl"
 
 #include "fmt/format.h"
 
@@ -151,8 +154,8 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             "ttcScintillatorLogic")};
         //set the position of air mother box
         const auto transform{G4RotateZ3D{Mustard::Math::IsEven(i) ? 0 : deltaPhi / 2} *
-                             G4Translate3D{ttc.Radius(), 0, (1 - ttc.NAlongZ()) * ttc.Width() / 2 + i * ttc.Width()} *
-                             G4RotateZ3D{ttc.SlantAngle()}}; // clang-format on
+                            G4Translate3D{Mustard::VectorCast<G4ThreeVector>(ttc.Position()[i])} *
+                            G4RotateZ3D{ttc.SlantAngle()}}; // clang-format on
         for (int j{}; j < ttc.NAlongPhi(); ++j, ++tileID) {
             Make<G4PVPlacement>(
                 G4RotateZ3D{j * deltaPhi} * transform,

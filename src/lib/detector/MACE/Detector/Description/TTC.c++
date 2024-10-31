@@ -1,17 +1,25 @@
 #include "MACE/Detector/Description/TTC.h++"
 
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PhysicalConstant.h++"
+
+#include "fmt/core.h"
+
+#include <algorithm>
+#include <deque>
+#include <vector>
 
 namespace MACE::Detector::Description {
 
+using namespace Mustard::PhysicalConstant;
 using namespace Mustard::LiteralUnit::Time;
 using namespace Mustard::LiteralUnit::Length;
 using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::LiteralUnit::Angle;
 using namespace Mustard::LiteralUnit::Density;
 
-TTC::TTC() :
-    DescriptionBase{"TTC"},
+TTC::TTC() : // clang-format off
+    DescriptionWithCacheBase{"TTC"}, // clang-format on
     // Geometry
     fLength{this, 7_cm},
     fWidthDown{this, 3_cm},
@@ -157,7 +165,8 @@ auto TTC::CalculatePosition() -> std::vector<muc::array3d> {
 auto TTC::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fLength, "Length");
-    ImportValue(node, fWidth, "Width");
+    ImportValue(node, fWidthDown, "WidthDown");
+    ImportValue(node, fWidthUp, "WidthUp");
     ImportValue(node, fThickness, "Thickness");
     ImportValue(node, fRadius, "DistanceToCDC");
     ImportValue(node, fSlantAngle, "SlantAngle");
@@ -210,7 +219,8 @@ auto TTC::ImportAllValue(const YAML::Node& node) -> void {
 auto TTC::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fLength, "Length");
-    ExportValue(node, fWidth, "Width");
+    ExportValue(node, fWidthDown, "WidthDown");
+    ExportValue(node, fWidthUp, "WidthUp");
     ExportValue(node, fThickness, "Thickness");
     ExportValue(node, fRadius, "DistanceToCDC");
     ExportValue(node, fSlantAngle, "SlantAngle");

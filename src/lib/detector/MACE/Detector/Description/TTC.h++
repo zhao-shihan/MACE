@@ -1,10 +1,12 @@
 #pragma once
 
-#include "Mustard/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionWithCacheBase.h++"
+
+#include "muc/array"
 
 namespace MACE::Detector::Description {
 
-class TTC final : public Mustard::Detector::Description::DescriptionBase<TTC> {
+class TTC final : public Mustard::Detector::Description::DescriptionWithCacheBase<TTC> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
@@ -36,7 +38,8 @@ public:
     auto SiliconeThickness() const -> auto { return *fSiliconeThickness; }
 
     auto Length(double val) -> void { fLength = val; }
-    auto Width(double val) -> void { fWidth = val; }
+    auto WidthDown(double val) -> void { fWidthDown = val; }
+    auto WidthUp(double val) -> void { fWidthUp = val; }
     auto Thickness(double val) -> void { fThickness = val; }
     auto Radius(double val) -> void { fRadius = val; }
     auto SlantAngle(double val) -> void { fSlantAngle = val; }
@@ -89,7 +92,7 @@ public:
     auto CouplerSurface() const -> auto& { return *fCouplerSurface; }
     auto AirPaintSurface() const -> auto& { return *fAirPaintSurface; }
     auto CathodeSurface() const -> auto& { return *fCathodeSurface; }
-    
+
     auto Density(double val) -> void { fDensity = val; }
     auto RIndexEnergyBin(std::vector<double> val) -> void { fRIndexEnergyBin = std::move(val); }
     auto RIndex(std::vector<double> val) -> void { fRIndex = std::move(val); }
@@ -121,6 +124,8 @@ public:
     auto CathodeSurface(std::vector<double> val) -> void { fCathodeSurface = std::move(val); }
 
 private:
+    auto CalculateWidth() -> std::vector<double>;
+    auto CalculatePosition() -> std::vector<muc::array3d>;
     auto ImportAllValue(const YAML::Node& node) -> void override;
     auto ExportAllValue(YAML::Node& node) const -> void override;
 
@@ -147,7 +152,7 @@ private:
     Simple<double> fSiliconeLength;
     Simple<double> fSiliconeWidth;
     Simple<double> fSiliconeThickness;
-    
+
     Cached<std::vector<double>> fWidth;
     Cached<std::vector<muc::array3d>> fPosition;
 

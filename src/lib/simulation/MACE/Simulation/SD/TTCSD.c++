@@ -56,7 +56,7 @@ TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
-    fSplitHit.reserve(ttc.NAlongPhi() * ttc.NAlongZ());
+    fSplitHit.reserve(ttc.NAlongPhi() * ttc.Width().size());
 }
 
 auto TTCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
