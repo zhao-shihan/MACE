@@ -7,7 +7,6 @@
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
-#include "Mustard/Utility/MPIReseedRandomEngine.h++"
 #include "Mustard/Utility/MakeTextTMacro.h++"
 #include "Mustard/Utility/PrettyLog.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
@@ -31,7 +30,6 @@ auto main(int argc, char* argv[]) -> int {
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
     Mustard::UseXoshiro<256> random;
-    Mustard::MPIReseedRandomEngine();
     gInterpreter->ProcessLine(R"(
         const auto Gauss{
             [](auto mu, auto sigma) {
