@@ -5,6 +5,7 @@
 #include "Mustard/Extension/Geant4X/Physics/MuonNLODecayPhysics.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumNLODecayPhysics.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPhysics.h++"
+#include "Mustard/Extension/Geant4X/Physics/PionKaonDecayMakeSpinPhysics.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PrettyLog.h++"
 
@@ -37,6 +38,8 @@ StandardPhysicsListBase::StandardPhysicsListBase() :
     // HP decay for muon and muonium
     RegisterPhysics(new Mustard::Geant4X::MuonNLODecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuoniumNLODecayPhysics{verboseLevel});
+    // Pion/Kaon decay into polarized muon
+    RegisterPhysics(new Mustard::Geant4X::PionKaonDecayMakeSpinPhysics{verboseLevel});
 
     // Set EM parameters
     using namespace Mustard::LiteralUnit::Energy;
@@ -67,7 +70,7 @@ auto StandardPhysicsListBase::DisableMuonMinusCapture() -> void {
     if (typeid(*stopping) == typeid(G4StoppingPhysics)) {
         Mustard::PrettyWarning(fmt::format("Replacing stopping physics {} with {}", typeid(*stopping).name(), typeid(G4StoppingPhysics).name()));
     }
-    ReplacePhysics(new G4StoppingPhysics("stopping", verboseLevel, false));
+    ReplacePhysics(new G4StoppingPhysics{"stopping", verboseLevel, false});
 }
 
 } // namespace MACE::inline Simulation::inline Physics
