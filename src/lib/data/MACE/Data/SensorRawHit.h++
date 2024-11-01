@@ -10,7 +10,7 @@ using TTCSiPMRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<double, "t", "Optical photon hit time">>;
 
 using ECALPMRawHit = Mustard::Data::TupleModel<
-    Mustard::Data::Value<short, "UnitID", "Hit unit ID">,
+    Mustard::Data::Value<short, "ModID", "Hit module ID">,
     Mustard::Data::Value<double, "t", "Optical photon hit time">>;
 
 } // namespace MACE::Data

@@ -14,7 +14,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fGenerator{&fAvailableGenerator.gpsx},
     fSavePrimaryVertexData{true},
     fPrimaryVertexData{},
-    fMessengerRegister{this} {}
+    fAnalysisMessengerRegister{this},
+    fPrimaryGeneratorActionMessengerRegister{this} {}
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
     fGenerator->GeneratePrimaryVertex(event);

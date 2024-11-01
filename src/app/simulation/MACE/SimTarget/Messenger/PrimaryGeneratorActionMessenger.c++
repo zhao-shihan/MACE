@@ -1,22 +1,22 @@
-#include "MACE/SimECAL/Action/PrimaryGeneratorAction.h++"
-#include "MACE/SimECAL/Messenger/PrimaryGeneratorActionMessenger.h++"
+#include "MACE/SimTarget/Action/PrimaryGeneratorAction.h++"
+#include "MACE/SimTarget/Messenger/PrimaryGeneratorActionMessenger.h++"
 
 #include "G4UIcmdWithoutParameter.hh"
 
-namespace MACE::SimECAL::inline Messenger {
+namespace MACE::SimTarget::inline Messenger {
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     SingletonMessenger{},
     fSwitchToGPSX{},
-    fSwitchToEcoMug{} {
+    fSwitchToFromDataPrimaryGenerator{} {
 
     fSwitchToGPSX = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Generator/SwitchToGPSX", this);
     fSwitchToGPSX->SetGuidance("If set then the G4GeneralParticleSource will be used.");
     fSwitchToGPSX->AvailableForStates(G4State_Idle);
 
-    fSwitchToEcoMug = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Generator/SwitchToEcoMug", this);
-    fSwitchToEcoMug->SetGuidance("If set then the EcoMug generator will be used.");
-    fSwitchToEcoMug->AvailableForStates(G4State_Idle);
+    fSwitchToFromDataPrimaryGenerator = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Generator/SwitchToFromDataPrimaryGenerator", this);
+    fSwitchToFromDataPrimaryGenerator->SetGuidance("If set then the EcoMug generator will be used.");
+    fSwitchToFromDataPrimaryGenerator->AvailableForStates(G4State_Idle);
 }
 
 PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger() = default;
@@ -26,11 +26,11 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
         Deliver<PrimaryGeneratorAction>([&](auto&& r) {
             r.SwitchToGPSX();
         });
-    } else if (command == fSwitchToEcoMug.get()) {
+    } else if (command == fSwitchToFromDataPrimaryGenerator.get()) {
         Deliver<PrimaryGeneratorAction>([&](auto&& r) {
-            r.SwitchToEcoMug();
+            r.SwitchToFromDataPrimaryGenerator();
         });
     }
 }
 
-} // namespace MACE::SimECAL::inline Messenger
+} // namespace MACE::SimTarget::inline Messenger

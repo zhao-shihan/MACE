@@ -6,8 +6,8 @@
 #include "Mustard/Extension/MPIX/Execution/Executor.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
-#include "Mustard/Utility/MPIReseedRandomEngine.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
+#include "Mustard/Utility/UseXoshiro.h++"
 
 #include "TFile.h"
 #include "TNtuple.h"
@@ -33,9 +33,7 @@ using namespace Mustard::PhysicalConstant;
 auto main(int argc, char* argv[]) -> int {
     Mustard::Env::MPIEnv env{argc, argv, {}};
 
-    Mustard::CLHEPX::Random::Xoshiro256Plus rng;
-    CLHEP::HepRandom::setTheEngine(&rng);
-    Mustard::MPIReseedRandomEngine();
+    Mustard::UseXoshiro<256> random;
 
     G4ParticleTable::GetParticleTable()->SetReadiness();
     Mustard::Geant4X::Antimuonium::Definition();
@@ -53,7 +51,7 @@ auto main(int argc, char* argv[]) -> int {
     ippDecay.MetropolisDelta(std::stod(argv[2]));
     ippDecay.MetropolisDiscard(std::stod(argv[3]));
     if (argc >= 5) {
-        ippDecay.PassCut(
+        ippDecay.Bias(
             [](auto&& event) {
                 const auto& [p, p1, p2, k1, k2]{event};
                 return p.e() < electron_mass_c2 + 10_keV;

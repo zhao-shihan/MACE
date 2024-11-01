@@ -2,7 +2,7 @@
 #include "MACE/Simulation/SD/TTCSD.h++"
 #include "MACE/Simulation/SD/TTCSiPMSD.h++"
 
-#include "Mustard/Env/Print.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -114,14 +114,12 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                     return count + cellHit.second.size();
                                 }));
 
-    for (int hitID{};
-         auto&& [tileID, splitHit] : fSplitHit) {
+    for (auto&& [tileID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
             muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
-            Get<"HitID">(*hit) = hitID++;
             assert(Get<"TileID">(*hit) == tileID);
             fHitsCollection->insert(hit.release());
         } break;
@@ -140,7 +138,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
+                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {
@@ -152,7 +150,6 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                        })};
                 // construct real hit
-                Get<"HitID">(*topHit) = hitID++;
                 assert(Get<"TileID">(*topHit) == tileID);
                 for (const auto& hit : cluster) {
                     if (hit == topHit) { continue; }
@@ -167,9 +164,13 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
     muc::timsort(*fHitsCollection->GetVector(),
                  [](const auto& hit1, const auto& hit2) {
-                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
-                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                     return std::tie(Get<"TrkID">(*hit1), Get<"t">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"t">(*hit2));
                  });
+
+    for (int hitID{}; auto&& hit : *fHitsCollection->GetVector()) {
+        Get<"HitID">(*hit) = hitID++;
+    }
 
     if (fTTCSiPMSD) {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};

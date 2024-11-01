@@ -40,12 +40,12 @@ auto ECALPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     step.GetTrack()->SetTrackStatus(fStopAndKill);
 
     const auto postStepPoint{*step.GetPostStepPoint()};
-    const auto unitID{postStepPoint.GetTouchable()->GetReplicaNumber(1)};
+    const auto modID{postStepPoint.GetTouchable()->GetReplicaNumber(1)};
     // new a hit
-    const auto& hit{fHit[unitID].emplace_back(std::make_unique_for_overwrite<ECALPMHit>())};
+    const auto& hit{fHit[modID].emplace_back(std::make_unique_for_overwrite<ECALPMHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
-    Get<"UnitID">(*hit) = unitID;
+    Get<"ModID">(*hit) = modID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
 
     return true;
@@ -53,10 +53,10 @@ auto ECALPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
 auto ECALPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
     for (int hitID{};
-         auto&& [unitID, hitOfUnit] : fHit) {
+         auto&& [modID, hitOfUnit] : fHit) {
         for (auto&& hit : hitOfUnit) {
             Get<"HitID">(*hit) = hitID++;
-            assert(Get<"UnitID">(*hit) == unitID);
+            assert(Get<"ModID">(*hit) == modID);
             fHitsCollection->insert(hit.release());
         }
     }
@@ -64,9 +64,9 @@ auto ECALPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
 auto ECALPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
     std::unordered_map<int, int> nHit;
-    for (auto&& [unitID, hit] : fHit) {
+    for (auto&& [modID, hit] : fHit) {
         if (hit.size() > 0) {
-            nHit[unitID] = hit.size();
+            nHit[modID] = hit.size();
         }
     }
     return nHit;

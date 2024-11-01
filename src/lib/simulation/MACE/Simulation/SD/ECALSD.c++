@@ -2,7 +2,7 @@
 #include "MACE/Simulation/SD/ECALPMSD.h++"
 #include "MACE/Simulation/SD/ECALSD.h++"
 
-#include "Mustard/Env/Print.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -79,17 +79,17 @@ auto ECALSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& touchable{*preStepPoint.GetTouchable()};
-    const auto unitID{touchable.GetReplicaNumber()};
+    const auto modID{touchable.GetReplicaNumber()};
     // calculate (Ek0, p0)
     const auto vertexEk{track.GetVertexKineticEnergy()};
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
     // new a hit
-    const auto& hit{fSplitHit[unitID].emplace_back(std::make_unique_for_overwrite<ECALHit>())};
+    const auto& hit{fSplitHit[modID].emplace_back(std::make_unique_for_overwrite<ECALHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
-    Get<"UnitID">(*hit) = unitID;
+    Get<"ModID">(*hit) = modID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"nOptPho">(*hit) = -1; // to be determined
@@ -114,15 +114,13 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                     return count + cellHit.second.size();
                                 }));
 
-    for (int hitID{};
-         auto&& [unitID, splitHit] : fSplitHit) {
+    for (auto&& [modID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
             muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
-            Get<"HitID">(*hit) = hitID++;
-            assert(Get<"UnitID">(*hit) == unitID);
+            assert(Get<"ModID">(*hit) == modID);
             fHitsCollection->insert(hit.release());
         } break;
         default: {
@@ -140,7 +138,7 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
+                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {
@@ -152,8 +150,7 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                        })};
                 // construct real hit
-                Get<"HitID">(*topHit) = hitID++;
-                assert(Get<"UnitID">(*topHit) == unitID);
+                assert(Get<"ModID">(*topHit) == modID);
                 for (const auto& hit : cluster) {
                     if (hit == topHit) { continue; }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
@@ -167,14 +164,18 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
     muc::timsort(*fHitsCollection->GetVector(),
                  [](const auto& hit1, const auto& hit2) {
-                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
-                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                     return std::tie(Get<"TrkID">(*hit1), Get<"t">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"t">(*hit2));
                  });
+
+    for (int hitID{}; auto&& hit : *fHitsCollection->GetVector()) {
+        Get<"HitID">(*hit) = hitID++;
+    }
 
     if (fECALPMSD) {
         auto nHit{fECALPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            Get<"nOptPho">(*hit) = nHit[Get<"UnitID">(*hit)];
+            Get<"nOptPho">(*hit) = nHit[Get<"ModID">(*hit)];
         }
     }
 }

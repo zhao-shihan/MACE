@@ -13,13 +13,13 @@ using namespace Mustard::LiteralUnit::Density;
 TTC::TTC() :
     DescriptionBase{"TTC"},
     // Geometry
-    fLength{15_cm},
-    fWidth{10_cm},
-    fThickness{1_cm},
+    fLength{5_cm},
+    fWidth{3_cm},
+    fThickness{0.5_cm},
     fRadius{48_cm},
-    fSlantAngle{15_deg},
-    fNAlongPhi{42},
-    fNAlongZ{18},
+    fSlantAngle{30_deg},
+    fNAlongPhi{163},
+    fNAlongZ{60},
     // Material
     fDensity{1.023_g_cm3},
     fRIndexEnergyBin{3.100_eV, 2.385_eV},

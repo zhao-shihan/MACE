@@ -5,6 +5,7 @@
 #include <memory>
 
 class G4UIcmdWithABool;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 
 namespace MACE::SimMACE {
@@ -30,8 +31,11 @@ public:
 
 private:
     std::unique_ptr<G4UIcmdWithABool> fApplyProductionCutNearTarget;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMACECutMaxLowerPositronEk;
-    std::unique_ptr<G4UIcmdWithABool> fApplyMACECut;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMACEBiasPxySofteningFactor;
+    std::unique_ptr<G4UIcmdWithADouble> fMACEBiasCosSofteningFactor;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMACEBiasEkLow;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMACEBiasEkSofteningFactor;
+    std::unique_ptr<G4UIcmdWithABool> fApplyMACEBias;
 };
 
 } // namespace Messenger

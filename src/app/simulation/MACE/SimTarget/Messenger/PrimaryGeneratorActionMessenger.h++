@@ -6,7 +6,7 @@
 
 class G4UIcmdWithoutParameter;
 
-namespace MACE::SimECAL {
+namespace MACE::SimTarget {
 
 inline namespace Action {
 class PrimaryGeneratorAction;
@@ -27,9 +27,9 @@ public:
 
 private:
     std::unique_ptr<G4UIcmdWithoutParameter> fSwitchToGPSX;
-    std::unique_ptr<G4UIcmdWithoutParameter> fSwitchToEcoMug;
+    std::unique_ptr<G4UIcmdWithoutParameter> fSwitchToFromDataPrimaryGenerator;
 };
 
 } // namespace Messenger
 
-} // namespace MACE::SimECAL
+} // namespace MACE::SimTarget

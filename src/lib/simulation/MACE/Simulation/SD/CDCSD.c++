@@ -1,8 +1,8 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
 
-#include "Mustard/Env/Print.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 #include "Mustard/Utility/VectorArithmeticOperator.h++"
 #include "Mustard/Utility/VectorCast.h++"
 
@@ -72,7 +72,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& postStepPoint{*step.GetPostStepPoint()};
     const auto& touchable{*preStepPoint.GetTouchable()};
     const auto position{muc::midpoint(preStepPoint.GetPosition(), postStepPoint.GetPosition())};
-    // retrive wire position
+    // retrieve wire position
     const auto cellID{touchable.GetReplicaNumber(1)};
     const auto& cellInfo{fCellMap->at(cellID)};
     assert(cellID == cellInfo.cellID);
@@ -129,14 +129,12 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                     return count + cellHit.second.size();
                                 }));
 
-    for (int hitID{};
-         auto&& [cellID, splitHit] : fSplitHit) {
+    for (auto&& [cellID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
             muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
-            Get<"HitID">(*hit) = hitID++;
             assert(Get<"CellID">(*hit) == cellID);
             fHitsCollection->insert(hit.release());
         } break;
@@ -155,7 +153,7 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + timeResolutionFWHM};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     timeResolutionFWHM != 0) [[unlikely]] {
-                    Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
+                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {
@@ -167,7 +165,6 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                        })};
                 // construct real hit
-                Get<"HitID">(*topHit) = hitID++;
                 assert(Get<"CellID">(*topHit) == cellID);
                 auto nTopHit{1};
                 for (const auto& hit : cluster) {
@@ -190,9 +187,13 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
     muc::timsort(*fHitsCollection->GetVector(),
                  [](const auto& hit1, const auto& hit2) {
-                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
-                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                     return std::tie(Get<"TrkID">(*hit1), Get<"tHit">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"tHit">(*hit2));
                  });
+
+    for (int hitID{}; auto&& hit : *fHitsCollection->GetVector()) {
+        Get<"HitID">(*hit) = hitID++;
+    }
 }
 
 } // namespace MACE::inline Simulation::inline SD
