@@ -25,7 +25,7 @@
 /Mustard/Physics/MuonDecay/ICDecay/BR                   1
 /Mustard/Physics/MuonDecay/ICDecay/MetropolisDelta      0.0025
 /Mustard/Physics/MuonDecay/ICDecay/MetropolisDiscard    10
-/MACE/Physics/MuonDecay/ICDecay/ApplyMACECut            yes
+/MACE/Physics/MuonDecay/ICDecay/ApplyMACEBias           yes
 /Mustard/Physics/MuonDecay/RadiativeDecay/BR             0
 /Mustard/Physics/MuonDecay/UpdateDecayBR
 
@@ -45,7 +45,7 @@
 # Run
 #############################################################################
 
-/Mustard/Analysis/FilePath SimMACE_mu2eeevv_with_cut
+/Mustard/Analysis/FilePath SimMACE_mu2eeevv_biased
 /Mustard/Analysis/FileMode NEW
 /run/beamOn 100000000
 /Mustard/Run/PrintRunSummary
