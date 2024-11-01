@@ -50,7 +50,7 @@ using MCPSimHit = Mustard::Data::TupleModel<
 
 using ECALSimHit = Mustard::Data::TupleModel<
     ECALHit,
-    Mustard::Data::Value<int, "nOptPho", "Number of optical photon hits on PMT (MC truth)">,
+    Mustard::Data::Value<int, "nOptPho", "Number of optical photon hits on PM (MC truth)">,
     Mustard::Data::Value<muc::array3f, "x", "Hit position (MC truth)">,
     Mustard::Data::Value<float, "Ek", "Hit kinetic energy (MC truth)">,
     Mustard::Data::Value<muc::array3f, "p", "Hit momentum (MC truth)">,

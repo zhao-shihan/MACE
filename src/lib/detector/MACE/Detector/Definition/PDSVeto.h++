@@ -4,9 +4,10 @@
 
 namespace MACE::Detector::Definition {
 
-class ECALMPPC final : public Mustard::Detector::Definition::DefinitionBase {
+class PDSVeto final : public Mustard::Detector::Definition::DefinitionBase {
 private:
     auto Construct(bool checkOverlaps) -> void override;
+
 };
 
 } // namespace MACE::Detector::Definition

@@ -4,9 +4,12 @@
 
 namespace MACE::Detector::Definition {
 
-class ECALPMTAssemblies final : public Mustard::Detector::Definition::DefinitionBase {
+class ECALPhotoSensor final : public Mustard::Detector::Definition::DefinitionBase {
 private:
     auto Construct(bool checkOverlaps) -> void override;
+    
+    auto ConstructMPPC(bool checkOverlaps) -> void ;
+    auto ConstructPMT(bool checkOverlaps) -> void ;
 };
 
 } // namespace MACE::Detector::Definition

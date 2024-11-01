@@ -12,7 +12,7 @@
 #include "MACE/Detector/Definition/ECALCrystal.h++"
 #include "MACE/Detector/Definition/ECALField.h++"
 #include "MACE/Detector/Definition/ECALMagnet.h++"
-#include "MACE/Detector/Definition/ECALPMTAssemblies.h++"
+#include "MACE/Detector/Definition/ECALPhotoSensor.h++"
 #include "MACE/Detector/Definition/ECALShield.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
 
     [[maybe_unused]] auto& ecalCrystal{ecalField.NewDaughter<ECALCrystal>(fCheckOverlap)};
     [[maybe_unused]] auto& ecalMagnet{ecalField.NewDaughter<ECALMagnet>(fCheckOverlap)};
-    [[maybe_unused]] auto& ecalPMTAssemblies{ecalField.NewDaughter<ECALPMTAssemblies>(fCheckOverlap)};
+    [[maybe_unused]] auto& ecalPhotoSensor{ecalField.NewDaughter<ECALPhotoSensor>(fCheckOverlap)};
     [[maybe_unused]] auto& mcpChamber{ecalField.NewDaughter<MCPChamber>(fCheckOverlap)};
 
     [[maybe_unused]] auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<SolenoidBeamPipeS1>(fCheckOverlap)};
@@ -151,7 +151,7 @@ int main(int argc, char* argv[]) {
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const DefinitionBase>>{
              ecalCrystal,
              ecalMagnet,
-             ecalPMTAssemblies,
+             ecalPhotoSensor,
              ecalShield,
              mmsMagnet,
              mmsShield,

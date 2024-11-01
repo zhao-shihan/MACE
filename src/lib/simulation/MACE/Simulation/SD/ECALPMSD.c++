@@ -1,4 +1,4 @@
-#include "MACE/Simulation/SD/ECALPMTSD.h++"
+#include "MACE/Simulation/SD/ECALPMSD.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -14,7 +14,7 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-ECALPMTSD::ECALPMTSD(const G4String& sdName) :
+ECALPMSD::ECALPMSD(const G4String& sdName) :
     Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fHit{},
@@ -22,15 +22,15 @@ ECALPMTSD::ECALPMTSD(const G4String& sdName) :
     collectionName.insert(sdName + "HC");
 }
 
-auto ECALPMTSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
+auto ECALPMSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     fHit.clear(); // clear at the begin of event allows ECALSD to get optical photon counts at the end of event
 
-    fHitsCollection = new ECALPMTHitCollection(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new ECALPMHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-auto ECALPMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
+auto ECALPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -40,9 +40,9 @@ auto ECALPMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     step.GetTrack()->SetTrackStatus(fStopAndKill);
 
     const auto postStepPoint{*step.GetPostStepPoint()};
-    const auto modID{postStepPoint.GetTouchable()->GetReplicaNumber()};
+    const auto modID{postStepPoint.GetTouchable()->GetReplicaNumber(1)};
     // new a hit
-    const auto& hit{fHit[modID].emplace_back(std::make_unique_for_overwrite<ECALPMTHit>())};
+    const auto& hit{fHit[modID].emplace_back(std::make_unique_for_overwrite<ECALPMHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"ModID">(*hit) = modID;
@@ -51,7 +51,7 @@ auto ECALPMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     return true;
 }
 
-auto ECALPMTSD::EndOfEvent(G4HCofThisEvent*) -> void {
+auto ECALPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
     for (int hitID{};
          auto&& [modID, hitOfUnit] : fHit) {
         for (auto&& hit : hitOfUnit) {
@@ -62,7 +62,7 @@ auto ECALPMTSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
 }
 
-auto ECALPMTSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
+auto ECALPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
     std::unordered_map<int, int> nHit;
     for (auto&& [modID, hit] : fHit) {
         if (hit.size() > 0) {

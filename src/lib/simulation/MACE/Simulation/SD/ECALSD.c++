@@ -1,5 +1,5 @@
 #include "MACE/Detector/Description/ECAL.h++"
-#include "MACE/Simulation/SD/ECALPMTSD.h++"
+#include "MACE/Simulation/SD/ECALPMSD.h++"
 #include "MACE/Simulation/SD/ECALSD.h++"
 
 #include "Mustard/Utility/PrettyLog.h++"
@@ -35,24 +35,24 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-ECALSD::ECALSD(const G4String& sdName, const ECALPMTSD* ecalPMTSD) :
+ECALSD::ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD) :
     Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
-    fECALPMTSD{ecalPMTSD},
+    fECALPMSD{ecalPMSD},
     fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
 
     const auto& ecal{Detector::Description::ECAL::Instance()};
-    assert(ecal.ScintillationWavelengthBin().size() == ecal.ScintillationComponent1().size());
-    std::vector<double> dE(ecal.ScintillationWavelengthBin().size());
-    muc::ranges::adjacent_difference(ecal.ScintillationWavelengthBin(), dE.begin());
+    assert(ecal.ScintillationEnergyBin().size() == ecal.ScintillationComponent1().size());
+    std::vector<double> dE(ecal.ScintillationEnergyBin().size());
+    muc::ranges::adjacent_difference(ecal.ScintillationEnergyBin(), dE.begin());
     std::vector<double> spectrum(ecal.ScintillationComponent1().size());
-    muc::ranges::adjacent_difference(ecal.ScintillationWavelengthBin(), spectrum.begin(), muc::midpoint<double>);
+    muc::ranges::adjacent_difference(ecal.ScintillationEnergyBin(), spectrum.begin(), muc::midpoint<double>);
     const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
-    std::vector<double> meanE(ecal.ScintillationWavelengthBin().size());
-    muc::ranges::adjacent_difference(ecal.ScintillationWavelengthBin(), meanE.begin(), muc::midpoint<double>);
+    std::vector<double> meanE(ecal.ScintillationEnergyBin().size());
+    muc::ranges::adjacent_difference(ecal.ScintillationEnergyBin(), meanE.begin(), muc::midpoint<double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
@@ -172,8 +172,8 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
         Get<"HitID">(*hit) = hitID++;
     }
 
-    if (fECALPMTSD) {
-        auto nHit{fECALPMTSD->NOpticalPhotonHit()};
+    if (fECALPMSD) {
+        auto nHit{fECALPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
             Get<"nOptPho">(*hit) = nHit[Get<"ModID">(*hit)];
         }
