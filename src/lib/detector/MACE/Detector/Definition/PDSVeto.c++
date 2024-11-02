@@ -190,6 +190,11 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
         const auto wls{nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE")};
 
         // pre define solids and logical volumes
+        const auto solidAlAbsorber{Make<G4Box>("temp",
+                                                dynamic_cast<const G4Box*>(logicModule->GetSolid())->GetXHalfLength(),
+                                                veto.AlAbsorberThickness()/2,
+                                                psStripLength/2)};
+        const auto logicAlAbsorber{Make<G4LogicalVolume>(solidAlAbsorber,nistManager->FindOrBuildMaterial("G4_Al"),"AlAbsorber")};
         const auto solidStrip{Make<G4Box>("temp",
                                           veto.PSWidth() / 2,
                                           veto.PSThickness() / 2,
@@ -233,6 +238,13 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
                            -(moduleThickness / 2 - veto.PSThickness() / 2) 
                            + (layerIndex) * (veto.PSThickness() + veto.AlAbsorberThickness())
                           };
+            if(layerIndex<totalLayer-1){
+                const auto alAbsorberPosY{
+                                stripPosY+veto.PSThickness()/2+veto.AlAbsorberThickness()/2
+                                    };
+                const G4Transform3D alAbsorberTransform{G4Rotate3D::Identity.getRotation(),G4ThreeVector(0,alAbsorberPosY,0)};
+                Make<G4PVPlacement>(alAbsorberTransform,logicAlAbsorber,name+"AlAbsorber",logicModule,false,layerIndex,checkOverlaps);
+            }
             // clang-format on
             for (int widthIndex{}; // start from 0
                  widthIndex < totalStripALayer;
@@ -262,7 +274,7 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
                                              veto.PSHoleRadius(),
                                              psStripLength / 2
                                              ) };
-        auto logicVirtualPairBox { Make <G4LogicalVolume>(solidVirtualPairBox, plasticScinllator, "virtualPairBox") };
+        auto logicVirtualPairBox { Make <G4LogicalVolume>(solidVirtualPairBox, plasticScinllator, "VirtualPairBox") };
         // clang-format on
 
         // construct pair box, SiPM, coupler
@@ -276,7 +288,7 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
             const auto pairBoxRotation { G4RotateZ3D(fiberPlaneTiltAngle) };
             const auto pairBoxTransform { G4Transform3D(pairBoxRotation.getRotation(), pairBoxTranslate) };
             // clang-format on
-            const auto phyPairBox{Make<G4PVPlacement>(pairBoxTransform, logicVirtualPairBox, "virtualPairBox", logicStrip, false, fiberPairCount, checkOverlaps)};
+            const auto phyPairBox{Make<G4PVPlacement>(pairBoxTransform, logicVirtualPairBox, "VirtualPairBox", logicStrip, false, fiberPairCount, checkOverlaps)};
 
             for (int sideCount{}; sideCount < 2; ++sideCount) {                         // nest loop by one pairs' 2 sides
                 const auto readBoxRotation{G4RotateX3D(pow(-1., sideCount) * pi / 2.)}; // SiPM&coupler
@@ -310,14 +322,14 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
         // straight FiberHoles
         Make<G4PVPlacement>(upStraightFiberTransform,
                             logicStraightFiberHole,
-                            "upStraightFiberHole",
+                            "UpStraightFiberHole",
                             logicVirtualPairBox,
                             false,
                             0,
                             checkOverlaps);
         Make<G4PVPlacement>(downStraightFiberTransform,
                             logicStraightFiberHole,
-                            "downStraightFiberHole",
+                            "DownStraightFiberHole",
                             logicVirtualPairBox,
                             false,
                             0,
