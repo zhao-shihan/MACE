@@ -52,6 +52,21 @@
 #/vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/zoom 2.5
 
+# remove all virtual geometry in veto
+/vis/geometry/set/visibility cap2ModuleBox                -1          no
+/vis/geometry/set/visibility cap1ModuleBox                -1          no
+/vis/geometry/set/visibility topModuleBox                 -1          no
+/vis/geometry/set/visibility sideModuleBox                -1          no
+/vis/geometry/set/visibility Cap2StripBox                 -1          yes
+/vis/geometry/set/visibility Cap1StripBox                 -1          yes
+/vis/geometry/set/visibility TopStripBox                  -1          yes
+/vis/geometry/set/visibility SideStripBox                 -1          yes
+/vis/geometry/set/visibility virtualPairBox                0          no
+/vis/geometry/set/visibility Cap2StripBox                  0          no
+/vis/geometry/set/visibility Cap1StripBox                  0          no
+/vis/geometry/set/visibility TopStripBox                   0          no
+/vis/geometry/set/visibility SideStripBox                  0          no
+
 # Colors
 /vis/geometry/set/colour Accelerator                   0     1     1     1     0.1
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
@@ -70,14 +85,12 @@
 /vis/geometry/set/colour ECALField                     0     1     1     1     0.05
 /vis/geometry/set/colour ECALMagnet                    0     1     1     1     0.05
 /vis/geometry/set/colour ECALShield                    0     1     1     1     0.05
-
 /vis/geometry/set/colour ECALPMTCoupler                0     1     1     1     0.1
 /vis/geometry/set/colour ECALPMTShell                  0     1     1     1     0.05
 /vis/geometry/set/colour ECALPMTVacuum                 0     1     1     1     0.
 /vis/geometry/set/colour ECALMPPCWindow                0     1     1     1     0.2
 /vis/geometry/set/colour ECALMPPCCoupler               0     1     1     1     0.1
-/vis/geometry/set/colour ECALPMCathode                0     1     1     1     0.3
-
+/vis/geometry/set/colour ECALPMCathode                 0     1     1     1     0.3
 /vis/geometry/set/colour MCP                           0     1     1     1     0.1
 /vis/geometry/set/colour MCPAnode                      0     1     1     1     0.1
 /vis/geometry/set/colour MCPChamber                    0     1     1     1     0.05
@@ -118,6 +131,17 @@
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour TTC                           0     1     1     1     0.05
 /vis/geometry/set/colour World                         0     1     1     1     0.001
+/vis/geometry/set/colour FiberHole                     0     1     1     1     0.1
+/vis/geometry/set/colour Fiber                         0     1     1     1     0.9
+/vis/geometry/set/colour SiPMCoupler                   0     1     1     1     0.4
+/vis/geometry/set/colour SiPM                          0     1     1     1     0.3
+/vis/geometry/set/colour SiPMCathode                   0     1     1     1     0.6
+/vis/geometry/set/colour Cap2Strip                     0     0.7   0     0.3   0.2
+/vis/geometry/set/colour Cap1Strip                     0     0     1     0     0.2
+/vis/geometry/set/colour TopStrip                      0     1     0     0     0.2
+/vis/geometry/set/colour SideStrip                     0     0     0     1     0.2
+
+
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 10 cm

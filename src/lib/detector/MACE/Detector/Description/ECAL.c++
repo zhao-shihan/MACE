@@ -476,6 +476,7 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ImportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ImportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
+    ImportValue(node,fUseMPPC,"UseMPPC");
     ImportValue(node, fPMTDimensions, "PMTDimensions");
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
@@ -496,7 +497,7 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fScintillationYield, "ScintillationYield");
     ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ImportValue(node, fResolutionScale, "ResolutionScale");
-    ImportValue(node, moduleSelection, "moduleSelection");
+    ImportValue(node, fmoduleSelection, "moduleSelection");
 
     SetGeometryOutdated();
 }
@@ -507,6 +508,7 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ExportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ExportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
+    ExportValue(node,fUseMPPC,"UseMPPC");
     ExportValue(node, fPMTDimensions, "PMTDimensions");
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
@@ -527,7 +529,7 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fScintillationYield, "ScintillationYield");
     ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ExportValue(node, fResolutionScale, "ResolutionScale");
-    ExportValue(node, moduleSelection, "moduleSelection");
+    ExportValue(node, fmoduleSelection, "moduleSelection");
 }
 
 } // namespace MACE::Detector::Description

@@ -88,13 +88,13 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
     const auto topModuleYShift{sideModuleWidth / 2 + veto.InterModuleGap() + topModuleThickness / 2};
     const G4ThreeVector topModuleCenter{0, topModuleYShift, 0};
 
-    const auto topModuleRotation{G4RotateY3D(pi / 2).getRotation()};
+    const auto topModuleRotation{G4RotateY3D{pi / 2}.getRotation()};
 
-    const auto side0ModuleRotation{G4RotateZ3D(pi / 2).getRotation()};
-    const auto side1ModuleRotation{G4RotateZ3D(-pi / 2).getRotation()};
+    const auto side0ModuleRotation{G4RotateZ3D{pi / 2}.getRotation()};
+    const auto side1ModuleRotation{G4RotateZ3D{-pi / 2}.getRotation()};
 
-    const auto cap1ModuleRotation{G4RotateX3D(pi / 2).getRotation()};
-    const auto cap2ModuleRotation{(G4RotateZ3D(pi / 2) * G4RotateX3D(pi / 2)).getRotation()};
+    const auto cap1ModuleRotation{G4RotateX3D{pi / 2}.getRotation()};
+    const auto cap2ModuleRotation{(G4RotateZ3D{pi / 2} * G4RotateX3D{pi / 2}).getRotation()};
 
     const auto& ecalField{Description::ECALField::Instance()};
     const auto x0{Mustard::VectorCast<G4ThreeVector>(ecalField.Center())};
@@ -175,7 +175,7 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
         const auto fiberPairSpacing { (veto.PSWidth()) / 2 }; // ignore radius
         const auto straightFiberLength { psStripLength 
                                         - 4 * sqrt(
-                                          pow(veto.PSFiberCurvatureRadius(), 2) - pow(veto.PSFiberCurvatureRadius() -   fiberPairSpacing / 4, 2)
+                                          std::pow(veto.PSFiberCurvatureRadius(), 2) - std::pow(veto.PSFiberCurvatureRadius() -   fiberPairSpacing / 4, 2)
                                           ) };
         const auto fiberSpacing { veto.PSWidth() / (fiberNum) }; // ignore radius
         const auto fiberPlaneTiltAngle { asin(veto.PSHoleRadius() * 2 / fiberSpacing) };
@@ -201,13 +201,13 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
                                           psStripLength / 2)};
         const auto logicStrip{Make<G4LogicalVolume>(solidStrip, plasticScinllator, name + "Strip")};
 
-        const auto solidStraightFiberHole{Make<G4Tubs>("temp", 0, veto.PSHoleRadius(), straightFiberLength / 2, 0, 2 * M_PI)};
+        const auto solidStraightFiberHole{Make<G4Tubs>("temp", 0, veto.PSHoleRadius(), straightFiberLength / 2, 0, 2 * pi)};
         const auto logicStraightFiberHole{Make<G4LogicalVolume>(solidStraightFiberHole, air, "StraightFiberHole")};
 
         const auto solidCurvedFiberHole{Make<G4Torus>("temp", 0, veto.PSHoleRadius(), veto.PSFiberCurvatureRadius(), 0, fiberCurvaturePhi)};
         const auto logicCurvedFiberHole{Make<G4LogicalVolume>(solidCurvedFiberHole, air, "CurvedFiberHole")};
 
-        const auto solidStraightFiber{Make<G4Tubs>("temp", 0, veto.PSFiberRadius(), straightFiberLength / 2, 0, 2 * M_PI)};
+        const auto solidStraightFiber{Make<G4Tubs>("temp", 0, veto.PSFiberRadius(), straightFiberLength / 2, 0, 2 * pi)};
         const auto logicStraightFiber{Make<G4LogicalVolume>(solidStraightFiber, wls, "StraightFiber")};
 
         const auto solidCurvedFiber{Make<G4Torus>("temp", 0, veto.PSFiberRadius(), veto.PSFiberCurvatureRadius(), 0, fiberCurvaturePhi)};
@@ -256,7 +256,7 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
                                + (layerIndex) * offset
                               };
                 // clang-format on
-                const auto stripTransform{G4Transform3D(G4RotationMatrix::IDENTITY, G4ThreeVector(stripPosX, stripPosY, 0))};
+                const auto stripTransform{G4Transform3D{G4RotationMatrix::IDENTITY, G4ThreeVector{stripPosX, stripPosY, 0}}};
                 const auto copyNum{layerIndex * totalStripALayer + widthIndex};
                 Make<G4PVPlacement>(stripTransform, logicStripBox, name + "StripBox", logicModule, false, copyNum, checkOverlaps);
             }
@@ -284,20 +284,20 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
             // clang-format off
             const auto pairBoxCenterX { -veto.PSWidth() / 2 
                                   + ((fiberNum + 2.) / 4. + fiberPairCount) * fiberSpacing };
-            const auto pairBoxTranslate { G4ThreeVector(pairBoxCenterX, 0, 0) };
-            const auto pairBoxRotation { G4RotateZ3D(fiberPlaneTiltAngle) };
-            const auto pairBoxTransform { G4Transform3D(pairBoxRotation.getRotation(), pairBoxTranslate) };
+            const auto pairBoxTranslate { G4ThreeVector{pairBoxCenterX, 0, 0} };
+            const auto pairBoxRotation { G4RotateZ3D{fiberPlaneTiltAngle} };
+            const auto pairBoxTransform { G4Transform3D{pairBoxRotation.getRotation(), pairBoxTranslate} };
             // clang-format on
             const auto phyPairBox{Make<G4PVPlacement>(pairBoxTransform, logicVirtualPairBox, "VirtualPairBox", logicStrip, false, fiberPairCount, checkOverlaps)};
 
             for (int sideCount{}; sideCount < 2; ++sideCount) {                         // nest loop by one pairs' 2 sides
-                const auto readBoxRotation{G4RotateX3D(pow(-1., sideCount) * pi / 2.)}; // SiPM&coupler
+                const auto readBoxRotation{G4RotateX3D{std::pow(-1., sideCount) * pi / 2.}}; // SiPM&coupler
 
                 const auto SiPMPosZ{(stripBoxHalfLength - veto.SiPMThickness() / 2)};
                 const auto couplerPosZ{stripBoxHalfLength - veto.SiPMThickness() - veto.SiPMCouplerThickness() / 2};
 
-                G4Transform3D couplerTransform{readBoxRotation.getRotation(), G4ThreeVector(pairBoxCenterX, 0, couplerPosZ * pow(-1., sideCount))};
-                G4Transform3D SiPMTransform{readBoxRotation.getRotation(), G4ThreeVector(pairBoxCenterX, 0, SiPMPosZ * pow(-1., sideCount))};
+                G4Transform3D couplerTransform{readBoxRotation.getRotation(), G4ThreeVector{pairBoxCenterX, 0, couplerPosZ * std::pow(-1., sideCount)}};
+                G4Transform3D SiPMTransform{readBoxRotation.getRotation(), G4ThreeVector{pairBoxCenterX, 0, SiPMPosZ * std::pow(-1., sideCount)}};
 
                 Make<G4PVPlacement>(couplerTransform, logicSiPMCoupler, name + "SiPMCoupler", logicStripBox, false, sideCount, checkOverlaps);
                 Make<G4PVPlacement>(SiPMTransform, logicSiPM, name + "SiPM", logicStripBox, false, sideCount, checkOverlaps);
@@ -305,20 +305,20 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
         }
         // fiber positions, most unsafe?
         const auto cathodeRelativePosY{veto.SiPMThickness() / 2 - veto.SiPMCathodeThickness() / 2};
-        G4Transform3D cathodeRelativeTransform{G4RotationMatrix::IDENTITY, G4ThreeVector(0, cathodeRelativePosY, 0)};
+        G4Transform3D cathodeRelativeTransform{G4RotationMatrix::IDENTITY, G4ThreeVector{0, cathodeRelativePosY, 0}};
         Make<G4PVPlacement>(cathodeRelativeTransform, logicCathode, name + "SiPMCathode", logicSiPM, false, 0, checkOverlaps);
 
         const auto upStraightFiberCenterX{pairBoxWidth / 2 - veto.PSHoleRadius()};
         const auto downStraightFiberCenterX{-pairBoxWidth / 2 + veto.PSHoleRadius()};
 
-        const auto downStraightFiberTranslate{G4ThreeVector(downStraightFiberCenterX, 0, 0)};
-        const auto upStraightFiberTranslate{G4ThreeVector(upStraightFiberCenterX, 0, 0)};
+        const auto downStraightFiberTranslate{G4ThreeVector{downStraightFiberCenterX, 0, 0}};
+        const auto upStraightFiberTranslate{G4ThreeVector{upStraightFiberCenterX, 0, 0}};
 
-        const auto downStraightFiberRotation{G4RotateY3D(0).getRotation()};
-        const auto upStraightFiberRotation{G4RotateY3D(0).getRotation()};
+        const auto downStraightFiberRotation{G4RotateY3D{0}.getRotation()};
+        const auto upStraightFiberRotation{G4RotateY3D{0}.getRotation()};
 
-        const auto downStraightFiberTransform{G4Transform3D(downStraightFiberRotation, downStraightFiberTranslate)};
-        const auto upStraightFiberTransform{G4Transform3D(upStraightFiberRotation, upStraightFiberTranslate)};
+        const auto downStraightFiberTransform{G4Transform3D{downStraightFiberRotation, downStraightFiberTranslate}};
+        const auto upStraightFiberTransform{G4Transform3D{upStraightFiberRotation, upStraightFiberTranslate}};
         // straight FiberHoles
         Make<G4PVPlacement>(upStraightFiberTransform,
                             logicStraightFiberHole,
@@ -336,9 +336,9 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
                             checkOverlaps);
         // curved fiber Holes
         for (int sideCount{}; sideCount < 2; ++sideCount) { // loop by strip side, left first, 4 curved fibers constructed in one loop
-            auto upCurvedFiber1CenterZ{straightFiberLength / 2 * pow(-1, sideCount)};
+            auto upCurvedFiber1CenterZ{straightFiberLength / 2 * std::pow(-1, sideCount)};
             auto upCurvedFiber1CenterX{upStraightFiberCenterX - veto.PSFiberCurvatureRadius()};
-            auto upCurvedFiber2CenterZ{psStripLength / 2 * pow(-1, sideCount)};
+            auto upCurvedFiber2CenterZ{psStripLength / 2 * std::pow(-1, sideCount)};
             auto upCurvedFiber2CenterX{upCurvedFiber1CenterX + 2 * (veto.PSFiberCurvatureRadius() - fiberPairSpacing / 4)};
             auto downCurvedFiber1CenterZ{upCurvedFiber1CenterZ};
             auto downCurvedFiber1CenterX{downStraightFiberCenterX + veto.PSFiberCurvatureRadius()};
@@ -346,20 +346,20 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
             auto downCurvedFiber2CenterX{downCurvedFiber1CenterX - 2 * (veto.PSFiberCurvatureRadius() - fiberPairSpacing / 4)};
             G4cout << "fiberCurvaturePhi" << fiberCurvaturePhi << "\n";
 
-            auto upCurvedFiber1Rotation{(G4RotateX3D(M_PI / 2 * pow(-1, sideCount))).getRotation()};
-            auto upCurvedFiber2Rotation{(G4RotateX3D(M_PI / 2 * pow(-1, sideCount)) * G4RotateZ3D(M_PI)).getRotation()};
-            auto downCurvedFiber1Rotation{((G4RotateX3D(M_PI / 2 * pow(-1, sideCount))) * G4RotateZ3D(M_PI - fiberCurvaturePhi)).getRotation()};
-            auto downCurvedFiber2Rotation{((G4RotateX3D(M_PI / 2 * pow(-1, sideCount))) * G4RotateZ3D(2 * M_PI - fiberCurvaturePhi)).getRotation()};
+            auto upCurvedFiber1Rotation{(G4RotateX3D{pi / 2 * std::pow(-1, sideCount)}).getRotation()};
+            auto upCurvedFiber2Rotation{(G4RotateX3D{pi / 2 * std::pow(-1, sideCount)} * G4RotateZ3D{pi}).getRotation()};
+            auto downCurvedFiber1Rotation{((G4RotateX3D{pi / 2 * std::pow(-1, sideCount)}) * G4RotateZ3D{pi - fiberCurvaturePhi}).getRotation()};
+            auto downCurvedFiber2Rotation{((G4RotateX3D{pi / 2 * std::pow(-1, sideCount)}) * G4RotateZ3D{2 * pi - fiberCurvaturePhi}).getRotation()};
 
-            auto upCurvedFiber1Translate{G4ThreeVector(upCurvedFiber1CenterX, 0, upCurvedFiber1CenterZ)};
-            auto upCurvedFiber2Translate{G4ThreeVector(upCurvedFiber2CenterX, 0, upCurvedFiber2CenterZ)};
-            auto downCurvedFiber1Translate{G4ThreeVector(downCurvedFiber1CenterX, 0, downCurvedFiber1CenterZ)};
-            auto downCurvedFiber2Translate{G4ThreeVector(downCurvedFiber2CenterX, 0, downCurvedFiber2CenterZ)};
+            auto upCurvedFiber1Translate{G4ThreeVector{upCurvedFiber1CenterX, 0, upCurvedFiber1CenterZ}};
+            auto upCurvedFiber2Translate{G4ThreeVector{upCurvedFiber2CenterX, 0, upCurvedFiber2CenterZ}};
+            auto downCurvedFiber1Translate{G4ThreeVector{downCurvedFiber1CenterX, 0, downCurvedFiber1CenterZ}};
+            auto downCurvedFiber2Translate{G4ThreeVector{downCurvedFiber2CenterX, 0, downCurvedFiber2CenterZ}};
 
-            auto upCurvedFiber1Transform{G4Transform3D(upCurvedFiber1Rotation, upCurvedFiber1Translate)};
-            auto upCurvedFiber2Transform{G4Transform3D(upCurvedFiber2Rotation, upCurvedFiber2Translate)};
-            auto downCurvedFiber1Transform{G4Transform3D(downCurvedFiber1Rotation, downCurvedFiber1Translate)};
-            auto downCurvedFiber2Transform{G4Transform3D(downCurvedFiber2Rotation, downCurvedFiber2Translate)};
+            auto upCurvedFiber1Transform{G4Transform3D{upCurvedFiber1Rotation, upCurvedFiber1Translate}};
+            auto upCurvedFiber2Transform{G4Transform3D{upCurvedFiber2Rotation, upCurvedFiber2Translate}};
+            auto downCurvedFiber1Transform{G4Transform3D{downCurvedFiber1Rotation, downCurvedFiber1Translate}};
+            auto downCurvedFiber2Transform{G4Transform3D{downCurvedFiber2Rotation, downCurvedFiber2Translate}};
 
             auto phyUpCurvedFiber1{Make<G4PVPlacement>(upCurvedFiber1Transform, logicCurvedFiberHole, "UpCurveHole1", logicVirtualPairBox, false, sideCount, checkOverlaps)};
             auto phyUpCurvedFiber2{Make<G4PVPlacement>(upCurvedFiber2Transform, logicCurvedFiberHole, "UpCurveHole2", logicVirtualPairBox, false, sideCount, checkOverlaps)};
