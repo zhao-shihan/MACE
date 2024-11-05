@@ -58,14 +58,14 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
     const auto solenoidWindowRadius{14.0_cm};
 
     const auto& veto{Description::PDSVeto::Instance()};
-    const auto sideModuleThickness{(veto.PSThickness() + veto.AlAbsorberThickness()) * veto.SideLayer() - veto.AlAbsorberThickness()};
-    const auto capModuleThickness{(veto.PSThickness() + veto.AlAbsorberThickness()) * veto.CapLayer() - veto.AlAbsorberThickness()}; // both cap1 and cap2
-    const auto topModuleThickness{(veto.PSThickness() + veto.AlAbsorberThickness()) * veto.TopLayer() - veto.AlAbsorberThickness()};
+    const auto sideModuleThickness{((veto.PSThickness() + veto.ReflectiveFilmThickness() * 2) + veto.AlAbsorberThickness()) * veto.SideLayer() - veto.AlAbsorberThickness()};
+    const auto capModuleThickness{((veto.PSThickness() + veto.ReflectiveFilmThickness() * 2) + veto.AlAbsorberThickness()) * veto.CapLayer() - veto.AlAbsorberThickness()}; // both cap1 and cap2
+    const auto topModuleThickness{((veto.PSThickness() + veto.ReflectiveFilmThickness() * 2) + veto.AlAbsorberThickness()) * veto.TopLayer() - veto.AlAbsorberThickness()};
 
-    const auto cap1ModuleWidth{(veto.PSWidth() + veto.InterPSGap()) * cap1PSaLayerCount - veto.InterPSGap() + veto.ModuleOffset() * (veto.CapLayer() - 1)}; // both cap1 and cap2
-    const auto cap2ModuleWidth{(veto.PSWidth() + veto.InterPSGap()) * cap2PSaLayerCount - veto.InterPSGap() + veto.ModuleOffset() * (veto.CapLayer() - 1)}; // both cap1 and cap2
-    const auto topModuleWidth{(veto.PSWidth() + veto.InterPSGap()) * topPSaLayerCount - veto.InterPSGap() + veto.ModuleOffset() * (veto.TopLayer() - 1)};
-    const auto sideModuleWidth{(veto.PSWidth() + veto.InterPSGap()) * sidePSaLayerCount - veto.InterPSGap() + veto.ModuleOffset() * (veto.SideLayer() - 1)};
+    const auto cap1ModuleWidth{((veto.PSWidth() + veto.ReflectiveFilmThickness() * 2) + veto.InterPSGap()) * cap1PSaLayerCount - veto.InterPSGap() + veto.ModuleOffset() * (veto.CapLayer() - 1)}; // both cap1 and cap2
+    const auto cap2ModuleWidth{((veto.PSWidth() + veto.ReflectiveFilmThickness() * 2) + veto.InterPSGap()) * cap2PSaLayerCount - veto.InterPSGap() + veto.ModuleOffset() * (veto.CapLayer() - 1)}; // both cap1 and cap2
+    const auto topModuleWidth{((veto.PSWidth() + veto.ReflectiveFilmThickness() * 2) + veto.InterPSGap()) * topPSaLayerCount - veto.InterPSGap() + veto.ModuleOffset() * (veto.TopLayer() - 1)};
+    const auto sideModuleWidth{((veto.PSWidth() + veto.ReflectiveFilmThickness() * 2) + veto.InterPSGap()) * sidePSaLayerCount - veto.InterPSGap() + veto.ModuleOffset() * (veto.SideLayer() - 1)};
 
     const auto sideModuleXShift{solenoidWindowRadius + cap1ModuleWidth + sideModuleThickness / 2 + veto.InterModuleGap()};
     const G4ThreeVector side0ModuleCenter{sideModuleXShift, 0, 0};
@@ -160,14 +160,14 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
     Make<G4PVPlacement>(cap2Module3Transform, logicCap2Module, "cap2Module3Box", Mother().LogicalVolume(), false, 3, checkOverlaps);
     // ModuleBox are virtual, do not exist actually
 
-    const auto AssembleStrip{[&](G4String name,
-                                 int totalLayer,
-                                 int totalStripALayer,
-                                 double moduleThickness,
-                                 double moduleWidth,
-                                 double offset,
-                                 G4LogicalVolume* logicStripBox,
-                                 G4LogicalVolume* logicModule) -> void {
+    const auto AssembleStripPlanA{[&](G4String name,
+                                  int totalLayer,
+                                  int totalStripALayer,
+                                  double moduleThickness,
+                                  double moduleWidth,
+                                  double offset,
+                                  G4LogicalVolume* logicStripBox,
+                                  G4LogicalVolume* logicModule) -> void {
         // clang-format off
         const int fiberNum{4}; // must be even
         const auto stripBoxHalfLength{dynamic_cast<const G4Box*>(logicStripBox->GetSolid())->GetZHalfLength()};
@@ -191,10 +191,10 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
 
         // pre define solids and logical volumes
         const auto solidAlAbsorber{Make<G4Box>("temp",
-                                                dynamic_cast<const G4Box*>(logicModule->GetSolid())->GetXHalfLength(),
-                                                veto.AlAbsorberThickness()/2,
-                                                psStripLength/2)};
-        const auto logicAlAbsorber{Make<G4LogicalVolume>(solidAlAbsorber,nistManager->FindOrBuildMaterial("G4_Al"),"AlAbsorber")};
+                                               dynamic_cast<const G4Box*>(logicModule->GetSolid())->GetXHalfLength(),
+                                               veto.AlAbsorberThickness() / 2,
+                                               psStripLength / 2)};
+        const auto logicAlAbsorber{Make<G4LogicalVolume>(solidAlAbsorber, nistManager->FindOrBuildMaterial("G4_Al"), "AlAbsorber")};
         const auto solidStrip{Make<G4Box>("temp",
                                           veto.PSWidth() / 2,
                                           veto.PSThickness() / 2,
@@ -235,12 +235,12 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
              layerIndex++) {
             // clang-format off
             auto stripPosY{
-                           -(moduleThickness / 2 - veto.PSThickness() / 2) 
-                           + (layerIndex) * (veto.PSThickness() + veto.AlAbsorberThickness())
+                           -(moduleThickness / 2 - (veto.PSThickness()+2*veto.ReflectiveFilmThickness()) / 2) 
+                           + (layerIndex) * ((veto.PSThickness()+2*veto.ReflectiveFilmThickness()) + veto.AlAbsorberThickness())
                           };
             if(layerIndex<totalLayer-1){
                 const auto alAbsorberPosY{
-                                stripPosY+veto.PSThickness()/2+veto.AlAbsorberThickness()/2
+                                stripPosY+(veto.PSThickness()+2*veto.ReflectiveFilmThickness())/2+veto.AlAbsorberThickness()/2
                                     };
                 const G4Transform3D alAbsorberTransform{G4Rotate3D::Identity.getRotation(),G4ThreeVector(0,alAbsorberPosY,0)};
                 Make<G4PVPlacement>(alAbsorberTransform,logicAlAbsorber,name+"AlAbsorber",logicModule,false,layerIndex,checkOverlaps);
@@ -251,12 +251,14 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
                  widthIndex++) {
                 // clang-format off
                 auto stripPosX{
-                               -(moduleWidth / 2 - veto.PSWidth() / 2) 
-                               + (widthIndex) * (veto.PSWidth() + veto.InterPSGap()) 
+                               -(moduleWidth / 2 - (veto.PSWidth() + 2 * veto.ReflectiveFilmThickness()) / 2) 
+                               + (widthIndex) * ((veto.PSWidth() + 2 * veto.ReflectiveFilmThickness()) + veto.InterPSGap()) 
                                + (layerIndex) * offset
                               };
                 // clang-format on
-                const auto stripTransform{G4Transform3D{G4RotationMatrix::IDENTITY, G4ThreeVector{stripPosX, stripPosY, 0}}};
+                const auto stripTransform{
+                    G4Transform3D{G4RotationMatrix::IDENTITY, G4ThreeVector{stripPosX, stripPosY, 0}}
+                };
                 const auto copyNum{layerIndex * totalStripALayer + widthIndex};
                 Make<G4PVPlacement>(stripTransform, logicStripBox, name + "StripBox", logicModule, false, copyNum, checkOverlaps);
             }
@@ -290,14 +292,18 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
             // clang-format on
             const auto phyPairBox{Make<G4PVPlacement>(pairBoxTransform, logicVirtualPairBox, "VirtualPairBox", logicStrip, false, fiberPairCount, checkOverlaps)};
 
-            for (int sideCount{}; sideCount < 2; ++sideCount) {                         // nest loop by one pairs' 2 sides
+            for (int sideCount{}; sideCount < 2; ++sideCount) {                              // nest loop by one pairs' 2 sides
                 const auto readBoxRotation{G4RotateX3D{std::pow(-1., sideCount) * pi / 2.}}; // SiPM&coupler
 
                 const auto SiPMPosZ{(stripBoxHalfLength - veto.SiPMThickness() / 2)};
                 const auto couplerPosZ{stripBoxHalfLength - veto.SiPMThickness() - veto.SiPMCouplerThickness() / 2};
 
-                G4Transform3D couplerTransform{readBoxRotation.getRotation(), G4ThreeVector{pairBoxCenterX, 0, couplerPosZ * std::pow(-1., sideCount)}};
-                G4Transform3D SiPMTransform{readBoxRotation.getRotation(), G4ThreeVector{pairBoxCenterX, 0, SiPMPosZ * std::pow(-1., sideCount)}};
+                G4Transform3D couplerTransform{
+                    readBoxRotation.getRotation(), G4ThreeVector{pairBoxCenterX, 0, couplerPosZ * std::pow(-1., sideCount)}
+                };
+                G4Transform3D SiPMTransform{
+                    readBoxRotation.getRotation(), G4ThreeVector{pairBoxCenterX, 0, SiPMPosZ * std::pow(-1., sideCount)}
+                };
 
                 Make<G4PVPlacement>(couplerTransform, logicSiPMCoupler, name + "SiPMCoupler", logicStripBox, false, sideCount, checkOverlaps);
                 Make<G4PVPlacement>(SiPMTransform, logicSiPM, name + "SiPM", logicStripBox, false, sideCount, checkOverlaps);
@@ -305,20 +311,30 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
         }
         // fiber positions, most unsafe?
         const auto cathodeRelativePosY{veto.SiPMThickness() / 2 - veto.SiPMCathodeThickness() / 2};
-        G4Transform3D cathodeRelativeTransform{G4RotationMatrix::IDENTITY, G4ThreeVector{0, cathodeRelativePosY, 0}};
+        G4Transform3D cathodeRelativeTransform{
+            G4RotationMatrix::IDENTITY, G4ThreeVector{0, cathodeRelativePosY, 0}
+        };
         Make<G4PVPlacement>(cathodeRelativeTransform, logicCathode, name + "SiPMCathode", logicSiPM, false, 0, checkOverlaps);
 
         const auto upStraightFiberCenterX{pairBoxWidth / 2 - veto.PSHoleRadius()};
         const auto downStraightFiberCenterX{-pairBoxWidth / 2 + veto.PSHoleRadius()};
 
-        const auto downStraightFiberTranslate{G4ThreeVector{downStraightFiberCenterX, 0, 0}};
-        const auto upStraightFiberTranslate{G4ThreeVector{upStraightFiberCenterX, 0, 0}};
+        const auto downStraightFiberTranslate{
+            G4ThreeVector{downStraightFiberCenterX, 0, 0}
+        };
+        const auto upStraightFiberTranslate{
+            G4ThreeVector{upStraightFiberCenterX, 0, 0}
+        };
 
         const auto downStraightFiberRotation{G4RotateY3D{0}.getRotation()};
         const auto upStraightFiberRotation{G4RotateY3D{0}.getRotation()};
 
-        const auto downStraightFiberTransform{G4Transform3D{downStraightFiberRotation, downStraightFiberTranslate}};
-        const auto upStraightFiberTransform{G4Transform3D{upStraightFiberRotation, upStraightFiberTranslate}};
+        const auto downStraightFiberTransform{
+            G4Transform3D{downStraightFiberRotation, downStraightFiberTranslate}
+        };
+        const auto upStraightFiberTransform{
+            G4Transform3D{upStraightFiberRotation, upStraightFiberTranslate}
+        };
         // straight FiberHoles
         Make<G4PVPlacement>(upStraightFiberTransform,
                             logicStraightFiberHole,
@@ -351,33 +367,166 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
             auto downCurvedFiber1Rotation{((G4RotateX3D{pi / 2 * std::pow(-1, sideCount)}) * G4RotateZ3D{pi - fiberCurvaturePhi}).getRotation()};
             auto downCurvedFiber2Rotation{((G4RotateX3D{pi / 2 * std::pow(-1, sideCount)}) * G4RotateZ3D{2 * pi - fiberCurvaturePhi}).getRotation()};
 
-            auto upCurvedFiber1Translate{G4ThreeVector{upCurvedFiber1CenterX, 0, upCurvedFiber1CenterZ}};
-            auto upCurvedFiber2Translate{G4ThreeVector{upCurvedFiber2CenterX, 0, upCurvedFiber2CenterZ}};
-            auto downCurvedFiber1Translate{G4ThreeVector{downCurvedFiber1CenterX, 0, downCurvedFiber1CenterZ}};
-            auto downCurvedFiber2Translate{G4ThreeVector{downCurvedFiber2CenterX, 0, downCurvedFiber2CenterZ}};
+            auto upCurvedFiber1Translate{
+                G4ThreeVector{upCurvedFiber1CenterX, 0, upCurvedFiber1CenterZ}
+            };
+            auto upCurvedFiber2Translate{
+                G4ThreeVector{upCurvedFiber2CenterX, 0, upCurvedFiber2CenterZ}
+            };
+            auto downCurvedFiber1Translate{
+                G4ThreeVector{downCurvedFiber1CenterX, 0, downCurvedFiber1CenterZ}
+            };
+            auto downCurvedFiber2Translate{
+                G4ThreeVector{downCurvedFiber2CenterX, 0, downCurvedFiber2CenterZ}
+            };
 
-            auto upCurvedFiber1Transform{G4Transform3D{upCurvedFiber1Rotation, upCurvedFiber1Translate}};
-            auto upCurvedFiber2Transform{G4Transform3D{upCurvedFiber2Rotation, upCurvedFiber2Translate}};
-            auto downCurvedFiber1Transform{G4Transform3D{downCurvedFiber1Rotation, downCurvedFiber1Translate}};
-            auto downCurvedFiber2Transform{G4Transform3D{downCurvedFiber2Rotation, downCurvedFiber2Translate}};
+            auto upCurvedFiber1Transform{
+                G4Transform3D{upCurvedFiber1Rotation, upCurvedFiber1Translate}
+            };
+            auto upCurvedFiber2Transform{
+                G4Transform3D{upCurvedFiber2Rotation, upCurvedFiber2Translate}
+            };
+            auto downCurvedFiber1Transform{
+                G4Transform3D{downCurvedFiber1Rotation, downCurvedFiber1Translate}
+            };
+            auto downCurvedFiber2Transform{
+                G4Transform3D{downCurvedFiber2Rotation, downCurvedFiber2Translate}
+            };
 
             auto phyUpCurvedFiber1{Make<G4PVPlacement>(upCurvedFiber1Transform, logicCurvedFiberHole, "UpCurveHole1", logicVirtualPairBox, false, sideCount, checkOverlaps)};
             auto phyUpCurvedFiber2{Make<G4PVPlacement>(upCurvedFiber2Transform, logicCurvedFiberHole, "UpCurveHole2", logicVirtualPairBox, false, sideCount, checkOverlaps)};
             auto phyDownCurvedFiber1{Make<G4PVPlacement>(downCurvedFiber1Transform, logicCurvedFiberHole, "DownCurveHole1", logicVirtualPairBox, false, sideCount, checkOverlaps)};
             auto phyDownCurvedFiber2{Make<G4PVPlacement>(downCurvedFiber2Transform, logicCurvedFiberHole, "DownCurveHole2", logicVirtualPairBox, false, sideCount, checkOverlaps)};
         }
-        Make<G4PVPlacement>(G4Transform3D::Identity,logicStraightFiber,"StraightFiber",logicStraightFiberHole,false,0,checkOverlaps);
-        Make<G4PVPlacement>(G4Transform3D::Identity,logicCurvedFiber,"CurvedFiber",logicCurvedFiberHole,false,0,checkOverlaps);
-                                 }};
+        Make<G4PVPlacement>(G4Transform3D::Identity, logicStraightFiber, "StraightFiber", logicStraightFiberHole, false, 0, checkOverlaps);
+        Make<G4PVPlacement>(G4Transform3D::Identity, logicCurvedFiber, "CurvedFiber", logicCurvedFiberHole, false, 0, checkOverlaps);
+    }};
+    const auto AssembleStripPlanB{[&](G4String name,
+                                  int totalLayer,
+                                  int totalStripALayer,
+                                  double moduleThickness,
+                                  double moduleWidth,
+                                  double offset,
+                                  G4LogicalVolume* logicStripBox,
+                                  G4LogicalVolume* logicModule) -> void {
+        const int fiberNum{4};
+        const auto stripBoxHalfLength{dynamic_cast<const G4Box*>(logicStripBox->GetSolid())->GetZHalfLength()};
+        const auto psStripLength{(stripBoxHalfLength - (veto.SiPMThickness() + veto.SiPMCouplerThickness())) * 2};
+        const auto fiberSpacing{veto.PSWidth() / (fiberNum)};
+        const auto fiberLength{psStripLength};
+
+        // material wls
+        // TODO
+        const auto wls{nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE")};
+
+        // pre define solids and logical volumes
+        const auto solidAlAbsorber{Make<G4Box>("temp",
+                                               dynamic_cast<const G4Box*>(logicModule->GetSolid())->GetXHalfLength(),
+                                               veto.AlAbsorberThickness() / 2,
+                                               psStripLength / 2)};
+        const auto logicAlAbsorber{Make<G4LogicalVolume>(solidAlAbsorber, nistManager->FindOrBuildMaterial("G4_Al"), "AlAbsorber")};
+        const auto solidStrip{Make<G4Box>("temp",
+                                          veto.PSWidth() / 2,
+                                          veto.PSThickness() / 2,
+                                          psStripLength / 2)};
+        const auto logicStrip{Make<G4LogicalVolume>(solidStrip, plasticScinllator, name + "Strip")};
+
+        const auto solidFiberHole{Make<G4Tubs>("temp", 0, veto.PSHoleRadius(), fiberLength / 2, 0, 2 * pi)};
+        const auto logicFiberHole{Make<G4LogicalVolume>(solidFiberHole, air, "FiberHole")};
+
+        const auto solidFiber{Make<G4Tubs>("temp", 0, veto.PSFiberRadius(), fiberLength / 2, 0, 2 * pi)};
+        const auto logicFiber{Make<G4LogicalVolume>(solidFiber, wls, "StraightFiber")};
+
+        const auto solidSiPMCoupuler{Make<G4Box>("temp",
+                                                 veto.SiPMSize() / 2,
+                                                 veto.SiPMCouplerThickness() / 2,
+                                                 veto.SiPMSize() / 2)};
+        const auto solidSiPM{Make<G4Box>("temp",
+                                         veto.SiPMSize() / 2,
+                                         veto.SiPMThickness() / 2,
+                                         veto.SiPMSize() / 2)};
+        const auto solidSiPMCathode{Make<G4Box>("temp",
+                                                veto.SiPMSize() / 2,
+                                                veto.SiPMCathodeThickness() / 2,
+                                                veto.SiPMSize() / 2)};
+        const auto logicSiPMCoupler{Make<G4LogicalVolume>(solidSiPMCoupuler, siliconeGrease, "SiPMCoupler")};
+        const auto logicSiPM{Make<G4LogicalVolume>(solidSiPM, epoxy, "SiPM")};
+        const auto logicCathode{Make<G4LogicalVolume>(solidSiPMCathode, silicon, "SiPMCathode")};
+
+        // construct stripBoxes (virtual do not exist actually)
+        for (int layerIndex{}; // start from 0
+             layerIndex < totalLayer;
+             layerIndex++) {
+            // clang-format off
+            auto stripPosY{
+                           -(moduleThickness / 2 - (veto.PSThickness()+2*veto.ReflectiveFilmThickness()) / 2) 
+                           + (layerIndex) * ((veto.PSThickness()+2*veto.ReflectiveFilmThickness()) + veto.AlAbsorberThickness())
+                          };
+            if(layerIndex<totalLayer-1){
+                const auto alAbsorberPosY{
+                                stripPosY+(veto.PSThickness()+2*veto.ReflectiveFilmThickness())/2+veto.AlAbsorberThickness()/2
+                                    };
+                const G4Transform3D alAbsorberTransform{G4Rotate3D::Identity.getRotation(),G4ThreeVector(0,alAbsorberPosY,0)};
+                Make<G4PVPlacement>(alAbsorberTransform,logicAlAbsorber,name+"AlAbsorber",logicModule,false,layerIndex,checkOverlaps);
+            }
+            // clang-format on
+            for (int widthIndex{}; // start from 0
+                 widthIndex < totalStripALayer;
+                 widthIndex++) {
+                // clang-format off
+                auto stripPosX{
+                               -(moduleWidth / 2 - (veto.PSWidth() + 2 * veto.ReflectiveFilmThickness()) / 2) 
+                               + (widthIndex) * ((veto.PSWidth() + 2 * veto.ReflectiveFilmThickness()) + veto.InterPSGap()) 
+                               + (layerIndex) * offset
+                              };
+                // clang-format on
+                const auto stripTransform{
+                    G4Transform3D{G4RotationMatrix::IDENTITY, G4ThreeVector{stripPosX, stripPosY, 0}}
+                };
+                const auto copyNum{layerIndex * totalStripALayer + widthIndex};
+                Make<G4PVPlacement>(stripTransform, logicStripBox, name + "StripBox", logicModule, false, copyNum, checkOverlaps);
+            }
+        }
+        // strips
+        Make<G4PVPlacement>(G4Transform3D::Identity, logicStrip, name + "Strip", logicStripBox, false, 0, checkOverlaps);
+        // fibers
+        for (int fiberCount{}; fiberCount < fiberNum; ++fiberCount) {
+            const auto fiberCenterX{-veto.PSWidth() / 2 + fiberSpacing * (2 * fiberCount + 1) / 2};
+            const G4Transform3D fiberTransform{
+                G4RotationMatrix::IDENTITY, G4ThreeVector{fiberCenterX, 0, 0}
+            };
+            Make<G4PVPlacement>(fiberTransform, logicFiberHole, name + "FiberHole", logicStrip, false, fiberCount, checkOverlaps);
+            for (int sideCount{}; sideCount < 2; ++sideCount) {                              // loop by one pairs' 2 sides
+                const auto readBoxRotation{G4RotateX3D{std::pow(-1., sideCount) * pi / 2.}}; // SiPM&coupler
+
+                const auto SiPMPosZ{(stripBoxHalfLength - veto.SiPMThickness() / 2)};
+                const auto couplerPosZ{stripBoxHalfLength - veto.SiPMThickness() - veto.SiPMCouplerThickness() / 2};
+
+                G4Transform3D couplerTransform{
+                    readBoxRotation.getRotation(), G4ThreeVector{fiberCenterX, 0, couplerPosZ * std::pow(-1., sideCount)}
+                };
+                G4Transform3D SiPMTransform{
+                    readBoxRotation.getRotation(), G4ThreeVector{fiberCenterX, 0, SiPMPosZ * std::pow(-1., sideCount)}
+                };
+
+                Make<G4PVPlacement>(couplerTransform, logicSiPMCoupler, name + "SiPMCoupler", logicStripBox, false, sideCount, checkOverlaps);
+                Make<G4PVPlacement>(SiPMTransform, logicSiPM, name + "SiPM", logicStripBox, false, sideCount, checkOverlaps);
+            }
+        }
+        Make<G4PVPlacement>(G4Transform3D::Identity, logicFiber, name + "Fiber",logicFiberHole, false, 0, checkOverlaps);
+        const auto cathodeRelativePosY{veto.SiPMThickness() / 2 - veto.SiPMCathodeThickness() / 2};
+        G4Transform3D cathodeRelativeTransform{G4RotationMatrix::IDENTITY, G4ThreeVector{0, cathodeRelativePosY, 0}};
+        Make<G4PVPlacement>(cathodeRelativeTransform, logicCathode, name + "SiPMCathode", logicSiPM, false, 0, checkOverlaps);
+        }};
 
         const auto solidTopStripBox{Make<G4Box>("temp",
-                                                veto.PSWidth() / 2,
-                                                veto.PSThickness() / 2,
+                                                veto.PSWidth() / 2 + veto.ReflectiveFilmThickness(),
+                                                veto.PSThickness() / 2 + veto.ReflectiveFilmThickness(),
                                                 (veto.TopPSLength() + veto.SiPMThickness() + veto.SiPMCouplerThickness()) / 2)};
         const auto logicTopStripBox{Make<G4LogicalVolume>(solidTopStripBox,
                                                           air,
                                                           "TopStripBox")};
-        AssembleStrip("Top",
+        AssembleStripPlanB("Top",
                       veto.TopLayer(),
                       topPSaLayerCount,
                       topModuleThickness,
@@ -387,13 +536,13 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
                       logicTopModule);
 
         const auto solidSideStripBox{Make<G4Box>("temp",
-                                                 veto.PSWidth() / 2,
-                                                 veto.PSThickness() / 2,
+                                                 veto.PSWidth() / 2 + veto.ReflectiveFilmThickness(),
+                                                 veto.PSThickness() / 2 + veto.ReflectiveFilmThickness(),
                                                  (veto.SidePSLength() + veto.SiPMThickness() + veto.SiPMCouplerThickness()) / 2)};
         const auto logicSideStripBox{Make<G4LogicalVolume>(solidSideStripBox,
                                                            air,
                                                            "SideStripBox")};
-        AssembleStrip("Side",
+        AssembleStripPlanB("Side",
                       veto.SideLayer(),
                       sidePSaLayerCount,
                       sideModuleThickness,
@@ -403,13 +552,13 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
                       logicSideModule);
 
         const auto solidCap1StripBox{Make<G4Box>("temp",
-                                                 veto.PSWidth() / 2,
-                                                 veto.PSThickness() / 2,
+                                                 veto.PSWidth() / 2 + veto.ReflectiveFilmThickness(),
+                                                 veto.PSThickness() / 2 + veto.ReflectiveFilmThickness(),
                                                  (veto.Cap1PSLength() + veto.SiPMThickness() + veto.SiPMCouplerThickness()) / 2)};
         const auto logicCap1StripBox{Make<G4LogicalVolume>(solidCap1StripBox,
                                                            air,
                                                            "Cap1StripBox")};
-        AssembleStrip("Cap1",
+        AssembleStripPlanB("Cap1",
                       veto.CapLayer(),
                       cap1PSaLayerCount,
                       capModuleThickness,
@@ -419,13 +568,13 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
                       logicCap1Module);
 
         const auto solidCap2StripBox{Make<G4Box>("temp",
-                                                 veto.PSWidth() / 2,
-                                                 veto.PSThickness() / 2,
+                                                 veto.PSWidth() / 2 + veto.ReflectiveFilmThickness(),
+                                                 veto.PSThickness() / 2 + veto.ReflectiveFilmThickness(),
                                                  (veto.Cap2PSLength() + veto.SiPMThickness() + veto.SiPMCouplerThickness()) / 2)};
         const auto logicCap2StripBox{Make<G4LogicalVolume>(solidCap2StripBox,
                                                            air,
                                                            "Cap2StripBox")};
-        AssembleStrip("Cap2",
+        AssembleStripPlanB("Cap2",
                       veto.CapLayer(),
                       cap2PSaLayerCount,
                       capModuleThickness,

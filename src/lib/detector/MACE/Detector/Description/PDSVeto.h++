@@ -25,17 +25,19 @@ public:
     auto PSFiberRadius() const -> const auto& { return fPSFiberRadius; }
     auto PSFiberCurvatureRadius() const -> const auto& {return fPSFiberCurvatureRadius;}
     auto PSHoleRadius() const -> const auto& { return fPSHoleRadius; }
+
+    auto ReflectiveFilmThickness() const ->const auto& {return fReflectiveFilmThickness;}
     auto InterPSGap() const -> const auto& { return fInterPSGap; }
     auto InterModuleGap() const -> const auto& {return fInterModuleGap;}
     auto Cap12Gap() const -> const auto& { return fCap12Gap; }
     auto ModuleOffset() const -> const auto& { return fModuleOffset; }
     auto AlAbsorberThickness() const -> const auto& { return fAlAbsorberThickness; }
-
+    
     auto TopLayer() const -> const auto& { return fTopLayer; }
     auto SideLayer() const -> const auto&{return fSideLayer;}
     auto BottomLayer() const -> const auto& { return fBottomLayer; }
     auto CapLayer() const -> const auto& { return fCapLayer; }
-
+    
     auto SiPMThickness() const ->const auto&{return fSiPMThickness;}
     auto SiPMCathodeThickness() const ->const auto&{return fSiPMCathodeThickness;}
     auto SiPMCouplerThickness() const ->const auto &{return fSiPMCouplerThickness;}
@@ -57,22 +59,24 @@ private:
     double fSidePSLength;
     double fCap1PSLength;
     double fCap2PSLength;
-    // CRV-T&B and CRV-C1 135cm, CRV-S 125cm, CRV-C2 35cm
-    double fPSWidth;                // 10cm
-    double fPSThickness;            // 2cm
-    double fPSFiberRadius;          // 0.7mm
-    double fPSHoleRadius;           //>0.7mm
-    double fPSFiberCurvatureRadius; // 61cm finely caculated, do not change arbitrarily
-    double fInterPSGap;                // 0.3cm
+    
+    double fPSWidth;               
+    double fPSThickness;            
+    double fPSFiberRadius;          
+    double fPSHoleRadius;           
+    double fPSFiberCurvatureRadius; //
+    double fInterPSGap;             
     double fInterModuleGap;
     double fCap12Gap;
-    double fModuleOffset;           // 1cm
-    double fAlAbsorberThickness;               // 0.6cm
+    double fModuleOffset;   
+    double fAlAbsorberThickness; 
+    double fReflectiveFilmThickness;      
+    
     int fTopLayer;
     int fSideLayer;
     int fBottomLayer;
     int fCapLayer;
-
+    
     double fSiPMThickness;
     double fSiPMCathodeThickness;
     double fSiPMCouplerThickness;

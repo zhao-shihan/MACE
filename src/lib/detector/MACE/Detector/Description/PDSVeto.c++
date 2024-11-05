@@ -20,11 +20,12 @@ PDSVeto::PDSVeto() :
     fPSHoleRadius{0.75_mm},
     fPSFiberCurvatureRadius{13_cm},
 
-    fInterPSGap{0.3_cm},
+    fInterPSGap{1_mm},
     fInterModuleGap{0.5_cm},
     fCap12Gap{1_cm},
     fModuleOffset{1_cm},
     fAlAbsorberThickness{0.6_cm},
+    fReflectiveFilmThickness{0.4_mm},
 
     fTopLayer{3},
     fSideLayer{2},
@@ -53,9 +54,9 @@ auto PDSVeto::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fInterPSGap, "InterPSGap");
     ImportValue(node, fInterModuleGap, "InterModuleGap");
     ImportValue(node, fCap12Gap, "Cap12Gap");
-
     ImportValue(node, fModuleOffset, "ModuleOffset");
     ImportValue(node, fAlAbsorberThickness, "AlAbsorberThickness");
+    ImportValue(node,fReflectiveFilmThickness,"ReflectiveFilmThickness");
     ImportValue(node, fTopLayer, "TopLayer");
     ImportValue(node, fSideLayer, "SideLayer");
     ImportValue(node, fBottomLayer, "BottomLayer");
@@ -81,7 +82,7 @@ auto PDSVeto::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node,fPSFiberCurvatureRadius ,"PSFiberCurvatureRadius" );
     ExportValue(node, fInterPSGap, "InterPSGap");
     ExportValue(node, fInterModuleGap, "InterModuleGap");
-
+    ExportValue(node,fReflectiveFilmThickness,"ReflectiveFilmThickness");
     ExportValue(node, fModuleOffset, "ModuleOffset");
     ExportValue(node, fAlAbsorberThickness, "AlAbsorberThickness");
     ExportValue(node, fTopLayer, "TopLayer");

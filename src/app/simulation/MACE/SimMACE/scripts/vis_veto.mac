@@ -136,15 +136,12 @@
 /vis/geometry/set/visibility Cap1StripBox                 -1          yes
 /vis/geometry/set/visibility TopStripBox                  -1          yes
 /vis/geometry/set/visibility SideStripBox                 -1          yes
-/vis/geometry/set/visibility virtualPairBox                0          no
-/vis/geometry/set/visibility Cap2StripBox                  0          no
-/vis/geometry/set/visibility Cap1StripBox                  0          no
-/vis/geometry/set/visibility TopStripBox                   0          no
-/vis/geometry/set/visibility SideStripBox                  0          no
+/vis/geometry/set/visibility VirtualPairBox                0          no
+/vis/geometry/set/visibility AlAbsorber                    0          yes
 
 # Colors
 /vis/geometry/set/colour FiberHole                       0     1     1     1       0.1
-/vis/geometry/set/colour Fiber                           0     1     1     1       0.9
+/vis/geometry/set/colour Fiber                           0     1     1     1       0.7
 /vis/geometry/set/colour SiPMCoupler                     0     1     1     1       0.4
 /vis/geometry/set/colour SiPM                            0     1     1     1       0.3
 /vis/geometry/set/colour SiPMCathode                     0     1     1     1       0.6
@@ -154,6 +151,11 @@
 /vis/geometry/set/colour Cap1Strip                      0      0     1     0       0.2
 /vis/geometry/set/colour TopStrip                       0      1     0     0       0.2
 /vis/geometry/set/colour SideStrip                      0      0     0     1       0.2
+/vis/geometry/set/colour Cap2StripBox                   0      0.7   0     0.3     0.1
+/vis/geometry/set/colour Cap1StripBox                   0      0     1     0       0.1
+/vis/geometry/set/colour TopStripBox                    0      1     0     0       0.1
+/vis/geometry/set/colour SideStripBox                   0      0     0     1       0.1
+/vis/geometry/set/colour AlAbsorber                     0      1     1     1       0.3
 
 
 
