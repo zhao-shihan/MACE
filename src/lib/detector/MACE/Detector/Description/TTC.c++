@@ -13,13 +13,33 @@ using namespace Mustard::LiteralUnit::Density;
 TTC::TTC() :
     DescriptionBase{"TTC"},
     // Geometry
-    fLength{5_cm},
-    fWidth{3_cm},
-    fThickness{0.5_cm},
-    fRadius{48_cm},
-    fSlantAngle{30_deg},
-    fNAlongPhi{163},
-    fNAlongZ{60},
+    fLength{this, 7_cm},
+    fWidthDown{this, 3_cm},
+    fWidthUp{this, 5_cm},
+    fThickness{this, 0.5_cm},
+    fRadius{this, 48_cm},
+    fSlantAngle{this, 46_deg},
+    fNAlongPhi{this, 122},
+    fBarrelLength{this, 180_cm},
+
+    fPCBLength{this, 3_cm},
+    fPCBWidth{this, 1_cm},
+    fPCBThickness{this, 0.1_cm},
+
+    fSiPMLength{this, 0.3_cm},
+    fSiPMWidth{this, 0.3_cm},
+    fSiPMThickness{this, 0.5_cm},
+
+    fLightcouplerLength{this, 0.3_cm},
+    fLightcouplerWidth{this, 0.3_cm},
+    fLightcouplerThickness{this, 0.01_cm},
+
+    fAirboxLength{this, fPCBLength},
+    fAirboxWidth{this, fPCBWidth},
+    fAirboxThickness{this, fLength + fPCBThickness + fSiPMThickness + fLightcouplerThickness},
+
+    fWidth{this, [this] { return CalculateWidth(); }},
+    fPosition{this, [this] { return CalculatePosition(); }},
     // Material
     fDensity{1.023_g_cm3},
     fRIndexEnergyBin{3.100_eV, 2.385_eV},
