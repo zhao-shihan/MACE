@@ -111,18 +111,6 @@ endif()
 # Other CMake-options-controlled compile options for MACE
 # =============================================================================
 
-if(MACE_SIGNAL_HANDLER)
-    list(APPEND MACE_COMPILE_DEFINITIONS MACE_SIGNAL_HANDLER=1)
-else()
-    list(APPEND MACE_COMPILE_DEFINITIONS MACE_SIGNAL_HANDLER=0)
-endif()
-
-if(MACE_USE_G4VIS)
-    list(APPEND MACE_COMPILE_DEFINITIONS MACE_USE_G4VIS=1)
-else()
-    list(APPEND MACE_COMPILE_DEFINITIONS MACE_USE_G4VIS=0)
-endif()
-
 if(MACE_ENABLE_MSVC_STD_CONFORMITY AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # Enable standard-conformity
     list(APPEND MACE_COMPILE_OPTIONS /permissive- /Zc:__cplusplus /Zc:inline)

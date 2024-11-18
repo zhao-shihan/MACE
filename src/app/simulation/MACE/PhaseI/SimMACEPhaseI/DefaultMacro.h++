@@ -40,7 +40,7 @@ constexpr auto defaultMacro = {
     "/MACE/Analysis/FileMode RECREATE",
     "",
 
-#if MACE_USE_G4VIS
+#if MUSTARD_USE_G4VIS
 
     "#############################################################################",
     "# Visualization settings",
