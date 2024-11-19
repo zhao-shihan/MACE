@@ -10,11 +10,12 @@ namespace MACE::PhaseI::SimMACEPhaseI::inline Action {
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{},
     G4VUserPrimaryGeneratorAction{},
-    fAvailableGenerator{},
+    fAvailableGenerator{.ecoMug = {Mustard::Geant4X::EcoMugCosmicRayMuon::Coordinate::Beam}},
     fGenerator{&fAvailableGenerator.gpsx},
     fSavePrimaryVertexData{true},
     fPrimaryVertexData{},
-    fMessengerRegister{this} {}
+    fAnalysisMessengerRegister{this},
+    fPrimaryGeneratorActionMessengerRegister{this} {}
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
     fGenerator->GeneratePrimaryVertex(event);
