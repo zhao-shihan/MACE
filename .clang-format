@@ -43,60 +43,85 @@ EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: LogicalBlock
 FixNamespaceComments: true
 IncludeBlocks: Regroup
-IncludeCategories: 
+IncludeCategories:
   # special
   - Regex: '"RKTrackRep\.h"'
     Priority: 2
+    CaseSensitive: true
   - Regex: '"Track\.h"'
     Priority: 2
+    CaseSensitive: true
   - Regex: '"TrackPoint\.h"'
     Priority: 2
+    CaseSensitive: true
   - Regex: '"Randomize\.hh"'
     Priority: 5
+    CaseSensitive: true
   - Regex: '"globals\.hh"'
     Priority: 5
+    CaseSensitive: true
   # general
   - Regex: '"MACE/.*\.h.*"'
     Priority: 0
+    CaseSensitive: true
   - Regex: '"Mustard/.*\.h.*"'
     Priority: 1
+    CaseSensitive: true
   - Regex: '"CLHEP/.*"'
     Priority: 3
+    CaseSensitive: true
   - Regex: '"ROOT/.*"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '"R.*\.hxx"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '"R.*\.h"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '".*/T.*\.h"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '"T.*\.h"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '"G4.*"'
     Priority: 5
+    CaseSensitive: true
   - Regex: '"pmp/.*"'
     Priority: 6
+    CaseSensitive: true
   - Regex: '"yaml-cpp/.*"'
     Priority: 7
+    CaseSensitive: true
   - Regex: '"argparse/.*"'
     Priority: 8
+    CaseSensitive: true
   - Regex: '"Eigen/.*"'
     Priority: 9
+    CaseSensitive: true
   - Regex: '"gsl.*\.h"'
     Priority: 10
+    CaseSensitive: true
   - Regex: '"mpi.*\.h"'
     Priority: 11
+    CaseSensitive: true
   - Regex: '"muc/.*"'
     Priority: 12
+    CaseSensitive: true
   - Regex: '"gsl/.*"'
     Priority: 13
+    CaseSensitive: true
   - Regex: '"fmt/.*\.h"'
     Priority: 14
+    CaseSensitive: true
   # very general
   - Regex: '".*"'
     Priority: 2
-  - Regex: '<.*>'
+    CaseSensitive: true
+  - Regex: "<.*>"
     Priority: 15
+    CaseSensitive: true
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false
