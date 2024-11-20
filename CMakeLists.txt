@@ -57,7 +57,7 @@ cmake_dependent_option(MACE_ENABLE_UNITY_BUILD "Build MACE with unity build tech
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Build using shared libraries")
 set(MACE_BUILTIN_MACE_OFFLINE_DATA_VERSION 0.0.1 CACHE STRING "Set built-in offline data version (if required).")
 set(MACE_BUILTIN_MUSTARD_VERSION 0.8.0 CACHE STRING "Set built-in Mustard version (if required).")
-set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in fmt version (if required).")
+set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in pmp version (if required).")
 
 # =============================================================================
 # Installation path
