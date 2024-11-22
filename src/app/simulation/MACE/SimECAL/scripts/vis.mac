@@ -41,9 +41,8 @@
 
 # Visibility
 /vis/geometry/set/visibility ECALField             0 no
-/vis/geometry/set/visibility ECALPMCathode        0 no
+/vis/geometry/set/visibility ECALPMCathode         0 no
 /vis/geometry/set/visibility ECALPMTCoupler        0 no
-
 
 # Colors
 /vis/geometry/set/colour ECALCrystal                   0     1     1     1     0.1
