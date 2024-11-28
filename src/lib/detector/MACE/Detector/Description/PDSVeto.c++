@@ -123,7 +123,7 @@ auto PDSVeto::CalculateTypeConfiguration() const -> std::vector<TypeConfiguratio
                                 +layerLocalID*((*fPSThickness+2*(*fReflectiveFilmThickness))+*fAlAbsorberThickness)
                                     };
                 auto alAbsorberYShift{
-                                layerYShift - (fPSThickness + 2 * fReflectiveFilmThickness) / 2 + fAlAbsorberThickness / 2};
+                                layerYShift - (fPSThickness + 2 * fReflectiveFilmThickness) / 2 - fAlAbsorberThickness / 2};
                 // clang-format on
                 auto layerLocalTransform{
                     G4Transform3D{G4RotationMatrix::IDENTITY, G4ThreeVector{0, layerYShift, 0}}

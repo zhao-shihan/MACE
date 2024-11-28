@@ -58,7 +58,7 @@ auto Target::ImportAllValue(const YAML::Node& node) -> void {
             } else if (shape == "MultiLayer") {
                 fShapeType = TargetShapeType::MultiLayer;
             } else {
-                Mustard::Env::PrintLnError("MACE::Detector::Description::Target::ImportAllValue: Unknown target shape '{}', skipping", shape);
+                Mustard::Utility::PrintError(fmt::format("MACE::Detector::Description::Target::ImportAllValue: Unknown target shape '{}', skipping", shape));
             }
         },
         "ShapeType");
@@ -76,7 +76,7 @@ auto Target::ImportAllValue(const YAML::Node& node) -> void {
                 } else if (detail == "Perforated") {
                     fCuboid.DetailType(CuboidTarget::ShapeDetailType::Perforated);
                 } else {
-                    Mustard::Env::PrintLnError("MACE::Detector::Description::Target::ImportAllValue: Unknown cuboid target detail '{}', skipping", detail);
+                    Mustard::Utility::PrintError(fmt::format("MACE::Detector::Description::Target::ImportAllValue: Unknown cuboid target detail '{}', skipping", detail));
                 }
             },
             "Cuboid", "DetailType");
@@ -118,7 +118,7 @@ auto Target::ImportAllValue(const YAML::Node& node) -> void {
                 } else if (detail == "Perforated") {
                     fMultiLayer.DetailType(MultiLayerTarget::ShapeDetailType::Perforated);
                 } else {
-                    Mustard::Env::PrintError("MACE::Detector::Description::Target::ImportAllValue: Unknown MultiLayer target detail '{}', skipping", detail);
+                    Mustard::Utility::PrintError(fmt::format("MACE::Detector::Description::Target::ImportAllValue: Unknown MultiLayer target detail '{}', skipping", detail));
                 }
             },
             "MultiLayer", "DetailType");

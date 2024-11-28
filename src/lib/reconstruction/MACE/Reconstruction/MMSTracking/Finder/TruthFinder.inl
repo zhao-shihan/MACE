@@ -58,7 +58,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
         auto outputTrackID{*Get<"TrkID">(firstHit)};
         auto [iGoodTrack, inserted]{r.good.try_emplace(outputTrackID, typename Result::GoodTrack{})};
         while (not inserted) {
-            Mustard::Env::PrintLnWarning("Warning: Disordered dataset (track {} has appeared before), attempting to assign track ID {}", outputTrackID, outputTrackID + 1);
+            Mustard::Utility::PrintWarning(fmt::format("Warning: Disordered dataset (track {} has appeared before), attempting to assign track ID {}", outputTrackID, outputTrackID + 1));
             std::tie(iGoodTrack, inserted) = r.good.try_emplace(++outputTrackID, typename Result::GoodTrack{});
         }
         auto& [trackHitData, seed]{iGoodTrack->second};

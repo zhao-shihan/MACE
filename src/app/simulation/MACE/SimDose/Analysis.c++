@@ -171,7 +171,7 @@ auto Analysis::RunEndUserAction(int runID) -> void {
 
 auto Analysis::CheckMapAdded() -> bool {
     if (fMapModel.empty()) {
-        Mustard::Env::PrintLnWarning("MACE::SimDose::Analysis::CheckMapAdded: No map was added");
+        Mustard::Utility::PrintWarning("MACE::SimDose::Analysis::CheckMapAdded: No map was added");
         return false;
     }
     return true;
