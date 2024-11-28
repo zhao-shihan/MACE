@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Mustard/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionWithCacheBase.h++"
 
 #include <vector>
 namespace MACE::Detector::Description {
 
-class PDSVeto final : public Mustard::Detector::Description::DescriptionBase<PDSVeto> {
+class PDSVeto final : public Mustard::Detector::Description::DescriptionWithCacheBase<PDSVeto> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
@@ -13,77 +13,107 @@ private:
     ~PDSVeto() = default;
 
 public:
-    // Geometry
+    auto NModuleOfaType() const -> const auto& { return *fNModuleOfaType; }
+    auto NLayerPerModuleOfaType() const -> const auto& { return *fNLayerPerModuleOfaType; }
+    auto NStripPerLayerOfaType() const -> const auto& { return *fNStripPerLayerOfaType; }
+    auto StripLengthOfaType() const -> const auto& { return *fStripLengthOfaType; }
+    auto PSWidth() const -> const auto& { return *fPSWidth; }
+    auto PSThickness() const -> const auto& { return *fPSThickness; }
+    auto PSFiberRadius() const -> const auto& { return *fPSFiberRadius; }
+    auto PSFiberCurvatureRadius() const -> const auto& { return *fPSFiberCurvatureRadius; }
+    auto PSHoleRadius() const -> const auto& { return *fPSHoleRadius; }
+    auto ReflectiveFilmThickness() const -> const auto& { return *fReflectiveFilmThickness; }
+    auto InterPSGap() const -> const auto& { return *fInterPSGap; }
+    auto InterModuleGap() const -> const auto& { return *fInterModuleGap; }
+    auto Cap12Gap() const -> const auto& { return *fCap12Gap; }
+    auto ModuleOffset() const -> const auto& { return *fModuleOffset; }
+    auto AlAbsorberThickness() const -> const auto& { return *fAlAbsorberThickness; }
+    auto SiPMThickness() const -> const auto& { return *fSiPMThickness; }
+    auto SiPMCathodeThickness() const -> const auto& { return *fSiPMCathodeThickness; }
+    auto SiPMCouplerThickness() const -> const auto& { return *fSiPMCouplerThickness; }
+    auto SiPMSize() const -> const auto& { return *fSiPMSize; }
+    // auto StripSelectionID() const ->const auto& {return *fStripSelectionID;}
+    auto FTypeConfiguration() const -> const auto& {return *fTypeConfiguration;}
+    auto FStripInformation() const -> const auto& {return *fStripInformation;}
+    auto FiberNum() const -> const auto& {return *fFiberNum;}
+    auto SelectedType() const -> const auto& {return *fSelectedType;}
 
-    auto TopPSLength() const -> const auto& { return fTopPSLength; }
-    auto BottomPSLength() const -> const auto& { return fBottomPSLength; }
-    auto SidePSLength() const -> const auto& { return fSidePSLength; }
-    auto Cap1PSLength() const -> const auto& { return fCap1PSLength; }
-    auto Cap2PSLength() const -> const auto& { return fCap2PSLength; }
-    auto PSWidth() const -> const auto& { return fPSWidth; }
-    auto PSThickness() const -> const auto& { return fPSThickness; }
-    auto PSFiberRadius() const -> const auto& { return fPSFiberRadius; }
-    auto PSFiberCurvatureRadius() const -> const auto& {return fPSFiberCurvatureRadius;}
-    auto PSHoleRadius() const -> const auto& { return fPSHoleRadius; }
 
-    auto ReflectiveFilmThickness() const ->const auto& {return fReflectiveFilmThickness;}
-    auto InterPSGap() const -> const auto& { return fInterPSGap; }
-    auto InterModuleGap() const -> const auto& {return fInterModuleGap;}
-    auto Cap12Gap() const -> const auto& { return fCap12Gap; }
-    auto ModuleOffset() const -> const auto& { return fModuleOffset; }
-    auto AlAbsorberThickness() const -> const auto& { return fAlAbsorberThickness; }
-    
-    auto TopLayer() const -> const auto& { return fTopLayer; }
-    auto SideLayer() const -> const auto&{return fSideLayer;}
-    auto BottomLayer() const -> const auto& { return fBottomLayer; }
-    auto CapLayer() const -> const auto& { return fCapLayer; }
-    
-    auto SiPMThickness() const ->const auto&{return fSiPMThickness;}
-    auto SiPMCathodeThickness() const ->const auto&{return fSiPMCathodeThickness;}
-    auto SiPMCouplerThickness() const ->const auto &{return fSiPMCouplerThickness;}
-    auto SiPMSize() const ->const auto&{return fSiPMSize;}
-    // Material
+public:
+    struct TypeConfiguration {
+        struct ModuleConfiguration {
+            struct LayerConfiguration {
+                struct StripConfiguration {
+                    int stripID;
+                    int stripLocalID;
+                    G4Transform3D stripLocalTranform;
+                };
+                int layerID;
+                int layerLocalID;
+                G4Transform3D layerLocalTransform;
+                G4Transform3D alAbsorberLocalTransform;
+                std::vector<StripConfiguration> strips;
+            };
+            int moduleID;
+            int moduleLocalID;
+            G4Transform3D moduleTransform;
+            std::vector<LayerConfiguration> layers;
+        };
+        int typeID;
+        double moduleLength;
+        double moduleWidth;
+        double moduleThickness;
+        std::vector<ModuleConfiguration> modules;
+    };
 
-    auto PSMaterialName() const -> const auto& { return fPSMaterialName; }
-
+    struct StripInformation {
+        int stripID;
+        int stripLocalID;
+        int layerID;
+        int layerLocalID;
+        int moduleID;
+        int moduleLocalID;
+        int typeID;
+        double stripLength;
+        // muc::array3d stripLocation;
+        muc::array3d readDirection;
+    };
 
 private:
+    auto CalculateTypeConfiguration() const -> std::vector<TypeConfiguration>;
+    auto CalculateStripInformation() const -> std::vector<StripInformation>;
+
     auto ImportAllValue(const YAML::Node& node) -> void override;
     auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry
+    Simple<std::vector<int>> fNModuleOfaType; // top 1, side 2 , cap1 4 , cap2 4
+    Simple<std::vector<int>> fNLayerPerModuleOfaType;
+    Simple<std::vector<int>> fNStripPerLayerOfaType;
+    Simple<std::vector<double>> fStripLengthOfaType;
 
-    double fTopPSLength;
-    double fBottomPSLength;
-    double fSidePSLength;
-    double fCap1PSLength;
-    double fCap2PSLength;
-    
-    double fPSWidth;               
-    double fPSThickness;            
-    double fPSFiberRadius;          
-    double fPSHoleRadius;           
-    double fPSFiberCurvatureRadius; //
-    double fInterPSGap;             
-    double fInterModuleGap;
-    double fCap12Gap;
-    double fModuleOffset;   
-    double fAlAbsorberThickness; 
-    double fReflectiveFilmThickness;      
-    
-    int fTopLayer;
-    int fSideLayer;
-    int fBottomLayer;
-    int fCapLayer;
-    
-    double fSiPMThickness;
-    double fSiPMCathodeThickness;
-    double fSiPMCouplerThickness;
-    double fSiPMSize;
+    Simple<double> fPSWidth;
+    Simple<double> fPSThickness;
+    Simple<double> fPSFiberRadius;
+    Simple<double> fPSHoleRadius;
+    Simple<double> fPSFiberCurvatureRadius; //
+    Simple<double> fInterPSGap;
+    Simple<double> fInterModuleGap;
+    Simple<double> fCap12Gap;
+    Simple<double> fModuleOffset;
+    Simple<double> fAlAbsorberThickness;
+    Simple<double> fReflectiveFilmThickness;
+    Simple<double> fSiPMThickness;
+    Simple<double> fSiPMCathodeThickness;
+    Simple<double> fSiPMCouplerThickness;
+    Simple<double> fSiPMSize;
+    Simple<double> fSolenoidWindowRadius;
+    Simple<int> fFiberNum;
+    Simple<int> fSelectedType;
 
-    // Material
-
-    std::string fPSMaterialName;
+    Cached<std::vector<TypeConfiguration>> fTypeConfiguration;
+    Cached<std::vector<StripInformation>> fStripInformation;
+    // Cached<std::vector<double>> fModuleLengthOfaType;
 };
 } // namespace MACE::Detector::Description

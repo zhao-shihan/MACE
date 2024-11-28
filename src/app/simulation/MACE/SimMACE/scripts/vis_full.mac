@@ -53,16 +53,18 @@
 /vis/viewer/zoom 2.5
 
 # remove all virtual geometry in veto
-/vis/geometry/set/visibility cap2ModuleBox                -1          no
-/vis/geometry/set/visibility cap1ModuleBox                -1          no
-/vis/geometry/set/visibility topModuleBox                 -1          no
-/vis/geometry/set/visibility sideModuleBox                -1          no
-/vis/geometry/set/visibility Cap2StripBox                 -1          yes
-/vis/geometry/set/visibility Cap1StripBox                 -1          yes
-/vis/geometry/set/visibility TopStripBox                  -1          yes
-/vis/geometry/set/visibility SideStripBox                 -1          yes
-/vis/geometry/set/visibility VirtualPairBox                0          no
-/vis/geometry/set/visibility AlAbsorber                    0          yes
+/vis/geometry/set/visibility VetoModuleBox_0                -1          no
+/vis/geometry/set/visibility VetoModuleBox_1                -1          no
+/vis/geometry/set/visibility VetoModuleBox_2                -1          no
+/vis/geometry/set/visibility VetoModuleBox_3                -1          no
+/vis/geometry/set/visibility VetoStripBox_0                 -1          yes
+/vis/geometry/set/visibility VetoStripBox_1                 -1          yes
+/vis/geometry/set/visibility VetoStripBox_2                 -1          yes
+/vis/geometry/set/visibility VetoStripBox_3                 -1          yes
+/vis/geometry/set/visibility VetoAlAbsorber_0                0          yes
+/vis/geometry/set/visibility VetoAlAbsorber_1                0          yes
+/vis/geometry/set/visibility VetoAlAbsorber_2                0          yes
+/vis/geometry/set/visibility VetoAlAbsorber_3                0          yes
 
 
 # Colors
@@ -129,20 +131,29 @@
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour TTC                           0     1     1     1     0.05
 /vis/geometry/set/colour World                         0     1     1     1     0.001
-/vis/geometry/set/colour FiberHole                     0     1     1     1     0.1
-/vis/geometry/set/colour Fiber                         0     1     1     1     0.7
-/vis/geometry/set/colour SiPMCoupler                   0     1     1     1     0.4
-/vis/geometry/set/colour SiPM                          0     1     1     1     0.3
-/vis/geometry/set/colour SiPMCathode                   0     1     1     1     0.6
-/vis/geometry/set/colour Cap2Strip                     0     0.7   0     0.3   0.2
-/vis/geometry/set/colour Cap1Strip                     0     0     1     0     0.2
-/vis/geometry/set/colour TopStrip                      0     1     0     0     0.2
-/vis/geometry/set/colour SideStrip                     0     0     0     1     0.2
-/vis/geometry/set/colour Cap2StripBox                  0     0.7   0     0.3   0.1
-/vis/geometry/set/colour Cap1StripBox                  0     0     1     0     0.1
-/vis/geometry/set/colour TopStripBox                   0     1     0     0     0.1
-/vis/geometry/set/colour SideStripBox                  0     0     0     1     0.1
-/vis/geometry/set/colour AlAbsorber                    0     1     1     1     0.3
+/vis/geometry/set/colour VetoFiberHole_0                       0     1     1     1       0.05
+/vis/geometry/set/colour VetoFiberHole_1                       0     1     1     1       0.05
+/vis/geometry/set/colour VetoFiberHole_2                       0     1     1     1       0.05
+/vis/geometry/set/colour VetoFiberHole_3                       0     1     1     1       0.05
+/vis/geometry/set/colour VetoFiber_0                           0     1     1     1       0.3
+/vis/geometry/set/colour VetoFiber_1                           0     1     1     1       0.3
+/vis/geometry/set/colour VetoFiber_2                           0     1     1     1       0.3
+/vis/geometry/set/colour VetoFiber_3                           0     1     1     1       0.3
+/vis/geometry/set/colour VetoStrip_0                           0     1     0     0       0.2
+/vis/geometry/set/colour VetoStrip_1                           0     0     0     1       0.2
+/vis/geometry/set/colour VetoStrip_2                           0     0     1     0       0.2
+/vis/geometry/set/colour VetoStrip_3                           0     0.7   0     0.3     0.2
+/vis/geometry/set/colour VetoStripBox_0                        0     1     0     0       0.05
+/vis/geometry/set/colour VetoStripBox_1                        0     0     0     1       0.05
+/vis/geometry/set/colour VetoStripBox_2                        0     0     1     0       0.05
+/vis/geometry/set/colour VetoStripBox_3                        0     0.7   0     0.3     0.05
+/vis/geometry/set/colour VetoAlAbsorber_0                      0     1     1     1       0.3
+/vis/geometry/set/colour VetoAlAbsorber_1                      0     1     1     1       0.3
+/vis/geometry/set/colour VetoAlAbsorber_2                      0     1     1     1       0.3
+/vis/geometry/set/colour VetoAlAbsorber_3                      0     1     1     1       0.3
+/vis/geometry/set/colour VetoSiPMCoupler                       0     1     1     1       0.2
+/vis/geometry/set/colour VetoSiPM                              0     1     1     1       0.1
+/vis/geometry/set/colour VetoCathode                           0     1     1     1       0.3
 
 
 
