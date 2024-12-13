@@ -11,6 +11,8 @@
 
 namespace MACE::SimPTS::Detector::Definition {
 
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
+
 auto VirtualDetectorD::Construct(bool checkOverlaps) -> void {
     const auto& mcpChamber{MACE::Detector::Description::MCPChamber::Instance()};
     const auto& virtualDetectorD{Description::VirtualDetectorD::Instance()};

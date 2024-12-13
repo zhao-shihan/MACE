@@ -22,9 +22,9 @@ MMS::MMS(Mustard::Detector::Definition::DefinitionBase& mother, bool checkOverla
     // 2
 
     auto& cdcBody{mmsField.NewDaughter<Detector::Definition::CDCBody>(checkOverlap)};
-    auto& mmsBeamPipe{mmsField.NewDaughter<Detector::Definition::MMSBeamPipe>(checkOverlap)};
-    auto& mmsMagnet{mmsField.NewDaughter<Detector::Definition::MMSMagnet>(checkOverlap)};
-    auto& ttc{mmsField.NewDaughter<Detector::Definition::TTC>(checkOverlap)};
+    mmsField.NewDaughter<Detector::Definition::MMSBeamPipe>(checkOverlap);
+    mmsField.NewDaughter<Detector::Definition::MMSMagnet>(checkOverlap);
+    mmsField.NewDaughter<Detector::Definition::TTC>(checkOverlap);
 
     // 3
 
@@ -40,7 +40,7 @@ MMS::MMS(Mustard::Detector::Definition::DefinitionBase& mother, bool checkOverla
 
     // 6
 
-    auto& cdcCell{cdcSenseLayer.NewDaughter<Detector::Definition::CDCCell>(checkOverlap)};
+    cdcSenseLayer.NewDaughter<Detector::Definition::CDCCell>(checkOverlap);
 
     // initialize
 

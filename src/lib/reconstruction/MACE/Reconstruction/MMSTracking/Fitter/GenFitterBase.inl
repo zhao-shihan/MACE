@@ -142,22 +142,13 @@ auto GenFitterBase<AHit, ATrack, AFitter>::Finalize(std::shared_ptr<genfit::Trac
     fitted.reserve(allPoint.size());
     std::vector<AHitPointer> failed;
     failed.reserve(allPoint.size());
-    int lastFittedID{};
     for (gsl::index i{}; i < ssize(allPoint); ++i) {
         const auto fit{allPoint[i]->hasFitterInfo(cardinalRep)};
         (fit ? fitted : failed)
             .emplace_back(measurementHitMap.at(allPoint[i]->getRawMeasurement()));
-        if (fit) {
-            lastFittedID = i;
-        }
     }
 
-    const auto t0{/* muc::ranges::transform_reduce(
-                      fitted, 0., std::plus<>{},
-                      [](auto&& hit) { return Get<"tT">(*hit); }) /
-                      fitted.size() -
-                  genfitTrack->getTOF(cardinalRep, 0, lastFittedID) */
-                  Get<"t0">(*seed)};
+    const auto t0{Get<"t0">(*seed)};
     const auto x0{Mustard::ToG4<"Length">(firstState->getPos())};
     const auto p0{Mustard::ToG4<"Energy">(firstState->getMom())};
     const auto mass{Mustard::ToG4<"Energy">(firstState->getMass())};

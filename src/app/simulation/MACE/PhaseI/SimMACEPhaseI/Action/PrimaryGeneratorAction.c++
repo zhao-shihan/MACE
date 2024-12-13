@@ -10,7 +10,7 @@ namespace MACE::PhaseI::SimMACEPhaseI::inline Action {
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{},
     G4VUserPrimaryGeneratorAction{},
-    fAvailableGenerator{.ecoMug = {Mustard::Geant4X::EcoMugCosmicRayMuon::Coordinate::Beam}},
+    fAvailableGenerator{{}, {Mustard::Geant4X::EcoMugCosmicRayMuon::Coordinate::Beam}},
     fGenerator{&fAvailableGenerator.gpsx},
     fSavePrimaryVertexData{true},
     fPrimaryVertexData{},

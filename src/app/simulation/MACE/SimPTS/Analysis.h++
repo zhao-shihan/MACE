@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Data/SimVertex.h++"
 #include "MACE/SimPTS/Hit/VirtualHit.h++"
 #include "MACE/SimPTS/Messenger/AnalysisMessenger.h++"
 

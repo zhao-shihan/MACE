@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::SimTarget {
 
 constexpr auto defaultMacro = {

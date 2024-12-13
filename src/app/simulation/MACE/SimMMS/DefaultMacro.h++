@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::SimMMS {
 
 constexpr auto defaultMacro = {

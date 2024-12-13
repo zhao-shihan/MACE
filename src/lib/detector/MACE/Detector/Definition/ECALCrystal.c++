@@ -109,16 +109,13 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
             continue;
         }
 
-        const auto centroidMagnitude{centroid.mag()};
-        const auto crystalLength{crystalHypotenuse * centroidMagnitude};
-        const auto outerRadius{innerRadius + crystalHypotenuse};
-
         const auto SolidCrystal{
             [&, &centroid = centroid, &vertexIndex = vertexIndex](const auto& name) {
                 const auto innerCentroid{innerRadius * centroid};
                 std::vector<G4ThreeVector> innerVertex(vertexIndex.size());
                 std::ranges::transform(vertexIndex, innerVertex.begin(),
                                        [&](const auto& i) { return ComputeIntersection(innerCentroid, normal, vertex[i], vertex[i]); });
+                const auto outerRadius{innerRadius + crystalHypotenuse};
                 const auto outerCentroid{outerRadius * centroid};
                 std::vector<G4ThreeVector> outerVertex(vertexIndex.size());
                 std::ranges::transform(vertexIndex, outerVertex.begin(),

@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::PhaseI::SimMACEPhaseI {
 
 constexpr auto defaultMacro = {

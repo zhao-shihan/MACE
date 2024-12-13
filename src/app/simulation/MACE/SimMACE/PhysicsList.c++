@@ -1,6 +1,7 @@
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/TTC.h++"
+#include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/PhysicsList.h++"
 
 #include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"

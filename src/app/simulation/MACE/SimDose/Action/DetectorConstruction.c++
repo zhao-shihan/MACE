@@ -111,10 +111,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // 1
 
     auto& ecalField{fWorld->NewDaughter<Detector::Definition::ECALField>(fCheckOverlap)};
-    auto& ecalShield{fWorld->NewDaughter<Detector::Definition::ECALShield>(fCheckOverlap)};
+    fWorld->NewDaughter<Detector::Definition::ECALShield>(fCheckOverlap);
     auto& mmsField{fWorld->NewDaughter<Detector::Definition::MMSField>(fCheckOverlap)};
-    auto& mmsShield{fWorld->NewDaughter<Detector::Definition::MMSShield>(fCheckOverlap)};
-    auto& shieldingWall{fWorld->NewDaughter<Detector::Definition::ShieldingWall>(fCheckOverlap)};
+    fWorld->NewDaughter<Detector::Definition::MMSShield>(fCheckOverlap);
+    fWorld->NewDaughter<Detector::Definition::ShieldingWall>(fCheckOverlap);
     auto& solenoidFieldS1{fWorld->NewDaughter<Detector::Definition::SolenoidFieldS1>(fCheckOverlap)};
     auto& solenoidFieldS2{fWorld->NewDaughter<Detector::Definition::SolenoidFieldS2>(fCheckOverlap)};
     auto& solenoidFieldS3{fWorld->NewDaughter<Detector::Definition::SolenoidFieldS3>(fCheckOverlap)};
@@ -123,52 +123,52 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 2
 
-    auto& ecalCrystal{ecalField.NewDaughter<Detector::Definition::ECALCrystal>(fCheckOverlap)};
-    auto& ecalMagnet{ecalField.NewDaughter<Detector::Definition::ECALMagnet>(fCheckOverlap)};
-    auto& ecalPhotoSensor{ecalField.NewDaughter<Detector::Definition::ECALPhotoSensor>(fCheckOverlap)};
+    ecalField.NewDaughter<Detector::Definition::ECALCrystal>(fCheckOverlap);
+    ecalField.NewDaughter<Detector::Definition::ECALMagnet>(fCheckOverlap);
+    ecalField.NewDaughter<Detector::Definition::ECALPhotoSensor>(fCheckOverlap);
     auto& mcpChamber{ecalField.NewDaughter<Detector::Definition::MCPChamber>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};
-    auto& solenoidS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidS1>(fCheckOverlap)};
-    auto& solenoidShieldS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidShieldS1>(fCheckOverlap)};
+    solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidS1>(fCheckOverlap);
+    solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidShieldS1>(fCheckOverlap);
 
     auto& solenoidBeamPipeS2{solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidBeamPipeS2>(fCheckOverlap)};
-    auto& solenoidS2{solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidS2>(fCheckOverlap)};
-    auto& solenoidShieldS2{solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidShieldS2>(fCheckOverlap)};
+    solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidS2>(fCheckOverlap);
+    solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidShieldS2>(fCheckOverlap);
 
     auto& solenoidBeamPipeS3{solenoidFieldS3.NewDaughter<Detector::Definition::SolenoidBeamPipeS3>(fCheckOverlap)};
-    auto& solenoidS3{solenoidFieldS3.NewDaughter<Detector::Definition::SolenoidS3>(fCheckOverlap)};
-    auto& solenoidShieldS3{solenoidFieldS3.NewDaughter<Detector::Definition::SolenoidShieldS3>(fCheckOverlap)};
+    solenoidFieldS3.NewDaughter<Detector::Definition::SolenoidS3>(fCheckOverlap);
+    solenoidFieldS3.NewDaughter<Detector::Definition::SolenoidShieldS3>(fCheckOverlap);
 
     auto& solenoidBeamPipeT1{solenoidFieldT1.NewDaughter<Detector::Definition::SolenoidBeamPipeT1>(fCheckOverlap)};
-    auto& solenoidShieldT1{solenoidFieldT1.NewDaughter<Detector::Definition::SolenoidShieldT1>(fCheckOverlap)};
-    auto& solenoidT1{solenoidFieldT1.NewDaughter<Detector::Definition::SolenoidT1>(fCheckOverlap)};
+    solenoidFieldT1.NewDaughter<Detector::Definition::SolenoidShieldT1>(fCheckOverlap);
+    solenoidFieldT1.NewDaughter<Detector::Definition::SolenoidT1>(fCheckOverlap);
 
     auto& solenoidBeamPipeT2{solenoidFieldT2.NewDaughter<Detector::Definition::SolenoidBeamPipeT2>(fCheckOverlap)};
-    auto& solenoidShieldT2{solenoidFieldT2.NewDaughter<Detector::Definition::SolenoidShieldT2>(fCheckOverlap)};
-    auto& solenoidT2{solenoidFieldT2.NewDaughter<Detector::Definition::SolenoidT2>(fCheckOverlap)};
+    solenoidFieldT2.NewDaughter<Detector::Definition::SolenoidShieldT2>(fCheckOverlap);
+    solenoidFieldT2.NewDaughter<Detector::Definition::SolenoidT2>(fCheckOverlap);
 
     auto& cdcBody{mmsField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap)};
     auto& mmsBeamPipe{mmsField.NewDaughter<Detector::Definition::MMSBeamPipe>(fCheckOverlap)};
-    auto& mmsMagnet{mmsField.NewDaughter<Detector::Definition::MMSMagnet>(fCheckOverlap)};
-    auto& ttc{mmsField.NewDaughter<Detector::Definition::TTC>(fCheckOverlap)};
+    mmsField.NewDaughter<Detector::Definition::MMSMagnet>(fCheckOverlap);
+    mmsField.NewDaughter<Detector::Definition::TTC>(fCheckOverlap);
 
     // 3
 
-    auto& mcp{mcpChamber.NewDaughter<Detector::Definition::MCP>(fCheckOverlap)};
+    mcpChamber.NewDaughter<Detector::Definition::MCP>(fCheckOverlap);
 
     auto& acceleratorField{mmsBeamPipe.NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
 
-    auto& collimator{solenoidBeamPipeS2.NewDaughter<Detector::Definition::Collimator>(fCheckOverlap)};
+    solenoidBeamPipeS2.NewDaughter<Detector::Definition::Collimator>(fCheckOverlap);
 
     auto& cdcGas{cdcBody.NewDaughter<Detector::Definition::CDCGas>(fCheckOverlap)};
 
     // 4
 
-    auto& accelerator{acceleratorField.NewDaughter<Detector::Definition::Accelerator>(fCheckOverlap)};
-    auto& beamDegrader{acceleratorField.NewDaughter<Detector::Definition::BeamDegrader>(fCheckOverlap)};
-    auto& beamMonitor{acceleratorField.NewDaughter<Detector::Definition::BeamMonitor>(fCheckOverlap)};
-    auto& target{acceleratorField.NewDaughter<Detector::Definition::Target>(fCheckOverlap)};
+    acceleratorField.NewDaughter<Detector::Definition::Accelerator>(fCheckOverlap);
+    acceleratorField.NewDaughter<Detector::Definition::BeamDegrader>(fCheckOverlap);
+    acceleratorField.NewDaughter<Detector::Definition::BeamMonitor>(fCheckOverlap);
+    acceleratorField.NewDaughter<Detector::Definition::Target>(fCheckOverlap);
 
     auto& cdcSuperLayer{cdcGas.NewDaughter<Detector::Definition::CDCSuperLayer>(fCheckOverlap)};
 
@@ -178,7 +178,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 6
 
-    auto& cdcCell{cdcSenseLayer.NewDaughter<Detector::Definition::CDCCell>(fCheckOverlap)};
+    cdcSenseLayer.NewDaughter<Detector::Definition::CDCCell>(fCheckOverlap);
 
     ////////////////////////////////////////////////////////////////
     // Register regions and apply limit

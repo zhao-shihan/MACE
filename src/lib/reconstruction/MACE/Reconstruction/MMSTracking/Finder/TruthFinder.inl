@@ -19,7 +19,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
     if (not this->GoodHitData(hitData) or
         ssize(hitData) < this->MinNHit() or
         GetAs<"x0", CLHEP::Hep3Vector>(*hitData.front()).perp2() > muc::pow<2>(fMaxVertexRxy)) {
-        return {.garbage = hitData};
+        return {.good = {}, .garbage = hitData};
     }
 
     Result r;
