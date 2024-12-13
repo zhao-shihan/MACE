@@ -6,8 +6,9 @@
 
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Data/TupleModel.h++"
-#include "Mustard/Env/Print.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
+#include "fmt/core.h"
 #include "fmt/ranges.h"
 
 #include <iterator>
