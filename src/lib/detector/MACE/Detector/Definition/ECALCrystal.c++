@@ -54,17 +54,19 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Element and Material
     /////////////////////////////////////////////
 
-    const auto nistManager{G4NistManager::Instance()};
+    const auto nist{G4NistManager::Instance()};
 
-    const auto iodideElement{nistManager->FindOrBuildElement("I")};
-    const auto cesiumElement{nistManager->FindOrBuildElement("Cs")};
-    const auto thalliumElement{nistManager->FindOrBuildElement("Tl")};
+    const auto iodideElement{nist->FindOrBuildElement("I")};
+    const auto cesiumElement{nist->FindOrBuildElement("Cs")};
+    const auto thalliumElement{nist->FindOrBuildElement("Tl")};
 
     const auto csI{new G4Material("CsI", 4.51_g_cm3, 3, kStateSolid)};
     csI->AddElement(cesiumElement, 0.507556);
     csI->AddElement(iodideElement, 0.484639);
     csI->AddElement(thalliumElement, 0.007805);
-    const auto bgo{nistManager->FindOrBuildMaterial("G4_BGO")};
+
+    const auto bgo{nist->FindOrBuildMaterial("G4_BGO")};
+
     //////////////////////////////////////////////////
     // Construct Material Optical Properties Tables
     //////////////////////////////////////////////////
@@ -84,7 +86,8 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     }
 
     const auto rfSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0.985, 0.985});
+    rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0.99, 0.99});
+    rfSurfacePropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.35, 1.35});
 
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1, 1});
@@ -199,8 +202,8 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
-        new G4LogicalSkinSurface{"reflectorSurface", logicCrystal, rfSurface};
+        const auto rfSurface{new G4OpticalSurface("reflector", unified, polishedbackpainted, dielectric_dielectric)};
+        new G4LogicalBorderSurface{"airPaintSurface", physicalCrystal, Mother().PhysicalVolume(), rfSurface};
         rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
 
         const auto airPaintSurface{new G4OpticalSurface("AirPaint", unified, polished, dielectric_metal)};

@@ -1,6 +1,5 @@
 #include "MACE/Detector/Definition/ECALCrystal.h++"
 #include "MACE/Detector/Definition/ECALPhotoSensor.h++"
-#include "MACE/Detector/Definition/ECALPhotoSensor.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/World.h++"
@@ -50,13 +49,12 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fWorld = std::make_unique<World>();
     auto& ecalCrystal{fWorld->NewDaughter<ECALCrystal>(fCheckOverlap)};
     auto& ecalPhotoSensor{fWorld->NewDaughter<ECALPhotoSensor>(fCheckOverlap)};
-    // auto& mcpChamber{fWorld->NewDaughter<MCPChamber>(fCheckOverlap)};
-    // auto& ecalMagnet = fWorld->NewDaughter<SimECAL::Detector::ECALMagnet>(fCheckOverlap);
-    auto& ecalShield = fWorld->NewDaughter<SimECAL::Detector::ECALShield>(fCheckOverlap);
-    
-    // auto& ecalTunnel = fWorld->NewDaughter<SimECAL::Detector::ECALTunnel>(fCheckOverlap);
+    auto& mcpChamber{fWorld->NewDaughter<MCPChamber>(fCheckOverlap)};
+    auto& mcp{mcpChamber.NewDaughter<MCP>(fCheckOverlap)};
 
-    // auto& mcp{mcpChamber.NewDaughter<MCP>(fCheckOverlap)};
+    // auto& ecalMagnet = fWorld->NewDaughter<SimECAL::Detector::ECALMagnet>(fCheckOverlap);
+    // auto& ecalShield = fWorld->NewDaughter<SimECAL::Detector::ECALShield>(fCheckOverlap);
+    // auto& ecalTunnel = fWorld->NewDaughter<SimECAL::Detector::ECALTunnel>(fCheckOverlap);
 
     // Shield region
 
@@ -68,22 +66,16 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // ecalShield.RegisterRegion(shieldRegion);
 
     const auto& ecalName{MACE::Detector::Description::ECAL::Instance().Name()};
-    std::cout <<"ECALname got."<<"\n";
     const auto ecalPMSD{new SD::ECALPMSD{ecalName + "PM"}};
-    std::cout <<"PMSD instance completed."<<"\n";
+
     ecalCrystal.RegisterSD(new SD::ECALSD{ecalName, ecalPMSD});
-    std::cout <<"crystalSD register completed."<<"\n";
-
     ecalPhotoSensor.RegisterSD("ECALPMCathode", ecalPMSD);
-    std::cout <<"PMSD register completed."<<"\n";
 
-
-    // mcp.RegisterSD(new SD::MCPSD{MACE::Detector::Description::MCP::Instance().Name()});
+    mcp.RegisterSD(new SD::MCPSD{MACE::Detector::Description::MCP::Instance().Name()});
 
     // fWorld->ParallelExport("ECALPhaseII.gdml");
 
     return fWorld->PhysicalVolume();
-    std::cout <<"Detector Construction completed."<<"\n";
 }
 
 } // namespace MACE::SimECAL::inline Action
