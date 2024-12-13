@@ -3,6 +3,7 @@
 #include "MACE/SimMMS/Analysis.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Simulation/Hit/TTCHit.h++"
+#include "MACE/Simulation/Hit/TTCSiPMHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
@@ -21,15 +22,18 @@ Analysis::Analysis() :
     AnalysisBase{},
     fSaveCDCHitData{true},
     fSaveTTCHitData{true},
+    fSaveTTCSiPMHitData{true},
     fPrimaryVertexOutput{},
     fDecayVertexOutput{},
     fTTCSimHitOutput{},
+    fTTCSiPMSimHitOutput{},
     fCDCSimHitOutput{},
     fMMSSimTrackOutput{},
     fPrimaryVertex{},
     fDecayVertex{},
     fCDCHit{},
     fTTCHit{},
+    fTTCSiPMHit{},
     fMMSTruthTracker{},
     fMessengerRegister{this} {}
 
@@ -38,6 +42,7 @@ auto Analysis::RunBeginUserAction(int runID) -> void {
     if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
     if (fSaveTTCHitData) { fTTCSimHitOutput.emplace(fmt::format("G4Run{}/TTCSimHit", runID)); }
     if (fSaveCDCHitData) { fCDCSimHitOutput.emplace(fmt::format("G4Run{}/CDCSimHit", runID)); }
+    if (fSaveTTCSiPMHitData) { fTTCSiPMSimHitOutput.emplace(fmt::format("G4Run{}/TTCSiPMSimHit", runID)); }
     fMMSSimTrackOutput.emplace(fmt::format("G4Run{}/MMSSimTrack", runID));
 }
 
@@ -51,6 +56,7 @@ auto Analysis::EventEndUserAction() -> void {
         if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
         if (mmsTrack) {
             if (fTTCSimHitOutput) { fTTCSimHitOutput->Fill(*fTTCHit); }
+            if (fTTCSiPMSimHitOutput) { fTTCSiPMSimHitOutput->Fill(*fTTCSiPMHit); }
             if (fCDCSimHitOutput) { fCDCSimHitOutput->Fill(*fCDCHit); }
             fMMSSimTrackOutput->Fill(*mmsTrack);
         }
@@ -59,6 +65,7 @@ auto Analysis::EventEndUserAction() -> void {
     fDecayVertex = {};
     fCDCHit = {};
     fTTCHit = {};
+    fTTCSiPMHit = {};
 }
 
 auto Analysis::RunEndUserAction(int) -> void {
@@ -66,12 +73,14 @@ auto Analysis::RunEndUserAction(int) -> void {
     if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
     if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
     if (fTTCSimHitOutput) { fTTCSimHitOutput->Write(); }
+    if (fTTCSiPMSimHitOutput) { fTTCSiPMSimHitOutput->Write(); }
     if (fCDCSimHitOutput) { fCDCSimHitOutput->Write(); }
     fMMSSimTrackOutput->Write();
     // reset output
     fPrimaryVertexOutput.reset();
     fDecayVertexOutput.reset();
     fTTCSimHitOutput.reset();
+    fTTCSiPMSimHitOutput.reset();
     fCDCSimHitOutput.reset();
     fMMSSimTrackOutput.reset();
 }

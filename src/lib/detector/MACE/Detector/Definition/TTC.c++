@@ -8,6 +8,9 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Transform3D.hh"
+#include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4OpticalSurface.hh"
 
 #include "fmt/format.h"
 
@@ -17,33 +20,260 @@ using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto TTC::Construct(G4bool checkOverlaps) -> void {
     const auto& ttc{Description::TTC::Instance()};
+    const auto nistManager{G4NistManager::Instance()};
+    // Define Element and Material
+    const auto& ttcScintillatorMaterial{nistManager->BuildMaterialWithNewDensity("TTC_PS101", "G4_POLYSTYRENE", ttc.Density())};
+    
+    const auto hydrogenElement{nistManager->FindOrBuildElement("H")};
+    const auto carbonElement{nistManager->FindOrBuildElement("C")};
+    const auto oxygenElement{nistManager->FindOrBuildElement("O")};
+    const auto siliconElement{nistManager->FindOrBuildElement("Si")};
 
-    const auto solid{Make<G4Box>(
-        ttc.Name(),
-        ttc.Thickness() / 2,
-        ttc.Length() / 2,
-        ttc.Width() / 2)};
-    const auto logic{Make<G4LogicalVolume>(
-        solid,
-        G4NistManager::Instance()->BuildMaterialWithNewDensity("TTC_PS101", "G4_POLYSTYRENE", ttc.Density()),
-        ttc.Name())};
+    const auto lightCoupler{new G4Material("lightCoupler", ttc.LightCouplerDensity(), 4, kStateLiquid)};
+    lightCoupler->AddElement(carbonElement, ttc.LightCouplerCarbonElement());
+    lightCoupler->AddElement(hydrogenElement, ttc.LightCouplerHydrogenElement());
+    lightCoupler->AddElement(oxygenElement, ttc.LightCouplerOxygenElement());
+    lightCoupler->AddElement(siliconElement, ttc.LightCouplerSiliconElement());
+
+    const auto window = new G4Material("window", ttc.WindowDensity(), 3, kStateSolid);
+    window->AddElement(carbonElement, ttc.WindowCarbonElement());
+    window->AddElement(hydrogenElement, ttc.WindowHydrogenElement());
+    window->AddElement(oxygenElement, ttc.WindowOxygenElement());
+
+    // Construct Material Optical Properties Tables
+    const auto [minPhotonEnergy, maxPhotonEnergy]{std::ranges::minmax(ttc.ScintillationComponent1EnergyBin())};
+    const auto scintillatorPropertiesTable{new G4MaterialPropertiesTable};
+    scintillatorPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, ttc.RIndex());
+    scintillatorPropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, ttc.AbsLength());
+    scintillatorPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", ttc.ScintillationComponent1EnergyBin(), ttc.ScintillationComponent1());
+    scintillatorPropertiesTable->AddConstProperty("SCINTILLATIONYIELD", ttc.ScintillationYield());
+    scintillatorPropertiesTable->AddConstProperty("SCINTILLATIONTIMECONSTANT1", ttc.ScintillationTimeConstant1());
+    scintillatorPropertiesTable->AddConstProperty("RESOLUTIONSCALE", ttc.ResolutionScale());
+    ttcScintillatorMaterial->SetMaterialPropertiesTable(scintillatorPropertiesTable);
+
+    const auto lightCouplerPropertiesTable{new G4MaterialPropertiesTable};
+    lightCouplerPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy},ttc.LightCouplerRIndex()); // EJ-550
+    lightCouplerPropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, ttc.LightCouplerAbsLength());
+    lightCoupler->SetMaterialPropertiesTable(lightCouplerPropertiesTable);
+
+    const auto windowPropertiesTable{new G4MaterialPropertiesTable};
+    windowPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, ttc.WindowRIndex());
+    window->SetMaterialPropertiesTable(windowPropertiesTable);
+
+
+    const auto rfSurfacePropertiesTable{new G4MaterialPropertiesTable};
+    rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, ttc.RfSurface());
+
+    const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
+    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, ttc.CouplerSurface());
+
+    const auto airPaintSurfacePropertiesTable{new G4MaterialPropertiesTable};
+    airPaintSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, ttc.AirPaintSurface());
+
+    const auto cathodeSurfacePropertiesTable{new G4MaterialPropertiesTable};
+    cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, ttc.CathodeSurface());
+    cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", ttc.SiPMEnergyBin(), ttc.SiPMEfficiency());
+
+    // Construct Detector
     int tileID{};
-    const auto deltaPhi{2_pi / ttc.NAlongPhi()};
-    for (int i{}; i < ttc.NAlongZ(); ++i) { // clang-format off
+    const auto deltaPhi{2*pi / ttc.NAlongPhi()};
+    const auto nWidth{ttc.Width().size()};
+    struct TTCAirBoxLogical
+    {
+        G4LogicalVolume* LogicalVolume;
+    };
+    struct TTCAirBoxLogical ttcAirBoxLogical[nWidth];
+
+    //set up the PCB
+    const auto ttcPCBSolid{Make<G4Box>(
+        "ttcPCB",
+        ttc.PCBWidth() / 2,
+        ttc.PCBThickness() / 2,
+        ttc.PCBLength() / 2)};
+    const auto ttcPCBMaterial{G4Material::GetMaterial("G4_Fe")};
+    const auto ttcPCBLogic{Make<G4LogicalVolume>(
+        ttcPCBSolid,
+        ttcPCBMaterial,
+        "ttcPCBLogic")};
+    //set up the Window
+        const auto ttcWindowSolid{Make<G4Box>(
+            "ttcWindow",
+            ttc.WindowWidth() / 2,
+            ttc.WindowThickness() / 2,
+            ttc.WindowLength() / 2)};
+        const auto ttcWindowUpLogic{Make<G4LogicalVolume>(
+            ttcWindowSolid,
+            window,
+            "ttcWindowUpLogic")};
+        const auto ttcWindowDownLogic{Make<G4LogicalVolume>(
+            ttcWindowSolid,
+            window,
+            "ttcWindowDownLogic")};
+    //set up the Silicon
+        const auto ttcSiliconeSolid{Make<G4Box>(
+            "ttcSilicone",
+            ttc.SiliconeWidth() / 2,
+            ttc.SiliconeThickness() / 2,
+            ttc.SiliconeLength() / 2)};
+        const auto ttcSiliconeLogic{Make<G4LogicalVolume>(
+            ttcSiliconeSolid,
+            nistManager->FindOrBuildMaterial("G4_Si"),
+            "ttcSiliconeLogic")};
+    //set up the LightCoupler
+    const auto ttcLightCouplerSolid{Make<G4Box>(
+        "ttcLightCoupler",
+        ttc.LightCouplerWidth() / 2,
+        ttc.LightCouplerThickness() / 2,
+        ttc.LightCouplerLength() / 2)};
+    const auto ttcLightCouplerLogic{Make<G4LogicalVolume>(
+        ttcLightCouplerSolid,
+        lightCoupler,
+        "ttcLightCouplerLogic")};
+
+    for (gsl::index i{}; i < nWidth; ++i) { // clang-format off
+        //set up the empty air motherbox
+        const auto ttcAirBoxSolid{Make<G4Box>(
+            "ttcAirBox",
+            ttc.PCBWidth() / 2,
+            ttc.Length()/2 +ttc.PCBThickness()+ttc.WindowThickness()+ttc.LightCouplerThickness(),
+            ttc.Width()[i] / 2)};
+        const auto ttcAirBoxMaterial{G4Material::GetMaterial("G4_AIR")};
+        ttcAirBoxLogical[i].LogicalVolume={Make<G4LogicalVolume>(ttcAirBoxSolid, ttcAirBoxMaterial,"ttcAirBoxLogical")};
+        //set up the TTCscintillator
+        const auto ttcScintillatorSolid{Make<G4Box>(
+            "ttcScintillator", 
+            ttc.Thickness() / 2,
+            ttc.Length() / 2,
+            ttc.Width()[i] / 2)};
+        const auto ttcScintillatorLogic{Make<G4LogicalVolume>(
+            ttcScintillatorSolid,
+            ttcScintillatorMaterial,
+            "ttcScintillatorLogic")};
+        //set the position of air mother box
         const auto transform{G4RotateZ3D{Mustard::Math::IsEven(i) ? 0 : deltaPhi / 2} *
                              G4Translate3D{ttc.Radius(), 0, (1 - ttc.NAlongZ()) * ttc.Width() / 2 + i * ttc.Width()} *
                              G4RotateZ3D{ttc.SlantAngle()}}; // clang-format on
         for (int j{}; j < ttc.NAlongPhi(); ++j, ++tileID) {
             Make<G4PVPlacement>(
                 G4RotateZ3D{j * deltaPhi} * transform,
-                logic,
-                fmt::format("{}_{}", ttc.Name(), tileID),
+                ttcAirBoxLogical[i].LogicalVolume,
+                "ttcAirBoxPhysics",
                 Mother().LogicalVolume(),
                 false,
                 tileID,
                 checkOverlaps);
+            
         }
-    }
-}
+        // set the position of the TTC scintillator inside the air mother box
+            auto ttcScintillatorPhysics{Make<G4PVPlacement>(
+            nullptr,
+            G4ThreeVector(0, 0, 0),
+            ttcScintillatorLogic,
+            "ttcScintillator",
+            ttcAirBoxLogical[i].LogicalVolume,
+            false,
+            checkOverlaps)};
+        //set the position of the LightCoupler inside the air mother box
+        auto ttcLightCouplerUpPhysics{Make<G4PVPlacement>(
+                nullptr,
+                G4ThreeVector(0, (ttc.Length()+ttc.LightCouplerThickness()) / 2,0), 
+                ttcLightCouplerLogic,
+                "ttcLightCoupler", 
+                ttcAirBoxLogical[i].LogicalVolume,
+                false, 
+                checkOverlaps)};
+        auto ttcLightCouplerDownPhysics{Make<G4PVPlacement>(
+                nullptr,
+                G4ThreeVector(0, -(ttc.Length()+ttc.LightCouplerThickness()) / 2,0), 
+                ttcLightCouplerLogic,
+                "ttcLightCoupler", 
+                ttcAirBoxLogical[i].LogicalVolume,
+                false, 
+                checkOverlaps)};
+        //set the position of the Window inside the air mother box
+        Make<G4PVPlacement>(
+                nullptr,
+                G4ThreeVector(0, ttc.LightCouplerThickness()+(ttc.Length()+ttc.WindowThickness()) / 2,0), 
+                ttcWindowUpLogic,
+                "ttcWindow", 
+                ttcAirBoxLogical[i].LogicalVolume,
+                false, 
+                checkOverlaps);
+        Make<G4PVPlacement>(
+                 nullptr,
+                G4ThreeVector(0, -(ttc.LightCouplerThickness()+(ttc.Length()+ttc.WindowThickness()) / 2),0), 
+                ttcWindowDownLogic,
+                "ttcWindow", 
+                ttcAirBoxLogical[i].LogicalVolume,
+                false, 
+                checkOverlaps);
+        //set the position of the PCB inside the air mother box
+        Make<G4PVPlacement>(
+                nullptr,
+                G4ThreeVector(0, ttc.WindowThickness()+ttc.LightCouplerThickness()+(ttc.Length()+ttc.PCBThickness()) / 2,0), 
+                ttcPCBLogic,
+                "ttcPCB", 
+                ttcAirBoxLogical[i].LogicalVolume,
+                false, 
+                checkOverlaps);
+        Make<G4PVPlacement>(
+                nullptr,
+                G4ThreeVector(0, -(ttc.WindowThickness()+ttc.LightCouplerThickness()+(ttc.Length()+ttc.PCBThickness()) / 2),0), 
+                ttcPCBLogic,
+                "ttcPCB", 
+                ttcAirBoxLogical[i].LogicalVolume,
+                false, 
+                checkOverlaps);
+    
+    //Construct Optical Surface
+    const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
+        new G4LogicalSkinSurface{"reflectorSurface", ttcScintillatorLogic, rfSurface};
+        rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
+    const auto airPaintSurface{new G4OpticalSurface("AirPaint", unified, polished, dielectric_metal)};
+        for (int k{}; k < ttc.NAlongPhi(); ++k) {
+            new G4LogicalBorderSurface{"airPaintSurface",
+                                            PhysicalVolume("ttcAirBoxPhysics",k+i*ttc.NAlongPhi()), 
+                                            ttcScintillatorPhysics, 
+                                            airPaintSurface};
+        airPaintSurface->SetMaterialPropertiesTable(airPaintSurfacePropertiesTable);
+        }
+        
 
+    const auto couplerUpSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
+        new G4LogicalBorderSurface{"couplerSurface",
+                                       ttcScintillatorPhysics,
+                                       ttcLightCouplerUpPhysics,
+                                       couplerUpSurface};
+        couplerUpSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
+    const auto couplerDownSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
+        new G4LogicalBorderSurface{"couplerSurface",
+                                       ttcScintillatorPhysics,
+                                       ttcLightCouplerDownPhysics,
+                                       couplerDownSurface};
+        couplerDownSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
+    }
+    //set the position of the Silicon inside the Window
+        Make<G4PVPlacement>(
+                nullptr,
+                G4ThreeVector(0, (ttc.SiliconeThickness()-ttc.WindowThickness()) / 2,0), 
+                ttcSiliconeLogic,
+                "ttcSilicone", 
+                ttcWindowUpLogic,
+                false, 
+                checkOverlaps);
+        Make<G4PVPlacement>(
+                nullptr,
+                G4ThreeVector(0, -(ttc.SiliconeThickness()-ttc.WindowThickness()) / 2,0), 
+                ttcSiliconeLogic,
+                "ttcSilicone", 
+                ttcWindowDownLogic,
+                false, 
+                checkOverlaps);
+
+    //Construct Silicon Optical Surface
+    const auto cathodeSurface{new G4OpticalSurface("Cathode", unified, polished, dielectric_metal)};
+        new G4LogicalSkinSurface{"cathodeSkinSurface", ttcSiliconeLogic, cathodeSurface};
+        cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
+    
+}
 } // namespace MACE::Detector::Definition

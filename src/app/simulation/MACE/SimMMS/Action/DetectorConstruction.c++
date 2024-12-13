@@ -15,6 +15,7 @@
 #include "MACE/SimMMS/Messenger/DetectorMessenger.h++"
 #include "MACE/SimMMS/SD/CDCSD.h++"
 #include "MACE/SimMMS/SD/TTCSD.h++"
+#include "MACE/SimMMS/SD/TTCSiPMSD.h++"
 
 #include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "Mustard/Detector/Field/AsG4Field.h++"
@@ -83,6 +84,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
             .RegisterSD("CDCSensitiveVolume", new SD::CDCSD{Detector::Description::CDC::Instance().Name()});
         mms.Get<Detector::Definition::TTC>()
             .RegisterSD(new SD::TTCSD{Detector::Description::TTC::Instance().Name()});
+        mms.Get<Detector::Definition::TTC>()
+            .RegisterSD(new SD::TTCSiPMSD{Detector::Description::TTC::Instance().Name()});
     }
 
     ////////////////////////////////////////////////////////////////

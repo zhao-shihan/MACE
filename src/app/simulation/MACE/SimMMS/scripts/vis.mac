@@ -6,6 +6,8 @@
 #/control/saveHistory
 /run/verbose 2
 
+/MACE/Physics/UseOpticalPhysics
+
 #/Mustard/Detector/Description/Ixport mms_geom.yaml
 
 /run/initialize
@@ -45,6 +47,7 @@
 /vis/geometry/set/visibility CDCCell             -1 no
 /vis/geometry/set/visibility CDCSuperLayer        0 no
 /vis/geometry/set/visibility MMSField             0 no
+/vis/geometry/set/visibility ttcAirBoxLogical     0 no
 
 # Colors
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
@@ -108,3 +111,4 @@
 
 /vis/verbose warnings
 /vis/viewer/set/autoRefresh yes
+
