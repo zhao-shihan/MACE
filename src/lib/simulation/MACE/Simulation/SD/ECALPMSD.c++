@@ -1,3 +1,4 @@
+#include "MACE/Detector/Description/ECAL.h++"
 #include "MACE/Simulation/SD/ECALPMSD.h++"
 
 #include "G4Event.hh"
@@ -10,6 +11,8 @@
 #include "G4Track.hh"
 #include "G4VTouchable.hh"
 
+#include "muc/algorithm"
+
 #include <cassert>
 
 namespace MACE::inline Simulation::inline SD {
@@ -20,6 +23,8 @@ ECALPMSD::ECALPMSD(const G4String& sdName) :
     fHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
+
+    const auto& ecal{Detector::Description::ECAL::Instance()};
 }
 
 auto ECALPMSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
@@ -52,9 +57,22 @@ auto ECALPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto ECALPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    const auto scintillationTimeConstant1{Detector::Description::ECAL::Instance().ScintillationTimeConstant1()};
+    assert(scintillationTimeConstant1 >= 0);
+
     for (int hitID{};
          auto&& [modID, hitOfUnit] : fHit) {
+        double initialTime{};
+        muc::timsort(hitOfUnit,
+                     [](auto&& hit1, auto&& hit2) {
+                         return Get<"t">(*hit1) < Get<"t">(*hit2);
+                     });
         for (auto&& hit : hitOfUnit) {
+            if (hitID == 0) {
+                initialTime = Get<"t">(*hit);
+            } else if (Get<"t">(*hit) - initialTime > 2 * scintillationTimeConstant1) {
+                continue;
+            }
             Get<"HitID">(*hit) = hitID++;
             assert(Get<"ModID">(*hit) == modID);
             fHitsCollection->insert(hit.release());

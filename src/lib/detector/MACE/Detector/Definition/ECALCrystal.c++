@@ -87,7 +87,6 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
 
     const auto rfSurfacePropertiesTable{new G4MaterialPropertiesTable};
     rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0.99, 0.99});
-    rfSurfacePropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.35, 1.35});
 
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1, 1});
@@ -199,8 +198,8 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        const auto rfSurface{new G4OpticalSurface("reflector", unified, polishedbackpainted, dielectric_dielectric)};
-        new G4LogicalBorderSurface{"airPaintSurface", physicalCrystal, Mother().PhysicalVolume(), rfSurface};
+        const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
+        new G4LogicalSkinSurface{"airPaintSurface", logicCrystal, rfSurface};
         rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
 
         const auto airPaintSurface{new G4OpticalSurface("AirPaint", unified, polished, dielectric_metal)};

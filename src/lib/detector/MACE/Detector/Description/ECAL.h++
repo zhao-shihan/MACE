@@ -54,7 +54,7 @@ public:
     auto NUnit() const -> auto { return Mesh().fFaceList.size(); }
     auto ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D;
 
-    auto ModuleSelection() const->const auto& {return moduleSelection;}
+    auto ModuleSelection() const -> const auto& { return moduleSelection; }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -88,7 +88,7 @@ public:
     auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
     auto ResolutionScale(double val) -> void { fResolutionScale = val; }
 
-    auto ModuleSelection(std::vector<int> val){moduleSelection = std::move(val);}
+    auto ModuleSelection(std::vector<int> val) { moduleSelection = std::move(val); }
 
     struct MeshInformation {
     private:
@@ -129,7 +129,7 @@ private:
     double fUpstreamWindowRadius;
     double fDownstreamWindowRadius;
 
-    bool fUseMPPC {false};
+    bool fUseMPPC{false};
 
     std::vector<muc::array3d> fPMTDimensions;
     double fPMTCouplerThickness;
