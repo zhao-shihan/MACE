@@ -64,8 +64,6 @@ auto main(int argc, char* argv[]) -> int {
     } while (false);
     {
         Mustard::Data::Processor<> processor;
-        const auto batchSizeProposal{cli.BatchSize()};
-        if (batchSizeProposal) { processor.BatchSizeProposal(*batchSizeProposal); }
 
         SmearMACE::Smearer smearer{cli.InputFilePath(), processor};
         const auto [iFirst, iLast]{cli.DatasetIndexRange()};

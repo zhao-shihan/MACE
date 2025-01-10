@@ -23,7 +23,6 @@ public:
     auto OutputFilePath() const -> std::filesystem::path;
 
     auto DatasetIndexRange() const -> std::pair<gsl::index, gsl::index>;
-    auto BatchSize() const -> auto { return ArgParser().present<unsigned>("-b"); }
 
     auto CDCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--cdc-hit"); }
     auto CDCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--cdc-hit-id"); }
