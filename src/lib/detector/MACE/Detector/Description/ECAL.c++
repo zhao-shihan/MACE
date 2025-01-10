@@ -477,23 +477,14 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-    ImportValue(node, fPMTEnergyBin, "PMTEnergyBin");
-    ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    ImportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
-    ImportValue(node, fMPPCPixelSizeSet,
-                "MPPCPixelSizeSet");
     ImportValue(node, fMPPCPitch, "MPPCPitch");
     ImportValue(node, fMPPCThickness, "MPPCThickness");
     ImportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
     ImportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
-    ImportValue(node, fMPPCEnergyBin, "MPPCEnergyBin");
-    ImportValue(node, fMPPCEfficiency, "MPPCEfficiency");
-    ImportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");
-    ImportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ImportValue(node, fScintillationYield, "ScintillationYield");
     ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ImportValue(node, fResolutionScale, "ResolutionScale");
-    ImportValue(node, moduleSelection, "moduleSelection");
+    ImportValue(node, fModuleSelection, "ModuleSelection");
 
     SetGeometryOutdated();
 }
@@ -508,23 +499,14 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-    ExportValue(node, fPMTEnergyBin, "PMTEnergyBin");
-    ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    ExportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
-    ExportValue(node, fMPPCPixelSizeSet,
-                "MPPCPixelSizeSet");
     ExportValue(node, fMPPCPitch, "MPPCPitch");
     ExportValue(node, fMPPCThickness, "MPPCThickness");
     ExportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
     ExportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
-    ExportValue(node, fMPPCEnergyBin, "MPPCEnergyBin");
-    ExportValue(node, fMPPCEfficiency, "MPPCEfficiency");
-    ExportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");
-    ExportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ExportValue(node, fScintillationYield, "ScintillationYield");
     ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ExportValue(node, fResolutionScale, "ResolutionScale");
-    ExportValue(node, moduleSelection, "moduleSelection");
+    ExportValue(node, fModuleSelection, "ModuleSelection");
 }
 
 } // namespace MACE::Detector::Description
