@@ -30,10 +30,6 @@ CLIModule::CLIModule(argparse::ArgumentParser& argParser) :
         .scan<'i', gsl::index>()
         .default_value(std::vector<gsl::index>{0, 1})
         .help("Set number of datasets (index in [0, size) range), or index range (in [first, last) pattern)");
-    ArgParser()
-        .add_argument("-b", "--batch-size-proposal")
-        .scan<'i', unsigned>()
-        .help("Propose number of entries processed in a batch.");
 
     auto& cdcHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
     cdcHitMutexGroup
