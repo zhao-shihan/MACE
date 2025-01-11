@@ -71,7 +71,7 @@ auto ECALPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
             if (hitID == 0) {
                 initialTime = Get<"t">(*hit);
             } else if (Get<"t">(*hit) - initialTime > 2 * scintillationTimeConstant1) {
-                continue;
+                break;
             }
             Get<"HitID">(*hit) = hitID++;
             assert(Get<"ModID">(*hit) == modID);
