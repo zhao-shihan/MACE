@@ -9,7 +9,7 @@ PhysicsList::PhysicsList() :
     PassiveSingleton<PhysicsList>{},
     StandardPhysicsListBase{} {}
 
-void PhysicsList::ConstructProcess() {
+auto PhysicsList::ConstructProcess() -> void {
     StandardPhysicsListBase::ConstructProcess();
 
     constexpr auto timeScale{1e12};

@@ -11,7 +11,7 @@ class PhysicsList final : public Mustard::Env::Memory::PassiveSingleton<PhysicsL
 public:
     PhysicsList();
 
-    void ConstructProcess() override;
+    auto ConstructProcess() -> void override;
 };
 
 } // namespace MACE::SimECAL
