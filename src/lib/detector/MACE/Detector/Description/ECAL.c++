@@ -188,7 +188,7 @@ ECAL::ECAL() : // clang-format off
                           0.18987, 0.19886, 0.2083, 0.21794, 0.228, 0.23806, 0.24644, 0.25312, 0.25713, 0.25932, 0.25835, 0.25279,
                           0.24266, 0.23367, 0.22357, 0.2143, 0.20344, 0.19319, 0.18363, 0.17294, 0.16265, 0.15232, 0.14053, 0.12759,
                           0.11486, 0.10345, 0.09229, 0.08193, 0.07198, 0.06108, 0.05136, 0.04241, 0.0337, 0.02403, 0.01447, 0.00466}, // ET 9269B
-
+    fUseMPPC{false},
     fMPPCNPixelRows{4,
                     4,
                     8,
@@ -319,7 +319,8 @@ ECAL::ECAL() : // clang-format off
     //                          0.107656381, 0.084704457, 0.061552239, 0.040184081, 0.024471847, 0.012727081},
     // fScintillationYield{10000},
     // fScintillationTimeConstant1{300_ns},
-    fResolutionScale{1.} {}
+    fResolutionScale{1.},
+    fWaveformIntegralTime{2000_ns} {}
 
 auto ECAL::ComputeMesh() const -> MeshInformation {
     auto pmpMesh{ECALMesh{fNSubdivision}.Generate()};
@@ -485,6 +486,7 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ImportValue(node, fResolutionScale, "ResolutionScale");
     ImportValue(node, fModuleSelection, "ModuleSelection");
+    ImportValue(node, fWaveformIntegralTime, "WaveformIntegralTime");
 
     SetGeometryOutdated();
 }
@@ -507,6 +509,7 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ExportValue(node, fResolutionScale, "ResolutionScale");
     ExportValue(node, fModuleSelection, "ModuleSelection");
+    ExportValue(node, fWaveformIntegralTime, "WaveformIntegralTime");
 }
 
 } // namespace MACE::Detector::Description

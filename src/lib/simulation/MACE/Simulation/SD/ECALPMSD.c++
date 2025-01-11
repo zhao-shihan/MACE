@@ -57,8 +57,8 @@ auto ECALPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto ECALPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
-    const auto scintillationTimeConstant1{Detector::Description::ECAL::Instance().ScintillationTimeConstant1()};
-    assert(scintillationTimeConstant1 >= 0);
+    const auto integralTime{Detector::Description::ECAL::Instance().WaveformIntegralTime()};
+    assert(integralTime >= 0);
 
     for (int hitID{};
          auto&& [modID, hitOfUnit] : fHit) {
@@ -70,7 +70,7 @@ auto ECALPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
         for (auto&& hit : hitOfUnit) {
             if (hitID == 0) {
                 initialTime = Get<"t">(*hit);
-            } else if (Get<"t">(*hit) - initialTime > 2 * scintillationTimeConstant1) {
+            } else if (Get<"t">(*hit) - initialTime > integralTime) {
                 break;
             }
             Get<"HitID">(*hit) = hitID++;
