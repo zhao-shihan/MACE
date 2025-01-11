@@ -1,7 +1,9 @@
 #pragma once
 
 #include "MACE/Detector/Description/ECAL.h++"
+#include "MACE/Detector/Description/Target.h++"
 #include "MACE/PhaseI/Detector/Description/CentralBeamPipe.h++"
+#include "MACE/PhaseI/Detector/Description/MRPC.h++"
 #include "MACE/PhaseI/Detector/Description/World.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Region.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/ECALPMSD.h++"
@@ -43,7 +45,9 @@ public:
 
 public:
     using DescriptionInUse = std::tuple<MACE::Detector::Description::ECAL,
+                                        PhaseI::Detector::Description::MRPC,
                                         PhaseI::Detector::Description::CentralBeamPipe,
+                                        MACE::Detector::Description::Target,
                                         PhaseI::Detector::Description::World>;
 
 private:

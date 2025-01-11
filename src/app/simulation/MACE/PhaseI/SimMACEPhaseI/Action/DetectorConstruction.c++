@@ -3,6 +3,7 @@
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Description/ECAL.h++"
 #include "MACE/PhaseI/Detector/Definition/CentralBeamPipe.h++"
+#include "MACE/PhaseI/Detector/Definition/MRPC.h++"
 #include "MACE/PhaseI/Detector/Definition/World.h++"
 #include "MACE/PhaseI/Detector/Description/UsePhaseIDefault.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Action/DetectorConstruction.h++"
@@ -50,8 +51,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fWorld = std::make_unique<PhaseI::World>();
     auto& ecalCrystal{fWorld->NewDaughter<ECALCrystal>(fCheckOverlap)};
     auto& ecalPhotoSensor{fWorld->NewDaughter<ECALPhotoSensor>(fCheckOverlap)};
+    auto& mrpc{fWorld->NewDaughter<PhaseI::MRPC>(fCheckOverlap)};
     auto& centralBeamPipe{fWorld->NewDaughter<PhaseI::CentralBeamPipe>(fCheckOverlap)};
-
     auto& target{centralBeamPipe.NewDaughter<Target>(fCheckOverlap)};
 
     const auto defaultCuts{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()};
