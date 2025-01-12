@@ -50,7 +50,6 @@ auto MuonLFVDecayPhysics::InsertDecayChannel(const G4String& parentName, gsl::no
 auto MuonLFVDecayPhysics::AssignMinorDecayBR(gsl::not_null<G4DecayTable*> decay) -> void {
     MuonNLODecayPhysics::AssignMinorDecayBR(decay);
     decay->GetDecayChannel(3)->SetBR(fDoubleRadiativeDecayBR);
-    decay->DumpInfo();
 }
 
 } // namespace MACE::inline Simulation::inline Physics
