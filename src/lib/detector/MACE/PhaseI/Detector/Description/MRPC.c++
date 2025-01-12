@@ -5,6 +5,7 @@
 namespace MACE::PhaseI::Detector::Description {
 
 using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Time;
 
 MRPC::MRPC() :
     DescriptionBase{"MRPC"},
@@ -23,7 +24,9 @@ MRPC::MRPC() :
     fCentralMRPCWidth{10_cm},
     fCornerRadius{11.6_cm},
     fCornerMRPCLength{35_cm},
-    fCornerMRPCWidth{10_cm} {}
+    fCornerMRPCWidth{10_cm},
+    fTimeResolutionFWHM{100_ps},
+    fSpacialResolutionFWHM{1_mm} {}
 
 auto MRPC::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
@@ -43,6 +46,8 @@ auto MRPC::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fCornerRadius, "CornerRadius");
     ImportValue(node, fCornerMRPCLength, "CornerMRPCLength");
     ImportValue(node, fCornerMRPCWidth, "CornerMRPCWidth");
+    ImportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");
+    ImportValue(node, fSpacialResolutionFWHM, "SpacialResolutionFWHM");
 }
 
 auto MRPC::ExportAllValue(YAML::Node& node) const -> void {
@@ -63,6 +68,8 @@ auto MRPC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fCornerRadius, "CornerRadius");
     ExportValue(node, fCornerMRPCLength, "CornerMRPCLength");
     ExportValue(node, fCornerMRPCWidth, "CornerMRPCWidth");
+    ExportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");
+    ExportValue(node, fSpacialResolutionFWHM, "SpacialResolutionFWHM");
 }
 
 } // namespace MACE::PhaseI::Detector::Description

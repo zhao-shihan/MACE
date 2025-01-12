@@ -26,4 +26,8 @@ using ECALRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<double, "t", "Hit time">,
     Mustard::Data::Value<float, "Edep", "Energy deposition">>;
 
+using MRPCRawHit = Mustard::Data::TupleModel<
+    Mustard::Data::Value<double, "t", "Hit time">,
+    Mustard::Data::Value<muc::array2f, "x", "Hit position">>;
+
 } // namespace MACE::Data

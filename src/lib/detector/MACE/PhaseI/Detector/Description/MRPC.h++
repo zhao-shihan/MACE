@@ -28,6 +28,8 @@ public:
     auto CornerRadius() const -> auto { return fCornerRadius; }
     auto CornerMRPCLength() const -> auto { return fCornerMRPCLength; }
     auto CornerMRPCWidth() const -> auto { return fCornerMRPCWidth; }
+    auto TimeResolutionFWHM() const -> auto { return fTimeResolutionFWHM; }
+    auto SpacialResolutionFWHM() const -> auto { return fSpacialResolutionFWHM; }
 
     auto HoneyCombThickness(double val) -> void { fHoneyCombThickness = val; }
     auto PCBThickness(double val) -> void { fPCBThickness = val; }
@@ -45,6 +47,8 @@ public:
     auto CornerRadius(double val) -> void { fCornerRadius = val; }
     auto CornerMRPCLength(double val) -> void { fCornerMRPCLength = val; }
     auto CornerMRPCWidth(double val) -> void { fCornerMRPCWidth = val; }
+    auto TimeResolutionFWHM(double val) -> void { fTimeResolutionFWHM = val; }
+    auto SpacialResolutionFWHM(double val) -> void { fSpacialResolutionFWHM = val; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -67,6 +71,8 @@ private:
     double fCornerRadius;
     double fCornerMRPCLength;
     double fCornerMRPCWidth;
+    double fTimeResolutionFWHM;
+    double fSpacialResolutionFWHM;
 };
 
 } // namespace MACE::PhaseI::Detector::Description
