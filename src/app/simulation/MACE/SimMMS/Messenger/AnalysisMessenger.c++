@@ -18,6 +18,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fSavePrimaryVertexData{},
     fSaveDecayVertexData{},
     fSaveTTCHitData{},
+    fSaveTTCSiPMHitData{},
     fSaveCDCHitData{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
@@ -37,6 +38,11 @@ AnalysisMessenger::AnalysisMessenger() :
     fSaveTTCHitData->SetGuidance("Save good TTC hit data if enabled.");
     fSaveTTCHitData->SetParameterName("mode", false);
     fSaveTTCHitData->AvailableForStates(G4State_Idle);
+
+    fSaveTTCSiPMHitData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveTTCSiPMHitData", this);
+    fSaveTTCSiPMHitData->SetGuidance("Save TTCSiPM hit data if enabled.");
+    fSaveTTCSiPMHitData->SetParameterName("mode", false);
+    fSaveTTCSiPMHitData->AvailableForStates(G4State_Idle);
 
     fSaveCDCHitData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveCDCHitData", this);
     fSaveCDCHitData->SetGuidance("Save CDC hit data if enabled.");
@@ -58,6 +64,10 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
     } else if (command == fSaveTTCHitData.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.SaveTTCHitData(fSaveTTCHitData->GetNewBoolValue(value));
+        });
+    } else if (command == fSaveTTCSiPMHitData.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.SaveTTCSiPMHitData(fSaveTTCSiPMHitData->GetNewBoolValue(value));
         });
     } else if (command == fSaveCDCHitData.get()) {
         Deliver<Analysis>([&](auto&& r) {

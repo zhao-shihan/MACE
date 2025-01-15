@@ -10,6 +10,7 @@
 /MACE/Physics/DisableMuonMinusCapture
 
 /run/initialize
+/process/optical/scintillation/setFiniteRiseTime true
 
 /MACE/Generator/SwitchToGPSX
 /gps/particle                         mu-

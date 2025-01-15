@@ -124,8 +124,10 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             fHitsCollection->insert(hit.release());
         } break;
         default: {
-            const auto scintillationTimeConstant1{Detector::Description::TTC::Instance().ScintillationTimeConstant1()};
-            assert(scintillationTimeConstant1 >= 0);
+            const auto scintillationRiseTimeConstant1{Detector::Description::TTC::Instance().ScintillationRiseTimeConstant1()};
+            const auto scintillationDecayTimeConstant1{Detector::Description::TTC::Instance().ScintillationDecayTimeConstant1()};
+            assert(scintillationRiseTimeConstant1 >= 0 &&scintillationDecayTimeConstant1 >= 0);
+            const auto scintillationTimeConstant1=scintillationRiseTimeConstant1+scintillationDecayTimeConstant1;
             // sort hit by time
             muc::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {

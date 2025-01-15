@@ -54,7 +54,7 @@ private:
     std::optional<Mustard::Data::Output<Data::SimPrimaryVertex>> fPrimaryVertexOutput;
     std::optional<Mustard::Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
     std::optional<Mustard::Data::Output<Data::TTCSimHit>> fTTCSimHitOutput;
-    std::optional<Mustard::Data::Output<Data::TTCSiPMHit>> fTTCSiPMSimHitOutput;
+    std::optional<Mustard::Data::Output<Data::TTCSiPMHit>> fTTCSiPMHitOutput;
     std::optional<Mustard::Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
     std::optional<Mustard::Data::Output<Data::MMSSimTrack>> fMMSSimTrackOutput;
 

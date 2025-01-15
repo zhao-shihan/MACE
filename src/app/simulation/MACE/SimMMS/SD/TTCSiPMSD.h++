@@ -10,4 +10,5 @@ public:
 
     auto EndOfEvent(G4HCofThisEvent* hc) -> void override;
 };
-}
+
+} // namespace MACE::SimMMS::inline SD

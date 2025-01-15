@@ -47,7 +47,8 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     scintillatorPropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, ttc.AbsLength());
     scintillatorPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", ttc.ScintillationComponent1EnergyBin(), ttc.ScintillationComponent1());
     scintillatorPropertiesTable->AddConstProperty("SCINTILLATIONYIELD", ttc.ScintillationYield());
-    scintillatorPropertiesTable->AddConstProperty("SCINTILLATIONTIMECONSTANT1", ttc.ScintillationTimeConstant1());
+    scintillatorPropertiesTable->AddConstProperty("SCINTILLATIONRISETIME1", ttc.ScintillationRiseTimeConstant1());
+    scintillatorPropertiesTable->AddConstProperty("SCINTILLATIONTIMECONSTANT1", ttc.ScintillationDecayTimeConstant1());
     scintillatorPropertiesTable->AddConstProperty("RESOLUTIONSCALE", ttc.ResolutionScale());
     ttcScintillatorMaterial->SetMaterialPropertiesTable(scintillatorPropertiesTable);
 
@@ -90,10 +91,9 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         ttc.PCBWidth() / 2,
         ttc.PCBThickness() / 2,
         ttc.PCBLength() / 2)};
-    const auto ttcPCBMaterial{G4Material::GetMaterial("G4_Fe")};
     const auto ttcPCBLogic{Make<G4LogicalVolume>(
         ttcPCBSolid,
-        ttcPCBMaterial,
+        nistManager->FindOrBuildMaterial("G4_POLYCARBONATE"),
         "ttcPCBLogic")};
     //set up the Window
         const auto ttcWindowSolid{Make<G4Box>(

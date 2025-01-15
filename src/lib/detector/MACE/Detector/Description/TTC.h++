@@ -68,7 +68,8 @@ public:
     auto ScintillationComponent1EnergyBin() const -> const auto& { return *fScintillationComponent1EnergyBin; }
     auto ScintillationComponent1() const -> const auto& { return *fScintillationComponent1; }
     auto ScintillationYield() const -> auto { return *fScintillationYield; }
-    auto ScintillationTimeConstant1() const -> auto { return *fScintillationTimeConstant1; }
+    auto ScintillationRiseTimeConstant1() const -> auto { return *fScintillationRiseTimeConstant1; }
+    auto ScintillationDecayTimeConstant1() const -> auto { return *fScintillationDecayTimeConstant1; }
     auto ResolutionScale() const -> auto { return *fResolutionScale; }
     auto LightCouplerDensity() const -> auto { return *fLightCouplerDensity; }
     auto LightCouplerCarbonElement() const -> auto { return *fLightCouplerCarbonElement; }
@@ -97,13 +98,14 @@ public:
     auto ScintillationComponent1EnergyBin(std::vector<double> val) -> void { fScintillationComponent1EnergyBin = std::move(val); }
     auto ScintillationComponent1(std::vector<double> val) -> void { fScintillationComponent1 = std::move(val); }
     auto ScintillationYield(double val) -> void { fScintillationYield = val; }
-    auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
+    auto ScintillationRiseTimeConstant1(double val) -> void { fScintillationRiseTimeConstant1 = val; }
+    auto ScintillationDecayTimeConstant1(double val) -> void { fScintillationDecayTimeConstant1 = val; }
     auto ResolutionScale(double val) -> void { fResolutionScale = val; }
     auto LightCouplerDensity(double val) -> void { fLightCouplerDensity = val; }
-    auto LightCouplerCarbonElement(double val) -> void { fLightCouplerCarbonElement = val; }
-    auto LightCouplerHydrogenElement(double val) -> void { fLightCouplerHydrogenElement = val; }
-    auto LightCouplerOxygenElement(double val) -> void { fLightCouplerOxygenElement = val; }
-    auto LightCouplerSiliconElement(double val) -> void { fLightCouplerSiliconElement = val; }
+    auto LightCouplerCarbonElement(int val) -> void { fLightCouplerCarbonElement = val; }
+    auto LightCouplerHydrogenElement(int val) -> void { fLightCouplerHydrogenElement = val; }
+    auto LightCouplerOxygenElement(int val) -> void { fLightCouplerOxygenElement = val; }
+    auto LightCouplerSiliconElement(int val) -> void { fLightCouplerSiliconElement = val; }
     auto LightCouplerRIndex(std::vector<double> val) -> void { fLightCouplerRIndex = std::move(val); }
     auto LightCouplerAbsLength(std::vector<double> val) -> void { fLightCouplerAbsLength = std::move(val); }
     auto WindowDensity(double val) -> void { fWindowDensity = val; }
@@ -159,13 +161,14 @@ private:
     Simple<std::vector<double>> fScintillationComponent1EnergyBin;
     Simple<std::vector<double>> fScintillationComponent1;
     Simple<double> fScintillationYield;
-    Simple<double> fScintillationTimeConstant1;
+    Simple<double> fScintillationRiseTimeConstant1;
+    Simple<double> fScintillationDecayTimeConstant1;
     Simple<double> fResolutionScale;
     Simple<double> fLightCouplerDensity;
-    Simple<double> fLightCouplerCarbonElement;
-    Simple<double> fLightCouplerHydrogenElement;
-    Simple<double> fLightCouplerOxygenElement;
-    Simple<double> fLightCouplerSiliconElement;
+    Simple<int> fLightCouplerCarbonElement;
+    Simple<int> fLightCouplerHydrogenElement;
+    Simple<int> fLightCouplerOxygenElement;
+    Simple<int> fLightCouplerSiliconElement;
     Simple<std::vector<double>> fLightCouplerRIndex;
     Simple<std::vector<double>> fLightCouplerAbsLength;
     Simple<double> fWindowDensity;

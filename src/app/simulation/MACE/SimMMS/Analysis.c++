@@ -26,7 +26,7 @@ Analysis::Analysis() :
     fPrimaryVertexOutput{},
     fDecayVertexOutput{},
     fTTCSimHitOutput{},
-    fTTCSiPMSimHitOutput{},
+    fTTCSiPMHitOutput{},
     fCDCSimHitOutput{},
     fMMSSimTrackOutput{},
     fPrimaryVertex{},
@@ -42,7 +42,7 @@ auto Analysis::RunBeginUserAction(int runID) -> void {
     if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
     if (fSaveTTCHitData) { fTTCSimHitOutput.emplace(fmt::format("G4Run{}/TTCSimHit", runID)); }
     if (fSaveCDCHitData) { fCDCSimHitOutput.emplace(fmt::format("G4Run{}/CDCSimHit", runID)); }
-    if (fSaveTTCSiPMHitData) { fTTCSiPMSimHitOutput.emplace(fmt::format("G4Run{}/TTCSiPMSimHit", runID)); }
+    if (fSaveTTCSiPMHitData) { fTTCSiPMHitOutput.emplace(fmt::format("G4Run{}/TTCSiPMHit", runID)); }
     fMMSSimTrackOutput.emplace(fmt::format("G4Run{}/MMSSimTrack", runID));
 }
 
@@ -56,7 +56,7 @@ auto Analysis::EventEndUserAction() -> void {
         if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
         if (mmsTrack) {
             if (fTTCSimHitOutput) { fTTCSimHitOutput->Fill(*fTTCHit); }
-            if (fTTCSiPMSimHitOutput) { fTTCSiPMSimHitOutput->Fill(*fTTCSiPMHit); }
+            if (fTTCSiPMHitOutput) { fTTCSiPMHitOutput->Fill(*fTTCSiPMHit); }
             if (fCDCSimHitOutput) { fCDCSimHitOutput->Fill(*fCDCHit); }
             fMMSSimTrackOutput->Fill(*mmsTrack);
         }
@@ -73,14 +73,14 @@ auto Analysis::RunEndUserAction(int) -> void {
     if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
     if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
     if (fTTCSimHitOutput) { fTTCSimHitOutput->Write(); }
-    if (fTTCSiPMSimHitOutput) { fTTCSiPMSimHitOutput->Write(); }
+    if (fTTCSiPMHitOutput) { fTTCSiPMHitOutput->Write(); }
     if (fCDCSimHitOutput) { fCDCSimHitOutput->Write(); }
     fMMSSimTrackOutput->Write();
     // reset output
     fPrimaryVertexOutput.reset();
     fDecayVertexOutput.reset();
     fTTCSimHitOutput.reset();
-    fTTCSiPMSimHitOutput.reset();
+    fTTCSiPMHitOutput.reset();
     fCDCSimHitOutput.reset();
     fMMSSimTrackOutput.reset();
 }
