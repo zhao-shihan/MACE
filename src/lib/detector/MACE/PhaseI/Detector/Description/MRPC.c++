@@ -20,10 +20,10 @@ MRPC::MRPC() :
     fGasTankThickness{1.5_mm},
     fNMRPCs{8},
     fCentralRadius{6.35_cm},
-    fCentralMRPCLength{35_cm},
+    fCentralMRPCLength{30_cm},
     fCentralMRPCWidth{10_cm},
     fCornerRadius{11.6_cm},
-    fCornerMRPCLength{35_cm},
+    fCornerMRPCLength{30_cm},
     fCornerMRPCWidth{10_cm},
     fTimeResolutionFWHM{100_ps},
     fSpacialResolutionFWHM{1_mm} {}
