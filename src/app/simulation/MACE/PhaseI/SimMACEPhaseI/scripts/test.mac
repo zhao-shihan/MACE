@@ -13,11 +13,12 @@
 /gps/particle e+
 /gps/ene/mono 53.085 MeV
 /gps/pos/centre 0. 0. 0. cm
+/gps/ang/type iso
 
 /MACE/Analysis/CoincidenceWithMRPC    no
 /MACE/Analysis/CoincidenceWithECAL    no
 
-/MACE/Analysis/FilePath SimPhaseI_test
+/MACE/Analysis/FilePath SimMACEPhaseI_test
 /MACE/Analysis/FileMode RECREATE
 
 /run/beamOn 1000

@@ -9,10 +9,10 @@ CentralBeamPipe:
   VacuumPressure: 0.62415090744607638
 ECAL:
   NSubdivision: 3
-  InnerRadius: 250
-  CrystalHypotenuse: 230
-  UpstreamWindowRadius: 150
-  DownstreamWindowRadius: 150
+  InnerRadius: 240
+  CrystalHypotenuse: 140
+  UpstreamWindowRadius: 140
+  DownstreamWindowRadius: 140
   PMTDimensions:
     -
       - 29.300000000000001
@@ -66,7 +66,7 @@ ECAL:
   ResolutionScale: 1
   ModuleSelection:
     []
-  WaveformIntegralTime: 2000
+  WaveformIntegralTime: 100
 MRPC:
   HoneyCombThickness: 4
   PCBThickness: 1.5

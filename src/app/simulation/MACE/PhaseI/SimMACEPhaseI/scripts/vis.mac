@@ -60,7 +60,7 @@
 /vis/viewer/set/auxiliaryEdge no
 #/vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/zoom 1.5
-/vis/viewer/addCutawayPlane 0 0 0 m 0 0 1
+#/vis/viewer/addCutawayPlane 0 0 0 m 1 0 0
 
 # Visibility
 /vis/geometry/set/visibility CentralBeamPipeVacuum      0 no
