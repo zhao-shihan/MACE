@@ -62,6 +62,8 @@ auto MRPCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& particle{*track.GetDefinition()};
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& touchable{*preStepPoint.GetTouchable()};
+    const auto& modID{touchable.GetReplicaNumber(1)};
+
     // transform hit position to local coordinate
     const G4TwoVector hitPosition{*touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation())};
     // calculate (E0, p0)
@@ -73,11 +75,13 @@ auto MRPCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     if (particle.GetPDGCharge() == 0) { return false; }
 
     // new a hit
-    const auto& hit{fSplitHit.emplace_back(std::make_unique_for_overwrite<MRPCHit>())};
+    const auto& hit{fSplitHit[modID].emplace_back(std::make_unique_for_overwrite<MRPCHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
+    Get<"ModID">(*hit) = modID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
-    Get<"x">(*hit) = hitPosition;
+    // Get<"x">(*hit) = hitPosition;
+    Get<"x">(*hit) = preStepPoint.GetPosition();
     Get<"Trig">(*hit) = false; // to be determined
     Get<"Edep">(*hit) = eDep;
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
@@ -96,47 +100,51 @@ auto MRPCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 auto MRPCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     fHitsCollection->GetVector()->reserve(fSplitHit.size());
 
-    switch (fSplitHit.size()) {
-    case 0:
-        break;
-    case 1: {
-        auto& hit{fSplitHit.front()};
-        fHitsCollection->insert(hit.release());
-    } break;
-    default: {
-        const auto timeResolutionFWHM{PhaseI::Detector::Description::MRPC::Instance().TimeResolutionFWHM()};
-        assert(timeResolutionFWHM >= 0);
-        // sort hit by time
-        muc::timsort(fSplitHit,
-                     [](const auto& hit1, const auto& hit2) {
-                         return Get<"t">(*hit1) < Get<"t">(*hit2);
-                     });
-        // loop over all hits and cluster to real hits by times
-        std::ranges::subrange cluster{fSplitHit.begin(), fSplitHit.begin()};
-        while (cluster.end() != fSplitHit.end()) {
-            const auto tFirst{*Get<"t">(**cluster.end())};
-            const auto windowClosingTime{tFirst + timeResolutionFWHM};
-            if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
-                timeResolutionFWHM != 0) [[unlikely]] {
-                Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
+    for (auto&& [modID, splitHit] : fSplitHit) {
+        switch (splitHit.size()) {
+        case 0:
+            muc::unreachable();
+        case 1: {
+            auto& hit{splitHit.front()};
+            assert(Get<"ModID">(*hit) == modID);
+            fHitsCollection->insert(hit.release());
+        } break;
+        default: {
+            const auto timeResolutionFWHM{PhaseI::Detector::Description::MRPC::Instance().TimeResolutionFWHM()};
+            assert(timeResolutionFWHM >= 0);
+            // sort hit by time
+            muc::timsort(splitHit,
+                         [](const auto& hit1, const auto& hit2) {
+                             return Get<"t">(*hit1) < Get<"t">(*hit2);
+                         });
+            // loop over all hits and cluster to real hits by times
+            std::ranges::subrange cluster{splitHit.begin(), splitHit.begin()};
+            while (cluster.end() != splitHit.end()) {
+                const auto tFirst{*Get<"t">(**cluster.end())};
+                const auto windowClosingTime{tFirst + timeResolutionFWHM};
+                if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
+                    timeResolutionFWHM != 0) [[unlikely]] {
+                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
+                }
+                cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
+                                                                   [&windowClosingTime](const auto& hit) {
+                                                                       return Get<"t">(*hit) <= windowClosingTime;
+                                                                   })};
+                // find top hit
+                auto& topHit{*std::ranges::min_element(cluster,
+                                                       [](const auto& hit1, const auto& hit2) {
+                                                           return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
+                                                       })};
+                // construct real hit
+                assert(Get<"ModID">(*topHit) == modID);
+                for (const auto& hit : cluster) {
+                    if (hit == topHit) { continue; }
+                    Get<"Edep">(*topHit) += Get<"Edep">(*hit);
+                }
+                fHitsCollection->insert(topHit.release());
             }
-            cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), fSplitHit.end(),
-                                                               [&windowClosingTime](const auto& hit) {
-                                                                   return Get<"t">(*hit) <= windowClosingTime;
-                                                               })};
-            // find top hit
-            auto& topHit{*std::ranges::min_element(cluster,
-                                                   [](const auto& hit1, const auto& hit2) {
-                                                       return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
-                                                   })};
-            // construct real hit
-            for (const auto& hit : cluster) {
-                if (hit == topHit) { continue; }
-                Get<"Edep">(*topHit) += Get<"Edep">(*hit);
-            }
-            fHitsCollection->insert(topHit.release());
+        } break;
         }
-    } break;
     }
     fSplitHit.clear();
 

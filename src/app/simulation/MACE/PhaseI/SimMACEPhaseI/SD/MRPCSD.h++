@@ -30,7 +30,7 @@ public:
 protected:
     double fIonizingEnergyDepositionThreshold;
 
-    std::vector<std::unique_ptr<MRPCHit>> fSplitHit;
+    std::unordered_map<int, std::vector<std::unique_ptr<MRPCHit>>> fSplitHit;
     MRPCHitCollection* fHitsCollection;
 
     MRPCSDMessenger::Register<MRPCSD> fMessengerRegister;

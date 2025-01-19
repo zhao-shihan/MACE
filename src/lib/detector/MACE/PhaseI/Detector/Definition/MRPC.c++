@@ -93,7 +93,7 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                             logicTank,
                             mrpc.Name() + "GasTank",
                             Mother().LogicalVolume(),
-                            true,
+                            false,
                             i,
                             checkOverlaps);
     }
@@ -108,7 +108,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Gas",
                         logicCentralGasTank,
                         false,
-                        0,
                         checkOverlaps);
 
     const auto solidCornerGas{Make<G4Box>(mrpc.Name() + "Gas",
@@ -121,7 +120,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Gas",
                         logicCornerGasTank,
                         false,
-                        0,
                         checkOverlaps);
 
     const auto solidCentralInnerGlass{Make<G4Box>(mrpc.Name() + "InnerGlass",
@@ -134,7 +132,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "InnerGlass",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
 
     const auto solidCornerInnerGlass{Make<G4Box>(mrpc.Name() + "InnerGlass",
@@ -147,7 +144,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "InnerGlass",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
 
     for (int i{1}; i < 0.5 * mrpc.NGaps(); i++) {
@@ -157,14 +153,12 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                             mrpc.Name() + "InnerGlass",
                             logicCentralGas,
                             false,
-                            0,
                             checkOverlaps);
         Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY, -G4ThreeVector(0, i * (gasGapThickness + innerGlassThickness), 0)),
                             logicCentralInnerGlass,
                             mrpc.Name() + "InnerGlass",
                             logicCentralGas,
                             false,
-                            0,
                             checkOverlaps);
 
         // Corner InnerGlass
@@ -173,14 +167,12 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                             mrpc.Name() + "InnerGlass",
                             logicCornerGas,
                             false,
-                            0,
                             checkOverlaps);
         Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY, -G4ThreeVector(0, i * (gasGapThickness + innerGlassThickness), 0)),
                             logicCornerInnerGlass,
                             mrpc.Name() + "InnerGlass",
                             logicCornerGas,
                             false,
-                            0,
                             checkOverlaps);
     }
     // Central OuterGlass
@@ -197,7 +189,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "OuterGlass",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -207,13 +198,12 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "OuterGlass",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     // Corner OuterGlass
     const auto solidCornerOuterGlass{Make<G4Box>(mrpc.Name() + "OuterGlass",
-                                                 centralMRPCWidth / 2,
+                                                 cornerMRPCWidth / 2,
                                                  outerGlassThickness / 2,
-                                                 centralMRPCLength / 2)};
+                                                 cornerMRPCLength / 2)};
     const auto logicCornerOuterGlass{Make<G4LogicalVolume>(solidCornerOuterGlass, glass, mrpc.Name() + "OuterGlass")};
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       G4ThreeVector(0,
@@ -223,7 +213,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "OuterGlass",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -233,7 +222,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "OuterGlass",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
     // Central Anode
     const auto solidCentralAnode{Make<G4Box>(mrpc.Name() + "Anode",
@@ -249,7 +237,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Anode",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -259,13 +246,12 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Anode",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     // Corner Anode
     const auto solidCornerAnode{Make<G4Box>(mrpc.Name() + "Anode",
-                                            centralMRPCWidth / 2,
+                                            cornerMRPCWidth / 2,
                                             anodeThickness / 2,
-                                            centralMRPCLength / 2)};
+                                            cornerMRPCLength / 2)};
     const auto logicCornerAnode{Make<G4LogicalVolume>(solidCornerAnode, graphite, mrpc.Name() + "Anode")};
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       G4ThreeVector(0,
@@ -275,7 +261,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Anode",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -285,7 +270,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Anode",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
     // Central Mylar
     const auto solidCentralMylar{Make<G4Box>(mrpc.Name() + "Mylar",
@@ -301,7 +285,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Mylar",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -311,13 +294,12 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Mylar",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     // Corner Mylar
     const auto solidCornerMylar{Make<G4Box>(mrpc.Name() + "Mylar",
-                                            centralMRPCWidth / 2,
+                                            cornerMRPCWidth / 2,
                                             mylarThickness / 2,
-                                            centralMRPCLength / 2)};
+                                            cornerMRPCLength / 2)};
     const auto logicCornerMylar{Make<G4LogicalVolume>(solidCornerMylar, mylar, mrpc.Name() + "Mylar")};
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       G4ThreeVector(0,
@@ -327,7 +309,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Mylar",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -337,7 +318,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "Mylar",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
     // Central PCB
     const auto solidCentralPCB{Make<G4Box>(mrpc.Name() + "PCB",
@@ -353,7 +333,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "PCB",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -363,13 +342,12 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "PCB",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     // Corner PCB
     const auto solidCornerPCB{Make<G4Box>(mrpc.Name() + "PCB",
-                                          centralMRPCWidth / 2,
+                                          cornerMRPCWidth / 2,
                                           pcbThickness / 2,
-                                          centralMRPCLength / 2)};
+                                          cornerMRPCLength / 2)};
     const auto logicCornerPCB{Make<G4LogicalVolume>(solidCornerPCB, pcb, mrpc.Name() + "PCB")};
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       G4ThreeVector(0,
@@ -379,7 +357,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "PCB",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -389,8 +366,8 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "PCB",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
+
     // Central HoneyComb
     const auto solidCentralHoneyComb{Make<G4Box>(mrpc.Name() + "HoneyComb",
                                                  centralMRPCWidth / 2,
@@ -405,7 +382,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "HoneyComb",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -415,13 +391,12 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "HoneyComb",
                         logicCentralGas,
                         false,
-                        0,
                         checkOverlaps);
     // Corner HoneyComb
     const auto solidCornerHoneyComb{Make<G4Box>(mrpc.Name() + "HoneyComb",
-                                                centralMRPCWidth / 2,
+                                                cornerMRPCWidth / 2,
                                                 honeyCombThickness / 2,
-                                                centralMRPCLength / 2)};
+                                                cornerMRPCLength / 2)};
     const auto logicCornerHoneyComb{Make<G4LogicalVolume>(solidCornerHoneyComb, mylar, mrpc.Name() + "HoneyComb")};
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       G4ThreeVector(0,
@@ -431,7 +406,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "HoneyComb",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
     Make<G4PVPlacement>(G4Transform3D(G4RotationMatrix::IDENTITY,
                                       -G4ThreeVector(0,
@@ -441,7 +415,6 @@ auto MRPC::Construct(G4bool checkOverlaps) -> void {
                         mrpc.Name() + "HoneyComb",
                         logicCornerGas,
                         false,
-                        0,
                         checkOverlaps);
 }
 } // namespace MACE::PhaseI::Detector::Definition
