@@ -1,9 +1,11 @@
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Detector/Description/ECAL.h++"
+#include "MACE/PhaseI/Detector/Description/UsePhaseIDefault.h++"
 
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/Tuple.h++"
+#include "Mustard/Detector/Description/DescriptionIO.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/MPIX/DataType.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
@@ -36,20 +38,15 @@ using namespace Mustard::LiteralUnit::Time;
 using namespace Mustard::MathConstant;
 using namespace Mustard::PhysicalConstant;
 
-auto smear(float e) -> float {
-    e *= 1000;
-    constexpr auto a = -7.47073293;
-    constexpr auto b = 2.76377561;
-    auto fwhm = a + b * sqrt(e);
-    auto smearedEnergy = gRandom->Gaus(e, fwhm / 2.35482);
-    return smearedEnergy / 1000;
-}
-
 auto main(int argc, char* argv[]) -> int {
     Mustard::Env::MPIEnv env{argc, argv, {}};
+    Mustard::Detector::Description::DescriptionIO::
+        Import<Detector::Description::ECAL>("../../../../simulation/MACE/PhaseI/SimMACEPhaseI/SimMACEPhaseI_geom.yaml");
 
-    std::vector<std::string> files;
-    for (auto i{1}; i < argc; ++i) { files.emplace_back(argv[i]); }
+    // std::vector<std::string> files;
+    // for (auto i{1}; i < argc; ++i) { files.emplace_back(argv[i]); }
+    std::string fileName{argv[1]};
+    std::string filePath{"../../../../simulation/MACE/PhaseI/SimMACEPhaseI/"};
 
     const auto& ecal{Detector::Description::ECAL::Instance()};
     const auto& faceList{ecal.Mesh().fFaceList};
@@ -62,18 +59,19 @@ auto main(int argc, char* argv[]) -> int {
         i++;
     }
 
-    TFile outputFile{Mustard::MPIX::ParallelizePath("dual_coin.root").generic_string().c_str(), "RECREATE"};
+    TFile outputFile{Mustard::MPIX::ParallelizePath(fileName).generic_string().c_str(), "RECREATE"};
     using ECALEnergy = Mustard::Data::TupleModel<Mustard::Data::Value<float, "Edep", "Energy deposition">,
                                                  Mustard::Data::Value<float, "Edep1", "Energy deposition 1">,
                                                  Mustard::Data::Value<float, "Edep2", "Energy deposition 2">,
                                                  Mustard::Data::Value<float, "dE", "Delta energy">,
                                                  Mustard::Data::Value<double, "theta", "angel">,
-                                                 Mustard::Data::Value<double, "dt0", "Delta time">>;
+
+                                                 Mustard::Data::Value<double, "dt", "Delta time">>;
     Mustard::Data::Output<ECALEnergy> reconEnergy{"G4Run0/ReconECAL"};
 
     Mustard::Data::Processor processor;
     processor.Process<Data::ECALSimHit>(
-        ROOT::RDataFrame{"G4Run0/ECALSimHit", files}, "EvtID",
+        ROOT::RDataFrame{"G4Run0/ECALSimHit", filePath + fileName}, "EvtID",
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             muc::timsort(event,
@@ -85,7 +83,6 @@ auto main(int argc, char* argv[]) -> int {
 
             for (auto&& hit : event) {
                 hitDict.try_emplace(Get<"ModID">(*hit), hit);
-                if (Get<"Edep">(*hit) < 50_keV) { continue; }
                 potentialSeedModule.emplace_back(Get<"ModID">(*hit));
             }
 
@@ -95,7 +92,11 @@ auto main(int argc, char* argv[]) -> int {
             std::unordered_set<short> secondCluster;
 
             auto firstSeedModule = potentialSeedModule.begin();
-            auto secondSeedModule = std::ranges::next(potentialSeedModule.begin());
+            // auto secondSeedModule = std::ranges::next(potentialSeedModule.begin());
+            auto secondSeedModule = std::ranges::find_if(
+                potentialSeedModule,
+                [&](short m) { return centroidMap.at(*firstSeedModule).angle(centroidMap.at(m)) > 0.9 * pi; });
+            if (secondSeedModule == potentialSeedModule.end()) { return; }
 
             const auto Clustering = [&](std::unordered_set<short>& set, std::vector<short>::iterator it) {
                 set.insert(*it); // add seed module
@@ -109,8 +110,8 @@ auto main(int argc, char* argv[]) -> int {
 
                 float energy{};
                 for (auto&& m : set) {
-                    if (not hitDict.contains(m) or Get<"Edep">(*hitDict.at(m)) < 50_keV) { continue; }
-                    energy += smear(Get<"Edep">(*hitDict.at(m)));
+                    if (hitDict.find(m) == hitDict.end() or Get<"Edep">(*hitDict.at(m)) < 50_keV) { continue; }
+                    energy += gRandom->Gaus(Get<"Edep">(*hitDict.at(m)), 0.14 * std::sqrt(Get<"Edep">(*hitDict.at(m))));
                 }
                 return energy;
             };
@@ -118,7 +119,7 @@ auto main(int argc, char* argv[]) -> int {
             auto firstClusterEnergy = Clustering(firstCluster, firstSeedModule);
             auto secondClusterEnergy = Clustering(secondCluster, secondSeedModule);
 
-            if (firstClusterEnergy > 590_keV or secondClusterEnergy > 590_keV) { return; }
+            if (firstClusterEnergy + secondClusterEnergy > muonium_mass_c2) { return; }
 
             Mustard::Data::Tuple<ECALEnergy> energyTuple;
             Get<"Edep">(energyTuple) = firstClusterEnergy + secondClusterEnergy;
@@ -126,7 +127,7 @@ auto main(int argc, char* argv[]) -> int {
             Get<"Edep2">(energyTuple) = secondClusterEnergy;
             Get<"dE">(energyTuple) = std::abs(firstClusterEnergy - secondClusterEnergy);
             Get<"theta">(energyTuple) = centroidMap.at(*firstSeedModule).angle(centroidMap.at(*secondSeedModule));
-            Get<"dt0">(energyTuple) = std::abs(*Get<"t0">(*hitDict.at(*firstSeedModule)) - *Get<"t0">(*hitDict.at(*secondSeedModule)));
+            Get<"dt">(energyTuple) = std::abs(*Get<"t">(*hitDict.at(*firstSeedModule)) - *Get<"t">(*hitDict.at(*secondSeedModule)));
             reconEnergy.Fill(std::move(energyTuple));
         });
 
