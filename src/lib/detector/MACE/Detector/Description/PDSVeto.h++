@@ -17,26 +17,44 @@ public:
     auto NLayerPerModuleOfaType() const -> const auto& { return *fNLayerPerModuleOfaType; }
     auto NStripPerLayerOfaType() const -> const auto& { return *fNStripPerLayerOfaType; }
     auto StripLengthOfaType() const -> const auto& { return *fStripLengthOfaType; }
-    auto PSWidth() const -> const auto& { return *fPSWidth; }
-    auto PSThickness() const -> const auto& { return *fPSThickness; }
-    auto PSFiberRadius() const -> const auto& { return *fPSFiberRadius; }
-    auto PSFiberCurvatureRadius() const -> const auto& { return *fPSFiberCurvatureRadius; }
-    auto PSHoleRadius() const -> const auto& { return *fPSHoleRadius; }
     auto ReflectiveFilmThickness() const -> const auto& { return *fReflectiveFilmThickness; }
     auto InterPSGap() const -> const auto& { return *fInterPSGap; }
     auto InterModuleGap() const -> const auto& { return *fInterModuleGap; }
     auto Cap12Gap() const -> const auto& { return *fCap12Gap; }
     auto ModuleOffset() const -> const auto& { return *fModuleOffset; }
     auto AlAbsorberThickness() const -> const auto& { return *fAlAbsorberThickness; }
-    auto SiPMThickness() const -> const auto& { return *fSiPMThickness; }
-    auto SiPMCathodeThickness() const -> const auto& { return *fSiPMCathodeThickness; }
-    auto SiPMCouplerThickness() const -> const auto& { return *fSiPMCouplerThickness; }
-    auto SiPMSize() const -> const auto& { return *fSiPMSize; }
-    // auto StripSelectionID() const ->const auto& {return *fStripSelectionID;}
     auto FTypeConfiguration() const -> const auto& {return *fTypeConfiguration;}
     auto FStripInformation() const -> const auto& {return *fStripInformation;}
     auto FiberNum() const -> const auto& {return *fFiberNum;}
     auto SelectedType() const -> const auto& {return *fSelectedType;}
+
+    auto PSScintillationEnergyBin() const -> const auto& {return *fPSScintillationEnergyBin;}
+    auto PSScintillationComponent1() const -> const auto& {return *fPSScintillationComponent1;}
+    auto PSScintillationYield() const -> const auto& {return *fPSScintillationYield;}
+    auto PSScintillationTimeConstant1() const -> const auto& {return *fPSScintillationTimeConstant1;}
+    auto PSResolutionScale() const -> const auto& {return *fPSResolutionScale;}
+
+    auto PSWidth() const -> const auto& { return *fPSWidth; }
+    auto PSThickness() const -> const auto& { return *fPSThickness; }
+    auto SiPMThickness() const -> const auto& { return *fSiPMThickness; }
+    auto SiPMCathodeThickness() const -> const auto& { return *fSiPMCathodeThickness; }
+    auto SiPMCouplerThickness() const -> const auto& { return *fSiPMCouplerThickness; }
+    auto SiPMSize() const -> const auto& { return *fSiPMSize; }
+    auto SiPMEnergyBin() const -> const auto& {return *fSiPMEnergyBin;}
+    auto SiPMEfficiency() const -> const auto& {return *fSiPMEfficiency;}
+
+    auto PSFiberRadius() const -> const auto& { return *fPSFiberRadius; }
+    // auto PSFiberCurvatureRadius() const -> const auto& { return *fPSFiberCurvatureRadius; }
+    auto PSHoleRadius() const -> const auto& { return *fPSHoleRadius; }
+    auto WlsRIndexEnergy() const -> const auto& {return *fWlsRIndexEnergy;}
+    auto WlsRIndex() const -> const auto& {return *fWlsRIndex;}
+    auto WlsVAbsEnergy() const -> const auto& {return *fWlsVAbsEnergy;}
+    auto WlsVAbsLength() const -> const auto& {return *fWlsVAbsLength;}
+    auto WlsAbsEnergy() const -> const auto& {return *fWlsAbsEnergy;}
+    auto WlsAbsLength() const -> const auto& {return *fWlsAbsLength;}
+    auto WlsEmissionEnergy() const -> const auto& {return *fWlsEmissionEnergy;}
+    auto WlsEmissionAmplitude() const -> const auto& {return *fWlsEmissionAmplitude;}
+
 
 
 public:
@@ -93,24 +111,48 @@ private:
     Simple<std::vector<int>> fNStripPerLayerOfaType;
     Simple<std::vector<double>> fStripLengthOfaType;
 
+    // Simple<double> fPSFiberCurvatureRadius; //
+
     Simple<double> fPSWidth;
     Simple<double> fPSThickness;
+    Simple<std::vector<double>> fPSScintillationEnergyBin;
+    Simple<std::vector<double>> fPSScintillationComponent1;
+    Simple<double> fPSScintillationYield;
+    Simple<double> fPSScintillationTimeConstant1;
+    Simple<double> fPSResolutionScale;
+
+    Simple<double> fSiPMThickness;
+    Simple<double> fSiPMCathodeThickness;
+    Simple<double> fSiPMCouplerThickness;
+    Simple<double> fSiPMSize;
+    Simple<std::vector<double>> fSiPMEnergyBin;
+    Simple<std::vector<double>> fSiPMEfficiency;
+
     Simple<double> fPSFiberRadius;
     Simple<double> fPSHoleRadius;
-    Simple<double> fPSFiberCurvatureRadius; //
+    Simple<std::vector<double>> fWlsRIndexEnergy;
+    Simple<std::vector<double>> fWlsRIndex;
+    Simple<std::vector<double>> fWlsVAbsEnergy;
+    Simple<std::vector<double>> fWlsVAbsLength;
+    Simple<std::vector<double>> fWlsAbsEnergy;
+    Simple<std::vector<double>> fWlsAbsLength;
+    Simple<std::vector<double>> fWlsEmissionEnergy;
+    Simple<std::vector<double>> fWlsEmissionAmplitude;
+    
     Simple<double> fInterPSGap;
     Simple<double> fInterModuleGap;
     Simple<double> fCap12Gap;
     Simple<double> fModuleOffset;
     Simple<double> fAlAbsorberThickness;
     Simple<double> fReflectiveFilmThickness;
-    Simple<double> fSiPMThickness;
-    Simple<double> fSiPMCathodeThickness;
-    Simple<double> fSiPMCouplerThickness;
-    Simple<double> fSiPMSize;
     Simple<double> fSolenoidWindowRadius;
     Simple<int> fFiberNum;
     Simple<int> fSelectedType;
+
+
+
+    
+    
 
     Cached<std::vector<TypeConfiguration>> fTypeConfiguration;
     Cached<std::vector<StripInformation>> fStripInformation;

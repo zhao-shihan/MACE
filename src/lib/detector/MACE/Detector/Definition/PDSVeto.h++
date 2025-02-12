@@ -30,7 +30,7 @@ public:
     // auto PlaceStrips();
 private:
     G4Material* fAir;
-    G4Material* fPlasticScinllator;
+    G4Material* fPlasticScintillaor;
     G4Material* fEpoxy;
     G4Material* fSiliconeGrease;
     G4Material* fSilicon;

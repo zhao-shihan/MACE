@@ -14,12 +14,9 @@
 #include "G4LogicalSkinSurface.hh"
 #include "G4NistManager.hh"
 #include "G4OpticalSurface.hh"
-#include "G4PVParameterised.hh"
 #include "G4PVPlacement.hh"
-#include "G4SubtractionSolid.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
-#include "G4VPVParameterisation.hh"
 
 #include "fmt/format.h"
 
@@ -90,9 +87,9 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     siliconeGreasePropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, {100_cm, 100_cm});
     siliconeGrease->SetMaterialPropertiesTable(siliconeGreasePropertiesTable);
 
-    const auto windowPropertiesTable{new G4MaterialPropertiesTable};
-    windowPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.57, 1.57});
-    epoxy->SetMaterialPropertiesTable(windowPropertiesTable);
+    const auto epoxyPropertiesTable{new G4MaterialPropertiesTable};
+    epoxyPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.57, 1.57});
+    epoxy->SetMaterialPropertiesTable(epoxyPropertiesTable);
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1, 1});
 
@@ -163,7 +160,7 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
                                                            true,
                                                            moduleID,
                                                            checkOverlaps)};
-            // change volume window from epoxy to epoxy&silicon Pixels, may change name "window" later
+            // 1 unit mppc = pixels(Si) + window(epoxy)
             Make<G4PVPlacement>(windowTransform,
                                 logicWindow,
                                 "ECALMPPCWindow",
@@ -238,9 +235,9 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     siliconeGreasePropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, {100_cm, 100_cm});
     siliconeGrease->SetMaterialPropertiesTable(siliconeGreasePropertiesTable);
 
-    const auto windowPropertiesTable{new G4MaterialPropertiesTable};
-    windowPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.49, 1.49}); // ET 9269B 9956B
-    glass->SetMaterialPropertiesTable(windowPropertiesTable);
+    const auto epoxyPropertiesTable{new G4MaterialPropertiesTable};
+    epoxyPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.49, 1.49}); // ET 9269B 9956B
+    glass->SetMaterialPropertiesTable(epoxyPropertiesTable);
 
     std::vector<G4double> cathodeSurfacePropertiesEnergy{pmtEnergyBin};
     std::vector<G4double> cathodeSurfacePropertiesEfficiency{pmtQuantumEfficiency};
