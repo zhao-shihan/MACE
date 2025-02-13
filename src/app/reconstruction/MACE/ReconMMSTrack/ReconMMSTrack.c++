@@ -47,7 +47,7 @@ auto main(int argc, char* argv[]) -> int {
     Mustard::Data::Processor processor;
     auto nextTrackID{0};
     processor.Process<Data::CDCSimHit>(
-        ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, "EvtID",
+        ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, int{}, "EvtID",
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             for (auto&& [trackID, good] : finder(event, nextTrackID).good) {
