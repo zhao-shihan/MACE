@@ -50,19 +50,35 @@
 #include "Mustard/Env/BasicEnv.h++"
 #include "Mustard/Env/CLI/BasicCLI.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "TGeoManager.h"
 
+#include "fmt/std.h"
+
+#include <filesystem>
 #include <functional>
+#include <stdexcept>
+#include <string>
 
 namespace MACE::MakeGeometry {
+
+using namespace std::string_literals;
 
 MakeGeometry::MakeGeometry() :
     Subprogram{"MakeGeometry", "Construct detector geometry and create geometry files."} {}
 
 auto MakeGeometry::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::CLI::BasicCLI<> cli;
+    cli->add_argument("-o", "--output").help("Set output directory path.").default_value("mace_geometry"s).required().nargs(1);
+    cli->add_argument("-c", "--opaque").help("Set geometry opacity.").default_value(false).required().nargs(1);
     Mustard::Env::BasicEnv env(argc, argv, cli);
+
+    const std::filesystem::path outputPath{cli->get("--output")};
+    if (std::filesystem::exists(outputPath)) {
+        Mustard::Throw<std::runtime_error>(fmt::format("{} already exists", outputPath));
+    }
+    std::filesystem::create_directories(outputPath);
 
     ////////////////////////////////////////////////////////////////
     // Construct volumes
@@ -141,36 +157,37 @@ auto MakeGeometry::Main(int argc, char* argv[]) const -> int {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fWorld->Export("test.gdml");
+    fWorld->Export(outputPath / "mace.gdml");
     mms.Get<CDCSenseLayer>().RemoveDaughter<CDCCell>(); // ROOT does not support twisted tube.
-    fWorld->Export("test_no_cell.gdml");
+    fWorld->Export(outputPath / "mace_root_compatible.gdml");
 
-    const auto geoManager{std::unique_ptr<TGeoManager>{TGeoManager::Import("test_no_cell.gdml")}};
-    geoManager->SetNameTitle("MACEGeom", "MACE Geometry");
+    const auto geoManager{std::unique_ptr<TGeoManager>{TGeoManager::Import((outputPath / "mace_root_compatible.gdml").generic_string().c_str())}};
+    geoManager->SetNameTitle("MACEGeometry", "MACE Geometry");
     geoManager->SetMaxVisNodes(0);
 
-    /* // set transparency for jsroot display
-    // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
+    if (cli->get<bool>("--opaque")) {
+        // set transparency for jsroot display
+        // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
+        geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
+        using Mustard::Detector::Definition::DefinitionBase;
+        for (auto&& entity : std::initializer_list<std::reference_wrapper<const DefinitionBase>>{
+                 ecalCrystal,
+                 ecalMagnet,
+                 ecalPhotoSensor,
+                 ecalShield,
+                 mms.Get<MMSMagnet>(),
+                 mms.Get<MMSShield>(),
+                 shieldingWall,
+                 solenoidT1,
+                 solenoidT2,
+                 solenoidS1,
+                 solenoidS2,
+                 solenoidS3}) {
+            geoManager->GetVolume(entity.get().LogicalVolume()->GetName())->SetTransparency(60);
+        }
+    }
 
-    geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
-    using Mustard::Detector::Definition::DefinitionBase;
-    for (auto&& entity : std::initializer_list<std::reference_wrapper<const DefinitionBase>>{
-             ecalCrystal,
-             ecalMagnet,
-             ecalPhotoSensor,
-             ecalShield,
-             mmsMagnet,
-             mmsShield,
-             shieldingWall,
-             solenoidT1,
-             solenoidT2,
-             solenoidS1,
-             solenoidS2,
-             solenoidS3}) {
-        geoManager->GetVolume(entity.get().LogicalVolume()->GetName())->SetTransparency(60);
-    } */
-
-    geoManager->Export("test.root");
+    geoManager->Export((outputPath / "mace.root").generic_string().c_str());
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
