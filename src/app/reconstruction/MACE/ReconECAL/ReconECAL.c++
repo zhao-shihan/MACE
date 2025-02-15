@@ -1,5 +1,6 @@
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Detector/Description/ECAL.h++"
+#include "MACE/ReconECAL/ReconECAL.h++"
 
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Data/Processor.h++"
@@ -21,9 +22,12 @@
 
 #include <unordered_map>
 
-using namespace MACE;
+namespace MACE::ReconECAL {
 
-auto main(int argc, char* argv[]) -> int {
+ReconECAL::ReconECAL() :
+    Subprogram{"ReconECAL", "Electromagnetic calorimeter (ECAL) event reconstruction."} {}
+
+auto ReconECAL::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, {}};
 
     // std::vector<std::string> files;
@@ -117,3 +121,5 @@ auto main(int argc, char* argv[]) -> int {
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::ReconECAL

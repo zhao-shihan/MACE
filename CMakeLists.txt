@@ -103,5 +103,11 @@ endif()
 
 # Config for MACE
 include(${MACE_PROJECT_CMAKE_DIR}/MACECompileConfig.cmake)
-# main content
+# libraries
 add_subdirectory(${PROJECT_SOURCE_DIR})
+# main program
+add_executable(MACE MACE.c++)
+target_link_libraries(MACE AppMACEPhaseI
+                           AppMACEReconstruction
+                           AppMACESimulation)
+install(TARGETS MACE DESTINATION ${CMAKE_INSTALL_BINDIR})

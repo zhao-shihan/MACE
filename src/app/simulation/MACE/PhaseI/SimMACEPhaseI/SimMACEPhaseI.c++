@@ -1,16 +1,18 @@
 #include "MACE/PhaseI/SimMACEPhaseI/DefaultMacro.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/RunManager.h++"
+#include "MACE/PhaseI/SimMACEPhaseI/SimMACEPhaseI.h++"
 
 #include "Mustard/Env/CLI/Geant4CLI.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Interface/MPIExecutive.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
 
-#include "Randomize.hh"
+namespace MACE::PhaseI::SimMACEPhaseI {
 
-using namespace MACE;
+SimMACEPhaseI::SimMACEPhaseI() :
+    Subprogram{"SimMACEPhaseI", "Simulation of events in the Phase-I Muonium-to-antimuonium conversion experiment (MACE Phase-I)."} {}
 
-auto main(int argc, char* argv[]) -> int {
+auto SimMACEPhaseI::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::CLI::Geant4CLI<> cli;
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
@@ -19,8 +21,10 @@ auto main(int argc, char* argv[]) -> int {
 
     // PhysicsList, DetectorConstruction, ActionInitialization are instantiated in RunManager constructor.
     // Mutually exclusive random seeds are distributed to all processes upon each BeamOn.
-    PhaseI::SimMACEPhaseI::RunManager runManager;
-    Mustard::Geant4X::MPIExecutive{}.StartSession(cli, PhaseI::SimMACEPhaseI::defaultMacro);
+    RunManager runManager;
+    Mustard::Geant4X::MPIExecutive{}.StartSession(cli, defaultMacro);
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::PhaseI::SimMACEPhaseI
