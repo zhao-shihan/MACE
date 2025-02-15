@@ -1,3 +1,6 @@
+#include "MACE/GenMuonICDecay/GenMuonICDecay.h++"
+#include "MACE/GenMuoniumICDecay/GenMuoniumICDecay.h++"
+#include "MACE/MakeGeometry/MakeGeometry.h++"
 #include "MACE/PhaseI/PhaseI.h++"
 #include "MACE/ReconECAL/ReconECAL.h++"
 #include "MACE/ReconMMSTrack/ReconMMSTrack.h++"
@@ -13,6 +16,9 @@
 
 auto main(int argc, char* argv[]) -> int {
     Mustard::Application::SubprogramLauncher launcher;
+    launcher.AddSubprogram<MACE::GenMuonICDecay::GenMuonICDecay>();
+    launcher.AddSubprogram<MACE::GenMuoniumICDecay::GenMuoniumICDecay>();
+    launcher.AddSubprogram<MACE::MakeGeometry::MakeGeometry>();
     launcher.AddSubprogram<MACE::PhaseI::PhaseI>();
     launcher.AddSubprogram<MACE::ReconECAL::ReconECAL>();
     launcher.AddSubprogram<MACE::ReconMMSTrack::ReconMMSTrack>();

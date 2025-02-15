@@ -1,3 +1,5 @@
+#include "MACE/GenMuoniumICDecay/GenMuoniumICDecay.h++"
+
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/CLHEPX/Random/Xoshiro.h++"
 #include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalConversionDecayChannel.h++"
@@ -27,10 +29,15 @@
 
 #include <cmath>
 
+namespace MACE::GenMuoniumICDecay {
+
 using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::PhysicalConstant;
 
-auto main(int argc, char* argv[]) -> int {
+GenMuoniumICDecay::GenMuoniumICDecay() :
+    Subprogram{"GenMuoniumICDecay", "Generate muonium internal conversion decay (M->eeevve) events for physical investigation or test purpose."} {}
+
+auto GenMuoniumICDecay::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, {}};
 
     Mustard::UseXoshiro<256> random;
@@ -102,3 +109,5 @@ auto main(int argc, char* argv[]) -> int {
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::GenMuoniumICDecay

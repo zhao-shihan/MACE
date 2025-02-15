@@ -1,6 +1,7 @@
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/TTC.h++"
+#include "MACE/GenMuonICDecay/GenMuonICDecay.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/CLHEPX/Random/Xoshiro.h++"
@@ -32,10 +33,15 @@
 
 #include <cmath>
 
+namespace MACE::GenMuonICDecay {
+
 using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::PhysicalConstant;
 
-auto main(int argc, char* argv[]) -> int {
+GenMuonICDecay::GenMuonICDecay() :
+    Subprogram{"GenMuonICDecay", "Generate muon internal conversion decay (mu->eeevv) events for physical investigation or test purpose."} {}
+
+auto GenMuonICDecay::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, {}};
 
     Mustard::UseXoshiro<256> random;
@@ -70,9 +76,9 @@ auto main(int argc, char* argv[]) -> int {
                 const muc::soft_cmp scCos{fMACEBiasCosSofteningFactor};
                 const muc::soft_cmp scEk{fMACEBiasEkSofteningFactor};
 
-                const auto& cdc{MACE::Detector::Description::CDC::Instance()};
-                const auto& ttc{MACE::Detector::Description::TTC::Instance()};
-                const auto mmsB{MACE::Detector::Description::MMSField::Instance().FastField()};
+                const auto& cdc{Detector::Description::CDC::Instance()};
+                const auto& ttc{Detector::Description::TTC::Instance()};
+                const auto mmsB{Detector::Description::MMSField::Instance().FastField()};
                 const auto inPxyCut{scPxy((cdc.GasInnerRadius() / 2) * mmsB * c_light)};
                 const auto outPxyCut{scPxy((ttc.Radius() / 2) * mmsB * c_light)};
                 const auto cosCut{scCos(1 / muc::hypot(2 * cdc.GasOuterRadius() / cdc.GasOuterLength(), 1.))};
@@ -133,3 +139,5 @@ auto main(int argc, char* argv[]) -> int {
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::GenMuonICDecay

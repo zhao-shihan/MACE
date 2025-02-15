@@ -44,6 +44,7 @@
 #include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
+#include "MACE/MakeGeometry/MakeGeometry.h++"
 
 #include "Mustard/Detector/Description/DescriptionIO.h++"
 #include "Mustard/Env/BasicEnv.h++"
@@ -54,7 +55,12 @@
 
 #include <functional>
 
-int main(int argc, char* argv[]) {
+namespace MACE::MakeGeometry {
+
+MakeGeometry::MakeGeometry() :
+    Subprogram{"MakeGeometry", "Construct detector geometry and create geometry files."} {}
+
+auto MakeGeometry::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::CLI::BasicCLI<> cli;
     Mustard::Env::BasicEnv env(argc, argv, cli);
 
@@ -62,9 +68,9 @@ int main(int argc, char* argv[]) {
     // Construct volumes
     ////////////////////////////////////////////////////////////////
 
-    using namespace MACE::Detector::Definition;
+    using namespace Detector::Definition;
 
-    constexpr auto fCheckOverlap = true;
+    constexpr auto fCheckOverlap{true};
 
     // 0
 
@@ -72,7 +78,7 @@ int main(int argc, char* argv[]) {
 
     // 1
 
-    MACE::Detector::Assembly::MMS mms{*fWorld, fCheckOverlap};
+    Detector::Assembly::MMS mms{*fWorld, fCheckOverlap};
 
     [[maybe_unused]] auto& ecalField{fWorld->NewDaughter<ECALField>(fCheckOverlap)};
     [[maybe_unused]] auto& ecalShield{fWorld->NewDaughter<ECALShield>(fCheckOverlap)};
@@ -172,3 +178,5 @@ int main(int argc, char* argv[]) {
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::MakeGeometry
