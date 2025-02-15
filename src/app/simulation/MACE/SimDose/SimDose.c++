@@ -11,7 +11,7 @@
 namespace MACE::SimDose {
 
 SimDose::SimDose() :
-    Subprogram{"SimDose", "Simulation of absorbed dose in the Muonium-to-antimuonium conversion experiment (MACE)."} {}
+    Subprogram{"SimDose", "Simulation of absorbed dose in the Muonium-to-Antimuonium Conversion Experiment (MACE)."} {}
 
 auto SimDose::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::CLI::Geant4CLI<Mustard::Env::CLI::Geant4ReferencePhysicsListModule<"QBBC_EMZ">> cli;

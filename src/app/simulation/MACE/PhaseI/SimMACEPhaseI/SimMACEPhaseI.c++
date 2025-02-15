@@ -10,7 +10,7 @@
 namespace MACE::PhaseI::SimMACEPhaseI {
 
 SimMACEPhaseI::SimMACEPhaseI() :
-    Subprogram{"SimMACEPhaseI", "Simulation of events in the Phase-I Muonium-to-antimuonium conversion experiment (MACE Phase-I)."} {}
+    Subprogram{"SimMACEPhaseI", "Simulation of events in the Phase-I Muonium-to-Antimuonium Conversion Experiment (MACE Phase-I)."} {}
 
 auto SimMACEPhaseI::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::CLI::Geant4CLI<> cli;

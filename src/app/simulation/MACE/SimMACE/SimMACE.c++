@@ -10,7 +10,7 @@
 namespace MACE::SimMACE {
 
 SimMACE::SimMACE() :
-    Subprogram{"SimMACE", "Simulation of events in the Muonium-to-antimuonium conversion experiment (MACE)."} {}
+    Subprogram{"SimMACE", "Simulation of events in the Muonium-to-Antimuonium Conversion Experiment (MACE)."} {}
 
 auto SimMACE::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::CLI::Geant4CLI<> cli;
