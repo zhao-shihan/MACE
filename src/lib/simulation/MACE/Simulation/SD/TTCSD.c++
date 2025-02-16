@@ -126,8 +126,8 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         default: {
             const auto scintillationRiseTimeConstant1{Detector::Description::TTC::Instance().ScintillationRiseTimeConstant1()};
             const auto scintillationDecayTimeConstant1{Detector::Description::TTC::Instance().ScintillationDecayTimeConstant1()};
-            assert(scintillationRiseTimeConstant1 >= 0 &&scintillationDecayTimeConstant1 >= 0);
-            const auto scintillationTimeConstant1=scintillationRiseTimeConstant1+scintillationDecayTimeConstant1;
+            assert(scintillationRiseTimeConstant1 >= 0 and scintillationDecayTimeConstant1 >= 0);
+            const auto triggerTimeWindow{scintillationRiseTimeConstant1+scintillationDecayTimeConstant1};
             // sort hit by time
             muc::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
@@ -137,10 +137,10 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             std::ranges::subrange cluster{splitHit.begin(), splitHit.begin()};
             while (cluster.end() != splitHit.end()) {
                 const auto tFirst{*Get<"t">(**cluster.end())};
-                const auto windowClosingTime{tFirst + scintillationTimeConstant1};
+                const auto windowClosingTime{tFirst + triggerTimeWindow};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
-                    scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1));
+                    triggerTimeWindow != 0) [[unlikely]] {
+                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, triggerTimeWindow));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {

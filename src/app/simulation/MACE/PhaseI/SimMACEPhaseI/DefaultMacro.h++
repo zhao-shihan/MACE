@@ -70,10 +70,6 @@ constexpr auto defaultMacro = {
     "# Visibility",
     "/vis/geometry/set/visibility CentralBeamPipeVacuum     0 no",
     "/vis/geometry/set/visibility World                     0 no",
-    "/vis/geometry/set/visibility CDCCell                  -1 no",
-    "/vis/geometry/set/visibility CDCSuperLayer             0 no",
-    "/vis/geometry/set/visibility MMSField                  0 no",
-    "/vis/geometry/set/visibility ttcAirBoxLogical          0 no",
     
     "# Colors",
     "/vis/geometry/set/colour CentralBeamPipe               0     1     1     1     0.1",

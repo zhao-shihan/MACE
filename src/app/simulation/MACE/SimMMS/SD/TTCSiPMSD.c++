@@ -8,4 +8,4 @@ auto TTCSiPMSD::EndOfEvent(G4HCofThisEvent* hc) -> void {
     Analysis::Instance().SubmitTTCSiPMHC(*fHitsCollection->GetVector());
 }
 
-} 
+} // namespace MACE::SimMMS::inline SD

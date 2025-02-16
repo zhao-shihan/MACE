@@ -9,6 +9,7 @@
 
 /MACE/Physics/DisableMuonMinusCapture
 
+/MACE/Physics/UseOpticalPhysics
 /run/initialize
 /process/optical/scintillation/setFiniteRiseTime true
 
