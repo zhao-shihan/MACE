@@ -59,7 +59,7 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/visibility CDCCell             -1 false",
     "/vis/geometry/set/visibility CDCSuperLayer        0 false",
     "/vis/geometry/set/visibility MMSField             0 false",
-    "/vis/geometry/set/visibility TTCAirBoxLogic       0 no",
+    "/vis/geometry/set/visibility TTCAirBox            0 false",
     "",
     "# Colors",
     "/vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05",

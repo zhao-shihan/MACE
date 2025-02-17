@@ -38,7 +38,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     lightCoupler->AddElement(oxygenElement, ttc.LightCouplerOxygenElement());
     lightCoupler->AddElement(siliconElement, ttc.LightCouplerSiliconElement());
 
-    const auto window = new G4Material("TTCWindowMaterial", ttc.WindowDensity(), 3, kStateSolid);
+    const auto window{new G4Material("TTCWindowMaterial", ttc.WindowDensity(), 3, kStateSolid)};
     window->AddElement(carbonElement, ttc.WindowCarbonElement());
     window->AddElement(hydrogenElement, ttc.WindowHydrogenElement());
     window->AddElement(oxygenElement, ttc.WindowOxygenElement());
@@ -92,7 +92,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     const auto ttcPCBLogic{Make<G4LogicalVolume>(
         ttcPCBSolid,
         nistManager->FindOrBuildMaterial("G4_POLYCARBONATE"),
-        "TTCPCBLogic")};
+        "TTCPCB")};
     // set up the Window
     const auto ttcWindowSolid{Make<G4Box>(
         "TTCWindowSolid",
@@ -102,11 +102,11 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     const auto ttcWindowUpLogic{Make<G4LogicalVolume>(
         ttcWindowSolid,
         window,
-        "TTCWindowUpLogic")};
+        "TTCWindowUp")};
     const auto ttcWindowDownLogic{Make<G4LogicalVolume>(
         ttcWindowSolid,
         window,
-        "TTCWindowDownLogic")};
+        "TTCWindowDown")};
     // set up the Silicon
     const auto ttcSiliconeSolid{Make<G4Box>(
         "TTCSiliconeSolid",
@@ -116,7 +116,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     const auto ttcSiliconeLogic{Make<G4LogicalVolume>(
         ttcSiliconeSolid,
         nistManager->FindOrBuildMaterial("G4_Si"),
-        "TTCSiliconeLogic")};
+        "TTCSilicone")};
     // set up the LightCoupler
     const auto ttcLightCouplerSolid{Make<G4Box>(
         "TTCLightCouplerSolid",
@@ -126,7 +126,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     const auto ttcLightCouplerLogic{Make<G4LogicalVolume>(
         ttcLightCouplerSolid,
         lightCoupler,
-        "TTCLightCouplerLogic")};
+        "TTCLightCoupler")};
 
     for (gsl::index i{}; i < nWidth; ++i) { // clang-format off
         //set up the empty air motherbox
@@ -136,7 +136,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             ttc.Length()/2 +ttc.PCBThickness()+ttc.WindowThickness()+ttc.LightCouplerThickness(),
             ttc.Width()[i] / 2)};
         const auto ttcAirBoxMaterial{G4Material::GetMaterial("G4_AIR")};
-        ttcAirBoxLogic.push_back(Make<G4LogicalVolume>(ttcAirBoxSolid, ttcAirBoxMaterial,"TTCAirBoxLogic"));
+        ttcAirBoxLogic.push_back(Make<G4LogicalVolume>(ttcAirBoxSolid, ttcAirBoxMaterial,"TTCAirBox"));
         //set up the TTCscintillator
         const auto ttcScintillatorSolid{Make<G4Box>(
             "TTCScintillatorSolid", 
@@ -146,7 +146,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         const auto ttcScintillatorLogic{Make<G4LogicalVolume>(
             ttcScintillatorSolid,
             ttcScintillatorMaterial,
-            "TTCScintillatorLogic")};
+            "TTCScintillator")};
         //set the position of air mother box
         const auto transform{G4RotateZ3D{Mustard::Math::IsEven(i) ? 0 : deltaPhi / 2} *
                             G4Translate3D{Mustard::VectorCast<G4ThreeVector>(ttc.Position()[i])} *
@@ -166,7 +166,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             nullptr,
             G4ThreeVector(0, 0, 0),
             ttcScintillatorLogic,
-            "TTCScintillator",
+            "TTCScintillatorPhysics",
             ttcAirBoxLogic[i],
             false,
             checkOverlaps)};
@@ -175,7 +175,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             nullptr,
             G4ThreeVector(0, (ttc.Length() + ttc.LightCouplerThickness()) / 2, 0),
             ttcLightCouplerLogic,
-            "TTCLightCoupler",
+            "TTCLightCouplerPhysics",
             ttcAirBoxLogic[i],
             false,
             checkOverlaps)};
@@ -183,7 +183,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             nullptr,
             G4ThreeVector(0, -(ttc.Length() + ttc.LightCouplerThickness()) / 2, 0),
             ttcLightCouplerLogic,
-            "TTCLightCoupler",
+            "TTCLightCouplerPhysics",
             ttcAirBoxLogic[i],
             false,
             checkOverlaps)};
@@ -192,7 +192,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             nullptr,
             G4ThreeVector(0, ttc.LightCouplerThickness() + (ttc.Length() + ttc.WindowThickness()) / 2, 0),
             ttcWindowUpLogic,
-            "TTCWindow",
+            "TTCWindowPhysics",
             ttcAirBoxLogic[i],
             false,
             checkOverlaps);
@@ -200,7 +200,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             nullptr,
             G4ThreeVector(0, -(ttc.LightCouplerThickness() + (ttc.Length() + ttc.WindowThickness()) / 2), 0),
             ttcWindowDownLogic,
-            "TTCWindow",
+            "TTCWindowPhysics",
             ttcAirBoxLogic[i],
             false,
             checkOverlaps);
@@ -209,7 +209,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             nullptr,
             G4ThreeVector(0, ttc.WindowThickness() + ttc.LightCouplerThickness() + (ttc.Length() + ttc.PCBThickness()) / 2, 0),
             ttcPCBLogic,
-            "TTCPCB",
+            "TTCPCBPhysics",
             ttcAirBoxLogic[i],
             false,
             checkOverlaps);
@@ -217,7 +217,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             nullptr,
             G4ThreeVector(0, -(ttc.WindowThickness() + ttc.LightCouplerThickness() + (ttc.Length() + ttc.PCBThickness()) / 2), 0),
             ttcPCBLogic,
-            "TTCPCB",
+            "TTCPCBPhysics",
             ttcAirBoxLogic[i],
             false,
             checkOverlaps);
@@ -253,7 +253,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         nullptr,
         G4ThreeVector(0, (ttc.SiliconeThickness() - ttc.WindowThickness()) / 2, 0),
         ttcSiliconeLogic,
-        "TTCSilicone",
+        "TTCSiliconePhysics",
         ttcWindowUpLogic,
         false,
         checkOverlaps);
@@ -261,7 +261,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         nullptr,
         G4ThreeVector(0, -(ttc.SiliconeThickness() - ttc.WindowThickness()) / 2, 0),
         ttcSiliconeLogic,
-        "TTCSilicone",
+        "TTCSiliconePhysics",
         ttcWindowDownLogic,
         false,
         checkOverlaps);
@@ -271,4 +271,5 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     new G4LogicalSkinSurface{"cathodeSkinSurface", ttcSiliconeLogic, cathodeSurface};
     cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 }
+
 } // namespace MACE::Detector::Definition
