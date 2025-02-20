@@ -1,5 +1,6 @@
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Detector/Description/ECAL.h++"
+#include "MACE/ReconECAL/ReconECAL.h++"
 
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Data/Processor.h++"
@@ -30,7 +31,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-using namespace MACE;
+namespace MACE::ReconECAL {
+
 using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::LiteralUnit::Time;
 using namespace Mustard::MathConstant;
@@ -45,7 +47,10 @@ auto smear(float e) -> float {
     return smearedEnergy / 1000;
 }
 
-auto main(int argc, char* argv[]) -> int {
+ReconECAL::ReconECAL() :
+    Subprogram{"ReconECAL", "Electromagnetic calorimeter (ECAL) event reconstruction."} {}
+
+auto ReconECAL::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, {}};
 
     std::vector<std::string> files;
@@ -73,7 +78,7 @@ auto main(int argc, char* argv[]) -> int {
 
     Mustard::Data::Processor processor;
     processor.Process<Data::ECALSimHit>(
-        ROOT::RDataFrame{"G4Run0/ECALSimHit", files}, "EvtID",
+        ROOT::RDataFrame{"G4Run0/ECALSimHit", files}, int{}, "EvtID",
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             muc::timsort(event,
@@ -134,3 +139,5 @@ auto main(int argc, char* argv[]) -> int {
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::ReconECAL

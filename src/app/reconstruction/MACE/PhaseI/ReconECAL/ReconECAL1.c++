@@ -71,7 +71,7 @@ auto main(int argc, char* argv[]) -> int {
 
     Mustard::Data::Processor processor;
     processor.Process<Data::ECALSimHit>(
-        ROOT::RDataFrame{"G4Run0/ECALSimHit", files}, "EvtID",
+        ROOT::RDataFrame{"G4Run0/ECALSimHit", files}, int{}, "EvtID",
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             muc::timsort(event,

@@ -1,13 +1,7 @@
-file(GLOB_RECURSE SmearMACE_srcs ${CMAKE_CURRENT_SOURCE_DIR}/*.c++)
-add_executable(SmearMACE ${SmearMACE_srcs})
-target_link_libraries(SmearMACE MACEData MACEDetector Mustard::Mustard)
-
-file(GLOB SimECAL_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/scripts/*)
-foreach(_scripts ${SimECAL_SCRIPTS})
-    configure_file(${_scripts} ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
-endforeach()
-
-install(TARGETS SmearMACE DESTINATION ${CMAKE_INSTALL_BINDIR})
+file(GLOB SmearMACE_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/scripts/*)
 foreach(_scripts ${SmearMACE_SCRIPTS})
-    install(FILES ${_scripts} DESTINATION ${MACE_DATAROOTDIR}/SmearMACE)
+    set(SmearMACE_SCRIPTS_COPY_DIR SmearMACE)
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${SmearMACE_SCRIPTS_COPY_DIR})
+    configure_file(${_scripts} ${CMAKE_BINARY_DIR}/${SmearMACE_SCRIPTS_COPY_DIR} COPYONLY)
+    install(FILES ${_scripts} DESTINATION ${MACE_DATAROOTDIR}/${SmearMACE_SCRIPTS_COPY_DIR})
 endforeach()
