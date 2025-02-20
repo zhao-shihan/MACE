@@ -1,11 +1,14 @@
 #pragma once
 
 #include "MACE/Detector/Description/ECAL.h++"
+#include "MACE/Detector/Description/Target.h++"
 #include "MACE/PhaseI/Detector/Description/CentralBeamPipe.h++"
+#include "MACE/PhaseI/Detector/Description/MRPC.h++"
 #include "MACE/PhaseI/Detector/Description/World.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Region.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/ECALPMSD.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/ECALSD.h++"
+#include "MACE/PhaseI/SimMACEPhaseI/SD/MRPCSD.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
@@ -40,10 +43,13 @@ public:
 
     auto ECALSD() const -> auto& { return *fECALSD; }
     auto ECALPMSD() const -> auto& { return *fECALPMSD; }
+    auto MRPCSD() const -> auto& { return *fMRPCSD; }
 
 public:
     using DescriptionInUse = std::tuple<MACE::Detector::Description::ECAL,
+                                        PhaseI::Detector::Description::MRPC,
                                         PhaseI::Detector::Description::CentralBeamPipe,
+                                        MACE::Detector::Description::Target,
                                         PhaseI::Detector::Description::World>;
 
 private:
@@ -60,6 +66,7 @@ private:
 
     SD::ECALSD* fECALSD;
     SD::ECALPMSD* fECALPMSD;
+    SD::MRPCSD* fMRPCSD;
 };
 
 } // namespace PhaseI::SimMACEPhaseI::inline Action
