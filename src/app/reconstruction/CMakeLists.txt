@@ -7,4 +7,3 @@ target_link_libraries(AppMACEReconstruction PUBLIC MACEData
                                                    Mustard::Mustard)
 
 add_subdirectory(MACE/SmearMACE)
-add_subdirectory(MACE/PhaseI)
