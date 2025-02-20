@@ -28,6 +28,7 @@
 #include "fmt/format.h"
 
 #include <algorithm>
+#include <functional>
 #include <ranges>
 #include <unordered_map>
 #include <unordered_set>
@@ -43,10 +44,10 @@ auto main(int argc, char* argv[]) -> int {
     Mustard::Detector::Description::DescriptionIO::
         Import<Detector::Description::ECAL>("../../../../simulation/MACE/PhaseI/SimMACEPhaseI/SimMACEPhaseI_geom.yaml");
 
-    // std::vector<std::string> files;
-    // for (auto i{1}; i < argc; ++i) { files.emplace_back(argv[i]); }
-    std::string fileName{argv[1]};
-    std::string filePath{"../../../../simulation/MACE/PhaseI/SimMACEPhaseI/"};
+    std::vector<std::string> files;
+    for (auto i{1}; i < argc; ++i) { files.emplace_back(argv[i]); }
+    // std::string fileName{argv[1]};
+    // std::string filePath{"../../../../simulation/MACE/PhaseI/SimMACEPhaseI/"};
 
     const auto& ecal{Detector::Description::ECAL::Instance()};
     const auto& faceList{ecal.Mesh().fFaceList};
@@ -59,19 +60,18 @@ auto main(int argc, char* argv[]) -> int {
         i++;
     }
 
-    TFile outputFile{Mustard::MPIX::ParallelizePath(fileName).generic_string().c_str(), "RECREATE"};
+    TFile outputFile{Mustard::MPIX::ParallelizePath("output.root").generic_string().c_str(), "RECREATE"};
     using ECALEnergy = Mustard::Data::TupleModel<Mustard::Data::Value<float, "Edep", "Energy deposition">,
                                                  Mustard::Data::Value<float, "Edep1", "Energy deposition 1">,
                                                  Mustard::Data::Value<float, "Edep2", "Energy deposition 2">,
                                                  Mustard::Data::Value<float, "dE", "Delta energy">,
-                                                 Mustard::Data::Value<double, "theta", "angel">,
-
-                                                 Mustard::Data::Value<double, "dt", "Delta time">>;
+                                                 Mustard::Data::Value<double, "dt", "Delta time">,
+                                                 Mustard::Data::Value<double, "theta", "angel">>;
     Mustard::Data::Output<ECALEnergy> reconEnergy{"G4Run0/ReconECAL"};
 
     Mustard::Data::Processor processor;
     processor.Process<Data::ECALSimHit>(
-        ROOT::RDataFrame{"G4Run0/ECALSimHit", filePath + fileName}, "EvtID",
+        ROOT::RDataFrame{"G4Run0/ECALSimHit", files}, "EvtID",
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             muc::timsort(event,
@@ -83,6 +83,7 @@ auto main(int argc, char* argv[]) -> int {
 
             for (auto&& hit : event) {
                 hitDict.try_emplace(Get<"ModID">(*hit), hit);
+                if (Get<"Edep">(*hit) < 15_MeV) { continue; }
                 potentialSeedModule.emplace_back(Get<"ModID">(*hit));
             }
 
@@ -91,33 +92,46 @@ auto main(int argc, char* argv[]) -> int {
             std::unordered_set<short> firstCluster;
             std::unordered_set<short> secondCluster;
 
+            CLHEP::Hep3Vector firstCenter{};
+            CLHEP::Hep3Vector secondCenter{};
+
             auto firstSeedModule = potentialSeedModule.begin();
-            // auto secondSeedModule = std::ranges::next(potentialSeedModule.begin());
             auto secondSeedModule = std::ranges::find_if(
                 potentialSeedModule,
-                [&](short m) { return centroidMap.at(*firstSeedModule).angle(centroidMap.at(m)) > 0.9 * pi; });
+                [&](short m) { return centroidMap.at(*firstSeedModule).angle(centroidMap.at(m)) > 0.5 * pi; });
             if (secondSeedModule == potentialSeedModule.end()) { return; }
 
-            const auto Clustering = [&](std::unordered_set<short>& set, std::vector<short>::iterator it) {
-                set.insert(*it); // add seed module
-                for (auto&& m : clusterMap.at(*it)) {
-                    set.insert(m); // add 1st layer
-                    for (auto&& n : clusterMap.at(m)) {
-                        set.insert(n);                                                // add 2nd layer
-                        set.insert(clusterMap.at(n).begin(), clusterMap.at(n).end()); // add 3rd layer
+            const auto Clustering = [&](std::unordered_set<short>& set,
+                                        CLHEP::Hep3Vector& c,
+                                        std::vector<short>::iterator seedIt) {
+                const auto addClusterLayers = [&](short module) {
+                    set.insert(module);
+                    for (auto&& neighbor : clusterMap.at(module)) {
+                        set.insert(neighbor);
+                        for (auto&& secondNeighbor : clusterMap.at(neighbor)) {
+                            set.insert(secondNeighbor);
+                            set.insert(clusterMap.at(secondNeighbor).begin(), clusterMap.at(secondNeighbor).end());
+                        }
                     }
-                }
+                };
+                addClusterLayers(*seedIt);
+                float totalEnergy{};
+                CLHEP::Hep3Vector weightedCentroid{};
 
-                float energy{};
-                for (auto&& m : set) {
-                    if (hitDict.find(m) == hitDict.end() or Get<"Edep">(*hitDict.at(m)) < 50_keV) { continue; }
-                    energy += gRandom->Gaus(Get<"Edep">(*hitDict.at(m)), 0.14 * std::sqrt(Get<"Edep">(*hitDict.at(m))));
+                for (const auto& module : set) {
+                    auto hitIt = hitDict.find(module);
+                    if (hitIt == hitDict.end() or Get<"Edep">(*hitIt->second) < 50_keV) { continue; }
+                    float energy = Get<"Edep">(*hitIt->second);
+                    weightedCentroid += energy * centroidMap.at(module);
+                    totalEnergy += energy;
                 }
-                return energy;
+                c = weightedCentroid / totalEnergy;
+                return gRandom->Gaus(totalEnergy, 0.14 * std::sqrt(totalEnergy));
+                // return totalEnergy;
             };
 
-            auto firstClusterEnergy = Clustering(firstCluster, firstSeedModule);
-            auto secondClusterEnergy = Clustering(secondCluster, secondSeedModule);
+            auto firstClusterEnergy = Clustering(firstCluster, firstCenter, firstSeedModule);
+            auto secondClusterEnergy = Clustering(secondCluster, secondCenter, secondSeedModule);
 
             if (firstClusterEnergy + secondClusterEnergy > muonium_mass_c2) { return; }
 
@@ -126,8 +140,8 @@ auto main(int argc, char* argv[]) -> int {
             Get<"Edep1">(energyTuple) = firstClusterEnergy;
             Get<"Edep2">(energyTuple) = secondClusterEnergy;
             Get<"dE">(energyTuple) = std::abs(firstClusterEnergy - secondClusterEnergy);
-            Get<"theta">(energyTuple) = centroidMap.at(*firstSeedModule).angle(centroidMap.at(*secondSeedModule));
             Get<"dt">(energyTuple) = std::abs(*Get<"t">(*hitDict.at(*firstSeedModule)) - *Get<"t">(*hitDict.at(*secondSeedModule)));
+            Get<"theta">(energyTuple) = firstCenter.angle(secondCenter);
             reconEnergy.Fill(std::move(energyTuple));
         });
 
