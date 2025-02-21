@@ -25,6 +25,11 @@ public:
     auto CrystalHypotenuse() const -> auto { return fCrystalHypotenuse; }
     auto UpstreamWindowRadius() const -> auto { return fUpstreamWindowRadius; }
     auto DownstreamWindowRadius() const -> auto { return fDownstreamWindowRadius; }
+    auto ScintillationEnergyBin() const -> const auto& { return fScintillationEnergyBin; }
+    auto ScintillationComponent1() const -> const auto& { return fScintillationComponent1; }
+    auto ScintillationYield() const -> auto { return fScintillationYield; }
+    auto ScintillationTimeConstant1() const -> auto { return fScintillationTimeConstant1; }
+    auto ResolutionScale() const -> auto { return fResolutionScale; }
 
     auto UseMPPC() const -> auto { return fUseMPPC; }
 
@@ -44,12 +49,6 @@ public:
     auto MPPCEnergyBin() const -> const auto& { return fMPPCEnergyBin; }
     auto MPPCEfficiency() const -> const auto& { return fMPPCEfficiency; }
 
-    auto ScintillationEnergyBin() const -> const auto& { return fScintillationEnergyBin; }
-    auto ScintillationComponent1() const -> const auto& { return fScintillationComponent1; }
-    auto ScintillationYield() const -> auto { return fScintillationYield; }
-    auto ScintillationTimeConstant1() const -> auto { return fScintillationTimeConstant1; }
-    auto ResolutionScale() const -> auto { return fResolutionScale; }
-
     auto Mesh() const -> const auto& { return fMeshManager.Get(this); }
     auto NUnit() const -> auto { return Mesh().fFaceList.size(); }
     auto ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D;
@@ -64,6 +63,11 @@ public:
     auto CrystalHypotenuse(double val) -> void { fCrystalHypotenuse = val, SetGeometryOutdated(); }
     auto UpstreamWindowRadius(double val) -> void { fUpstreamWindowRadius = val, SetGeometryOutdated(); }
     auto DownstreamWindowRadius(double val) -> void { fDownstreamWindowRadius = val, SetGeometryOutdated(); }
+    auto ScintillationEnergyBin(std::vector<double> val) -> void { fScintillationEnergyBin = std::move(val); }
+    auto ScintillationComponent1(std::vector<double> val) -> void { fScintillationComponent1 = std::move(val); }
+    auto ScintillationYield(double val) -> void { fScintillationYield = val; }
+    auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
+    auto ResolutionScale(double val) -> void { fResolutionScale = val; }
 
     auto UseMPPC(bool val) -> void { fUseMPPC = val; }
 
@@ -82,12 +86,6 @@ public:
     auto MPPCWindowThickness(double val) -> void { fMPPCWindowThickness = val; }
     auto MPPCEnergyBin(std::vector<double> val) -> void { fMPPCEnergyBin = std::move(val); }
     auto MPPCEfficiency(std::vector<double> val) -> void { fMPPCEfficiency = std::move(val); }
-
-    auto ScintillationEnergyBin(std::vector<double> val) -> void { fScintillationEnergyBin = std::move(val); }
-    auto ScintillationComponent1(std::vector<double> val) -> void { fScintillationComponent1 = std::move(val); }
-    auto ScintillationYield(double val) -> void { fScintillationYield = val; }
-    auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
-    auto ResolutionScale(double val) -> void { fResolutionScale = val; }
 
     auto ModuleSelection(std::vector<int> val) { fModuleSelection = std::move(val); }
     auto WaveformIntegralTime(double val) { fWaveformIntegralTime = val; }
@@ -130,6 +128,11 @@ private:
     double fCrystalHypotenuse;
     double fUpstreamWindowRadius;
     double fDownstreamWindowRadius;
+    std::vector<double> fScintillationEnergyBin;
+    std::vector<double> fScintillationComponent1;
+    double fScintillationYield;
+    double fScintillationTimeConstant1;
+    double fResolutionScale;
 
     bool fUseMPPC;
 
@@ -148,12 +151,6 @@ private:
     double fMPPCWindowThickness;
     std::vector<double> fMPPCEnergyBin;
     std::vector<double> fMPPCEfficiency;
-
-    std::vector<double> fScintillationEnergyBin;
-    std::vector<double> fScintillationComponent1;
-    double fScintillationYield;
-    double fScintillationTimeConstant1;
-    double fResolutionScale;
 
     mutable MeshManager fMeshManager;
 

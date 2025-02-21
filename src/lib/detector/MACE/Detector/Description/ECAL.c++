@@ -161,6 +161,32 @@ ECAL::ECAL() : // clang-format off
     fCrystalHypotenuse{10_cm},
     fUpstreamWindowRadius{50_mm},
     fDownstreamWindowRadius{5_mm},
+    // BGO optical param.s
+    fScintillationEnergyBin{1.945507481_eV, 1.956691365_eV, 1.974526166_eV, 1.992686315_eV, 2.011182111_eV,
+                            2.030023135_eV, 2.049218172_eV, 2.068776498_eV, 2.088712977_eV, 2.109036_eV,
+                            2.12975713_eV, 2.150887751_eV, 2.171451222_eV, 2.190391881_eV, 2.209663573_eV,
+                            2.229274743_eV, 2.247116958_eV, 2.265244608_eV, 2.283666187_eV, 2.301276603_eV,
+                            2.318032238_eV, 2.333890214_eV, 2.349966255_eV, 2.368619281_eV, 2.389971082_eV,
+                            2.412936123_eV, 2.437596391_eV, 2.464039018_eV, 2.492373025_eV, 2.521380095_eV,
+                            2.551089015_eV, 2.581526478_eV, 2.612727511_eV, 2.644717279_eV, 2.677523383_eV,
+                            2.708082211_eV, 2.733054836_eV, 2.75369941_eV, 2.773041191_eV, 2.792667214_eV,
+                            2.810903696_eV, 2.827691812_eV, 2.844122034_eV, 2.861882767_eV, 2.877806421_eV,
+                            2.894720751_eV, 2.911600212_eV, 2.929633378_eV, 2.947486552_eV, 2.965972235_eV,
+                            2.984688528_eV, 3.003641613_eV, 3.024116133_eV, 3.04551166_eV, 3.067869957_eV,
+                            3.091903493_eV, 3.118356404_eV, 3.147344518_eV, 3.178997019_eV, 3.215638088_eV,
+                            3.253129005_eV, 3.281477983_eV, 3.302608153_eV},
+    fScintillationComponent1{0.195254826, 0.214876564, 0.247266504, 0.281705118, 0.316502611, 0.351368412, 0.387289114,
+                             0.424968103, 0.459795422, 0.494441782, 0.528656318, 0.562776635, 0.595129123, 0.628156693,
+                             0.66160206, 0.695627571, 0.726322943, 0.757562051, 0.788164087, 0.818063582, 0.846719321,
+                             0.873933468, 0.900421966, 0.925228448, 0.945965637, 0.963539434, 0.978127738, 0.991670468,
+                             0.999665211, 1, 0.991116414, 0.973225812, 0.943719198, 0.904954051, 0.858628733, 0.81043525,
+                             0.766603628, 0.72769847, 0.690508334, 0.650827878, 0.615158969, 0.582925251, 0.549468551,
+                             0.518706558, 0.485613932, 0.454237279, 0.422103766, 0.389336957, 0.357120837, 0.324825964,
+                             0.293908848, 0.263908054, 0.234764495, 0.208390636, 0.1828993, 0.156768192, 0.13171465,
+                             0.107656381, 0.084704457, 0.061552239, 0.040184081, 0.024471847, 0.012727081},
+    fScintillationYield{10000},
+    fScintillationTimeConstant1{300_ns},
+    fResolutionScale{1.},
     fUseMPPC{false},
     fPMTDimensions{{29.3_mm, 25_mm, 87_mm},    // 9442B Type-HEX01
                    {29.3_mm, 25_mm, 87_mm},    // 9442B Type-PEN
@@ -237,32 +263,6 @@ ECAL::ECAL() : // clang-format off
                     0.217013978, 0.206721701, 0.200096265, 0.191250653, 0.181575856, 0.168947005, 0.159534377, 0.149674853, 0.139503115,
                     0.129670093, 0.120230653, 0.108280609, 0.091831406, 0.098424138, 0.083937488, 0.073056832, 0.060399447, 0.047887957,
                     0.034501313},
-    // BGO optical param.s
-    fScintillationEnergyBin{1.945507481_eV, 1.956691365_eV, 1.974526166_eV, 1.992686315_eV, 2.011182111_eV,
-                            2.030023135_eV, 2.049218172_eV, 2.068776498_eV, 2.088712977_eV, 2.109036_eV,
-                            2.12975713_eV, 2.150887751_eV, 2.171451222_eV, 2.190391881_eV, 2.209663573_eV,
-                            2.229274743_eV, 2.247116958_eV, 2.265244608_eV, 2.283666187_eV, 2.301276603_eV,
-                            2.318032238_eV, 2.333890214_eV, 2.349966255_eV, 2.368619281_eV, 2.389971082_eV,
-                            2.412936123_eV, 2.437596391_eV, 2.464039018_eV, 2.492373025_eV, 2.521380095_eV,
-                            2.551089015_eV, 2.581526478_eV, 2.612727511_eV, 2.644717279_eV, 2.677523383_eV,
-                            2.708082211_eV, 2.733054836_eV, 2.75369941_eV, 2.773041191_eV, 2.792667214_eV,
-                            2.810903696_eV, 2.827691812_eV, 2.844122034_eV, 2.861882767_eV, 2.877806421_eV,
-                            2.894720751_eV, 2.911600212_eV, 2.929633378_eV, 2.947486552_eV, 2.965972235_eV,
-                            2.984688528_eV, 3.003641613_eV, 3.024116133_eV, 3.04551166_eV, 3.067869957_eV,
-                            3.091903493_eV, 3.118356404_eV, 3.147344518_eV, 3.178997019_eV, 3.215638088_eV,
-                            3.253129005_eV, 3.281477983_eV, 3.302608153_eV},
-    fScintillationComponent1{0.195254826, 0.214876564, 0.247266504, 0.281705118, 0.316502611, 0.351368412, 0.387289114,
-                             0.424968103, 0.459795422, 0.494441782, 0.528656318, 0.562776635, 0.595129123, 0.628156693,
-                             0.66160206, 0.695627571, 0.726322943, 0.757562051, 0.788164087, 0.818063582, 0.846719321,
-                             0.873933468, 0.900421966, 0.925228448, 0.945965637, 0.963539434, 0.978127738, 0.991670468,
-                             0.999665211, 1, 0.991116414, 0.973225812, 0.943719198, 0.904954051, 0.858628733, 0.81043525,
-                             0.766603628, 0.72769847, 0.690508334, 0.650827878, 0.615158969, 0.582925251, 0.549468551,
-                             0.518706558, 0.485613932, 0.454237279, 0.422103766, 0.389336957, 0.357120837, 0.324825964,
-                             0.293908848, 0.263908054, 0.234764495, 0.208390636, 0.1828993, 0.156768192, 0.13171465,
-                             0.107656381, 0.084704457, 0.061552239, 0.040184081, 0.024471847, 0.012727081},
-    fScintillationYield{10000},
-    fScintillationTimeConstant1{300_ns},
-    fResolutionScale{1.},
     fWaveformIntegralTime{100_ns} {}
 
 auto ECAL::ComputeMesh() const -> MeshInformation {
@@ -417,6 +417,12 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ImportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ImportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
+    ImportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");
+    ImportValue(node, fScintillationComponent1, "ScintillationComponent1");
+    ImportValue(node, fScintillationYield, "ScintillationYield");
+    ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
+    ImportValue(node, fResolutionScale, "ResolutionScale");
+    ImportValue(node, fUseMPPC, "UseMPPC");
     ImportValue(node, fPMTDimensions, "PMTDimensions");
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
@@ -429,9 +435,8 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fMPPCThickness, "MPPCThickness");
     ImportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
     ImportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
-    ImportValue(node, fScintillationYield, "ScintillationYield");
-    ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
-    ImportValue(node, fResolutionScale, "ResolutionScale");
+    ImportValue(node, fMPPCEnergyBin, "MPPCEnergyBin");
+    ImportValue(node, fMPPCEfficiency, "MPPCEfficiency");
     ImportValue(node, fModuleSelection, "ModuleSelection");
     ImportValue(node, fWaveformIntegralTime, "WaveformIntegralTime");
 
@@ -444,6 +449,12 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ExportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ExportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
+    ExportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");
+    ExportValue(node, fScintillationComponent1, "ScintillationComponent1");
+    ExportValue(node, fScintillationYield, "ScintillationYield");
+    ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
+    ExportValue(node, fResolutionScale, "ResolutionScale");
+    ExportValue(node, fUseMPPC, "UseMPPC");
     ExportValue(node, fPMTDimensions, "PMTDimensions");
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
@@ -456,9 +467,8 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fMPPCThickness, "MPPCThickness");
     ExportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
     ExportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
-    ExportValue(node, fScintillationYield, "ScintillationYield");
-    ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
-    ExportValue(node, fResolutionScale, "ResolutionScale");
+    ExportValue(node, fMPPCEnergyBin, "MPPCEnergyBin");
+    ExportValue(node, fMPPCEfficiency, "MPPCEfficiency");
     ExportValue(node, fModuleSelection, "ModuleSelection");
     ExportValue(node, fWaveformIntegralTime, "WaveformIntegralTime");
 }
