@@ -256,6 +256,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         "TTCSiliconePhysics",
         ttcWindowUpLogic,
         false,
+        ttc.NSiPM() - 1, // SiPMLocalID
         checkOverlaps);
     Make<G4PVPlacement>(
         nullptr,
@@ -264,6 +265,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         "TTCSiliconePhysics",
         ttcWindowDownLogic,
         false,
+        ttc.NSiPM() - 2, // SiPMLocalID
         checkOverlaps);
 
     // Construct Silicon Optical Surface

@@ -36,6 +36,7 @@ public:
     auto SiliconeLength() const -> auto { return *fSiliconeLength; }
     auto SiliconeWidth() const -> auto { return *fSiliconeWidth; }
     auto SiliconeThickness() const -> auto { return *fSiliconeThickness; }
+    auto NSiPM() const -> auto { return *fNSiPM; }
 
     auto Length(double val) -> void { fLength = val; }
     auto WidthDown(double val) -> void { fWidthDown = val; }
@@ -57,6 +58,7 @@ public:
     auto SiliconeLength(double val) -> void { fSiliconeLength = val; }
     auto SiliconeWidth(double val) -> void { fSiliconeWidth = val; }
     auto SiliconeThickness(double val) -> void { fSiliconeThickness = val; }
+    auto NSiPM(int val) -> void { fNSiPM = val; }
 
     auto Width() const -> auto { return *fWidth; }
     auto Position() const -> auto { return *fPosition; }
@@ -152,6 +154,7 @@ private:
     Simple<double> fSiliconeLength;
     Simple<double> fSiliconeWidth;
     Simple<double> fSiliconeThickness;
+    Simple<int> fNSiPM;
 
     Cached<std::vector<double>> fWidth;
     Cached<std::vector<muc::array3d>> fPosition;

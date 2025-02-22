@@ -92,7 +92,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"Good">(*hit) = false; // to be determined
-    Get<"nOptPho">(*hit) = -1; // to be determined
+    Get<"nOptPho">(*hit) = {}; // to be determined
     Get<"x">(*hit) = preStepPoint.GetPosition();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
@@ -127,7 +127,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             const auto scintillationRiseTimeConstant1{Detector::Description::TTC::Instance().ScintillationRiseTimeConstant1()};
             const auto scintillationDecayTimeConstant1{Detector::Description::TTC::Instance().ScintillationDecayTimeConstant1()};
             assert(scintillationRiseTimeConstant1 >= 0 and scintillationDecayTimeConstant1 >= 0);
-            const auto triggerTimeWindow{scintillationRiseTimeConstant1+scintillationDecayTimeConstant1};
+            const auto triggerTimeWindow{scintillationRiseTimeConstant1 + scintillationDecayTimeConstant1};
             // sort hit by time
             muc::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
@@ -177,7 +177,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     if (fTTCSiPMSD) {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            Get<"nOptPho">(*hit) = nHit[Get<"TileID">(*hit)];
+            Get<"nOptPho">(*hit) = (nHit[Get<"TileID">(*hit)]);
         }
     }
 }

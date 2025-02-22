@@ -34,5 +34,5 @@
 
 /Mustard/Analysis/FilePath SimMMS_em_flat
 /Mustard/Analysis/FileMode NEW
-/run/beamOn 1000
+/run/beamOn 10
 /Mustard/Run/PrintRunSummary

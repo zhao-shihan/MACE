@@ -22,7 +22,7 @@ public:
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
-    auto NOpticalPhotonHit() const -> std::unordered_map<int, int>;
+    auto NOpticalPhotonHit() const -> std::unordered_map<int, std::vector<int>>;
 
 protected:
     std::unordered_map<int, std::vector<std::unique_ptr<TTCSiPMHit>>> fHit;

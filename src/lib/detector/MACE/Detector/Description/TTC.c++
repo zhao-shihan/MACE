@@ -48,6 +48,8 @@ TTC::TTC() : // clang-format off
 
     fWidth{this, [this] { return CalculateWidth(); }},
     fPosition{this, [this] { return CalculatePosition(); }},
+
+    fNSiPM{this, 2},
     // Material
     // Scintillator
     fDensity{this, 1.023_g_cm3},
@@ -154,6 +156,7 @@ auto TTC::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fSiliconeLength, "SiliconeLength");
     ImportValue(node, fSiliconeWidth, "SiliconeWidth");
     ImportValue(node, fSiliconeThickness, "SiliconeThickness");
+    ImportValue(node, fNSiPM, "NSiPM");
     // Material
     ImportValue(node, fDensity, "Density");
     ImportValue(node, fRIndexEnergyBin, "RIndexEnergyBin");
@@ -208,6 +211,7 @@ auto TTC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fSiliconeLength, "SiliconeLength");
     ExportValue(node, fSiliconeWidth, "SiliconeWidth");
     ExportValue(node, fSiliconeThickness, "SiliconeThickness");
+    ExportValue(node, fNSiPM, "NSiPM");
     // Material
     ExportValue(node, fDensity, "Density");
     ExportValue(node, fRIndexEnergyBin, "RIndexEnergyBin");
