@@ -37,6 +37,8 @@ private:
     G4Material* fWls;
     G4Material* fAl;
     std::vector<std::string> fTypeNames{"Top","Side","Cap1","Cap2"};
+    G4VPhysicalVolume* fPhySingleStrip{nullptr};
+    G4LogicalVolume* fLogSingleStrip{nullptr};
 };
 
 } // namespace MACE::Detector::Definition

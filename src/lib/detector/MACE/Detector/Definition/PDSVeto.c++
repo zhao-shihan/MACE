@@ -204,23 +204,40 @@ auto PDSVeto::Construct(bool checkOverlaps) -> void {
             if (veto.SelectedType() != -1) { break; }
         }
         for (auto aStripConfig : aTypeConfig.modules[0].layers[0].strips) {
-            Make<G4PVPlacement>(aStripConfig.stripLocalTranform,
-                                LogicalVolume(fmt::format("VetoStripBox_{}", typeID)),
-                                fmt::format("VetoStripBox_{}_all_all_{}", typeID, aStripConfig.stripLocalID),
-                                LogicalVolume(fmt::format("VetoLayerBox_{}", typeID)),
-                                false,
-                                aStripConfig.stripID,
-                                checkOverlaps);
-            if (veto.SelectedType() != -1) { break; }
+            auto phyStripBox{Make<G4PVPlacement>(aStripConfig.stripLocalTranform,
+                                                 LogicalVolume(fmt::format("VetoStripBox_{}", typeID)),
+                                                 fmt::format("VetoStripBox_{}_all_all_{}", typeID, aStripConfig.stripLocalID),
+                                                 LogicalVolume(fmt::format("VetoLayerBox_{}", typeID)),
+                                                 false,
+                                                 aStripConfig.stripID,
+                                                 checkOverlaps)};
+            if (veto.SelectedType() != -1) { 
+                // fmt::println("@info\nSingle strip configuration info: ");
+                // fmt::println("x0: {}", phyStripBox->GetObjectTranslation().getX());
+                // fmt::println("y0: {}", phyStripBox->GetObjectTranslation().getY());
+                // fmt::println("z0: {}", phyStripBox->GetObjectTranslation().getZ());
+                // const auto frameRot{phyStripBox->GetFrameRotation()};
+                // fmt::print("frame rotation: {}",frameRot);
+                break; }
         }
         // strips
         const auto physicalStrip{Make<G4PVPlacement>(G4Transform3D::Identity,
-                                                     LogicalVolume(fmt::format("VetoStrip_{}", typeID)),
-                                                     fmt::format("VetoStrip_{}", typeID),
-                                                     LogicalVolume(fmt::format("VetoStripBox_{}", typeID)),
-                                                     false,
-                                                     0,
-                                                     checkOverlaps)};
+                                                        LogicalVolume(fmt::format("VetoStrip_{}", typeID)),
+                                                        fmt::format("VetoStrip_{}", typeID),
+                                                        LogicalVolume(fmt::format("VetoStripBox_{}", typeID)),
+                                                        false,
+                                                        0,
+                                                        checkOverlaps)};
+        if (veto.SelectedType() != -1) { 
+            fPhySingleStrip = physicalStrip;
+            fLogSingleStrip = fPhySingleStrip->GetLogicalVolume();
+        //     fmt::println("@info\nSingle strip configuration info: ");
+        //     G4Box solidStrip {(G4Box)physicalStrip->GetLogicalVolume()->GetSolid()};
+        //     fmt::println("strip scaleX: {}", solidStrip.GetXHalfLength()*2.);
+        //     fmt::println("strip scaleY: {}", solidStrip.GetYHalfLength()*2.);
+        //     fmt::println("strip scaleZ: {}", solidStrip.GetZHalfLength()*2.);
+            }
+
 
         // fibers
         const auto fiberNum{veto.FiberNum()};

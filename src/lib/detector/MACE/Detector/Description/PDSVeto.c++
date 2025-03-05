@@ -1,7 +1,6 @@
 #include "MACE/Detector/Description/ECALField.h++"
 #include "MACE/Detector/Description/PDSVeto.h++"
 
-#include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
 #include "Mustard/Utility/VectorCast.h++"

@@ -1,4 +1,7 @@
-#include "MACE/Detector/Definition/PDSVeto.h++"
+#include "MACE/Detector/Description/PDSVeto.h++"
+#include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/ECALField.h++"
 #include "MACE/SimVeto/SD/VetoPMSD.h++"
 #include "MACE/SimVeto/SD/VetoStripSD.h++"
 
@@ -24,7 +27,19 @@ DetectorConstruction::DetectorConstruction() :
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     using namespace MACE::Detector::Definition;
-    
+    /*reset veto center to 0*/{
+        const auto& mmsField{Description::MMSField::Instance()};
+        const auto& solenoid{Description::Solenoid::Instance()};
+        const auto& ecalField{Description::ECALField::Instance()};
+        mmsField.Length(0.);
+        solenoid.S1Length(0.);
+        solenoid.S2Length(0.);
+        solenoid.S3Length(0.);
+        solenoid.T1Radius(0.);
+        solenoid.T2Radius(0.);
+        ecalField.Length(0.);
+    }
+
     fWorld = std::make_unique<World>();
     auto& pdsVeto{fWorld->NewDaughter<PDSVeto>(fCheckOverlap)};
 
