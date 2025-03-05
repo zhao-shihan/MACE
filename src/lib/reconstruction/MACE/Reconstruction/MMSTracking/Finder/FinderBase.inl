@@ -18,7 +18,7 @@ template<std::indirectly_readable AHitPointer>
     requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
 auto FinderBase<AHit, ATrack>::GoodHitData(const std::vector<AHitPointer>& hitData) -> bool {
     if (hitData.empty()) [[unlikely]] {
-        Mustard::Utility::PrintWarning("Warning: Empty hit data");
+        Mustard::PrintWarning("Empty hit data");
         return false;
     }
 
@@ -30,7 +30,7 @@ auto FinderBase<AHit, ATrack>::GoodHitData(const std::vector<AHitPointer>& hitDa
         eventID.emplace(Get<"EvtID">(*hit));
     }
     if (eventID.size() != 1) [[unlikely]] {
-        Mustard::Utility::PrintWarning(fmt::format("Warning: Hit data include different event IDs {}, skipping", eventID));
+        Mustard::PrintWarning(fmt::format("Hit data include different event IDs {}, skipping", eventID));
         good = false;
     }
 

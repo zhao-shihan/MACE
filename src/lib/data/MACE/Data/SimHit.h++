@@ -56,10 +56,10 @@ using ECALSimHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<muc::array3f, "p", "Hit momentum (MC truth)">,
     internal::SimHitVertexTruth>;
 
-using VetoSimHit = Mustard::Data::TupleModel<
-    VetoStripHit,
-    Mustard::Data::Value<int, "nOptPho", "Number of optical photon hits on PM (MC truth)">,
-    Mustard::Data::Value<muc::array3f, "x", "Hit position (MC truth)">,
+using MRPCSimHit = Mustard::Data::TupleModel<
+    MRPCHit,
+    Mustard::Data::Value<bool, "Trig", "Trigger flag">,
+    Mustard::Data::Value<float, "Edep", "Energy deposition">,
     Mustard::Data::Value<float, "Ek", "Hit kinetic energy (MC truth)">,
     Mustard::Data::Value<muc::array3f, "p", "Hit momentum (MC truth)">,
     internal::SimHitVertexTruth>;

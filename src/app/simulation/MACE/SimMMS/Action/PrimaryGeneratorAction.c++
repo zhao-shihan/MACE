@@ -10,7 +10,7 @@ namespace MACE::SimMMS::inline Action {
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{},
     G4VUserPrimaryGeneratorAction{},
-    fAvailableGenerator{},
+    fAvailableGenerator{.gpsx{}, .ecoMug{Mustard::Geant4X::EcoMugCosmicRayMuon::Coordinate::Beam}},
     fGenerator{&fAvailableGenerator.gpsx},
     fSavePrimaryVertexData{true},
     fPrimaryVertexData{},

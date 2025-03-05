@@ -42,7 +42,8 @@ private:
     bool fSavePrimaryVertexData;
     std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>> fPrimaryVertexData;
 
-    PrimaryGeneratorActionMessenger::Register<PrimaryGeneratorAction> fMessengerRegister;
+    AnalysisMessenger::Register<PrimaryGeneratorAction> fAnalysisMessengerRegister;
+    PrimaryGeneratorActionMessenger::Register<PrimaryGeneratorAction> fPrimaryGeneratorActionMessengerRegister;
 };
 
 } // namespace MACE::PhaseI::SimMACEPhaseI::inline Action

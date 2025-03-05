@@ -1,3 +1,4 @@
+#include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/Messenger/PhysicsMessenger.h++"
 #include "MACE/SimMACE/PhysicsList.h++"
 

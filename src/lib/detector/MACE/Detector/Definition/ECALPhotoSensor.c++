@@ -39,7 +39,6 @@ auto ECALPhotoSensor::Construct(G4bool checkOverlaps) -> void {
 }
 
 auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
-
     const auto& ecal{Description::ECAL::Instance()};
     const auto name{ecal.Name()};
 
@@ -57,13 +56,13 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     // Define Element and Material
     /////////////////////////////////////////////
 
-    const auto nistManager{G4NistManager::Instance()};
-    const auto hydrogenElement{nistManager->FindOrBuildElement("H")};
-    const auto carbonElement{nistManager->FindOrBuildElement("C")};
-    const auto oxygenElement{nistManager->FindOrBuildElement("O")};
-    const auto siliconElement{nistManager->FindOrBuildElement("Si")};
+    const auto nist{G4NistManager::Instance()};
+    const auto hydrogenElement{nist->FindOrBuildElement("H")};
+    const auto carbonElement{nist->FindOrBuildElement("C")};
+    const auto oxygenElement{nist->FindOrBuildElement("O")};
+    const auto siliconElement{nist->FindOrBuildElement("Si")};
 
-    const auto silicon = nistManager->FindOrBuildMaterial("G4_Si");
+    const auto silicon = nist->FindOrBuildMaterial("G4_Si");
 
     const auto siliconeGrease{new G4Material("siliconeGrease", 1.06_g_cm3, 4, kStateLiquid)};
     siliconeGrease->AddElement(carbonElement, 2);
@@ -91,7 +90,7 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     epoxyPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.57, 1.57});
     epoxy->SetMaterialPropertiesTable(epoxyPropertiesTable);
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1, 1});
+    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1., 1.});
 
     const auto cathodeSurfacePropertiesTable{new G4MaterialPropertiesTable};
     cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0., 0.});
@@ -104,7 +103,6 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     /////////////////////////////////////////////
     // Construct Volumes
     /////////////////////////////////////////////
-    const auto& faceList{ecal.Mesh().fFaceList};
     const auto& typeMap{ecal.Mesh().fTypeMap};
     const auto& moduleSelection{ecal.ModuleSelection()};
     std::map<int, std::vector<int>> idListOfType;
@@ -190,7 +188,6 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
 }
 
 auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
-
     const auto& ecal{Description::ECAL::Instance()};
     const auto name{ecal.Name()};
 
@@ -205,14 +202,14 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     // Define Element and Material
     /////////////////////////////////////////////
 
-    const auto nistManager{G4NistManager::Instance()};
-    const auto hydrogenElement{nistManager->FindOrBuildElement("H")};
-    const auto carbonElement{nistManager->FindOrBuildElement("C")};
-    const auto oxygenElement{nistManager->FindOrBuildElement("O")};
-    const auto siliconElement{nistManager->FindOrBuildElement("Si")};
-    const auto potassiumElement{nistManager->FindOrBuildElement("K")};
-    const auto antimonyElement{nistManager->FindOrBuildElement("Sb")};
-    const auto cesiumElement{nistManager->FindOrBuildElement("Cs")};
+    const auto nist{G4NistManager::Instance()};
+    const auto hydrogenElement{nist->FindOrBuildElement("H")};
+    const auto carbonElement{nist->FindOrBuildElement("C")};
+    const auto oxygenElement{nist->FindOrBuildElement("O")};
+    const auto siliconElement{nist->FindOrBuildElement("Si")};
+    const auto potassiumElement{nist->FindOrBuildElement("K")};
+    const auto antimonyElement{nist->FindOrBuildElement("Sb")};
+    const auto cesiumElement{nist->FindOrBuildElement("Cs")};
 
     const auto siliconeGrease{new G4Material("siliconeGrease", 1.06_g_cm3, 4, kStateLiquid)};
     siliconeGrease->AddElement(carbonElement, 2);
@@ -220,7 +217,7 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     siliconeGrease->AddElement(oxygenElement, 1);
     siliconeGrease->AddElement(siliconElement, 1);
 
-    const auto glass{nistManager->FindOrBuildMaterial("G4_GLASS_PLATE")};
+    const auto glass{nist->FindOrBuildMaterial("G4_GLASS_PLATE")};
     const auto bialkali{new G4Material("Bialkali", 2.0_g_cm3, 3, kStateSolid)};
     bialkali->AddElement(potassiumElement, 2);
     bialkali->AddElement(cesiumElement, 1);
@@ -242,7 +239,7 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     std::vector<G4double> cathodeSurfacePropertiesEnergy{pmtEnergyBin};
     std::vector<G4double> cathodeSurfacePropertiesEfficiency{pmtQuantumEfficiency};
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1, 1});
+    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1., 1.});
 
     const auto cathodeSurfacePropertiesTable{new G4MaterialPropertiesTable};
     cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0., 0.});
@@ -256,7 +253,6 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
-    const auto& faceList{ecal.Mesh().fFaceList};
     const auto& typeMap{ecal.Mesh().fTypeMap};
     const auto& moduleSelection{ecal.ModuleSelection()};
     std::map<int, std::vector<int>> idListOfType;
@@ -281,12 +277,10 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
         const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, glass, "ECALPMTShell")};
 
         const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtDiameter / 2 - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness - pmtCathodeThickness / 2, 0, 2 * pi)};
-        const auto logicPMTVacuum{Make<G4LogicalVolume>(solidPMTVacuum, nistManager->FindOrBuildMaterial("G4_Galactic"), "ECALPMTVacuum")};
+        const auto logicPMTVacuum{Make<G4LogicalVolume>(solidPMTVacuum, nist->FindOrBuildMaterial("G4_Galactic"), "ECALPMTVacuum")};
 
         const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
         const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "ECALPMCathode")};
-
-        int debugCount{};
 
         for (auto&& moduleID : moduleIDList) {
             if ((not moduleSelection.empty()) and (std::find(moduleSelection.begin(), moduleSelection.end(), moduleID) == moduleSelection.end())) { continue; }

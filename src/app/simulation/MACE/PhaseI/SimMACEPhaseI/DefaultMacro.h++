@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::PhaseI::SimMACEPhaseI {
 
 constexpr auto defaultMacro = {
@@ -25,8 +29,8 @@ constexpr auto defaultMacro = {
     "/gps/pos/radius           0 mm",
     "/gps/pos/sigma_r          5 mm",
     "/gps/ene/type             Gauss",
-    "/gps/ene/mono             3.647 MeV    # momentum 28 MeV",
-    "/gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%",
+    "/gps/ene/mono             3.224 MeV    # momentum 26.3 MeV",
+    "/gps/ene/sigma            0.459 MeV    # momentum spreading 1.9 MeV",
     "/GPSX/NVertex             1",
     "/GPSX/PulseWidth          0 ns",
     "",
@@ -40,7 +44,7 @@ constexpr auto defaultMacro = {
     "/MACE/Analysis/FileMode RECREATE",
     "",
 
-#if MACE_USE_G4VIS
+#if MUSTARD_USE_G4VIS
 
     "#############################################################################",
     "# Visualization settings",

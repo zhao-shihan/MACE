@@ -12,6 +12,8 @@
 
 namespace MACE::SimPTS::Detector::Definition {
 
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
+
 auto VirtualDetectorC::Construct(bool checkOverlaps) -> void {
     const auto& solenoid{MACE::Detector::Description::Solenoid::Instance()};
     const auto& solenoidBeamPipe{MACE::Detector::Description::SolenoidBeamPipe::Instance()};

@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::SimTarget {
 
 constexpr auto defaultMacro = {
@@ -50,7 +54,7 @@ constexpr auto defaultMacro = {
     "/MACE/Action/KillIrrelevants    true",
     "",
 
-#if MACE_USE_G4VIS
+#if MUSTARD_USE_G4VIS
 
     "#############################################################################",
     "# Visualization settings",

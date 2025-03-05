@@ -36,7 +36,7 @@ public:
     auto UserSteppingAction(const G4Step* step) -> void override final;
 
 private:
-    virtual auto SteppingActionForNeutrino(const G4Step& step) -> void {}
+    virtual auto SteppingActionForNeutrino(const G4Step&) -> void {}
     virtual auto SteppingActionWithoutNeutrino(const G4Step& step) -> void = 0;
 
 private:

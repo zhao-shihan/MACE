@@ -54,17 +54,30 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Element and Material
     /////////////////////////////////////////////
 
-    const auto nistManager{G4NistManager::Instance()};
+    const auto nist{G4NistManager::Instance()};
 
-    const auto iodideElement{nistManager->FindOrBuildElement("I")};
-    const auto cesiumElement{nistManager->FindOrBuildElement("Cs")};
-    const auto thalliumElement{nistManager->FindOrBuildElement("Tl")};
+    const auto oxygenElement = nist->FindOrBuildElement("O");
+    const auto siliconElement = nist->FindOrBuildElement("Si");
+    const auto iodideElement{nist->FindOrBuildElement("I")};
+    const auto cesiumElement{nist->FindOrBuildElement("Cs")};
+    const auto thalliumElement{nist->FindOrBuildElement("Tl")};
+    const auto yttriumElement = nist->FindOrBuildElement("Y");
+    const auto lutetiumElement = nist->FindOrBuildElement("Lu");
 
     const auto csI{new G4Material("CsI", 4.51_g_cm3, 3, kStateSolid)};
     csI->AddElement(cesiumElement, 0.507556);
     csI->AddElement(iodideElement, 0.484639);
     csI->AddElement(thalliumElement, 0.007805);
-    const auto bgo{nistManager->FindOrBuildMaterial("G4_BGO")};
+
+    const auto bgo{nist->FindOrBuildMaterial("G4_BGO")};
+
+    const auto lyso = new G4Material("LYSO", 7.1_g_cm3, 5, kStateSolid);
+    lyso->AddElement(oxygenElement, 0.175801);
+    lyso->AddElement(siliconElement, 0.061720);
+    lyso->AddElement(yttriumElement, 0.019538);
+    lyso->AddElement(lutetiumElement, 0.730562);
+    lyso->AddElement(cesiumElement, 0.012379);
+
     //////////////////////////////////////////////////
     // Construct Material Optical Properties Tables
     //////////////////////////////////////////////////
@@ -84,7 +97,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     }
 
     const auto rfSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0.985, 0.985});
+    rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0.99, 0.99});
 
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1, 1});
@@ -106,16 +119,13 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
             continue;
         }
 
-        const auto centroidMagnitude{centroid.mag()};
-        const auto crystalLength{crystalHypotenuse * centroidMagnitude};
-        const auto outerRadius{innerRadius + crystalHypotenuse};
-
         const auto SolidCrystal{
             [&, &centroid = centroid, &vertexIndex = vertexIndex](const auto& name) {
                 const auto innerCentroid{innerRadius * centroid};
                 std::vector<G4ThreeVector> innerVertex(vertexIndex.size());
                 std::ranges::transform(vertexIndex, innerVertex.begin(),
                                        [&](const auto& i) { return ComputeIntersection(innerCentroid, normal, vertex[i], vertex[i]); });
+                const auto outerRadius{innerRadius + crystalHypotenuse};
                 const auto outerCentroid{outerRadius * centroid};
                 std::vector<G4ThreeVector> outerVertex(vertexIndex.size());
                 std::ranges::transform(vertexIndex, outerVertex.begin(),
@@ -183,7 +193,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
         const auto logicCrystal{
             Make<G4LogicalVolume>(
                 SolidCrystal(fmt::format("ECALCrystal_{}", moduleID)),
-                csI,
+                lyso,
                 "ECALCrystal")};
         const auto physicalCrystal{
             Make<G4PVPlacement>(
@@ -200,7 +210,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
         /////////////////////////////////////////////
 
         const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
-        new G4LogicalSkinSurface{"reflectorSurface", logicCrystal, rfSurface};
+        new G4LogicalSkinSurface{"airPaintSurface", logicCrystal, rfSurface};
         rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
 
         const auto airPaintSurface{new G4OpticalSurface("AirPaint", unified, polished, dielectric_metal)};

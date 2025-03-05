@@ -1,5 +1,2 @@
 add_subdirectory(app)
 add_subdirectory(lib)
-if(MACE_BUILD_TEST)
-    add_subdirectory(test)
-endif()

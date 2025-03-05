@@ -2,7 +2,6 @@
 #include "MACE/SimDose/Analysis.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Env/Print.h++"
 #include "Mustard/Utility/PrettyLog.h++"
 
 #include "TH3F.h"
@@ -171,7 +170,7 @@ auto Analysis::RunEndUserAction(int runID) -> void {
 
 auto Analysis::CheckMapAdded() -> bool {
     if (fMapModel.empty()) {
-        Mustard::Utility::PrintWarning("MACE::SimDose::Analysis::CheckMapAdded: No map was added");
+        Mustard::PrintWarning("No map was added");
         return false;
     }
     return true;

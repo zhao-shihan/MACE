@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::SimMACE {
 
 constexpr auto defaultMacro = {
@@ -36,7 +40,7 @@ constexpr auto defaultMacro = {
     "/Mustard/Analysis/FileMode RECREATE",
     "",
 
-#if MACE_USE_G4VIS
+#if MUSTARD_USE_G4VIS
 
     "#############################################################################",
     "# Visualization settings",
@@ -70,19 +74,6 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/visibility SolenoidFieldS3      0 no",
     "/vis/geometry/set/visibility SolenoidFieldT1      0 no",
     "/vis/geometry/set/visibility SolenoidFieldT2      0 no",
-    "# only stripboxes visible in veto ",
-    "/vis/geometry/set/visibility VetoModuleBox_0                -1          no",
-    "/vis/geometry/set/visibility VetoModuleBox_1                -1          no",
-    "/vis/geometry/set/visibility VetoModuleBox_2                -1          no",
-    "/vis/geometry/set/visibility VetoModuleBox_3                -1          no",
-    "/vis/geometry/set/visibility VetoStripBox_0                  0          yes",
-    "/vis/geometry/set/visibility VetoStripBox_1                  0          yes",
-    "/vis/geometry/set/visibility VetoStripBox_2                  0          yes",
-    "/vis/geometry/set/visibility VetoStripBox_3                  0          yes",
-    "/vis/geometry/set/visibility VetoAlAbsorber_0                0          yes",
-    "/vis/geometry/set/visibility VetoAlAbsorber_1                0          yes",
-    "/vis/geometry/set/visibility VetoAlAbsorber_2                0          yes",
-    "/vis/geometry/set/visibility VetoAlAbsorber_3                0          yes",
     "",
     "# Colors",
     "/vis/geometry/set/colour Accelerator                   0     1     1     1     0.1",

@@ -37,8 +37,8 @@ Analysis::Analysis() :
     fECALSimHitOutput{},
     fPrimaryVertex{},
     fDecayVertex{},
-    fCDCHit{},
     fTTCHit{},
+    fCDCHit{},
     fMCPHit{},
     fECALHit{},
     fMMSTruthTracker{},
@@ -80,7 +80,7 @@ auto Analysis::EventEndUserAction() -> void {
     fECALHit = {};
 }
 
-auto Analysis::RunEndUserAction(int runID) -> void {
+auto Analysis::RunEndUserAction(int) -> void {
     // write data
     if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
     if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }

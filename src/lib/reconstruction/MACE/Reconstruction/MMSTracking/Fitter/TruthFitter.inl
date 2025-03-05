@@ -6,7 +6,7 @@ template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPoi
     requires(Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit> and
              Mustard::Data::SuperTupleModel<typename std::iter_value_t<ASeedPointer>::Model, ATrack>)
 auto TruthFitter<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitData, ASeedPointer seed) -> std::shared_ptr<Mustard::Data::Tuple<ATrack>> {
-    const auto track{std::make_shared_for_overwrite<Mustard::Data::Tuple<Data::MMSSimTrack>>()};
+    const auto track{std::make_shared_for_overwrite<Mustard::Data::Tuple<ATrack>>()};
 
     const auto& firstHit{*hitData.front()};
     Get<"EvtID">(*track) = Get<"EvtID">(firstHit);

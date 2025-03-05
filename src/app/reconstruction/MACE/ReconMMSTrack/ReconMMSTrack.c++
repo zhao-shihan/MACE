@@ -1,6 +1,7 @@
 #include "MACE/Data/Hit.h++"
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/SimHit.h++"
+#include "MACE/ReconMMSTrack/ReconMMSTrack.h++"
 #include "MACE/Reconstruction/MMSTracking/Finder/TruthFinder.h++"
 #include "MACE/Reconstruction/MMSTracking/Fitter/GenFitDAFFitter.h++"
 #include "MACE/Reconstruction/MMSTracking/Fitter/GenFitReferenceKalmanFitter.h++"
@@ -10,7 +11,6 @@
 #include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Env/Print.h++"
 #include "Mustard/Extension/MPIX/DataType.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
 #include "Mustard/Utility/VectorArithmeticOperator.h++"
@@ -28,9 +28,12 @@
 #include <unordered_set>
 #include <vector>
 
-using namespace MACE;
+namespace MACE::ReconMMSTrack {
 
-auto main(int argc, char* argv[]) -> int {
+ReconMMSTrack::ReconMMSTrack() :
+    Subprogram{"ReconMMSTrack", "Michel magnetic spectrometer (MMS) track reconstruction."} {}
+
+auto ReconMMSTrack::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, {}};
 
     std::vector<std::string> files;
@@ -48,7 +51,7 @@ auto main(int argc, char* argv[]) -> int {
     Mustard::Data::Processor processor;
     auto nextTrackID{0};
     processor.Process<Data::CDCSimHit>(
-        ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, "EvtID",
+        ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, int{}, "EvtID",
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             for (auto&& [trackID, good] : finder(event, nextTrackID).good) {
@@ -84,3 +87,5 @@ auto main(int argc, char* argv[]) -> int {
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::ReconMMSTrack

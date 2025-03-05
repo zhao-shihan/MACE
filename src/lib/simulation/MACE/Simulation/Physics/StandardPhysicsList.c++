@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/Target.h++"
+#include "MACE/Simulation/Physics/MuonLFVDecayPhysics.h++"
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
 #include "Mustard/Env/BasicEnv.h++"
@@ -40,6 +41,8 @@ StandardPhysicsListBase::StandardPhysicsListBase() :
     RegisterPhysics(new Mustard::Geant4X::MuoniumNLODecayPhysics{verboseLevel});
     // Pion/Kaon decay into polarized muon
     RegisterPhysics(new Mustard::Geant4X::PionKaonDecayMakeSpinPhysics{verboseLevel});
+    // Muon LFV decay
+    RegisterPhysics(new MuonLFVDecayPhysics{verboseLevel});
 
     // Set EM parameters
     using namespace Mustard::LiteralUnit::Energy;

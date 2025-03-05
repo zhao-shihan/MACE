@@ -1,22 +1,25 @@
 /control/verbose 0
 /run/verbose 0
 
-/MACE/Physics/UseRadioactiveDecayPhysics
+#/MACE/Physics/UseRadioactiveDecayPhysics
 #/MACE/Physics/UseOpticalPhysics
 
-/Mustard/Detector/Description/Import test.yaml
+#/Mustard/Detector/Description/Import SimMACEPhaseI_geom.yaml
 
 /run/initialize
 
 /MACE/Generator/SwitchToGPSX
 
-/gps/particle gamma
+/gps/particle e+
 /gps/ene/mono 53.085 MeV
 /gps/pos/centre 0. 0. 0. cm
-/gps/direction 0.523352 0.846801 -1.13048e-18
+/gps/ang/type iso
 
-/MACE/Analysis/FilePath resTest
+/MACE/Analysis/CoincidenceWithMRPC    no
+/MACE/Analysis/CoincidenceWithECAL    no
+
+/MACE/Analysis/FilePath SimMACEPhaseI_test
 /MACE/Analysis/FileMode RECREATE
 
 /run/beamOn 1000
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary

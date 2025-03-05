@@ -63,16 +63,6 @@ set(MACE_COMPILE_DEFINITIONS "")
 # Compile warnings for MACE
 # =============================================================================
 
-# More warnings
-if(CMAKE_COMPILER_IS_GNUCXX)
-    list(APPEND MACE_COMPILE_OPTIONS -Wall -Wextra -Wduplicated-cond -Wnon-virtual-dtor -pedantic -Wundef -Wunused-macros)
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    list(APPEND MACE_COMPILE_OPTIONS -WCL4 -Wmove -Wnon-virtual-dtor -pedantic -Wundef -Wunused-macros
-                                     -Wno-gnu-zero-variadic-macro-arguments)
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    list(APPEND MACE_COMPILE_OPTIONS /W4)
-endif()
-
 # Surpress some, if required
 if(NOT MACE_SHOW_MORE_COMPILER_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
@@ -108,54 +98,8 @@ elseif(MACE_SHOW_EVEN_MORE_COMPILER_WARNINGS)
 endif()
 
 # =============================================================================
-# Other CMake-options-controlled compile options for MACE
+# Add compile options and definitions here
 # =============================================================================
 
-if(MACE_SIGNAL_HANDLER)
-    list(APPEND MACE_COMPILE_DEFINITIONS MACE_SIGNAL_HANDLER=1)
-else()
-    list(APPEND MACE_COMPILE_DEFINITIONS MACE_SIGNAL_HANDLER=0)
-endif()
-
-if(MACE_USE_G4VIS)
-    list(APPEND MACE_COMPILE_DEFINITIONS MACE_USE_G4VIS=1)
-else()
-    list(APPEND MACE_COMPILE_DEFINITIONS MACE_USE_G4VIS=0)
-endif()
-
-if(MACE_ENABLE_MSVC_STD_CONFORMITY AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    # Enable standard-conformity
-    list(APPEND MACE_COMPILE_OPTIONS /permissive- /Zc:__cplusplus /Zc:inline)
-    message(STATUS "MSVC standard-conformity enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
-    # Be permissive to standard cfunctions
-    list(APPEND MACE_COMPILE_DEFINITIONS _CRT_SECURE_NO_WARNINGS=1)
-endif()
-
-# =============================================================================
-# MPI-induced compile options for MACE
-# =============================================================================
-
-# Inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
-list(APPEND MACE_COMPILE_DEFINITIONS OMPI_SKIP_MPICXX=1)
-
-# Inform MPICH and derivatives not to bring mpicxx in, seems unnecessary but more consistent.
-list(APPEND MACE_COMPILE_DEFINITIONS MPICH_SKIP_MPICXX=1)
-
-# =============================================================================
-# Eigen-induced compile options for MACE
-# =============================================================================
-
-# Inform Eigen not to enable multithreading, though we are not using OpenMP. It is safer to do so.
-list(APPEND MACE_COMPILE_DEFINITIONS EIGEN_DONT_PARALLELIZE=1)
-
-if(CMAKE_CXX_PLATFORM_ID STREQUAL "MinGW")
-    # MinGW and GCC 12.2 have issues with explitic vectorization
-    list(APPEND MACE_COMPILE_DEFINITIONS EIGEN_DONT_VECTORIZE=1)
-    message(NOTICE "***Notice: Building on Windows with MinGW, disabling vectorization of Eigen")
-endif()
-
-# =============================================================================
-# Add definition here
-# =============================================================================
-
+add_compile_options(${MACE_COMPILE_OPTIONS})
 add_compile_definitions(${MACE_COMPILE_DEFINITIONS})
