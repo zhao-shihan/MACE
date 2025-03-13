@@ -6,9 +6,12 @@
 #/control/saveHistory
 /run/verbose 2
 
+
 #/Mustard/Detector/Description/Ixport mms_geom.yaml
 
+/MACE/Physics/UseOpticalPhysics
 /run/initialize
+/process/optical/scintillation/setFiniteRiseTime true
 
 /MACE/Generator/SwitchToGPSX
 /gps/particle                         e+
@@ -16,6 +19,10 @@
 /gps/pos/centre                       0 0 0 m
 /gps/ang/type                         iso
 /gps/ene/mono                         52.8 MeV
+
+/MACE/Analysis/SaveTTCHitData         yes
+/MACE/Analysis/SaveTTCSiPMHitData     yes
+/MACE/Analysis/SaveCDCHitData         yes
 
 
 /Mustard/Analysis/FilePath SimMACE_vis
@@ -45,6 +52,7 @@
 /vis/geometry/set/visibility CDCCell             -1 no
 /vis/geometry/set/visibility CDCSuperLayer        0 no
 /vis/geometry/set/visibility MMSField             0 no
+/vis/geometry/set/visibility TTCAirBox            0 no
 
 # Colors
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
@@ -108,3 +116,4 @@
 
 /vis/verbose warnings
 /vis/viewer/set/autoRefresh yes
+

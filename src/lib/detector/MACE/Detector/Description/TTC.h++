@@ -1,10 +1,12 @@
 #pragma once
 
-#include "Mustard/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionWithCacheBase.h++"
+
+#include "muc/array"
 
 namespace MACE::Detector::Description {
 
-class TTC final : public Mustard::Detector::Description::DescriptionBase<TTC> {
+class TTC final : public Mustard::Detector::Description::DescriptionWithCacheBase<TTC> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
@@ -14,34 +16,84 @@ private:
 public:
     // Geometry
 
-    auto Length() const -> auto { return fLength; }
-    auto Width() const -> auto { return fWidth; }
-    auto Thickness() const -> auto { return fThickness; }
-    auto Radius() const -> auto { return fRadius; }
-    auto SlantAngle() const -> auto { return fSlantAngle; }
-    auto NAlongPhi() const -> auto { return fNAlongPhi; }
-    auto NAlongZ() const -> auto { return fNAlongZ; }
+    auto Length() const -> auto { return *fLength; }
+    auto WidthDown() const -> auto { return *fWidthDown; }
+    auto WidthUp() const -> auto { return *fWidthUp; }
+    auto Thickness() const -> auto { return *fThickness; }
+    auto Radius() const -> auto { return *fRadius; }
+    auto SlantAngle() const -> auto { return *fSlantAngle; }
+    auto NAlongPhi() const -> auto { return *fNAlongPhi; }
+    auto BarrelLength() const -> auto { return *fBarrelLength; }
+    auto PCBLength() const -> auto { return *fPCBLength; }
+    auto PCBWidth() const -> auto { return *fPCBWidth; }
+    auto PCBThickness() const -> auto { return *fPCBThickness; }
+    auto WindowLength() const -> auto { return *fWindowLength; }
+    auto WindowWidth() const -> auto { return *fWindowWidth; }
+    auto WindowThickness() const -> auto { return *fWindowThickness; }
+    auto LightCouplerLength() const -> auto { return *fLightCouplerLength; }
+    auto LightCouplerWidth() const -> auto { return *fLightCouplerWidth; }
+    auto LightCouplerThickness() const -> auto { return *fLightCouplerThickness; }
+    auto SiliconeLength() const -> auto { return *fSiliconeLength; }
+    auto SiliconeWidth() const -> auto { return *fSiliconeWidth; }
+    auto SiliconeThickness() const -> auto { return *fSiliconeThickness; }
+    auto NSiPM() const -> auto { return *fNSiPM; }
 
     auto Length(double val) -> void { fLength = val; }
-    auto Width(double val) -> void { fWidth = val; }
+    auto WidthDown(double val) -> void { fWidthDown = val; }
+    auto WidthUp(double val) -> void { fWidthUp = val; }
     auto Thickness(double val) -> void { fThickness = val; }
     auto Radius(double val) -> void { fRadius = val; }
     auto SlantAngle(double val) -> void { fSlantAngle = val; }
     auto NAlongPhi(int val) -> void { fNAlongPhi = val; }
-    auto NAlongZ(int val) -> void { fNAlongZ = val; }
+    auto BarrelLength(int val) -> void { fBarrelLength = val; }
+    auto PCBLength(double val) -> void { fPCBLength = val; }
+    auto PCBWidth(double val) -> void { fPCBWidth = val; }
+    auto PCBThickness(double val) -> void { fPCBThickness = val; }
+    auto WindowLength(double val) -> void { fWindowLength = val; }
+    auto WindowWidth(double val) -> void { fWindowWidth = val; }
+    auto WindowThickness(double val) -> void { fWindowThickness = val; }
+    auto LightCouplerLength(double val) -> void { fLightCouplerLength = val; }
+    auto LightCouplerWidth(double val) -> void { fLightCouplerWidth = val; }
+    auto LightCouplerThickness(double val) -> void { fLightCouplerThickness = val; }
+    auto SiliconeLength(double val) -> void { fSiliconeLength = val; }
+    auto SiliconeWidth(double val) -> void { fSiliconeWidth = val; }
+    auto SiliconeThickness(double val) -> void { fSiliconeThickness = val; }
+    auto NSiPM(int val) -> void { fNSiPM = val; }
+
+    auto Width() const -> auto { return *fWidth; }
+    auto Position() const -> auto { return *fPosition; }
 
     // Material
 
-    auto Density() const -> auto { return fDensity; }
-    auto RIndexEnergyBin() const -> const auto& { return fRIndexEnergyBin; }
-    auto RIndex() const -> const auto& { return fRIndex; }
-    auto AbsLengthEnergyBin() const -> const auto& { return fAbsLengthEnergyBin; }
-    auto AbsLength() const -> const auto& { return fAbsLength; }
-    auto ScintillationComponent1EnergyBin() const -> const auto& { return fScintillationComponent1EnergyBin; }
-    auto ScintillationComponent1() const -> const auto& { return fScintillationComponent1; }
-    auto ScintillationYield() const -> auto { return fScintillationYield; }
-    auto ScintillationTimeConstant1() const -> auto { return fScintillationTimeConstant1; }
-    auto ResolutionScale() const -> auto { return fResolutionScale; }
+    auto Density() const -> auto { return *fDensity; }
+    auto RIndexEnergyBin() const -> const auto& { return *fRIndexEnergyBin; }
+    auto RIndex() const -> const auto& { return *fRIndex; }
+    auto AbsLengthEnergyBin() const -> const auto& { return *fAbsLengthEnergyBin; }
+    auto AbsLength() const -> const auto& { return *fAbsLength; }
+    auto ScintillationComponent1EnergyBin() const -> const auto& { return *fScintillationComponent1EnergyBin; }
+    auto ScintillationComponent1() const -> const auto& { return *fScintillationComponent1; }
+    auto ScintillationYield() const -> auto { return *fScintillationYield; }
+    auto ScintillationRiseTimeConstant1() const -> auto { return *fScintillationRiseTimeConstant1; }
+    auto ScintillationDecayTimeConstant1() const -> auto { return *fScintillationDecayTimeConstant1; }
+    auto ResolutionScale() const -> auto { return *fResolutionScale; }
+    auto LightCouplerDensity() const -> auto { return *fLightCouplerDensity; }
+    auto LightCouplerCarbonElement() const -> auto { return *fLightCouplerCarbonElement; }
+    auto LightCouplerHydrogenElement() const -> auto { return *fLightCouplerHydrogenElement; }
+    auto LightCouplerOxygenElement() const -> auto { return *fLightCouplerOxygenElement; }
+    auto LightCouplerSiliconElement() const -> auto { return *fLightCouplerSiliconElement; }
+    auto LightCouplerRIndex() const -> auto& { return *fLightCouplerRIndex; }
+    auto LightCouplerAbsLength() const -> auto& { return *fLightCouplerAbsLength; }
+    auto WindowDensity() const -> auto { return *fWindowDensity; }
+    auto WindowCarbonElement() const -> auto { return *fWindowCarbonElement; }
+    auto WindowHydrogenElement() const -> auto { return *fWindowHydrogenElement; }
+    auto WindowOxygenElement() const -> auto { return *fWindowOxygenElement; }
+    auto WindowRIndex() const -> auto& { return *fWindowRIndex; }
+    auto SiPMEnergyBin() const -> const auto& { return *fSiPMEnergyBin; }
+    auto SiPMEfficiency() const -> const auto& { return *fSiPMEfficiency; }
+    auto RfSurface() const -> auto& { return *fRfSurface; }
+    auto CouplerSurface() const -> auto& { return *fCouplerSurface; }
+    auto AirPaintSurface() const -> auto& { return *fAirPaintSurface; }
+    auto CathodeSurface() const -> auto& { return *fCathodeSurface; }
 
     auto Density(double val) -> void { fDensity = val; }
     auto RIndexEnergyBin(std::vector<double> val) -> void { fRIndexEnergyBin = std::move(val); }
@@ -51,36 +103,93 @@ public:
     auto ScintillationComponent1EnergyBin(std::vector<double> val) -> void { fScintillationComponent1EnergyBin = std::move(val); }
     auto ScintillationComponent1(std::vector<double> val) -> void { fScintillationComponent1 = std::move(val); }
     auto ScintillationYield(double val) -> void { fScintillationYield = val; }
-    auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
+    auto ScintillationRiseTimeConstant1(double val) -> void { fScintillationRiseTimeConstant1 = val; }
+    auto ScintillationDecayTimeConstant1(double val) -> void { fScintillationDecayTimeConstant1 = val; }
     auto ResolutionScale(double val) -> void { fResolutionScale = val; }
+    auto LightCouplerDensity(double val) -> void { fLightCouplerDensity = val; }
+    auto LightCouplerCarbonElement(int val) -> void { fLightCouplerCarbonElement = val; }
+    auto LightCouplerHydrogenElement(int val) -> void { fLightCouplerHydrogenElement = val; }
+    auto LightCouplerOxygenElement(int val) -> void { fLightCouplerOxygenElement = val; }
+    auto LightCouplerSiliconElement(int val) -> void { fLightCouplerSiliconElement = val; }
+    auto LightCouplerRIndex(std::vector<double> val) -> void { fLightCouplerRIndex = std::move(val); }
+    auto LightCouplerAbsLength(std::vector<double> val) -> void { fLightCouplerAbsLength = std::move(val); }
+    auto WindowDensity(double val) -> void { fWindowDensity = val; }
+    auto WindowCarbonElement(double val) -> void { fWindowCarbonElement = val; }
+    auto WindowHydrogenElement(double val) -> void { fWindowHydrogenElement = val; }
+    auto WindowOxygenElement(double val) -> void { fWindowOxygenElement = val; }
+    auto WindowRIndex(std::vector<double> val) -> void { fWindowRIndex = std::move(val); }
+    auto SiPMEnergyBin(std::vector<double> val) -> void { fSiPMEnergyBin = std::move(val); }
+    auto SiPMEfficiency(std::vector<double> val) -> void { fSiPMEfficiency = std::move(val); }
+    auto RfSurface(std::vector<double> val) -> void { fRfSurface = std::move(val); }
+    auto CouplerSurface(std::vector<double> val) -> void { fCouplerSurface = std::move(val); }
+    auto AirPaintSurface(std::vector<double> val) -> void { fAirPaintSurface = std::move(val); }
+    auto CathodeSurface(std::vector<double> val) -> void { fCathodeSurface = std::move(val); }
 
 private:
+    auto CalculateWidth() -> std::vector<double>;
+    auto CalculatePosition() -> std::vector<muc::array3d>;
     auto ImportAllValue(const YAML::Node& node) -> void override;
     auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry
 
-    double fLength;
-    double fWidth;
-    double fThickness;
-    double fRadius;
-    double fSlantAngle;
-    int fNAlongPhi;
-    int fNAlongZ;
+    Simple<double> fLength;
+    Simple<double> fWidthDown;
+    Simple<double> fWidthUp;
+    Simple<double> fThickness;
+    Simple<double> fRadius;
+    Simple<double> fSlantAngle;
+    Simple<int> fNAlongPhi;
+    Simple<double> fBarrelLength;
+    Simple<double> fPCBLength;
+    Simple<double> fPCBWidth;
+    Simple<double> fPCBThickness;
+    Simple<double> fWindowLength;
+    Simple<double> fWindowWidth;
+    Simple<double> fWindowThickness;
+    Simple<double> fLightCouplerLength;
+    Simple<double> fLightCouplerWidth;
+    Simple<double> fLightCouplerThickness;
+    Simple<double> fSiliconeLength;
+    Simple<double> fSiliconeWidth;
+    Simple<double> fSiliconeThickness;
+    Simple<int> fNSiPM;
+
+    Cached<std::vector<double>> fWidth;
+    Cached<std::vector<muc::array3d>> fPosition;
 
     // Material
 
-    double fDensity;
-    std::vector<double> fRIndexEnergyBin;
-    std::vector<double> fRIndex;
-    std::vector<double> fAbsLengthEnergyBin;
-    std::vector<double> fAbsLength;
-    std::vector<double> fScintillationComponent1EnergyBin;
-    std::vector<double> fScintillationComponent1;
-    double fScintillationYield;
-    double fScintillationTimeConstant1;
-    double fResolutionScale;
+    Simple<double> fDensity;
+    Simple<std::vector<double>> fRIndexEnergyBin;
+    Simple<std::vector<double>> fRIndex;
+    Simple<std::vector<double>> fAbsLengthEnergyBin;
+    Simple<std::vector<double>> fAbsLength;
+    Simple<std::vector<double>> fScintillationComponent1EnergyBin;
+    Simple<std::vector<double>> fScintillationComponent1;
+    Simple<double> fScintillationYield;
+    Simple<double> fScintillationRiseTimeConstant1;
+    Simple<double> fScintillationDecayTimeConstant1;
+    Simple<double> fResolutionScale;
+    Simple<double> fLightCouplerDensity;
+    Simple<int> fLightCouplerCarbonElement;
+    Simple<int> fLightCouplerHydrogenElement;
+    Simple<int> fLightCouplerOxygenElement;
+    Simple<int> fLightCouplerSiliconElement;
+    Simple<std::vector<double>> fLightCouplerRIndex;
+    Simple<std::vector<double>> fLightCouplerAbsLength;
+    Simple<double> fWindowDensity;
+    Simple<double> fWindowCarbonElement;
+    Simple<double> fWindowHydrogenElement;
+    Simple<double> fWindowOxygenElement;
+    Simple<std::vector<double>> fWindowRIndex;
+    Simple<std::vector<double>> fSiPMEnergyBin;
+    Simple<std::vector<double>> fSiPMEfficiency;
+    Simple<std::vector<double>> fRfSurface;
+    Simple<std::vector<double>> fCouplerSurface;
+    Simple<std::vector<double>> fAirPaintSurface;
+    Simple<std::vector<double>> fCathodeSurface;
 };
 
 } // namespace MACE::Detector::Description

@@ -56,7 +56,7 @@ TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
-    fSplitHit.reserve(ttc.NAlongPhi() * ttc.NAlongZ());
+    fSplitHit.reserve(ttc.NAlongPhi() * ttc.Width().size());
 }
 
 auto TTCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
@@ -78,7 +78,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
-    const auto tileID{preStepPoint.GetTouchable()->GetReplicaNumber()};
+    const auto tileID{preStepPoint.GetTouchable()->GetReplicaNumber(1)};
     // calculate (Ek0, p0)
     const auto vertexEk{track.GetVertexKineticEnergy()};
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
@@ -92,7 +92,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"Good">(*hit) = false; // to be determined
-    Get<"nOptPho">(*hit) = -1; // to be determined
+    Get<"nOptPho">(*hit) = {}; // to be determined
     Get<"x">(*hit) = preStepPoint.GetPosition();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
@@ -124,8 +124,10 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             fHitsCollection->insert(hit.release());
         } break;
         default: {
-            const auto scintillationTimeConstant1{Detector::Description::TTC::Instance().ScintillationTimeConstant1()};
-            assert(scintillationTimeConstant1 >= 0);
+            const auto scintillationRiseTimeConstant1{Detector::Description::TTC::Instance().ScintillationRiseTimeConstant1()};
+            const auto scintillationDecayTimeConstant1{Detector::Description::TTC::Instance().ScintillationDecayTimeConstant1()};
+            assert(scintillationRiseTimeConstant1 >= 0 and scintillationDecayTimeConstant1 >= 0);
+            const auto triggerTimeWindow{scintillationRiseTimeConstant1 + scintillationDecayTimeConstant1};
             // sort hit by time
             muc::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
@@ -135,10 +137,10 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             std::ranges::subrange cluster{splitHit.begin(), splitHit.begin()};
             while (cluster.end() != splitHit.end()) {
                 const auto tFirst{*Get<"t">(**cluster.end())};
-                const auto windowClosingTime{tFirst + scintillationTimeConstant1};
+                const auto windowClosingTime{tFirst + triggerTimeWindow};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
-                    scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1));
+                    triggerTimeWindow != 0) [[unlikely]] {
+                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, triggerTimeWindow));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {
@@ -175,7 +177,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     if (fTTCSiPMSD) {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            Get<"nOptPho">(*hit) = nHit[Get<"TileID">(*hit)];
+            Get<"nOptPho">(*hit) = (nHit[Get<"TileID">(*hit)]);
         }
     }
 }
