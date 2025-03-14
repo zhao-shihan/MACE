@@ -11,7 +11,7 @@ auto Smearer::Smear(std::string_view treeName, const std::unordered_map<std::str
     }
 
     fProcessor.Process<Ts...>(
-        ROOT::RDataFrame{treeName, fInputFile}, "EvtID",
+        ROOT::RDataFrame{treeName, fInputFile}, int{}, "EvtID",
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             for (auto&& entry : event) {

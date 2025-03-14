@@ -38,7 +38,6 @@ include(CMakeDependentOption)
 
 # Basic
 # Options (ON/OFF)
-option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." ON)
 option(MACE_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if GenFit is built-in." ON)
 option(MACE_BUILTIN_MACE_OFFLINE_DATA "Use built-in offline data (network or pre-downloaded data are required)." OFF)
@@ -103,5 +102,13 @@ endif()
 
 # Config for MACE
 include(${MACE_PROJECT_CMAKE_DIR}/MACECompileConfig.cmake)
-# main content
+# libraries
 add_subdirectory(${PROJECT_SOURCE_DIR})
+# main program
+add_executable(MACE MACE.c++)
+target_link_libraries(MACE AppMACEPhaseI
+                           AppMACEReconstruction
+                           AppMACESimulation
+                           AppMACEUtility
+                           Mustard::Mustard)
+install(TARGETS MACE DESTINATION ${CMAKE_INSTALL_BINDIR})

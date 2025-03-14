@@ -57,6 +57,8 @@ auto Target::ImportAllValue(const YAML::Node& node) -> void {
                 fShapeType = TargetShapeType::Cuboid;
             } else if (shape == "MultiLayer") {
                 fShapeType = TargetShapeType::MultiLayer;
+            } else if (shape == "Cylinder") {
+                fShapeType = TargetShapeType::Cylinder;
             } else {
                 Mustard::PrintError(fmt::format("Unknown target shape '{}', skipping", shape));
             }

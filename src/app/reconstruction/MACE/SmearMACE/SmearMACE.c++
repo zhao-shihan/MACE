@@ -1,6 +1,7 @@
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/SmearMACE/CLI.h++"
+#include "MACE/SmearMACE/SmearMACE.h++"
 #include "MACE/SmearMACE/Smearer.h++"
 
 #include "Mustard/Data/Processor.h++"
@@ -23,10 +24,13 @@
 #include <sstream>
 #include <stdexcept>
 
-using namespace MACE;
+namespace MACE::SmearMACE {
 
-auto main(int argc, char* argv[]) -> int {
-    SmearMACE::CLI cli;
+SmearMACE::SmearMACE() :
+    Subprogram{"SmearMACE", "Add resolution effect to simulation data."} {}
+
+auto SmearMACE::Main(int argc, char* argv[]) const -> int {
+    CLI cli;
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
     Mustard::UseXoshiro<256> random;
@@ -65,7 +69,7 @@ auto main(int argc, char* argv[]) -> int {
     {
         Mustard::Data::Processor<> processor;
 
-        SmearMACE::Smearer smearer{cli.InputFilePath(), processor};
+        Smearer smearer{cli.InputFilePath(), processor};
         const auto [iFirst, iLast]{cli.DatasetIndexRange()};
         const auto Smear{
             [&, iFirst = iFirst, iLast = iLast]<
@@ -86,3 +90,5 @@ auto main(int argc, char* argv[]) -> int {
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::SmearMACE
