@@ -37,7 +37,8 @@ auto Target::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -
 }
 
 template<typename ADerivedShape>
-Target::ShapeBase<ADerivedShape>::ShapeBase() {
+Target::ShapeBase<ADerivedShape>::ShapeBase(ADerivedShape* derived) :
+    Mustard::Env::Memory::WeakSingleton<ADerivedShape>{derived} {
     static_assert(
         requires(const ADerivedShape shape, double x[3], bool inside) {
             requires std::is_base_of_v<ShapeBase<ADerivedShape>, ADerivedShape>;
@@ -50,7 +51,8 @@ Target::ShapeBase<ADerivedShape>::ShapeBase() {
 
 template<typename ADerivedShape>
 template<typename ADerivedDetail>
-Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
+Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase(ADerivedDetail* derived) :
+    Mustard::Env::Memory::WeakSingleton<ADerivedDetail>{derived} {
     static_assert(
         requires(const ADerivedDetail detail, double x[3]) {
             requires std::is_base_of_v<DetailBase<ADerivedDetail>, ADerivedDetail>;

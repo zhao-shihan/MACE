@@ -19,7 +19,7 @@
 namespace MACE::SimMMS {
 
 Analysis::Analysis() :
-    AnalysisBase{},
+    AnalysisBase{this},
     fSaveCDCHitData{true},
     fSaveTTCHitData{true},
     fSaveTTCSiPMHitData{true},

@@ -15,13 +15,15 @@ public:
 
     auto UseRadioactiveDecayPhysics() -> void;
     auto UseOpticalPhysics() -> void;
-    auto DisableMuonMinusCapture() -> void;
 
 private:
     StandardPhysicsListMessenger::Register<StandardPhysicsListBase> fMessengerRegister;
 };
 
 class StandardPhysicsList final : public Mustard::Env::Memory::PassiveSingleton<StandardPhysicsList>,
-                                  public StandardPhysicsListBase {};
+                                  public StandardPhysicsListBase {
+public:
+    StandardPhysicsList();
+};
 
 } // namespace MACE::inline Simulation::inline Physics

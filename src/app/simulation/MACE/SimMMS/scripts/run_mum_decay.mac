@@ -7,11 +7,12 @@
 
 #/Mustard/Detector/Description/Ixport mms_geom.yaml
 
-/MACE/Physics/DisableMuonMinusCapture
-
 /MACE/Physics/UseOpticalPhysics
+
 /run/initialize
+
 /process/optical/scintillation/setFiniteRiseTime true
+/process/inactivate muMinusCaptureAtRest
 
 /MACE/Generator/SwitchToGPSX
 /gps/particle                         mu-

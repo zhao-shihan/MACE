@@ -30,14 +30,14 @@ public:
     template<typename ADerivedShape>
     class ShapeBase : public Mustard::Env::Memory::WeakSingleton<ADerivedShape> {
     protected:
-        ShapeBase();
+        ShapeBase(ADerivedShape* derived);
         ~ShapeBase() = default;
 
     protected:
         template<typename ADerivedDetail>
         class DetailBase : public Mustard::Env::Memory::WeakSingleton<ADerivedDetail> {
         protected:
-            DetailBase();
+            DetailBase(ADerivedDetail* derived);
             ~DetailBase() = default;
         };
     };

@@ -19,7 +19,7 @@
 namespace MACE::PhaseI::SimMACEPhaseI {
 
 Analysis::Analysis() :
-    AnalysisBase{},
+    AnalysisBase{this},
     fCoincidenceWithMRPC{true},
     fCoincidenceWithECAL{true},
     fPrimaryVertexOutput{},

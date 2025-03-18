@@ -21,7 +21,7 @@
 namespace MACE::SimECAL {
 
 Analysis::Analysis() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     fFilePath{"SimECAL_untitled"},
     fFileMode{"NEW"},
     fCoincidenceWithECAL{true},

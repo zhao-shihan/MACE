@@ -6,6 +6,9 @@
 
 namespace MACE::SimDose::inline Action {
 
+SteppingAction::SteppingAction() :
+    NeutrinoKillerSteppingAction{this} {}
+
 auto SteppingAction::SteppingActionWithoutNeutrino(const G4Step& step) -> void {
     Analysis::Instance().FillMap(step);
 }

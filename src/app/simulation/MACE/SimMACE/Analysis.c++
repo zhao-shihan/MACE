@@ -22,7 +22,7 @@
 namespace MACE::SimMACE {
 
 Analysis::Analysis() :
-    AnalysisBase{},
+    AnalysisBase{this},
     fCoincidenceWithMMS{true},
     fCoincidenceWithMCP{true},
     fCoincidenceWithECAL{true},

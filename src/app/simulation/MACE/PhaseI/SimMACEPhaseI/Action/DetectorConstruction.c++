@@ -29,7 +29,7 @@ namespace MACE::PhaseI::SimMACEPhaseI::inline Action {
 using namespace Mustard::LiteralUnit;
 
 DetectorConstruction::DetectorConstruction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserDetectorConstruction{},
     fCheckOverlap{false},
     fWorld{},
