@@ -11,11 +11,15 @@
 #include "G4NistManager.hh"
 #include "G4OpticalSurface.hh"
 #include "G4PVPlacement.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Transform3D.hh"
 
 #include "gsl/gsl"
 
 #include "fmt/format.h"
+
+#include <algorithm>
+#include <vector>
 
 namespace MACE::Detector::Definition {
 
@@ -64,14 +68,14 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     windowPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, ttc.WindowRIndex());
     window->SetMaterialPropertiesTable(windowPropertiesTable);
 
-    const auto rfSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, ttc.RfSurface());
+    const auto reflectorSurfacePropertiesTable{new G4MaterialPropertiesTable};
+    reflectorSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, ttc.ReflectorReflectivity());
 
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, ttc.CouplerSurface());
+    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, ttc.CouplerTransmittance());
 
     const auto airPaintSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    airPaintSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, ttc.AirPaintSurface());
+    airPaintSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, ttc.AirPaintReflectivity());
 
     const auto cathodeSurfacePropertiesTable{new G4MaterialPropertiesTable};
     cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, ttc.CathodeSurface());
@@ -81,7 +85,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     int tileID{};
     const auto deltaPhi{2 * pi / ttc.NAlongPhi()};
     const auto nWidth{ssize(ttc.Width())};
-    std::vector<G4LogicalVolume*> ttcAirBoxLogic;
+    std::vector<G4LogicalVolume*> ttcVirtualBoxLogic;
 
     // set up the PCB
     const auto ttcPCBSolid{Make<G4Box>(
@@ -128,18 +132,18 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         lightCoupler,
         "TTCLightCoupler")};
 
-    for (gsl::index i{}; i < nWidth; ++i) { // clang-format off
-        //set up the empty air motherbox
-        const auto ttcAirBoxSolid{Make<G4Box>(
-            "TTCAirBoxSolid",
+    for (gsl::index i{}; i < nWidth; ++i) {
+        // set up the empty air motherbox
+        const auto ttcVirtualBoxSolid{Make<G4Box>(
+            "TTCVirtualBoxSolid",
             ttc.PCBWidth() / 2,
-            ttc.Length()/2 +ttc.PCBThickness()+ttc.WindowThickness()+ttc.LightCouplerThickness(),
+            ttc.Length() / 2 + ttc.PCBThickness() + ttc.WindowThickness() + ttc.LightCouplerThickness(),
             ttc.Width()[i] / 2)};
-        const auto ttcAirBoxMaterial{G4Material::GetMaterial("G4_AIR")};
-        ttcAirBoxLogic.push_back(Make<G4LogicalVolume>(ttcAirBoxSolid, ttcAirBoxMaterial,"TTCAirBox"));
-        //set up the TTCscintillator
+        const auto ttcVirtualBoxMaterial{G4Material::GetMaterial("G4_AIR")};
+        ttcVirtualBoxLogic.push_back(Make<G4LogicalVolume>(ttcVirtualBoxSolid, ttcVirtualBoxMaterial, "TTCVirtualBox"));
+        // set up the TTC scintillator
         const auto ttcScintillatorSolid{Make<G4Box>(
-            "TTCScintillatorSolid", 
+            "TTCScintillatorSolid",
             ttc.Thickness() / 2,
             ttc.Length() / 2,
             ttc.Width()[i] / 2)};
@@ -147,15 +151,15 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             ttcScintillatorSolid,
             ttcScintillatorMaterial,
             "TTCScintillator")};
-        //set the position of air mother box
+        // set the position of air mother box
         const auto transform{G4RotateZ3D{Mustard::Math::IsEven(i) ? 0 : deltaPhi / 2} *
-                            G4Translate3D{Mustard::VectorCast<G4ThreeVector>(ttc.Position()[i])} *
-                            G4RotateZ3D{ttc.SlantAngle()}}; // clang-format on
+                             G4Translate3D{Mustard::VectorCast<G4ThreeVector>(ttc.Position()[i])} *
+                             G4RotateZ3D{ttc.SlantAngle()}};
         for (int j{}; j < ttc.NAlongPhi(); ++j, ++tileID) {
             Make<G4PVPlacement>(
                 G4RotateZ3D{j * deltaPhi} * transform,
-                ttcAirBoxLogic[i],
-                "TTCAirBoxPhysics",
+                ttcVirtualBoxLogic[i],
+                "TTCVirtualBoxPhysics",
                 Mother().LogicalVolume(),
                 false,
                 tileID,
@@ -167,7 +171,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             G4ThreeVector(0, 0, 0),
             ttcScintillatorLogic,
             "TTCScintillatorPhysics",
-            ttcAirBoxLogic[i],
+            ttcVirtualBoxLogic[i],
             false,
             checkOverlaps)};
         // set the position of the LightCoupler inside the air mother box
@@ -176,7 +180,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             G4ThreeVector(0, (ttc.Length() + ttc.LightCouplerThickness()) / 2, 0),
             ttcLightCouplerLogic,
             "TTCLightCouplerPhysics",
-            ttcAirBoxLogic[i],
+            ttcVirtualBoxLogic[i],
             false,
             checkOverlaps)};
         auto ttcLightCouplerDownPhysics{Make<G4PVPlacement>(
@@ -184,7 +188,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             G4ThreeVector(0, -(ttc.Length() + ttc.LightCouplerThickness()) / 2, 0),
             ttcLightCouplerLogic,
             "TTCLightCouplerPhysics",
-            ttcAirBoxLogic[i],
+            ttcVirtualBoxLogic[i],
             false,
             checkOverlaps)};
         // set the position of the Window inside the air mother box
@@ -193,7 +197,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             G4ThreeVector(0, ttc.LightCouplerThickness() + (ttc.Length() + ttc.WindowThickness()) / 2, 0),
             ttcWindowUpLogic,
             "TTCWindowPhysics",
-            ttcAirBoxLogic[i],
+            ttcVirtualBoxLogic[i],
             false,
             checkOverlaps);
         Make<G4PVPlacement>(
@@ -201,7 +205,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             G4ThreeVector(0, -(ttc.LightCouplerThickness() + (ttc.Length() + ttc.WindowThickness()) / 2), 0),
             ttcWindowDownLogic,
             "TTCWindowPhysics",
-            ttcAirBoxLogic[i],
+            ttcVirtualBoxLogic[i],
             false,
             checkOverlaps);
         // set the position of the PCB inside the air mother box
@@ -210,7 +214,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             G4ThreeVector(0, ttc.WindowThickness() + ttc.LightCouplerThickness() + (ttc.Length() + ttc.PCBThickness()) / 2, 0),
             ttcPCBLogic,
             "TTCPCBPhysics",
-            ttcAirBoxLogic[i],
+            ttcVirtualBoxLogic[i],
             false,
             checkOverlaps);
         Make<G4PVPlacement>(
@@ -218,31 +222,31 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             G4ThreeVector(0, -(ttc.WindowThickness() + ttc.LightCouplerThickness() + (ttc.Length() + ttc.PCBThickness()) / 2), 0),
             ttcPCBLogic,
             "TTCPCBPhysics",
-            ttcAirBoxLogic[i],
+            ttcVirtualBoxLogic[i],
             false,
             checkOverlaps);
 
         // Construct Optical Surface
-        const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
-        new G4LogicalSkinSurface{"reflectorSurface", ttcScintillatorLogic, rfSurface};
-        rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
-        const auto airPaintSurface{new G4OpticalSurface("AirPaint", unified, polished, dielectric_metal)};
+        const auto reflectorSurface{new G4OpticalSurface("TTCReflector", unified, polished, dielectric_metal)};
+        new G4LogicalSkinSurface{"TTCReflectorSurface", ttcScintillatorLogic, reflectorSurface};
+        reflectorSurface->SetMaterialPropertiesTable(reflectorSurfacePropertiesTable);
+        const auto airPaintSurface{new G4OpticalSurface("TTCAirPaint", unified, polished, dielectric_metal)};
         for (int k{}; k < ttc.NAlongPhi(); ++k) {
-            new G4LogicalBorderSurface{"airPaintSurface",
-                                       PhysicalVolume("TTCAirBoxPhysics", k + i * ttc.NAlongPhi()),
+            new G4LogicalBorderSurface{"TTCAirPaintSurface",
+                                       PhysicalVolume("TTCVirtualBoxPhysics", k + i * ttc.NAlongPhi()),
                                        ttcScintillatorPhysics,
                                        airPaintSurface};
             airPaintSurface->SetMaterialPropertiesTable(airPaintSurfacePropertiesTable);
         }
 
-        const auto couplerUpSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
-        new G4LogicalBorderSurface{"couplerSurface",
+        const auto couplerUpSurface{new G4OpticalSurface("TTCCoupler", unified, polished, dielectric_dielectric)};
+        new G4LogicalBorderSurface{"TTCCouplerSurface",
                                    ttcScintillatorPhysics,
                                    ttcLightCouplerUpPhysics,
                                    couplerUpSurface};
         couplerUpSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
-        const auto couplerDownSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
-        new G4LogicalBorderSurface{"couplerSurface",
+        const auto couplerDownSurface{new G4OpticalSurface("TTCCoupler", unified, polished, dielectric_dielectric)};
+        new G4LogicalBorderSurface{"TTCCouplerSurface",
                                    ttcScintillatorPhysics,
                                    ttcLightCouplerDownPhysics,
                                    couplerDownSurface};
@@ -269,8 +273,8 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         checkOverlaps);
 
     // Construct Silicon Optical Surface
-    const auto cathodeSurface{new G4OpticalSurface("Cathode", unified, polished, dielectric_metal)};
-    new G4LogicalSkinSurface{"cathodeSkinSurface", ttcSiliconeLogic, cathodeSurface};
+    const auto cathodeSurface{new G4OpticalSurface("TTCCathode", unified, polished, dielectric_metal)};
+    new G4LogicalSkinSurface{"TTCCathodeSkinSurface", ttcSiliconeLogic, cathodeSurface};
     cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 }
 

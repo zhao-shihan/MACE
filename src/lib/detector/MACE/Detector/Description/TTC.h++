@@ -4,6 +4,9 @@
 
 #include "muc/array"
 
+#include <utility>
+#include <vector>
+
 namespace MACE::Detector::Description {
 
 class TTC final : public Mustard::Detector::Description::DescriptionWithCacheBase<TTC> {
@@ -60,8 +63,8 @@ public:
     auto SiliconeThickness(double val) -> void { fSiliconeThickness = val; }
     auto NSiPM(int val) -> void { fNSiPM = val; }
 
-    auto Width() const -> auto { return *fWidth; }
-    auto Position() const -> auto { return *fPosition; }
+    auto Width() const -> const auto& { return *fWidth; }
+    auto Position() const -> const auto& { return *fPosition; }
 
     // Material
 
@@ -81,19 +84,19 @@ public:
     auto LightCouplerHydrogenElement() const -> auto { return *fLightCouplerHydrogenElement; }
     auto LightCouplerOxygenElement() const -> auto { return *fLightCouplerOxygenElement; }
     auto LightCouplerSiliconElement() const -> auto { return *fLightCouplerSiliconElement; }
-    auto LightCouplerRIndex() const -> auto& { return *fLightCouplerRIndex; }
-    auto LightCouplerAbsLength() const -> auto& { return *fLightCouplerAbsLength; }
+    auto LightCouplerRIndex() const -> const auto& { return *fLightCouplerRIndex; }
+    auto LightCouplerAbsLength() const -> const auto& { return *fLightCouplerAbsLength; }
     auto WindowDensity() const -> auto { return *fWindowDensity; }
     auto WindowCarbonElement() const -> auto { return *fWindowCarbonElement; }
     auto WindowHydrogenElement() const -> auto { return *fWindowHydrogenElement; }
     auto WindowOxygenElement() const -> auto { return *fWindowOxygenElement; }
-    auto WindowRIndex() const -> auto& { return *fWindowRIndex; }
+    auto WindowRIndex() const -> const auto& { return *fWindowRIndex; }
     auto SiPMEnergyBin() const -> const auto& { return *fSiPMEnergyBin; }
     auto SiPMEfficiency() const -> const auto& { return *fSiPMEfficiency; }
-    auto RfSurface() const -> auto& { return *fRfSurface; }
-    auto CouplerSurface() const -> auto& { return *fCouplerSurface; }
-    auto AirPaintSurface() const -> auto& { return *fAirPaintSurface; }
-    auto CathodeSurface() const -> auto& { return *fCathodeSurface; }
+    auto ReflectorReflectivity() const -> const auto& { return *fReflectorReflectivity; }
+    auto CouplerTransmittance() const -> const auto& { return *fCouplerTransmittance; }
+    auto AirPaintReflectivity() const -> const auto& { return *fAirPaintReflectivity; }
+    auto CathodeSurface() const -> const auto& { return *fCathodeSurface; }
 
     auto Density(double val) -> void { fDensity = val; }
     auto RIndexEnergyBin(std::vector<double> val) -> void { fRIndexEnergyBin = std::move(val); }
@@ -120,9 +123,9 @@ public:
     auto WindowRIndex(std::vector<double> val) -> void { fWindowRIndex = std::move(val); }
     auto SiPMEnergyBin(std::vector<double> val) -> void { fSiPMEnergyBin = std::move(val); }
     auto SiPMEfficiency(std::vector<double> val) -> void { fSiPMEfficiency = std::move(val); }
-    auto RfSurface(std::vector<double> val) -> void { fRfSurface = std::move(val); }
-    auto CouplerSurface(std::vector<double> val) -> void { fCouplerSurface = std::move(val); }
-    auto AirPaintSurface(std::vector<double> val) -> void { fAirPaintSurface = std::move(val); }
+    auto ReflectorReflectivity(std::vector<double> val) -> void { fReflectorReflectivity = std::move(val); }
+    auto CouplerTransmittance(std::vector<double> val) -> void { fCouplerTransmittance = std::move(val); }
+    auto AirPaintReflectivity(std::vector<double> val) -> void { fAirPaintReflectivity = std::move(val); }
     auto CathodeSurface(std::vector<double> val) -> void { fCathodeSurface = std::move(val); }
 
 private:
@@ -186,9 +189,9 @@ private:
     Simple<std::vector<double>> fWindowRIndex;
     Simple<std::vector<double>> fSiPMEnergyBin;
     Simple<std::vector<double>> fSiPMEfficiency;
-    Simple<std::vector<double>> fRfSurface;
-    Simple<std::vector<double>> fCouplerSurface;
-    Simple<std::vector<double>> fAirPaintSurface;
+    Simple<std::vector<double>> fReflectorReflectivity;
+    Simple<std::vector<double>> fCouplerTransmittance;
+    Simple<std::vector<double>> fAirPaintReflectivity;
     Simple<std::vector<double>> fCathodeSurface;
 };
 
