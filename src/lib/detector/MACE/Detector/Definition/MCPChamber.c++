@@ -120,7 +120,7 @@ auto MCPChamber::Construct(G4bool checkOverlaps) -> void {
             0,
             2_pi)};
         const auto logicVacuum{Make<G4LogicalVolume>(
-            solidPipe,
+            solidVacuum,
             vacuumMaterial,
             vacuumName)};
         Make<G4PVPlacement>(
