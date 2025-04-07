@@ -7,6 +7,7 @@ namespace MACE::Data {
 
 using TTCSiPMRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<short, "TileID", "Hit detector ID">,
+    Mustard::Data::Value<short, "SiPMID", "Hit Silicone ID">,
     Mustard::Data::Value<double, "t", "Optical photon hit time">>;
 
 using ECALPMRawHit = Mustard::Data::TupleModel<

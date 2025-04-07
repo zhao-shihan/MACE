@@ -68,9 +68,9 @@ constexpr auto defaultMacro = {
     "#/vis/viewer/addCutawayPlane 0 0 0",
     "",
     "# Visibility",
-    "/vis/geometry/set/visibility CentralBeamPipeVacuum     0 false",
-    "/vis/geometry/set/visibility World                     0 false",
-    "",
+    "/vis/geometry/set/visibility CentralBeamPipeVacuum     0 no",
+    "/vis/geometry/set/visibility World                     0 no",
+    
     "# Colors",
     "/vis/geometry/set/colour CentralBeamPipe               0     1     1     1     0.1",
     "/vis/geometry/set/colour ECALCrystal                   0     1     1     1     0.1",

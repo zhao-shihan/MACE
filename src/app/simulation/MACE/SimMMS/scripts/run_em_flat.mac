@@ -5,9 +5,13 @@
 /control/verbose 0
 /run/verbose 0
 
+
 #/Mustard/Detector/Description/Ixport mms_geom.yaml
 
+/MACE/Physics/UseOpticalPhysics
 /run/initialize
+/process/optical/scintillation/setFiniteRiseTime true
+
 
 /MACE/Generator/SwitchToGPSX
 /gps/particle                         e-
@@ -21,6 +25,7 @@
 /gps/ene/max                          52.83 MeV
 
 /MACE/Analysis/SaveTTCHitData         yes
+/MACE/Analysis/SaveTTCSiPMHitData     yes
 /MACE/Analysis/SaveCDCHitData         yes
 
 #############################################################################
@@ -29,5 +34,5 @@
 
 /Mustard/Analysis/FilePath SimMMS_em_flat
 /Mustard/Analysis/FileMode NEW
-/run/beamOn 10000
+/run/beamOn 10
 /Mustard/Run/PrintRunSummary
