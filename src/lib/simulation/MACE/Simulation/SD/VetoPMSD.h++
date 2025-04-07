@@ -1,4 +1,4 @@
-pragma once
+#pragma once
 
 #include "MACE/Simulation/Hit/VetoPMHit.h++"
 
@@ -23,6 +23,7 @@ public:
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
     auto NOpticalPhotonHit() const -> std::unordered_map<int, int>;
+    auto NOpticalPhotonOnEachSiPM() const -> std::unordered_map<int, std::vector<int>>;
 
 protected:
     std::unordered_map<int, std::vector<std::unique_ptr<VetoPMHit>>> fHit;

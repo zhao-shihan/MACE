@@ -696,22 +696,22 @@ MMSShield:
   BeamSlantAngle: 0
   MaterialName: G4_Fe
 PDSVeto:
-  NModuleOfaType:
+  NModuleOfAType:
     - 1
     - 2
     - 4
     - 4
-  NLayerPerModuleOfaType:
+  NLayerPerModuleOfAType:
     - 3
     - 2
     - 2
     - 2
-  NStripPerLayerOfaType:
+  NStripPerLayerOfAType:
     - 12
     - 16
     - 5
     - 8
-  StripLengthOfaType:
+  StripLengthOfAType:
     - 1450
     - 1400
     - 1800
@@ -722,7 +722,7 @@ PDSVeto:
   PSHoleRadius: 0.75
   PSFiberCurvatureRadius: 130
   InterPSGap: 1
-  InterModuleGap: 5
+  PerpendicularModuleGap: 5
   ReflectiveFilmThickness: 0.40000000000000002
   ModuleOffset: 10
   AlAbsorberThickness: 6

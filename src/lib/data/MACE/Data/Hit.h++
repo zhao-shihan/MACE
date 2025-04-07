@@ -37,5 +37,10 @@ using ECALHit = Mustard::Data::TupleModel<
 using MRPCHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     MRPCRawHit>;
+    
+using VetoHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    VetoRawHit,
+    Mustard::Data::Value<bool, "Good", "Good flag">>;
 
 } // namespace MACE::Data

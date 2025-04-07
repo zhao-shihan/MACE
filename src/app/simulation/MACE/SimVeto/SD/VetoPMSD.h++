@@ -2,7 +2,7 @@
 
 #include "MACE/Simulation/SD/VetoPMSD.h++"
 
-namespace MACE::SimVetoPM::inline SD {
+namespace MACE::SimVeto::inline SD {
 
 class VetoPMSD final : public Simulation::VetoPMSD {
 public:

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Detector/Description/PDSVeto.h++"
-// #include "MACE/SimECAL/SD/ECALPMSD.h++"
-// #include "MACE/SimECAL/SD/ECALSD.h++"
-// #include "MACE/SimECAL/SD/MCPSD.h++"
+
+#include "MACE/SimVeto/SD/VetoPMSD.h++"
+#include "MACE/SimVeto/SD/VetoSD.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 

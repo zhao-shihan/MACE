@@ -2,8 +2,14 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/ECALField.h++"
+#include "MACE/Detector/Definition/World.h++"
+#include "MACE/Detector/Definition/PDSVeto.h++"
+
+
 #include "MACE/SimVeto/SD/VetoPMSD.h++"
-#include "MACE/SimVeto/SD/VetoStripSD.h++"
+#include "MACE/SimVeto/SD/VetoSD.h++"
+#include "MACE/SimVeto/Action/DetectorConstruction.h++"
+#include "MACE/SimVeto/Messenger/DetectorMessenger.h++"
 
 #include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "Mustard/Detector/Description/DescriptionIO.h++"
@@ -27,10 +33,11 @@ DetectorConstruction::DetectorConstruction() :
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     using namespace MACE::Detector::Definition;
+    using namespace MACE::Detector::Description;
     /*reset veto center to 0*/{
-        const auto& mmsField{Description::MMSField::Instance()};
-        const auto& solenoid{Description::Solenoid::Instance()};
-        const auto& ecalField{Description::ECALField::Instance()};
+        auto& mmsField{MACE::Detector::Description::MMSField::Instance()};
+        auto& solenoid{MACE::Detector::Description::Solenoid::Instance()};
+        auto& ecalField{MACE::Detector::Description::ECALField::Instance()};
         mmsField.Length(0.);
         solenoid.S1Length(0.);
         solenoid.S2Length(0.);
@@ -40,17 +47,17 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         ecalField.Length(0.);
     }
 
-    fWorld = std::make_unique<World>();
-    auto& pdsVeto{fWorld->NewDaughter<PDSVeto>(fCheckOverlap)};
+    fWorld = std::make_unique<MACE::Detector::Definition::World>();
+    auto& pdsVeto{fWorld->NewDaughter<MACE::Detector::Definition::PDSVeto>(fCheckOverlap)};
 
     const auto& vetoName{MACE::Detector::Description::PDSVeto::Instance().Name()};
     std::cout << "vetoName: " << vetoName << "\n";
     const auto& vetoPMSD{new SD::VetoPMSD{vetoName + "PM"}};
-    const auto& vetoStripSD{new SD::VetoStripSD{vetoName + "Strip", vetoPMSD}};
-    pdsVeto.RegisterSD("VetoCathode", vetoPMSD);
-    for(int typeID{0};typeID<4;typeID++){
-        pdsVeto.RegisterSD(fmt::format("VetoStrip_{}", typeID), vetoStripSD);
+    const auto& vetoStripSD{new SD::VetoSD{vetoName + "Strip", vetoPMSD}};
+    for(int categoryID{0};categoryID<4;categoryID++){
+        pdsVeto.RegisterSD(fmt::format("VetoStrip_{}", categoryID), vetoStripSD);
     }
+    pdsVeto.RegisterSD("VetoCathode", vetoPMSD);
     
     return fWorld->PhysicalVolume();
 

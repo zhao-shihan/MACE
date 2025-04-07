@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Simulation/Hit/VetoStripHit.h++"
+#include "MACE/Simulation/Hit/VetoHit.h++"
 
 #include "Mustard/Utility/NonMoveableBase.h++"
 
@@ -14,10 +14,10 @@ namespace MACE::inline Simulation::inline SD {
 
 class VetoPMSD;
 
-class VetoStripSD : public Mustard::NonMoveableBase,
+class VetoSD : public Mustard::NonMoveableBase,
               public G4VSensitiveDetector {
 public:
-    VetoStripSD(const G4String& sdName, const VetoPMSD* vetoPMSD = {});
+    VetoSD(const G4String& sdName, const VetoPMSD* vetoPMSD = {});
 
     virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
@@ -29,7 +29,7 @@ protected:
     double fEnergyDepositionThreshold;
 
     std::unordered_map<int, std::vector<std::unique_ptr<VetoHit>>> fSplitHit;
-    VetoStripHitCollection* fHitsCollection;
+    VetoHitCollection* fHitsCollection;
 };
 
 } // namespace MACE::inline Simulation::inline SD

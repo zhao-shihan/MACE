@@ -2,6 +2,10 @@
 
 #include "Mustard/Detector/Description/DescriptionWithCacheBase.h++"
 
+#include "G4Transform3D.hh"
+
+#include "muc/array"
+
 #include <vector>
 namespace MACE::Detector::Description {
 
@@ -13,26 +17,24 @@ private:
     ~PDSVeto() = default;
 
 public:
-    auto NModuleOfaType() const -> const auto& { return *fNModuleOfaType; }
-    auto NLayerPerModuleOfaType() const -> const auto& { return *fNLayerPerModuleOfaType; }
-    auto NStripPerLayerOfaType() const -> const auto& { return *fNStripPerLayerOfaType; }
-    auto StripLengthOfaType() const -> const auto& { return *fStripLengthOfaType; }
+    auto NModuleOfACategory() const -> const auto& { return *fNModuleOfACategory; }
+    auto NLayerPerModuleOfACategory() const -> const auto& { return *fNLayerPerModuleOfACategory; }
+    auto NStripPerLayerOfACategory() const -> const auto& { return *fNStripPerLayerOfACategory; }
+    auto StripLengthOfACategory() const -> const auto& { return *fStripLengthOfACategory; }
     auto ReflectiveFilmThickness() const -> const auto& { return *fReflectiveFilmThickness; }
     auto InterPSGap() const -> const auto& { return *fInterPSGap; }
-    auto InterModuleGap() const -> const auto& { return *fInterModuleGap; }
-    auto Cap12Gap() const -> const auto& { return *fCap12Gap; }
+    auto PerpendicularModuleGap() const -> const auto& { return *fPerpendicularModuleGap; }
+    auto ParallelModuleGap() const -> const auto& { return *fParallelModuleGap; }
     auto ModuleOffset() const -> const auto& { return *fModuleOffset; }
     auto AlAbsorberThickness() const -> const auto& { return *fAlAbsorberThickness; }
-    auto FTypeConfiguration() const -> const auto& {return *fTypeConfiguration;}
-    auto FStripInformation() const -> const auto& {return *fStripInformation;}
-    auto FiberNum() const -> const auto& {return *fFiberNum;}
-    auto SelectedType() const -> const auto& {return *fSelectedType;}
+    auto FiberNum() const -> const auto& { return *fFiberNum; }
+    auto SelectedCategory() const -> const auto& { return *fSelectedCategory; }
 
-    auto PSScintillationEnergyBin() const -> const auto& {return *fPSScintillationEnergyBin;}
-    auto PSScintillationComponent1() const -> const auto& {return *fPSScintillationComponent1;}
-    auto PSScintillationYield() const -> const auto& {return *fPSScintillationYield;}
-    auto PSScintillationTimeConstant1() const -> const auto& {return *fPSScintillationTimeConstant1;}
-    auto PSResolutionScale() const -> const auto& {return *fPSResolutionScale;}
+    auto PSScintillationEnergyBin() const -> const auto& { return *fPSScintillationEnergyBin; }
+    auto PSScintillationComponent1() const -> const auto& { return *fPSScintillationComponent1; }
+    auto PSScintillationYield() const -> const auto& { return *fPSScintillationYield; }
+    auto PSScintillationTimeConstant1() const -> const auto& { return *fPSScintillationTimeConstant1; }
+    auto PSResolutionScale() const -> const auto& { return *fPSResolutionScale; }
 
     auto PSWidth() const -> const auto& { return *fPSWidth; }
     auto PSThickness() const -> const auto& { return *fPSThickness; }
@@ -40,76 +42,78 @@ public:
     auto SiPMCathodeThickness() const -> const auto& { return *fSiPMCathodeThickness; }
     auto SiPMCouplerThickness() const -> const auto& { return *fSiPMCouplerThickness; }
     auto SiPMSize() const -> const auto& { return *fSiPMSize; }
-    auto SiPMEnergyBin() const -> const auto& {return *fSiPMEnergyBin;}
-    auto SiPMEfficiency() const -> const auto& {return *fSiPMEfficiency;}
+    auto SiPMEnergyBin() const -> const auto& { return *fSiPMEnergyBin; }
+    auto SiPMEfficiency() const -> const auto& { return *fSiPMEfficiency; }
 
     auto PSFiberRadius() const -> const auto& { return *fPSFiberRadius; }
-    // auto PSFiberCurvatureRadius() const -> const auto& { return *fPSFiberCurvatureRadius; }
     auto PSHoleRadius() const -> const auto& { return *fPSHoleRadius; }
-    auto WlsRIndexEnergy() const -> const auto& {return *fWlsRIndexEnergy;}
-    auto WlsRIndex() const -> const auto& {return *fWlsRIndex;}
-    auto WlsVAbsEnergy() const -> const auto& {return *fWlsVAbsEnergy;}
-    auto WlsVAbsLength() const -> const auto& {return *fWlsVAbsLength;}
-    auto WlsAbsEnergy() const -> const auto& {return *fWlsAbsEnergy;}
-    auto WlsAbsLength() const -> const auto& {return *fWlsAbsLength;}
-    auto WlsEmissionEnergy() const -> const auto& {return *fWlsEmissionEnergy;}
-    auto WlsEmissionAmplitude() const -> const auto& {return *fWlsEmissionAmplitude;}
+    auto WLSRIndexEnergy() const -> const auto& { return *fWLSRIndexEnergy; }
+    auto WLSRIndex() const -> const auto& { return *fWLSRIndex; }
+    auto WLSVAbsEnergy() const -> const auto& { return *fWLSVAbsEnergy; }
+    auto WLSVAbsLength() const -> const auto& { return *fWLSVAbsLength; }
+    auto WLSAbsEnergy() const -> const auto& { return *fWLSAbsEnergy; }
+    auto WLSAbsLength() const -> const auto& { return *fWLSAbsLength; }
+    auto WLSEmissionEnergy() const -> const auto& { return *fWLSEmissionEnergy; }
+    auto WLSEmissionAmplitude() const -> const auto& { return *fWLSEmissionAmplitude; }
 
-
+    auto CategoryConfiguration() const -> const auto& { return *fCategoryConfiguration; }
+    auto StripInformation() const -> const auto& { return *fStripInformation; }
+    auto StartingStripIDOfAModule() const -> const auto& { return *fStartingStripIDOfAModule; }
 
 public:
-    struct TypeConfiguration {
+    struct CategoryConfigurationType {
         struct ModuleConfiguration {
-            struct LayerConfiguration {
-                struct StripConfiguration {
-                    int stripID;
-                    int stripLocalID;
-                    G4Transform3D stripLocalTranform;
-                };
+            struct AlLayerConfiguration {
                 int layerID;
                 int layerLocalID;
-                G4Transform3D layerLocalTransform;
+                // G4Transform3D layerLocalTransform;
                 G4Transform3D alAbsorberLocalTransform;
-                std::vector<StripConfiguration> strips;
+            };
+            struct StripConfiguration {
+                int stripID;
+                int stripLocalID;
+                G4Transform3D stripLocalTransform;
             };
             int moduleID;
             int moduleLocalID;
             G4Transform3D moduleTransform;
-            std::vector<LayerConfiguration> layers;
+            std::vector<AlLayerConfiguration> alLayers;
+            std::vector<StripConfiguration> strips;
         };
-        int typeID;
+        int categoryID;
         double moduleLength;
         double moduleWidth;
         double moduleThickness;
         std::vector<ModuleConfiguration> modules;
     };
 
-    struct StripInformation {
+    struct StripInformationType {
         int stripID;
         int stripLocalID;
         int layerID;
         int layerLocalID;
         int moduleID;
         int moduleLocalID;
-        int typeID;
+        int categoryID;
         double stripLength;
         // muc::array3d stripLocation;
         muc::array3d readDirection;
     };
 
 private:
-    auto CalculateTypeConfiguration() const -> std::vector<TypeConfiguration>;
-    auto CalculateStripInformation() const -> std::vector<StripInformation>;
+    auto CalculateCategoryConfiguration() const -> std::vector<CategoryConfigurationType>;
+    auto CalculateStripInformation() const -> std::vector<StripInformationType>;
+    auto CalculateStartingStripIDOfAModule() const -> std::vector<short>;
 
     auto ImportAllValue(const YAML::Node& node) -> void override;
     auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry
-    Simple<std::vector<int>> fNModuleOfaType; // top 1, side 2 , cap1 4 , cap2 4
-    Simple<std::vector<int>> fNLayerPerModuleOfaType;
-    Simple<std::vector<int>> fNStripPerLayerOfaType;
-    Simple<std::vector<double>> fStripLengthOfaType;
+    Simple<std::vector<int>> fNModuleOfACategory; // top 1, side 2 , cap1 4 , cap2 4
+    Simple<std::vector<int>> fNLayerPerModuleOfACategory;
+    Simple<std::vector<int>> fNStripPerLayerOfACategory;
+    Simple<std::vector<double>> fStripLengthOfACategory;
 
     // Simple<double> fPSFiberCurvatureRadius; //
 
@@ -130,32 +134,29 @@ private:
 
     Simple<double> fPSFiberRadius;
     Simple<double> fPSHoleRadius;
-    Simple<std::vector<double>> fWlsRIndexEnergy;
-    Simple<std::vector<double>> fWlsRIndex;
-    Simple<std::vector<double>> fWlsVAbsEnergy;
-    Simple<std::vector<double>> fWlsVAbsLength;
-    Simple<std::vector<double>> fWlsAbsEnergy;
-    Simple<std::vector<double>> fWlsAbsLength;
-    Simple<std::vector<double>> fWlsEmissionEnergy;
-    Simple<std::vector<double>> fWlsEmissionAmplitude;
-    
+    Simple<std::vector<double>> fWLSRIndexEnergy;
+    Simple<std::vector<double>> fWLSRIndex;
+    Simple<std::vector<double>> fWLSVAbsEnergy;
+    Simple<std::vector<double>> fWLSVAbsLength;
+    Simple<std::vector<double>> fWLSAbsEnergy;
+    Simple<std::vector<double>> fWLSAbsLength;
+    Simple<std::vector<double>> fWLSEmissionEnergy;
+    Simple<std::vector<double>> fWLSEmissionAmplitude;
+
     Simple<double> fInterPSGap;
-    Simple<double> fInterModuleGap;
-    Simple<double> fCap12Gap;
+    Simple<double> fPerpendicularModuleGap;
+    Simple<double> fParallelModuleGap;
     Simple<double> fModuleOffset;
     Simple<double> fAlAbsorberThickness;
     Simple<double> fReflectiveFilmThickness;
     Simple<double> fSolenoidWindowRadius;
     Simple<int> fFiberNum;
-    Simple<int> fSelectedType;
+    Simple<int> fSelectedCategory;
 
-
-
-    
-    
-
-    Cached<std::vector<TypeConfiguration>> fTypeConfiguration;
-    Cached<std::vector<StripInformation>> fStripInformation;
-    // Cached<std::vector<double>> fModuleLengthOfaType;
+    Cached<std::vector<CategoryConfigurationType>> fCategoryConfiguration;
+    Cached<std::vector<StripInformationType>> fStripInformation;
+    Cached<std::vector<short>> fStartingStripIDOfAModule;
+    // Cached<std::vector<double>> fModuleLengthOfaCategory;
 };
+
 } // namespace MACE::Detector::Description

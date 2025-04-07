@@ -1,0 +1,30 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+/control/verbose 0
+#/control/saveHistory
+/run/verbose 0
+
+#/Mustard/Detector/Description/Export SimVeto_geom.yaml
+/Mustard/Detector/Description/Import SimVeto_geom.yaml
+#/Mustard/Detector/Description/Ixport SimVeto_geom.yaml
+
+/MACE/Physics/UseOpticalPhysics
+
+
+/run/initialize
+
+/MACE/Generator/SwitchToGPSX
+/GPSX/NVertex             1
+/GPSX/PulseWidth          0 ns
+/gps/particle             mu+
+/gps/pos/type             Point
+/gps/pos/centre           0 0 0 cm
+/gps/direction            1 -1.1 0
+/gps/ene/mono             100 MeV
+
+/MACE/Analysis/FilePath SimVeto_optical_test
+/MACE/Analysis/FileMode RECREATE
+
+/run/beamOn 10000

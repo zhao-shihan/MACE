@@ -2,6 +2,7 @@
 #include "MACE/Detector/Description/ECALField.h++"
 #include "MACE/Detector/Description/PDSVeto.h++"
 
+#include "Mustard/Env/BasicEnv.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/PrettyLog.h++"
@@ -60,13 +61,13 @@ auto PDSVeto::DefineMaterial() -> void {
     // WLS fiber material
     fWls = nistManager->FindOrBuildMaterial("G4_POLYSTYRENE");
     fWls->SetFreeElectronDensity(1.19_g_cm3);
-    const auto MPTFiber{new G4MaterialPropertiesTable};
-    MPTFiber->AddProperty("RINDEX", veto.WlsRIndexEnergy(), veto.WlsRIndex());
-    MPTFiber->AddProperty("ABSLENGTH",veto.WlsVAbsEnergy(),veto.WlsVAbsLength());
-    MPTFiber->AddProperty("WLSABSLENGTH", veto.WlsAbsEnergy(), veto.WlsAbsLength());
-    MPTFiber->AddProperty("WLSCOMPONENT", veto.WlsEmissionEnergy(), veto.WlsEmissionAmplitude());
-    MPTFiber->AddConstProperty("WLSTIMECONSTANT", 0.5_ns);
-    fWls->SetMaterialPropertiesTable(MPTFiber);
+    const auto WLSFiberMaterial{new G4MaterialPropertiesTable};
+    WLSFiberMaterial->AddProperty("RINDEX", veto.WLSRIndexEnergy(), veto.WLSRIndex());
+    WLSFiberMaterial->AddProperty("ABSLENGTH", veto.WLSVAbsEnergy(), veto.WLSVAbsLength());
+    WLSFiberMaterial->AddProperty("WLSABSLENGTH", veto.WLSAbsEnergy(), veto.WLSAbsLength());
+    WLSFiberMaterial->AddProperty("WLSCOMPONENT", veto.WLSEmissionEnergy(), veto.WLSEmissionAmplitude());
+    WLSFiberMaterial->AddConstProperty("WLSTIMECONSTANT", 0.5_ns);
+    fWls->SetMaterialPropertiesTable(WLSFiberMaterial);
 }
 
 auto PDSVeto::ConstructLV() -> void {
@@ -79,38 +80,33 @@ auto PDSVeto::ConstructLV() -> void {
     cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0., 0.});
     cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", veto.SiPMEnergyBin(), veto.SiPMEfficiency());
 
-    const auto& typeConfiguration{veto.FTypeConfiguration()};
-    for (int typeID{}; typeID < 4; ++typeID) {
-        // fmt::println("typename: {}",thisTypeName);
-        const auto moduleLength{typeConfiguration[typeID].moduleLength};
-        const auto moduleWidth{typeConfiguration[typeID].moduleWidth};
-        const auto moduleThickness{typeConfiguration[typeID].moduleThickness};
+    const auto& categoryConfiguration{veto.CategoryConfiguration()};
+    for (int categoryID{}; categoryID < 4; ++categoryID) {
+        // fmt::println("categoryname: {}",thisCategoryName);
+        const auto moduleLength{categoryConfiguration[categoryID].moduleLength};
+        const auto moduleWidth{categoryConfiguration[categoryID].moduleWidth};
+        const auto moduleThickness{categoryConfiguration[categoryID].moduleThickness};
         // fmt::println("moudle size:{},{},{}",moduleLength,moduleThickness,moduleWidth);
         // define solids and logical volumes
         const auto solidModule{Make<G4Box>("temp",
                                            moduleWidth / 2,
                                            moduleThickness / 2,
                                            moduleLength / 2)};
-        const auto logicModule{Make<G4LogicalVolume>(solidModule, fAir, fmt::format("VetoModuleBox_{}", typeID))};
-        // fLVStoreOfTypes[typeID].fModule = logicModule;
-        const auto solidLayerBox{Make<G4Box>("temp",
-                                             moduleWidth / 2,
-                                             veto.PSThickness() / 2 + veto.ReflectiveFilmThickness(),
-                                             moduleLength / 2)};
-        Make<G4LogicalVolume>(solidLayerBox, fAir, fmt::format("VetoLayerBox_{}", typeID));
+        const auto logicModule{Make<G4LogicalVolume>(solidModule, fAir, fmt::format("VetoModuleBox_{}", categoryID))};
+
         const auto solidStripBox{Make<G4Box>("temp",
                                              veto.PSWidth() / 2 + veto.ReflectiveFilmThickness(),
                                              veto.PSThickness() / 2 + veto.ReflectiveFilmThickness(),
                                              moduleLength / 2)};
-        const auto logicStripBox{Make<G4LogicalVolume>(solidStripBox, fAir, fmt::format("VetoStripBox_{}", typeID))};
-        // fLVStoreOfTypes[typeID].fStripBox = logicStripBox;
+        const auto logicStripBox{Make<G4LogicalVolume>(solidStripBox, fAir, fmt::format("VetoStripBox_{}", categoryID))};
+
         const auto stripBoxHalfLength{dynamic_cast<const G4Box*>(logicStripBox->GetSolid())->GetZHalfLength()};
         const auto psStripLength{(stripBoxHalfLength - (veto.SiPMThickness() + veto.SiPMCouplerThickness())) * 2};
         const auto solidStrip{Make<G4Box>("temp",
                                           veto.PSWidth() / 2,
                                           veto.PSThickness() / 2,
                                           psStripLength / 2)};
-        const auto logicStrip{Make<G4LogicalVolume>(solidStrip, fPlasticScintillaor, fmt::format("VetoStrip_{}", typeID))};
+        const auto logicStrip{Make<G4LogicalVolume>(solidStrip, fPlasticScintillaor, fmt::format("VetoStrip_{}", categoryID))};
         // skin surface PS strip
         const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
         new G4LogicalSkinSurface{"reflectorSurface", logicStrip, rfSurface};
@@ -120,13 +116,13 @@ auto PDSVeto::ConstructLV() -> void {
                                                dynamic_cast<const G4Box*>(logicModule->GetSolid())->GetXHalfLength(),
                                                veto.AlAbsorberThickness() / 2,
                                                psStripLength / 2)};
-        Make<G4LogicalVolume>(solidAlAbsorber, fAl, fmt::format("VetoAlAbsorber_{}", typeID));
+        Make<G4LogicalVolume>(solidAlAbsorber, fAl, fmt::format("VetoAlAbsorber_{}", categoryID));
 
         const auto fiberLength{psStripLength};
         const auto solidFiberHole{Make<G4Tubs>("temp", 0, veto.PSHoleRadius(), fiberLength / 2, 0, 2 * pi)};
-        Make<G4LogicalVolume>(solidFiberHole, fSiliconeGrease, fmt::format("VetoFiberHole_{}", typeID));
+        Make<G4LogicalVolume>(solidFiberHole, fSiliconeGrease, fmt::format("VetoFiberHole_{}", categoryID));
         const auto solidFiber{Make<G4Tubs>("temp", 0, veto.PSFiberRadius(), fiberLength / 2, 0, 2 * pi)};
-        Make<G4LogicalVolume>(solidFiber, fWls, fmt::format("VetoFiber_{}", typeID));
+        Make<G4LogicalVolume>(solidFiber, fWls, fmt::format("VetoFiber_{}", categoryID));
     }
     const auto solidSiPMCoupuler{Make<G4Box>("temp",
                                              veto.SiPMSize() / 2,
@@ -160,84 +156,75 @@ auto PDSVeto::Construct(bool checkOverlaps) -> void {
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1, 1});
 
-    if (veto.SelectedType() < -1 or veto.SelectedType() > 3) {
-        Mustard::Utility::PrintWarning(fmt::format("\n no such type: type_{}\n"
-                                                   "available type selection:\n"
-                                                   "type_3 (Cap2)\n"
-                                                   "type_2 (Cap1)\n"
-                                                   "type_1 (Side)\n"
-                                                   "type_0 (Top)\n"
-                                                   "type_-1 (All)\n",
-                                                   veto.SelectedType()));
+    if (veto.SelectedCategory() < -1 or veto.SelectedCategory() > 3) {
+        Mustard::Utility::PrintWarning(fmt::format("\n no such category: category_{}\n"
+                                                   "available category selection:\n"
+                                                   "category_3 (Cap2)\n"
+                                                   "category_2 (Cap1)\n"
+                                                   "category_1 (Side)\n"
+                                                   "category_0 (Top)\n"
+                                                   "category_-1 (All)\n",
+                                                   veto.SelectedCategory()));
     }
-    for (auto aTypeConfig : veto.FTypeConfiguration()) {
-        auto typeID{aTypeConfig.typeID};
-        if ((veto.SelectedType() != -1) and (typeID != veto.SelectedType())) continue;
-        for (auto aModuleConfig : aTypeConfig.modules) {
-            Make<G4PVPlacement>(aModuleConfig.moduleTransform,
-                                LogicalVolume(fmt::format("VetoModuleBox_{}", typeID)),
-                                fmt::format("VetoModuleBox_{}_{}", typeID, aModuleConfig.moduleLocalID),
-                                Mother().LogicalVolume(),
-                                false,
-                                aModuleConfig.moduleID,
-                                checkOverlaps);
-            if (veto.SelectedType() != -1) { break; }
+    for (auto aCategoryConfiguration : veto.CategoryConfiguration()) {
+        auto categoryID{aCategoryConfiguration.categoryID};
+        auto singleStripTranslation{new G4ThreeVector()};
+        if ((veto.SelectedCategory() != -1)) {
+            if (categoryID != veto.SelectedCategory()) {
+                continue;
+            }
         }
-        for (auto aLayerConfig : aTypeConfig.modules[0].layers) {
 
-            Make<G4PVPlacement>(aLayerConfig.layerLocalTransform,
-                                LogicalVolume(fmt::format("VetoLayerBox_{}", typeID)),
-                                fmt::format("VetoLayerBox_{}_all_{}", typeID, aLayerConfig.layerLocalID),
-                                LogicalVolume(fmt::format("VetoModuleBox_{}", typeID)),
-                                false,
-                                aLayerConfig.layerLocalID,
-                                checkOverlaps);
-            if (veto.SelectedType() == -1 and aLayerConfig.layerLocalID > 0) {
+        for (auto aModuleConfig : aCategoryConfiguration.modules) {
+            auto phyModuleBox{Make<G4PVPlacement>(aModuleConfig.moduleTransform,
+                                                  LogicalVolume(fmt::format("VetoModuleBox_{}", categoryID)),
+                                                  fmt::format("VetoModuleBox_{}_{}", categoryID, aModuleConfig.moduleLocalID),
+                                                  Mother().LogicalVolume(),
+                                                  false,
+                                                  aModuleConfig.moduleID,
+                                                  checkOverlaps)};
+            if (veto.SelectedCategory() != -1) {
+                (*singleStripTranslation) += phyModuleBox->GetTranslation();
+                fmt::println("@info\nSingle strip configuration info: ");
+                fmt::println("x_moduleBox: {},{},{}", phyModuleBox->GetTranslation().getX(), phyModuleBox->GetTranslation().getY(), phyModuleBox->GetTranslation().getZ());
+                break;
+            }
+        }
+        for (auto aLayerConfig : aCategoryConfiguration.modules[0].alLayers) {
+
+            if (veto.SelectedCategory() == -1 and aLayerConfig.layerLocalID > 0) {
                 Make<G4PVPlacement>(aLayerConfig.alAbsorberLocalTransform,
-                                    LogicalVolume(fmt::format("VetoAlAbsorber_{}", typeID)),
-                                    fmt::format("VetoAlAbsorber_{}_all_{}", typeID, aLayerConfig.layerLocalID),
-                                    LogicalVolume(fmt::format("VetoModuleBox_{}", typeID)),
+                                    LogicalVolume(fmt::format("VetoAlAbsorber_{}", categoryID)),
+                                    fmt::format("VetoAlAbsorber_{}_allModules_{}", categoryID, aLayerConfig.layerLocalID),
+                                    LogicalVolume(fmt::format("VetoModuleBox_{}", categoryID)),
                                     false,
                                     aLayerConfig.layerLocalID,
                                     checkOverlaps);
             }
-            if (veto.SelectedType() != -1) { break; }
         }
-        for (auto aStripConfig : aTypeConfig.modules[0].layers[0].strips) {
-            auto phyStripBox{Make<G4PVPlacement>(aStripConfig.stripLocalTranform,
-                                                 LogicalVolume(fmt::format("VetoStripBox_{}", typeID)),
-                                                 fmt::format("VetoStripBox_{}_all_all_{}", typeID, aStripConfig.stripLocalID),
-                                                 LogicalVolume(fmt::format("VetoLayerBox_{}", typeID)),
+        for (auto aStripConfig : aCategoryConfiguration.modules[0].strips) {
+            auto phyStripBox{Make<G4PVPlacement>(aStripConfig.stripLocalTransform,
+                                                 LogicalVolume(fmt::format("VetoStripBox_{}", categoryID)),
+                                                 fmt::format("VetoStripBox_{}_allModules_{}", categoryID, aStripConfig.stripLocalID),
+                                                 LogicalVolume(fmt::format("VetoModuleBox_{}", categoryID)),
                                                  false,
-                                                 aStripConfig.stripID,
+                                                 aStripConfig.stripLocalID,
                                                  checkOverlaps)};
-            if (veto.SelectedType() != -1) { 
-                // fmt::println("@info\nSingle strip configuration info: ");
-                // fmt::println("x0: {}", phyStripBox->GetObjectTranslation().getX());
-                // fmt::println("y0: {}", phyStripBox->GetObjectTranslation().getY());
-                // fmt::println("z0: {}", phyStripBox->GetObjectTranslation().getZ());
-                // const auto frameRot{phyStripBox->GetFrameRotation()};
-                // fmt::print("frame rotation: {}",frameRot);
-                break; }
+            if (veto.SelectedCategory() != -1) {
+                (*singleStripTranslation) += phyStripBox->GetTranslation();
+                fmt::println("x_stripBox: {},{},{}", phyStripBox->GetTranslation().getX(), phyStripBox->GetTranslation().getY(), phyStripBox->GetTranslation().getZ());
+                fmt::println("Total actual X: {},{},{}", (*singleStripTranslation).getX(), (*singleStripTranslation).getY(), (*singleStripTranslation).getZ()); // fmt::print("frame rotation: {}",frameRot);
+                break;
+            }
         }
         // strips
         const auto physicalStrip{Make<G4PVPlacement>(G4Transform3D::Identity,
-                                                        LogicalVolume(fmt::format("VetoStrip_{}", typeID)),
-                                                        fmt::format("VetoStrip_{}", typeID),
-                                                        LogicalVolume(fmt::format("VetoStripBox_{}", typeID)),
-                                                        false,
-                                                        0,
-                                                        checkOverlaps)};
-        if (veto.SelectedType() != -1) { 
-            fPhySingleStrip = physicalStrip;
-            fLogSingleStrip = fPhySingleStrip->GetLogicalVolume();
-        //     fmt::println("@info\nSingle strip configuration info: ");
-        //     G4Box solidStrip {(G4Box)physicalStrip->GetLogicalVolume()->GetSolid()};
-        //     fmt::println("strip scaleX: {}", solidStrip.GetXHalfLength()*2.);
-        //     fmt::println("strip scaleY: {}", solidStrip.GetYHalfLength()*2.);
-        //     fmt::println("strip scaleZ: {}", solidStrip.GetZHalfLength()*2.);
-            }
-
+                                                     LogicalVolume(fmt::format("VetoStrip_{}", categoryID)),
+                                                     fmt::format("VetoStrip_{}", categoryID),
+                                                     LogicalVolume(fmt::format("VetoStripBox_{}", categoryID)),
+                                                     false,
+                                                     0,
+                                                     checkOverlaps)};
 
         // fibers
         const auto fiberNum{veto.FiberNum()};
@@ -248,15 +235,15 @@ auto PDSVeto::Construct(bool checkOverlaps) -> void {
                 G4RotationMatrix::IDENTITY, G4ThreeVector{fiberCenterX, 0, 0}
             };
             const auto physicalFiberHole{Make<G4PVPlacement>(fiberTransform,
-                                                             LogicalVolume(fmt::format("VetoFiberHole_{}", typeID)),
-                                                             fmt::format("VetoFiberHole_{}", typeID),
-                                                             LogicalVolume(fmt::format("VetoStrip_{}", typeID)),
+                                                             LogicalVolume(fmt::format("VetoFiberHole_{}", categoryID)),
+                                                             fmt::format("VetoFiberHole_{}", categoryID),
+                                                             LogicalVolume(fmt::format("VetoStrip_{}", categoryID)),
                                                              false,
                                                              fiberCount,
                                                              checkOverlaps)};
             for (int sideCount{}; sideCount < 2; ++sideCount) {                              // loop by one pairs' 2 sides
                 const auto readBoxRotation{G4RotateX3D{std::pow(-1., sideCount) * pi / 2.}}; // SiPM&coupler
-                const auto stripBoxHalfLength{dynamic_cast<const G4Box*>(LogicalVolume(fmt::format("VetoStripBox_{}", typeID))->GetSolid())->GetZHalfLength()};
+                const auto stripBoxHalfLength{dynamic_cast<const G4Box*>(LogicalVolume(fmt::format("VetoStripBox_{}", categoryID))->GetSolid())->GetZHalfLength()};
                 const auto SiPMPosZ{(stripBoxHalfLength - veto.SiPMThickness() / 2)};
                 const auto couplerPosZ{stripBoxHalfLength - veto.SiPMThickness() - veto.SiPMCouplerThickness() / 2};
                 G4Transform3D couplerTransform{
@@ -268,23 +255,23 @@ auto PDSVeto::Construct(bool checkOverlaps) -> void {
                 Make<G4PVPlacement>(couplerTransform,
                                     LogicalVolume("VetoSiPMCoupler"),
                                     "VetoSiPMCoupler",
-                                    LogicalVolume(fmt::format("VetoStripBox_{}", typeID)),
+                                    LogicalVolume(fmt::format("VetoStripBox_{}", categoryID)),
                                     false,
                                     sideCount,
                                     checkOverlaps);
                 Make<G4PVPlacement>(SiPMTransform,
                                     LogicalVolume("VetoSiPM"),
                                     "VetoSiPM",
-                                    LogicalVolume(fmt::format("VetoStripBox_{}", typeID)),
+                                    LogicalVolume(fmt::format("VetoStripBox_{}", categoryID)),
                                     false,
-                                    sideCount,
+                                    fiberCount * 2 + sideCount,
                                     checkOverlaps);
             }
         }
         Make<G4PVPlacement>(G4Transform3D::Identity,
-                            LogicalVolume(fmt::format("VetoFiber_{}", typeID)),
-                            fmt::format("VetoFiber_{}", typeID),
-                            LogicalVolume(fmt::format("VetoFiberHole_{}", typeID)),
+                            LogicalVolume(fmt::format("VetoFiber_{}", categoryID)),
+                            fmt::format("VetoFiber_{}", categoryID),
+                            LogicalVolume(fmt::format("VetoFiberHole_{}", categoryID)),
                             false,
                             0,
                             checkOverlaps);
@@ -296,24 +283,35 @@ auto PDSVeto::Construct(bool checkOverlaps) -> void {
         // border surface strip(fiberholes(fibers)) -> coupler
         for (auto physicalCoupler : PhysicalVolumes("VetoSiPMCoupler")) {
             if (physicalStrip && physicalCoupler) {
-                const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
+                const auto couplerSurfaceStripToCoupler{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
                 new G4LogicalBorderSurface{"couplerSurface",
                                            physicalStrip,
                                            physicalCoupler,
-                                           couplerSurface};
-                couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
+                                           couplerSurfaceStripToCoupler};
+                couplerSurfaceStripToCoupler->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
+            }
+        }
+        // border surface strips -> fiberholes
+        for (auto physicalFiberHole : PhysicalVolumes(fmt::format("VetoFiberHole_{}", categoryID))) {
+            if (physicalStrip && physicalFiberHole) {
+                const auto couplerSurfaceStripToFiberHole{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
+                new G4LogicalBorderSurface{"couplerSurface",
+                                           physicalStrip,
+                                           physicalFiberHole,
+                                           couplerSurfaceStripToFiberHole};
+                couplerSurfaceStripToFiberHole->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
             }
         }
         // border surface fiberholes -> fibers
-        for (auto physicalFiberHole : PhysicalVolumes(fmt::format("VetoFiberHole_{}", typeID))) {
-            for (auto physicalFiber : PhysicalVolumes(fmt::format("VetoFiber_{}", typeID))) {
+        for (auto physicalFiberHole : PhysicalVolumes(fmt::format("VetoFiberHole_{}", categoryID))) {
+            for (auto physicalFiber : PhysicalVolumes(fmt::format("VetoFiber_{}", categoryID))) {
                 if (physicalFiberHole && physicalFiber) {
-                    const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
+                    const auto couplerSurfaceFiberHoleToFiber{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
                     new G4LogicalBorderSurface{"couplerSurface",
                                                physicalFiberHole,
                                                physicalFiber,
-                                               couplerSurface};
-                    couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
+                                               couplerSurfaceFiberHoleToFiber};
+                    couplerSurfaceFiberHoleToFiber->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
                 }
             }
         }

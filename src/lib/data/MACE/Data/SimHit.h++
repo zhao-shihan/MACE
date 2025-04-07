@@ -64,4 +64,14 @@ using MRPCSimHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<muc::array3f, "p", "Hit momentum (MC truth)">,
     internal::SimHitVertexTruth>;
 
+using VetoSimHit = Mustard::Data::TupleModel<
+    VetoHit,
+    Mustard::Data::Value<int, "nOptPho", "Number of optical photon hits on PM (MC truth)">,
+    Mustard::Data::Value<muc::array3f, "x", "Hit position (MC truth)">,
+    Mustard::Data::Value<float, "Ek", "Hit kinetic energy (MC truth)">,
+    Mustard::Data::Value<muc::array3f, "p", "Hit momentum (MC truth)">,
+    Mustard::Data::Value<std::vector<int>, "nOptPhoOnEachSiPM", "Number of optical photon hits on each PM (MC truth)">,
+    internal::SimHitVertexTruth>;
+
+
 } // namespace MACE::Data

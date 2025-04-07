@@ -32,8 +32,6 @@ public:
 
 private:
     auto UpdatePrimaryVertexData(const G4Event& event) -> void;
-    auto SetGPSPrimaryVertex() -> void;
-    auto SetEcoMugPrimaryVertex() -> void;
 
 private:
     struct {

@@ -1,0 +1,31 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+/control/verbose 0
+/run/verbose 0
+
+
+/Mustard/Detector/Description/Import SimVeto_geom.yaml
+
+/MACE/Physics/UseOpticalPhysics
+
+/run/initialize
+
+/Mustard/EcoMug/Position/Hsphere 0 0 0 m
+/Mustard/EcoMug/Size/Hsphere/Radius 2 m
+
+
+
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
+
+
+
+#############################################################################
+# Run
+#############################################################################
+
+/MACE/Analysis/FilePath SimVeto_strip_LY
+/MACE/Analysis/FileMode NEW
+/run/beamOn 30000000
+/Mustard/Run/PrintRunSummary

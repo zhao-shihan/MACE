@@ -1,7 +1,4 @@
-#include <type_traits>
-
 #include "MACE/SimVeto/Action/PrimaryGeneratorAction.h++"
-#include "MACE/SimVeto/Action/TrackingAction.h++"
 #include "MACE/SimVeto/Analysis.h++"
 
 #include "MACE/Detector/Description/ECALField.h++"
@@ -21,7 +18,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fSavePrimaryVertexData{true},
     fPrimaryVertexData{},
     fAnalysisMessengerRegister{this},
-    fPrimaryGeneratorActionMessengerRegister{this} {}
+    fPrimaryGeneratorActionMessengerRegister{this} 
+    {}
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
     fGenerator->GeneratePrimaryVertex(event);
@@ -44,11 +42,4 @@ auto PrimaryGeneratorAction::UpdatePrimaryVertexData(const G4Event& event) -> vo
     }
     Analysis::Instance().SubmitPrimaryVertexData(fPrimaryVertexData);
 }
-auto PrimaryGeneratorAction::SetEcoMugPrimaryVertex()->void{
-    const auto& ecalField{Description::ECALField::Instance()};
-    const auto x0{Mustard::VectorCast<G4ThreeVector>(ecalField.Center())};
-    fGenerator->UseHSphere();
-    fGenerator->HSphereCenterPosition(x0);
-    fGenerator->HSphereRadius(2_m);
-    }
 } // namespace MACE::SimVeto::inline Action

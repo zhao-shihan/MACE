@@ -1,7 +1,7 @@
 #include "MACE/SimVeto/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimVeto/Analysis.h++"
 #include "MACE/Simulation/Hit/VetoPMHit.h++"
-#include "MACE/Simulation/Hit/VetoStripHit.h++"
+#include "MACE/Simulation/Hit/VetoHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
@@ -20,7 +20,6 @@ Analysis::Analysis():
     PassiveSingleton{},
     fFilePath{"SimVeto_untiled"},
     fFileMode{"NEW"},
-    fCoincidenceWithVeto{true},
     fLastUsedFullFilePath{},
     fFile{},
     fPrimaryVertexOutput{},
@@ -29,8 +28,9 @@ Analysis::Analysis():
     fVetoPMHitOutput{},
     fPrimaryVertex{},
     fDecayVertex{},
-    fVetoStripHit{},
+    fVetoHit{},
     fVetoPMHit{},
+    fCoincidenceWithVeto{true},
     fMessengerRegister{this}
     {}
 
@@ -51,22 +51,22 @@ auto Analysis::RunBegin(G4int runID) -> void {
     }
     // initialize outputs
     if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID)); }
-    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
-    fVetoSimHitOutput.emplace(fmt::format("G4Run{}/VetoSimHit", SSSrunID));
+    // if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
+    fVetoSimHitOutput.emplace(fmt::format("G4Run{}/VetoSimHit", runID));
     fVetoPMHitOutput.emplace(fmt::format("G4Run{}/VetoPMHit", runID));
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto vetoPassed{not fCoincidenceWithVeto or fVetoStripHit == nullptr or fVetoStripHit->size() > 0};
+    const auto vetoPassed{not fCoincidenceWithVeto or fVetoHit == nullptr or fVetoHit->size() > 0};
     if(vetoPassed){
         if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
         if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
-        if (fVetoStripHit) { fECALSimHitOutput->Fill(*fVetoStripHit); }
-        if (fVetoPMHit) { fECALPMHitOutput->Fill(*fVetoPMHit); }
+        if (fVetoHit) { fVetoSimHitOutput->Fill(*fVetoHit); }
+        if (fVetoPMHit) { fVetoPMHitOutput->Fill(*fVetoPMHit); }
     }
     fPrimaryVertex = {};
     fDecayVertex = {};
-    fVetoStripHit = {};
+    fVetoHit = {};
     fVetoPMHit = {};
 }
 

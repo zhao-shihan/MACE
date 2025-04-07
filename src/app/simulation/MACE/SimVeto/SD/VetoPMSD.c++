@@ -1,7 +1,7 @@
 #include "MACE/SimVeto/Analysis.h++"
 #include "MACE/SimVeto/SD/VetoPMSD.h++"
 
-namespace MACE::SimVetoPM::inline SD {
+namespace MACE::SimVeto::inline SD {
 
 auto VetoPMSD::EndOfEvent(G4HCofThisEvent* hc) -> void {
     Simulation::VetoPMSD::EndOfEvent(hc);

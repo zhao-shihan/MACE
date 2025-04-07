@@ -24,7 +24,6 @@ ECALPMSD::ECALPMSD(const G4String& sdName) :
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
 
-    const auto& ecal{Detector::Description::ECAL::Instance()};
 }
 
 auto ECALPMSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {

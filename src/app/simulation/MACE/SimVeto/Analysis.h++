@@ -16,11 +16,12 @@
 #include <memory>
 #include <optional>
 #include <utility>
+#include <vector>
 
 class TFile;
 
 namespace MACE::inline Simulation::inline Hit {
-class VetoStripHit;
+class VetoHit;
 class VetoPMHit;
 } // namespace MACE::inline Simulation::inline Hit
 
@@ -39,7 +40,9 @@ public:
 
     auto SubmitPrimaryVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>& data) -> void { fPrimaryVertex = &data; }
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
-    auto SubmitVetoStripHC(const std::vector<gsl::owner<VetoStripHit*>>& hc) -> void { fVetoStripHit = &hc; }
+    auto SubmitVetoHC(const std::vector<gsl::owner<VetoHit*>>& hc) -> void { fVetoHit = &hc; }
+    auto SubmitVetoPMHC(const std::vector<gsl::owner<VetoPMHit*>>& hc) -> void {fVetoPMHit = &hc;}
+    auto CoincidenceWithVeto(const G4bool& var) -> void {fCoincidenceWithVeto = var;}
     auto EventEnd() -> void;
 
     auto RunEnd(Option_t* option = {}) -> void;
@@ -47,6 +50,7 @@ public:
 private:
     std::filesystem::path fFilePath;
     std::string fFileMode;
+    G4bool fCoincidenceWithVeto;
     // G4bool fCoincidenceWithECAL;
     // G4bool fCoincidenceWithMCP;
 
@@ -60,7 +64,7 @@ private:
 
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>* fPrimaryVertex;
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
-    const std::vector<gsl::owner<VetoStripHit*>>* fVetoStripHit;
+    const std::vector<gsl::owner<VetoHit*>>* fVetoHit;
     const std::vector<gsl::owner<VetoPMHit*>>* fVetoPMHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;

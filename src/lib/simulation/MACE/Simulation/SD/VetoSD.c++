@@ -1,7 +1,8 @@
 #include "MACE/Detector/Description/PDSVeto.h++"
 #include "MACE/Simulation/SD/VetoPMSD.h++"
-#include "MACE/Simulation/SD/VetoStripSD.h++"
+#include "MACE/Simulation/SD/VetoSD.h++"
 
+#include "Mustard/Data/Tuple.h++"
 #include "Mustard/Utility/PrettyLog.h++"
 
 #include "G4Event.hh"
@@ -34,14 +35,16 @@
 #include <vector>
 
 namespace MACE::inline Simulation::inline SD {
+using namespace MACE::Detector::Description;
 
-VetoStripSD::VetoStripSD(const G4String& sdName, const VetoPMSD* vetoPMSD) :
+VetoSD::VetoSD(const G4String& sdName, const VetoPMSD* vetoPMSD) :
     Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fVetoPMSD{vetoPMSD},
     fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
+    vetoPMSD->NOpticalPhotonHit();
     collectionName.insert(sdName + "HC");
 
     const auto& veto{Detector::Description::PDSVeto::Instance()};
@@ -56,16 +59,22 @@ VetoStripSD::VetoStripSD(const G4String& sdName, const VetoPMSD* vetoPMSD) :
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
-    fSplitHit.reserve(veto.NUnit());
+    fSplitHit.reserve([&]() {
+        short nStrip{0};
+        for (short categoryID{0}; categoryID < veto.NModuleOfACategory().size(); categoryID++) {
+            nStrip += veto.NModuleOfACategory()[categoryID] * veto.NLayerPerModuleOfACategory()[categoryID] * veto.NStripPerLayerOfACategory()[categoryID];
+        }
+        return nStrip;
+    }());
 }
 
-auto VetoStripSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
+auto VetoSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     fHitsCollection = new VetoHitCollection{SensitiveDetectorName, collectionName[0]};
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-auto VetoStripSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
+auto VetoSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -79,14 +88,22 @@ auto VetoStripSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& touchable{*preStepPoint.GetTouchable()};
-    const auto stripID{touchable.GetReplicaNumber(1)};
+
+    // replica number list 0_strip, 1_stripBox, 2_moduleBox
+    const auto stripID{[&]() {
+        const auto& veto{PDSVeto::Instance()};
+        const auto stripLocalID{touchable.GetReplicaNumber(1)};
+        const auto moduleID{touchable.GetReplicaNumber(2)};
+        return stripLocalID + veto.StartingStripIDOfAModule()[moduleID];
+    }()};
+
     // calculate (Ek0, p0)
     const auto vertexEk{track.GetVertexKineticEnergy()};
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
     // new a hit
-    const auto& hit{fSplitHit[stripID].emplace_back(std::make_unique_for_overwrite<VetoStripHit>())};
+    const auto& hit{fSplitHit[stripID].emplace_back(std::make_unique_for_overwrite<VetoHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"StripID">(*hit) = stripID;
@@ -107,7 +124,7 @@ auto VetoStripSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     return true;
 }
 
-auto VetoStripSD::EndOfEvent(G4HCofThisEvent*) -> void {
+auto VetoSD::EndOfEvent(G4HCofThisEvent*) -> void {
     fHitsCollection->GetVector()->reserve(
         muc::ranges::accumulate(fSplitHit, 0,
                                 [](auto&& count, auto&& cellHit) {
@@ -124,7 +141,7 @@ auto VetoStripSD::EndOfEvent(G4HCofThisEvent*) -> void {
             fHitsCollection->insert(hit.release());
         } break;
         default: {
-            const auto scintillationTimeConstant1{Detector::Description::PDSVeto::Instance().ScintillationTimeConstant1()};
+            const auto scintillationTimeConstant1{Detector::Description::PDSVeto::Instance().PSScintillationTimeConstant1()};
             assert(scintillationTimeConstant1 >= 0);
             // sort hit by time
             muc::timsort(splitHit,
@@ -174,8 +191,10 @@ auto VetoStripSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
     if (fVetoPMSD) {
         auto nHit{fVetoPMSD->NOpticalPhotonHit()};
+        auto nHitOnEachSiPM{fVetoPMSD->NOpticalPhotonOnEachSiPM()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            Get<"nOptPho">(*hit) = nHit[Get<"StripID">(*hit)];
+            Get<"nOptPho">(*hit) = nHit.at(Get<"StripID">(*hit));
+            Get<"nOptPhoOnEachSiPM">(*hit) = nHitOnEachSiPM.at(Get<"StripID">(*hit));
         }
     }
 }
