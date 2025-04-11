@@ -1,4 +1,5 @@
 #include "MACE/PhaseI/PhaseI.h++"
+#include "MACE/PhaseI/ReconSciFi/ReconSciFi.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SimMACEPhaseI.h++"
 
 #include "Mustard/Application/SubprogramLauncher.h++"
@@ -11,6 +12,7 @@ PhaseI::PhaseI() :
 auto PhaseI::Main(int argc, char* argv[]) const -> int {
     Mustard::Application::SubprogramLauncher launcher;
     launcher.AddSubprogram<MACE::PhaseI::SimMACEPhaseI::SimMACEPhaseI>();
+    launcher.AddSubprogram<MACE::PhaseI::ReconSciFi::ReconSciFi>();
     return launcher.LaunchMain(argc, argv);
 }
 

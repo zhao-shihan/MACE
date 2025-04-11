@@ -32,7 +32,7 @@ private:
 private:
     bool fSaveDecayVertexData;
 
-    std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>> fDecayVertexData;
+    std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>> fDecayVertexData;
 
     AnalysisMessenger::Register<TrackingAction> fMessengerRegister;
 };
