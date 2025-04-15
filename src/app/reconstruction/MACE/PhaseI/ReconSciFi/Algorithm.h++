@@ -31,13 +31,13 @@ namespace MACE::PhaseI::ReconSciFi {
 auto FindCrossCoordinates(double lID, double rID, double tID, int lNumber, int rNumber, int tNumber, double x0, double y0)
     -> std::vector<muc::array3d>;
 
-auto GetLayerID(int id) -> int;
+auto FindLayerID(int id) -> int;
 
 auto HitNumber(std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>& data, double deltaTime)
     -> std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>>;
 
 template<typename... Args>
-bool AreInSameSubarray(Args... args);
+auto InSameSubarray(Args... args) -> bool;
 
 auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>>& data, double deltaTime)
     -> std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>>;

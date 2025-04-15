@@ -43,7 +43,7 @@ public:
     auto ScintillationComponent1() const -> const auto& { return fScintillationComponent1; }
     auto SiPMEnergyBin() const -> const auto& { return fSiPMEnergyBin; }
     auto SiPMQuantumEfficiency() const -> const auto& { return fSiPMQuantumEfficiency; }
-    //// reconstruction////
+    // Reconstruction
     auto Threshold() const -> const auto { return fThreshold; }
     auto ClusterLength() const -> const auto { return fClusterLength; }
     auto ThresholdTime() const -> const auto { return fThresholdTime; }
