@@ -1,7 +1,5 @@
 #pragma once
 
-#include "MACE/PhaseI/Data/SensorHit.h++"
-#include "MACE/PhaseI/Data/SensorRawHit.h++"
 #include "MACE/PhaseI/Data/SimHit.h++"
 
 #include "Mustard/Data/Tuple.h++"

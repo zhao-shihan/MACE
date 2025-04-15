@@ -5,8 +5,6 @@
 #include "Mustard/Utility/PhysicalConstant.h++"
 #include "Mustard/Utility/VectorCast.h++"
 
-#include "pmp/algorithms/utilities.h"
-
 namespace MACE::PhaseI::Detector::Description {
 
 using namespace Mustard::LiteralUnit::Length;
@@ -15,10 +13,8 @@ using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::PhysicalConstant;
 using namespace Mustard::LiteralUnit;
 
-SciFiTracker::SciFiTracker() :
-    DescriptionWithCacheBase{
-        "SciFiTracker"
-},
+SciFiTracker::SciFiTracker() : // clang-format off
+    DescriptionWithCacheBase{"SciFiTracker"}, // clang-format on
     // Geometry
     fSiliconeOilThickness{0.01_mm},
     fFiberCoreWidth{0.96 * 1_mm},
@@ -196,7 +192,7 @@ auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fScintillationYield, "ScintillationYield");
     ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ImportValue(node, fResolutionScale, "ResolutionScale");
-    /// Reconstruction
+    // Reconstruction
     ImportValue(node, fThreshold, "OptPhoThresholdNumberOfSiPM");
     ImportValue(node, fClusterLength, "LengthOfCluster");
     ImportValue(node, fThresholdTime, "OptPhoThresholdTimeOfSiPM");
@@ -229,7 +225,7 @@ auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fScintillationYield, "ScintillationYield");
     ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ExportValue(node, fResolutionScale, "ResolutionScale");
-    /// Reconstruction///
+    // Reconstruction
     ExportValue(node, fThreshold, "OptPhoThresholdNumberOfSiPM");
     ExportValue(node, fClusterLength, "LengthOfCluster");
     ExportValue(node, fThresholdTime, "OptPhoThresholdTimeOfSiPM");
