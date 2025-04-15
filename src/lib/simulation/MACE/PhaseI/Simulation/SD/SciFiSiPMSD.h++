@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Simulation/Hit/SciFiSiPMRawHit.h++"
+#include "MACE/PhaseI/Simulation/Hit/SciFiSiPMRawHit.h++"
 
 #include "Mustard/Utility/NonMoveableBase.h++"
 
@@ -11,7 +11,7 @@
 #include <utility>
 #include <vector>
 
-namespace MACE::inline Simulation::inline SD {
+namespace MACE::PhaseI::inline Simulation::inline SD {
 
 class SciFiSiPMSD : public Mustard::NonMoveableBase,
                     public G4VSensitiveDetector {
@@ -29,4 +29,4 @@ protected:
     SciFiSiPMRawHitCollection* fHitsCollection;
 };
 
-} // namespace MACE::inline Simulation::inline SD
+} // namespace MACE::PhaseI::inline Simulation::inline SD

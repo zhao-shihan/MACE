@@ -1,4 +1,4 @@
-#include "MACE/Simulation/SD/SciFiSiPMSD.h++"
+#include "MACE/PhaseI/Simulation/SD/SciFiSiPMSD.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -12,7 +12,7 @@
 
 #include <cassert>
 
-namespace MACE::inline Simulation::inline SD {
+namespace MACE::PhaseI::inline Simulation::inline SD {
 
 SciFiSiPMSD::SciFiSiPMSD(const G4String& sdName) :
     Mustard::NonMoveableBase{},
@@ -74,4 +74,4 @@ auto SciFiSiPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
     return nHit;
 }
 
-} // namespace MACE::inline Simulation::inline SD
+} // namespace MACE::PhaseI::inline Simulation::inline SD

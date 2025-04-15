@@ -18,4 +18,12 @@ using HitEventIDHitID = Mustard::Data::TupleModel<
 using SciFiHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     SciFiRawHit>;
+
+using ECALHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    ECALRawHit>;
+
+using MRPCHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    MRPCRawHit>;
 } // namespace MACE::PhaseI::Data

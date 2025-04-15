@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Simulation/SD/SciFiSD.h++"
+#include "MACE/PhaseI/Simulation/SD/SciFiSD.h++"
 
 namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 

@@ -175,12 +175,12 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                     sciFiTracker.SiliconeOilThickness() / 2)};
     const auto logicalSiliconeOil{Make<G4LogicalVolume>(solidSiliconeOil, siliconeOil, "SciFiSiliconeOil")};
 
-    const auto solidReflectLayer{
-        Make<G4Box>("SciFiReflectLayer",
+    const auto solidAbsorbLayer{
+        Make<G4Box>("SciFiAbsorbLayer",
                     sciFiTracker.SiPMLength() / 2,
                     sciFiTracker.SiPMLength() / 2,
                     (sciFiTracker.SiPMThickness() + sciFiTracker.SiliconeOilThickness() + sciFiTracker.EpoxyThickness()) / 2)};
-    const auto logicalReflectLayer{Make<G4LogicalVolume>(solidReflectLayer, silicon, "SciFiReflectLayer")};
+    const auto logicalAbsorbLayer{Make<G4LogicalVolume>(solidAbsorbLayer, silicon, "SciFiAbsorbLayer")};
 
     Make<G4PVPlacement>(
         nullptr, G4ThreeVector(0, 0, (sciFiTracker.SiliconeOilThickness() - sciFiTracker.SiPMThickness()) / 2),
@@ -233,7 +233,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 0.001)};
             const auto logicalcore{Make<G4LogicalVolume>(solidcore, ps, "SciFiCore")};
 
-            Make<G4PVPlacement>(nullptr, G4ThreeVector(),
+            Make<G4PVPlacement>(G4Transform3D{},
                                 logicalcore, "SciFiCore", logicalcladding, false, 0, checkOverlaps);
             return logicalcladding;
         }};
@@ -266,7 +266,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 pmma,
                 name + "SciFiLightGuide")};
 
-            Make<G4PVPlacement>(nullptr, G4ThreeVector(),
+            Make<G4PVPlacement>(G4Transform3D{},
                                 logicalcore, name + "SciFiLightGuide", logicalcladding, false, 0, checkOverlaps);
 
             return logicalcladding;
@@ -290,7 +290,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             fiberLength / 2)};
 
         const auto logicalTransversecore{Make<G4LogicalVolume>(solidTransverseCore, ps, "SciFiCore")};
-        Make<G4PVPlacement>(nullptr, G4ThreeVector(),
+        Make<G4PVPlacement>(G4Transform3D{},
                             logicalTransversecore, "SciFiCore", logicalTFiber, false, 0, checkOverlaps);
 
         return logicalTFiber;
@@ -311,7 +311,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
 
         const auto logicalTLightGuide{Make<G4LogicalVolume>(solidTLightGuideCladding, fp, name + "SciFiLightGuide")};
         const auto logicalTLightGuideCore{Make<G4LogicalVolume>(solidTLightGuideCore, pmma, name + "SciFiLightGuide")};
-        Make<G4PVPlacement>(nullptr, G4ThreeVector(),
+        Make<G4PVPlacement>(G4Transform3D{},
                             logicalTLightGuideCore, name + "SciFiLightGuide", logicalTLightGuide, false, 0, checkOverlaps);
 
         return logicalTLightGuide;
@@ -380,8 +380,8 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                                        pitch,
                                        -std::copysign(helicalradius, pitch),
                                        curvature * (1 - std::abs(std::sin(pitch))), -1)},
-                    logicalReflectLayer,
-                    name + "SciFiReflectLayer",
+                    logicalAbsorbLayer,
+                    name + "SciFiAbsorbLayer",
                     Mother().LogicalVolume(),
                     false,
                     0,
@@ -455,8 +455,8 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                                             sciFiTracker.FiberLength()) /
                                                   2 -
                                               sciFiTracker.TLightGuideLength())},
-                    logicalReflectLayer,
-                    name + "SciFiReflectLayer",
+                    logicalAbsorbLayer,
+                    name + "SciFiAbsorbLayer",
                     Mother().LogicalVolume(),
                     false,
                     0,
@@ -466,7 +466,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
 
     const auto layerConfig{sciFiTracker.DetectorLayerConfiguration()};
     for (int i{}; i < sciFiTracker.NLayer(); i++) {
-        if (layerConfig[i].fiber.layerType == 'L') {
+        if (layerConfig[i].fiber.layerType == "LHelical") {
             auto logicalLFiber{logicalFiber(
                 layerConfig[i].fiber.radius,
                 sciFiTracker.FiberCladdingWidth(),
@@ -484,11 +484,11 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             HelicalPlacement(layerConfig[i].fiber.radius,
                              logicalLFiber,
                              logicalLLightGuide,
-                             layerConfig[i].endID - layerConfig[i].beginID + 1, // number of fiber is (end-begin+1)
+                             layerConfig[i].lastID - layerConfig[i].firstID + 1, // number of fiber is (end-begin+1)
                              layerConfig[i].fiber.pitch,
                              sciFiTracker.LightGuideCurvature(),
                              layerConfig[i].name, layerConfig[i].isSecond);
-        } else if (layerConfig[i].fiber.layerType == 'R') {
+        } else if (layerConfig[i].fiber.layerType == "RHelical") {
             auto logicalRFiber{logicalFiber(
                 layerConfig[i].fiber.radius,
                 sciFiTracker.FiberCladdingWidth(),
@@ -506,11 +506,11 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             HelicalPlacement(layerConfig[i].fiber.radius,
                              logicalRFiber,
                              logicalRLightGuide,
-                             layerConfig[i].endID - layerConfig[i].beginID + 1, // number of fiber is (end-begin+1)
+                             layerConfig[i].lastID - layerConfig[i].firstID + 1, // number of fiber is (end-begin+1)
                              layerConfig[i].fiber.pitch,
                              sciFiTracker.LightGuideCurvature(),
                              layerConfig[i].name, layerConfig[i].isSecond);
-        } else if (layerConfig[i].fiber.layerType == 'T') {
+        } else if (layerConfig[i].fiber.layerType == "Transverse") {
             auto logicalTFiber{logicalTransverseFiber(
                 sciFiTracker.FiberCladdingWidth(),
                 sciFiTracker.FiberCoreWidth(),
@@ -526,7 +526,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             TransversePlacement(layerConfig[i].fiber.radius,
                                 logicalTFiber,
                                 logicalTLightGuide,
-                                layerConfig[i].endID - layerConfig[i].beginID + 1, // number of fiber is (end-begin+1)
+                                layerConfig[i].lastID - layerConfig[i].firstID + 1, // number of fiber is (end-begin+1)
                                 layerConfig[i].name,
                                 layerConfig[i].isSecond);
         }
@@ -542,7 +542,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
 
     const auto rfSurface{new G4OpticalSurface("rfSurface", unified, polished, dielectric_metal)};
     rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
-    new G4LogicalSkinSurface{"SiPMSurface", logicalReflectLayer, rfSurface};
+    new G4LogicalSkinSurface{"AbsorbSurface", logicalAbsorbLayer, rfSurface};
 }
 
 } // namespace MACE::PhaseI::Detector::Definition

@@ -10,7 +10,7 @@
 #include "G4THitsCollection.hh"
 #include "G4VHit.hh"
 
-namespace MACE::inline Simulation::inline Hit {
+namespace MACE::PhaseI::inline Simulation::inline Hit {
 
 class SciFiHit final : public Mustard::Geant4X::UseG4Allocator<SciFiHit>,
                        public G4VHit,
@@ -18,4 +18,4 @@ class SciFiHit final : public Mustard::Geant4X::UseG4Allocator<SciFiHit>,
 
 using SciFiHitCollection = G4THitsCollection<SciFiHit>;
 
-} // namespace MACE::inline Simulation::inline Hit
+} // namespace MACE::PhaseI::inline Simulation::inline Hit

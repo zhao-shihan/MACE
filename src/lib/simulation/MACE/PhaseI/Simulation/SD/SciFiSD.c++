@@ -1,6 +1,6 @@
 #include "MACE/PhaseI/Detector/Description/SciFiTracker.h++"
-#include "MACE/Simulation/SD/SciFiSD.h++"
-#include "MACE/Simulation/SD/SciFiSiPMSD.h++"
+#include "MACE/PhaseI/Simulation/SD/SciFiSD.h++"
+#include "MACE/PhaseI/Simulation/SD/SciFiSiPMSD.h++"
 
 #include "Mustard/Utility/LiteralUnit.h++"
 
@@ -36,7 +36,7 @@
 #include <utility>
 #include <vector>
 
-namespace MACE::inline Simulation::inline SD {
+namespace MACE::PhaseI::inline Simulation::inline SD {
 using namespace Mustard::LiteralUnit;
 SciFiSD::SciFiSD(const G4String& sdName) :
     Mustard::NonMoveableBase{},
@@ -70,17 +70,17 @@ auto SciFiSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto preStepPoint{*step.GetPreStepPoint()};
 
     const auto x = preStepPoint.GetPosition();
-    const auto fibreID{preStepPoint.GetTouchable()->GetReplicaNumber(1)};
+    const auto fiberID{preStepPoint.GetTouchable()->GetReplicaNumber(1)};
     const auto creatorProcess{track.GetCreatorProcess()};
     const auto vertexEk{track.GetVertexKineticEnergy()};
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
 
     // new a hit
-    const auto& hit{fSplitHit[fibreID].emplace_back(std::make_unique_for_overwrite<SciFiHit>())};
+    const auto& hit{fSplitHit[fiberID].emplace_back(std::make_unique_for_overwrite<SciFiHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"TrkID">(*hit) = track.GetTrackID();
-    Get<"FibreID">(*hit) = fibreID;
+    Get<"FiberID">(*hit) = fiberID;
     Get<"x">(*hit) = x;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"MotherID">(*hit) = track.GetParentID();
@@ -92,17 +92,6 @@ auto SciFiSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"p0">(*hit) = vertexMomentum;
     *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
     Get<"x0">(*hit) = track.GetVertexPosition();
-    // for (auto&& sec : *step.GetSecondary()) {
-    //     // auto trackID = sec->GetParentID();
-    //     // Get<"MotherID">(*hit) = trackID;
-    //     // // Get<"ProcessName">(*hit) = sec->GetCreatorProcess()->GetProcessName();
-    //     // Get<"Produceposition">(*hit) = sec->GetVertexPosition();
-    //     // auto particleName = sec->GetDefinition()->GetParticleName();
-    //     // if (particleName == "opticalphoton") {
-    //     //     continue;
-    //     // }
-    //     trackIDToSecondaries[trackID].push_back(sec);
-    // }
     return true;
 }
 
@@ -124,7 +113,6 @@ auto SciFiSD::EndOfEvent(G4HCofThisEvent*) -> void {
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;
-            // assert(Get<"TrackID">(*hit) == trackID);
             fHitsCollection->insert(hit.release());
         } break;
         default: {
@@ -142,7 +130,6 @@ auto SciFiSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
-                    // Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {
@@ -153,7 +140,6 @@ auto SciFiSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
                 // construct real hit
                 Get<"HitID">(*topHit) = hitID++;
-                // assert(Get<"TrackID">(*topHit) == trackID);
                 for (const auto& hit : cluster) {
                     if (hit == topHit) { continue; }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
@@ -165,32 +151,6 @@ auto SciFiSD::EndOfEvent(G4HCofThisEvent*) -> void {
         }
     }
     fSplitHit.clear();
-    // for (int hitID{};
-    //      auto&& [fibreID, hitOfDetector] : fSplitHit) {
-    //     for (auto&& hit : hitOfDetector) {
-    //         Get<"HitID">(*hit) = hitID++;
-    //         // assert(Get<"x">(*hit) == fibreID);
-    //         fHitsCollection->insert(hit.release());
-    //     }
-    // }
-    // for (auto&& i : trackIDToSecondaries)
-    //     for (auto&& sec : i.second) {
-    //         // std::cout << i.first << " " << sec->GetCreatorProcess()->GetProcessName() << std::endl;
-    //         // std::cout << i.first << " " << sec->GetVertexPosition() << std::endl;
-    //         // Get<"MotherID">(*topHit) = i.first;
-    //         // Get<"ProcessName">(*topHit) = sec->GetCreatorProcess()->GetProcessName();
-    //         Get<"Produceposition">(*sec->Get<"HitID">) = sec->GetVertexPosition();
-    //     }
 }
 
-// auto SciFiSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
-//     std::unordered_map<int, int> nHit;
-//     for (auto&& [fibreID, hit] : fSplitHit) {
-//         if (hit.size() > 0) {
-//             nHit[fibreID] = hit.size();
-//         }
-//     }
-//     return nHit;
-// }
-
-} // namespace MACE::inline Simulation::inline SD
+} // namespace MACE::PhaseI::inline Simulation::inline SD

@@ -33,8 +33,8 @@ public:
     auto TypeOfLayer() const -> auto& { return fTypeOfLayer; }
     auto RLayer() const -> const auto& { return fRLayer; }
     auto IsSecond() const -> const auto& { return fIsSecond; }
-    auto BeginIDOfLayer() const -> const auto& { return fBeginIDOfLayer; }
-    auto EndIDOfLayer() const -> const auto& { return fEndIDOfLayer; }
+    auto FirstIDOfLayer() const -> const auto& { return fFirstIDOfLayer; }
+    auto LastIDOfLayer() const -> const auto& { return fLastIDOfLayer; }
     auto NameOfLayer() const -> auto& { return fNameOfLayer; }
     auto CombinationOfLayer() const -> auto& { return fCombinationOfLayer; }
     // Optical properties
@@ -64,11 +64,11 @@ public:
     auto TLightGuideLength(double val) -> void { fTLightGuideLength = val; }
     auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
     auto NLayer(int val) -> void { fNLayer = val; }
-    auto TypeOfLayer(std::vector<char> val) -> void { fTypeOfLayer = std::move(val); }
+    auto TypeOfLayer(std::vector<std::string> val) -> void { fTypeOfLayer = std::move(val); }
     auto RLayer(std::vector<double> val) -> void { fRLayer = std::move(val); }
     auto IsSecond(std::vector<bool> val) -> void { fIsSecond = std::move(val); }
-    auto BeginIDOfLayer(std::vector<int> val) -> void { fBeginIDOfLayer = std::move(val); }
-    auto EndIDOfLayer(std::vector<int> val) -> void { fEndIDOfLayer = std::move(val); }
+    auto FirstIDOfLayer(std::vector<int> val) -> void { fFirstIDOfLayer = std::move(val); }
+    auto LastIDOfLayer(std::vector<int> val) -> void { fLastIDOfLayer = std::move(val); }
     auto NameOfLayer(std::vector<std::string> val) -> void { fNameOfLayer = std::move(val); }
     auto CombinationOfLayer(std::vector<std::vector<int>> val) -> void { fCombinationOfLayer = std::move(val); }
 
@@ -86,12 +86,12 @@ public:
 public:
     struct LayerConfiguration {
         struct FiberConfiguration {
-            char layerType;
+            std::string layerType;
             double radius;
             double pitch;
         };
-        int beginID;
-        int endID;
+        int firstID;
+        int lastID;
         bool isSecond;
         std::string name;
         FiberConfiguration fiber;
@@ -130,11 +130,11 @@ private:
     auto CalculateLayerConfiguration() const -> std::vector<LayerConfiguration>;
     auto CalculateLayerPitch() const -> std::vector<double>;
     Simple<int> fNLayer;
-    Simple<std::vector<char>> fTypeOfLayer;
+    Simple<std::vector<std::string>> fTypeOfLayer;
     Simple<std::vector<double>> fRLayer;
     Simple<std::vector<bool>> fIsSecond;
-    Simple<std::vector<int>> fBeginIDOfLayer;
-    Simple<std::vector<int>> fEndIDOfLayer;
+    Simple<std::vector<int>> fFirstIDOfLayer;
+    Simple<std::vector<int>> fLastIDOfLayer;
     Simple<std::vector<std::string>> fNameOfLayer;
     Simple<std::vector<std::vector<int>>> fCombinationOfLayer;
     Cached<std::vector<double>> fPitchOfLayer;

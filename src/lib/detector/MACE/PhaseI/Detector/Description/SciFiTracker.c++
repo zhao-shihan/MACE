@@ -31,11 +31,11 @@ SciFiTracker::SciFiTracker() :
     fTLightGuideLength{25_mm},
     fEpoxyThickness{0.105_mm},
     fNLayer{this, 6},
-    fTypeOfLayer{this, {'L', 'L', 'R', 'R', 'T', 'T' /*, 'L', 'L', 'R', 'R'*/}},
+    fTypeOfLayer{this, {"LHelical", "LHelical", "RHelical", "RHelical", "Transverse", "Transverse" /*, "LHelical", "LHelical", "RHelical", "RHelical"*/}},
     fRLayer{this, {55_mm, 56.2_mm, 50_mm, 51.2_mm, 45_mm, 46.2_mm /*, 80_mm, 81.2_mm, 90_mm, 91.2_mm*/}},
     fIsSecond{this, {0, 1, 0, 1, 0, 1 /*, 0, 1, 0, 1*/}},
-    fBeginIDOfLayer{this, {0, 120, 240, 360, 480, 600 /*, 720, 840, 960, 1080*/}},
-    fEndIDOfLayer{this, {119, 239, 359, 479, 599, 719 /*, 839, 959, 1079, 1199*/}},
+    fFirstIDOfLayer{this, {0, 120, 240, 360, 480, 600 /*, 720, 840, 960, 1080*/}},
+    fLastIDOfLayer{this, {119, 239, 359, 479, 599, 719 /*, 839, 959, 1079, 1199*/}},
     fNameOfLayer{this, {"FirstL", "SecondL", "FirstR", "SecondR", "FirstT", "SecondT" /*, "ThirdL", "ForthL", "ThirdR", "ForthR"*/}},
     fCombinationOfLayer{this, {{0, 1, 2, 3, 4, 5}}},
     fPitchOfLayer{this, [this] { return CalculateLayerPitch(); }},
@@ -144,11 +144,11 @@ SciFiTracker::SciFiTracker() :
 auto SciFiTracker::CalculateLayerPitch() const -> std::vector<double> {
     std::vector<double> Pitch;
     for (int i{}; i < fNLayer; i++) {
-        if (fTypeOfLayer->at(i) == 'L') {
+        if (fTypeOfLayer->at(i) == "LHelical") {
             Pitch.push_back(std::atan(fFiberLength / (2_pi * fRLayer->at(i))));
-        } else if (fTypeOfLayer->at(i) == 'R') {
+        } else if (fTypeOfLayer->at(i) == "RHelical") {
             Pitch.push_back(-std::atan(fFiberLength / (2_pi * fRLayer->at(i))));
-        } else if (fTypeOfLayer->at(i) == 'T') {
+        } else if (fTypeOfLayer->at(i) == "Transverse") {
             Pitch.push_back(0);
         }
     }
@@ -160,8 +160,8 @@ auto SciFiTracker::CalculateLayerConfiguration() const -> std::vector<LayerConfi
     layerConfig.reserve(fNLayer);
     for (int i{}; i < fNLayer; i++) {
         auto& layer{layerConfig.emplace_back()};
-        layer.beginID = fBeginIDOfLayer->at(i);
-        layer.endID = fEndIDOfLayer->at(i);
+        layer.firstID = fFirstIDOfLayer->at(i);
+        layer.lastID = fLastIDOfLayer->at(i);
         layer.name = fNameOfLayer->at(i);
         layer.isSecond = fIsSecond->at(i);
         layer.fiber.layerType = fTypeOfLayer->at(i);
@@ -186,8 +186,8 @@ auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fTypeOfLayer, "TypeOfLayer");
     ImportValue(node, fRLayer, "RadiusOfLayer");
     ImportValue(node, fIsSecond, "IfThisLayerNumberIsEven");
-    ImportValue(node, fBeginIDOfLayer, "BeginIDOfFiberInALayer");
-    ImportValue(node, fEndIDOfLayer, "EndIDOfFiberInALayer");
+    ImportValue(node, fFirstIDOfLayer, "FirstIDOfFiberInALayer");
+    ImportValue(node, fLastIDOfLayer, "LastIDOfFiberInALayer");
     ImportValue(node, fNameOfLayer, "NameOfLayer");
     ImportValue(node, fCombinationOfLayer, "TheseLayersWillReconstructOneHitPoint");
     // Optical properties
@@ -219,8 +219,8 @@ auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fTypeOfLayer, "TypeOfLayer");
     ExportValue(node, fRLayer, "RadiusOfLayer");
     ExportValue(node, fIsSecond, "IfThisLayerNumberIsEven");
-    ExportValue(node, fBeginIDOfLayer, "BeginIDOfFiberInALayer");
-    ExportValue(node, fEndIDOfLayer, "EndIDOfFiberInALayer");
+    ExportValue(node, fFirstIDOfLayer, "FirstIDOfFiberInALayer");
+    ExportValue(node, fLastIDOfLayer, "LastIDOfFiberInALayer");
     ExportValue(node, fNameOfLayer, "NameOfLayer");
     ExportValue(node, fCombinationOfLayer, "TheseLayersWillReconstructOneHitPoint");
     // Optical properties

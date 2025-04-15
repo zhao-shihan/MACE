@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Simulation/SD/ECALPMSD.h++"
+#include "MACE/PhaseI/Simulation/SD/ECALPMSD.h++"
 
 namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 

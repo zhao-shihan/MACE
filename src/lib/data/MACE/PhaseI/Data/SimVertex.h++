@@ -1,4 +1,5 @@
 #pragma once
+#include "MACE/PhaseI/Data/Vertex.h++"
 
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Data/Value.h++"
@@ -12,6 +13,12 @@ using SimPrimaryVertex = Mustard::Data::TupleModel<
     Mustard::Data::Value<muc::array3f, "x0", "Primary position">,
     Mustard::Data::Value<float, "Ek0", "Primary kinetic energy">,
     Mustard::Data::Value<muc::array3f, "p0", "Primary momentum">>;
+
+using SimDecayVertex = Mustard::Data::TupleModel<
+    DecayVertex,
+    Mustard::Data::Value<int, "TrkID", "Parent MC Track ID">,
+    Mustard::Data::Value<float, "Ek", "Parent kinetic energy at decay">,
+    Mustard::Data::Value<muc::array3f, "p", "Parent momentum at decay">>;
 
 using SciFiVertex = Mustard::Data::TupleModel<
     Mustard::Data::Value<double, "Ek0", "Energy in vertex">,
