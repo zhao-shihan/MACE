@@ -1,4 +1,20 @@
-#include "Algorithm.h++"
+#include "MACE/PhaseI/Detector/Description/SciFiTracker.h++"
+#include "MACE/PhaseI/ReconSciFi/Algorithm.h++"
+
+#include "muc/algorithm"
+
+#include <array>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <numbers>
+#include <ranges>
+#include <string>
+#include <string_view>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 
 namespace MACE::PhaseI::ReconSciFi {
 
@@ -107,8 +123,8 @@ auto HitNumber(std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Da
                 return std::ranges::any_of(cluster, [&](auto&& element) {
                     return std::abs(Get<"t">(*hit) - Get<"t">(*element)) < deltaTime and
                            (FindLayerID(Get<"SiPMID">(*hit)) / 2) == (FindLayerID(Get<"SiPMID">(*element)) / 2) and
-                           std::abs((Get<"SiPMID">(*hit) - (sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))))) -
-                                    (Get<"SiPMID">(*element) - (sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*element)))))) <= sciFiTracker.ClusterLength();
+                           std::abs((Get<"SiPMID">(*hit) - (sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))))) -
+                                    (Get<"SiPMID">(*element) - (sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*element)))))) <= sciFiTracker.ClusterLength();
                 });
             })};
         if (cluster != clusterList.end()) {
@@ -155,10 +171,10 @@ auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tup
     std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>> newTData;
 
     for (auto&& cluster : data) {
-        if (sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*cluster.front()))) == 'L') {
+        if (sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*cluster.front()))) == "LHelical") {
             lData.emplace_back(cluster);
         } else if (
-            sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*cluster.front()))) == 'R') {
+            sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*cluster.front()))) == "RHelical") {
             rData.emplace_back(cluster);
         } else {
             tData.emplace_back(cluster);
@@ -181,8 +197,8 @@ auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tup
                         if (sciFiTracker.IsSecond()->at(FindLayerID(Get<"SiPMID">(*hit))) == 1) {
                             avarageLNumber += Get<"nOptPho">(*hit) * 0.5;
                         }
-                        if (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
-                            avarageLNumber += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
+                        if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
+                            avarageLNumber += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
                             lNOptPho += Get<"nOptPho">(*hit);
                         }
                     }
@@ -190,8 +206,8 @@ auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tup
                         if (sciFiTracker.IsSecond()->at(FindLayerID(Get<"SiPMID">(*hit))) == 1) {
                             avarageRNumber += Get<"nOptPho">(*hit) * 0.5;
                         }
-                        if (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
-                            avarageRNumber += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
+                        if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
+                            avarageRNumber += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
                             rNOptPho += Get<"nOptPho">(*hit);
                         }
                     }
@@ -200,20 +216,20 @@ auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tup
                         if (sciFiTracker.IsSecond()->at(FindLayerID(Get<"SiPMID">(*hit))) == 1) {
                             avarageTNumber += Get<"nOptPho">(*hit) * 0.5;
                         }
-                        if (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
-                            avarageTNumber += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
+                        if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
+                            avarageTNumber += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
                             tNOptPho += Get<"nOptPho">(*hit);
                         }
                     }
                     avarageLNumber = avarageLNumber / lNOptPho;
                     avarageRNumber = avarageRNumber / rNOptPho;
                     avarageTNumber = avarageTNumber / tNOptPho;
-                    int lNumber = sciFiTracker.EndIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it1->front()))) -
-                                  sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it1->front())));
-                    int rNumber = sciFiTracker.EndIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it2->front()))) -
-                                  sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it2->front())));
-                    int tNumber = sciFiTracker.EndIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it3->front()))) -
-                                  sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it3->front())));
+                    int lNumber = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it1->front()))) -
+                                  sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it1->front())));
+                    int rNumber = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it2->front()))) -
+                                  sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it2->front())));
+                    int tNumber = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it3->front()))) -
+                                  sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it3->front())));
                     if (std::abs(Get<"t">(*it3->front()) - Get<"t">(*it1->front())) < deltaTime and
                         std::abs(Get<"t">(*it3->front()) - Get<"t">(*it2->front())) < deltaTime and
                         (((std::fmod((avarageLNumber / lNumber) + (avarageRNumber - rNumber / 2) / rNumber, 2) / 2 * tNumber) - avarageTNumber <= 5) or
@@ -296,7 +312,7 @@ auto PositionTransform(const std::vector<std::vector<std::shared_ptr<Mustard::Da
         int lNOptPho{}, rNOptPho{}, tNOptPho{};
         int nLLayer{}, nRLayer{}, nTLayer{};
         double x0 = [&]() {
-            double avaRadius;
+            double avaRadius{};
             for (size_t i{}; i < sciFiTracker.CombinationOfLayer()->size(); ++i) {
                 const auto& sub = sciFiTracker.CombinationOfLayer()->at(i);
                 if (std::find(sub.begin(), sub.end(), FindLayerID(Get<"SiPMID">(*cluster.front()))) != sub.end()) {
@@ -306,44 +322,46 @@ auto PositionTransform(const std::vector<std::vector<std::shared_ptr<Mustard::Da
                     return avaRadius / sciFiTracker.CombinationOfLayer()->at(i).size();
                 }
             }
+            throw std::logic_error{Mustard::PrettyException(fmt::format(
+                "nLayer Out of range"))};
         }();
         double y0 = 0;
         for (auto&& hit : cluster) {
-            if (sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) == 'L') {
+            if (sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) == "LHelical") {
                 if (sciFiTracker.IsSecond()->at(FindLayerID(Get<"SiPMID">(*hit))) == 1) {
                     lID += Get<"nOptPho">(*hit) * 0.5;
                 }
-                if (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
-                    lID += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
+                if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
+                    lID += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
                     lTime += Get<"t">(*hit) * Get<"nOptPho">(*hit);
                     lNOptPho += Get<"nOptPho">(*hit);
                 }
-                nLLayer = sciFiTracker.EndIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) -
-                          sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit)));
+                nLLayer = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) -
+                          sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit)));
 
-            } else if (sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) == 'R') {
+            } else if (sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) == "RHelical") {
                 if (sciFiTracker.IsSecond()->at(FindLayerID(Get<"SiPMID">(*hit))) == 1) {
                     rID += Get<"nOptPho">(*hit) * 0.5;
                 }
-                if (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
-                    rID += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
+                if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
+                    rID += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
                     rTime += Get<"t">(*hit) * Get<"nOptPho">(*hit);
                     rNOptPho += Get<"nOptPho">(*hit);
                 }
-                nRLayer = sciFiTracker.EndIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) -
-                          sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit)));
+                nRLayer = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) -
+                          sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit)));
 
             } else {
                 if (sciFiTracker.IsSecond()->at(FindLayerID(Get<"SiPMID">(*hit))) == 1) {
                     tID += Get<"nOptPho">(*hit) * 0.5;
                 }
-                if (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
-                    tID += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
+                if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
+                    tID += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
                     TTime += Get<"t">(*hit) * Get<"nOptPho">(*hit);
                     tNOptPho += Get<"nOptPho">(*hit);
                 }
-                nTLayer = sciFiTracker.EndIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) -
-                          sciFiTracker.BeginIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit)));
+                nTLayer = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) -
+                          sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit)));
             }
         }
 

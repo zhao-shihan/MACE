@@ -1,5 +1,5 @@
 #include "MACE/PhaseI/PhaseI.h++"
-#include "MACE/PhaseI/ReconSciFi/ReconECAL.h++"
+#include "MACE/PhaseI/ReconECAL/ReconECAL.h++"
 #include "MACE/PhaseI/ReconSciFi/ReconSciFi.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SimMACEPhaseI.h++"
 

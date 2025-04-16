@@ -3,27 +3,13 @@
 #include "MACE/PhaseI/Data/SensorRawHit.h++"
 #include "MACE/PhaseI/Data/SimHit.h++"
 #include "MACE/PhaseI/Data/Track.h++"
-#include "MACE/PhaseI/Detector/Description/SciFiTracker.h++"
 
 #include "Mustard/Data/Tuple.h++"
 
-#include "muc/algorithm"
 #include "muc/array"
 
 #include <algorithm>
-#include <array>
-#include <cmath>
-#include <iomanip>
-#include <iostream>
-#include <iterator>
 #include <memory>
-#include <numbers>
-#include <ranges>
-#include <string>
-#include <string_view>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
 #include <vector>
 
 namespace MACE::PhaseI::ReconSciFi {

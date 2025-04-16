@@ -108,24 +108,10 @@ private:
     double fFiberLength;
     double fLightGuideCurvature;
     double fSiPMLength;
-    double fTLightGuideLength;
     double fSiPMWidth;
     double fSiPMThickness;
+    double fTLightGuideLength;
     double fEpoxyThickness;
-
-    double fScintillationYield;
-    double fScintillationTimeConstant1;
-    double fResolutionScale;
-
-    int fThreshold;
-    int fClusterLength;
-    double fThresholdTime;
-    double fTimeWindow;
-    double fDeadtime;
-    std::vector<double> fScintillationWavelengthBin;
-    std::vector<double> fScintillationComponent1;
-    std::vector<double> fSiPMEnergyBin;
-    std::vector<double> fSiPMQuantumEfficiency;
 
     auto CalculateLayerConfiguration() const -> std::vector<LayerConfiguration>;
     auto CalculateLayerPitch() const -> std::vector<double>;
@@ -139,6 +125,21 @@ private:
     Simple<std::vector<std::vector<int>>> fCombinationOfLayer;
     Cached<std::vector<double>> fPitchOfLayer;
     Cached<std::vector<LayerConfiguration>> fLayerConfiguration;
+
+    double fScintillationYield;
+    double fScintillationTimeConstant1;
+    double fResolutionScale;
+
+    std::vector<double> fScintillationWavelengthBin;
+    std::vector<double> fScintillationComponent1;
+    std::vector<double> fSiPMEnergyBin;
+    std::vector<double> fSiPMQuantumEfficiency;
+
+    int fThreshold;
+    int fClusterLength;
+    double fThresholdTime;
+    double fTimeWindow;
+    double fDeadtime;
 };
 
 } // namespace MACE::PhaseI::Detector::Description
