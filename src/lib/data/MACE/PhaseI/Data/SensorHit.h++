@@ -23,7 +23,4 @@ using SiPMHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<int, "SiPMID", "SiPM ID">,
     Mustard::Data::Value<double, "t", "Time over threshold">>;
 
-using ECALPMHit = Mustard::Data::TupleModel<
-    internal::HitEventIDHitID,
-    ECALPMRawHit>;
 } // namespace MACE::PhaseI::Data

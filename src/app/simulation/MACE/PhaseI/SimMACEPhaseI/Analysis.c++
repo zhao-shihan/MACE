@@ -1,11 +1,11 @@
 #include "MACE/PhaseI/SimMACEPhaseI/Action/PrimaryGeneratorAction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Action/TrackingAction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Analysis.h++"
-#include "MACE/PhaseI/Simulation/Hit/ECALHit.h++"
-#include "MACE/PhaseI/Simulation/Hit/ECALPMHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/MRPCHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiSiPMRawHit.h++"
+#include "MACE/Simulation/Hit/ECALHit.h++"
+#include "MACE/Simulation/Hit/ECALPMHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
