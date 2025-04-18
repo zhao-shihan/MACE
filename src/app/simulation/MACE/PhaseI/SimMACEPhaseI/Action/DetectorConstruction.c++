@@ -61,16 +61,15 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     const auto fECALPMSD{new SD::ECALPMSD{ecalName + "PM"}};
     // ecalPhotoSensor.RegisterSD("ECALPMCathode", fECALPMSD);
 
-    const auto fECALSD{
-        new SD::ECALSD{ecalName, fECALPMSD}
-    };
+    const auto fECALSD(new SD::ECALSD{ecalName, fECALPMSD});
     // ecalCrystal.RegisterSD(fECALSD);
 
     const auto fSciFiSD{new SD::SciFiSD{scifiName}};
-    sciFiTracker.RegisterSD("SciFiCore", fSciFiSD);
+    sciFiTracker.RegisterSD(scifiName + "HelicalFiberCore", fSciFiSD);
+    sciFiTracker.RegisterSD(scifiName + "TransverseFiberCore", fSciFiSD);
 
     const auto fSciFiSiPMSD{new SD::SciFiSiPMSD{scifiName + "SiPM"}};
-    sciFiTracker.RegisterSD("SciFiSiPM", fSciFiSiPMSD);
+    sciFiTracker.RegisterSD(scifiName + "SiPM", fSciFiSiPMSD);
 
     const auto& mrpcName{MACE::PhaseI::Detector::Description::MRPC::Instance().Name()};
 

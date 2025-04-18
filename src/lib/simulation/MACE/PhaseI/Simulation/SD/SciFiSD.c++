@@ -54,7 +54,7 @@ auto SciFiSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
-std::map<int, std::vector<G4Track*>> trackIDToSecondaries;
+
 auto SciFiSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto& track{*step.GetTrack()};

@@ -35,7 +35,6 @@ public:
     auto IsSecond() const -> const auto& { return fIsSecond; }
     auto FirstIDOfLayer() const -> const auto& { return fFirstIDOfLayer; }
     auto LastIDOfLayer() const -> const auto& { return fLastIDOfLayer; }
-    auto NameOfLayer() const -> auto& { return fNameOfLayer; }
     auto CombinationOfLayer() const -> auto& { return fCombinationOfLayer; }
     // Optical properties
     auto ScintillationTimeConstant1() const -> auto { return fScintillationTimeConstant1; }
@@ -69,7 +68,6 @@ public:
     auto IsSecond(std::vector<bool> val) -> void { fIsSecond = std::move(val); }
     auto FirstIDOfLayer(std::vector<int> val) -> void { fFirstIDOfLayer = std::move(val); }
     auto LastIDOfLayer(std::vector<int> val) -> void { fLastIDOfLayer = std::move(val); }
-    auto NameOfLayer(std::vector<std::string> val) -> void { fNameOfLayer = std::move(val); }
     auto CombinationOfLayer(std::vector<std::vector<int>> val) -> void { fCombinationOfLayer = std::move(val); }
 
     auto ScintillationWaveLengthBin(std::vector<double> val) -> void { fScintillationWavelengthBin = std::move(val); }
@@ -121,7 +119,6 @@ private:
     Simple<std::vector<bool>> fIsSecond;
     Simple<std::vector<int>> fFirstIDOfLayer;
     Simple<std::vector<int>> fLastIDOfLayer;
-    Simple<std::vector<std::string>> fNameOfLayer;
     Simple<std::vector<std::vector<int>>> fCombinationOfLayer;
     Cached<std::vector<double>> fPitchOfLayer;
     Cached<std::vector<LayerConfiguration>> fLayerConfiguration;

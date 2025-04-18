@@ -32,7 +32,6 @@ SciFiTracker::SciFiTracker() : // clang-format off
     fIsSecond{this, {0, 1, 0, 1, 0, 1 /*, 0, 1, 0, 1*/}},
     fFirstIDOfLayer{this, {0, 120, 240, 360, 480, 600 /*, 720, 840, 960, 1080*/}},
     fLastIDOfLayer{this, {119, 239, 359, 479, 599, 719 /*, 839, 959, 1079, 1199*/}},
-    fNameOfLayer{this, {"FirstL", "SecondL", "FirstR", "SecondR", "FirstT", "SecondT" /*, "ThirdL", "ForthL", "ThirdR", "ForthR"*/}},
     fCombinationOfLayer{this, {{0, 1, 2, 3, 4, 5}}},
     fPitchOfLayer{this, [this] { return CalculateLayerPitch(); }},
     fLayerConfiguration{this, [this] { return CalculateLayerConfiguration(); }},
@@ -158,7 +157,6 @@ auto SciFiTracker::CalculateLayerConfiguration() const -> std::vector<LayerConfi
         auto& layer{layerConfig.emplace_back()};
         layer.firstID = fFirstIDOfLayer->at(i);
         layer.lastID = fLastIDOfLayer->at(i);
-        layer.name = fNameOfLayer->at(i);
         layer.isSecond = fIsSecond->at(i);
         layer.fiber.layerType = fTypeOfLayer->at(i);
         layer.fiber.pitch = fPitchOfLayer->at(i);
@@ -184,7 +182,6 @@ auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fIsSecond, "IfThisLayerNumberIsEven");
     ImportValue(node, fFirstIDOfLayer, "FirstIDOfFiberInALayer");
     ImportValue(node, fLastIDOfLayer, "LastIDOfFiberInALayer");
-    ImportValue(node, fNameOfLayer, "NameOfLayer");
     ImportValue(node, fCombinationOfLayer, "TheseLayersWillReconstructOneHitPoint");
     // Optical properties
     ImportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
@@ -217,7 +214,6 @@ auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fIsSecond, "IfThisLayerNumberIsEven");
     ExportValue(node, fFirstIDOfLayer, "FirstIDOfFiberInALayer");
     ExportValue(node, fLastIDOfLayer, "LastIDOfFiberInALayer");
-    ExportValue(node, fNameOfLayer, "NameOfLayer");
     ExportValue(node, fCombinationOfLayer, "TheseLayersWillReconstructOneHitPoint");
     // Optical properties
     ExportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
