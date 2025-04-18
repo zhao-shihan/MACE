@@ -23,18 +23,14 @@
 class TFile;
 
 namespace MACE::PhaseI::inline Simulation::inline Hit {
-
 class MRPCHit;
 class SciFiHit;
 class SciFiSiPMRawHit;
-
 } // namespace MACE::PhaseI::inline Simulation::inline Hit
 
 namespace MACE::inline Simulation::inline Hit {
-
 class ECALHit;
 class ECALPMHit;
-
 } // namespace MACE::inline Simulation::inline Hit
 
 namespace MACE::PhaseI::SimMACEPhaseI {

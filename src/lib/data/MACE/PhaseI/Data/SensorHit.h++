@@ -8,6 +8,7 @@
 namespace MACE::PhaseI::Data {
 
 namespace internal {
+
 using HitEventIDHitID = Mustard::Data::TupleModel<
     Mustard::Data::Value<int, "EvtID", "Event ID">,
     Mustard::Data::Value<int, "HitID", "Hit ID">>;
