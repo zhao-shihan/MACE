@@ -45,7 +45,7 @@ using namespace Mustard::PhysicalConstant;
 using namespace std::string_literals;
 
 GenMuonICDecay::GenMuonICDecay() :
-    Subprogram{"GenMuonICDecay", "Generate muon internal conversion decay (mu->eeevv) events for physical investigation or test purpose."} {}
+    Subprogram{"GenMuonICDecay", "Generate muon internal conversion decay (mu->eeevv) events for physical study or test."} {}
 
 auto GenMuonICDecay::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::CLI::MonteCarloCLI<> cli;
