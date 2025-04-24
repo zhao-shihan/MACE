@@ -8,6 +8,7 @@
 namespace MACE::PhaseI::Data {
 
 namespace internal {
+
 using SimHitVertexTruth = Mustard::Data::TupleModel<
     Mustard::Data::Value<int, "TrkID", "MC Track ID">,
     Mustard::Data::Value<int, "MotherID", "MC Mother Track ID">,
@@ -34,4 +35,5 @@ using MRPCSimHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<float, "Ek", "Hit kinetic energy (MC truth)">,
     Mustard::Data::Value<muc::array3f, "p", "Hit momentum (MC truth)">,
     internal::SimHitVertexTruth>;
+
 } // namespace MACE::PhaseI::Data
