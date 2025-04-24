@@ -69,7 +69,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     csI->AddElement(iodideElement, 0.484639);
     csI->AddElement(thalliumElement, 0.007805);
 
-    const auto bgo{nist->FindOrBuildMaterial("G4_BGO")};
+    // const auto bgo{nist->FindOrBuildMaterial("G4_BGO")};
 
     const auto lyso = new G4Material("LYSO", 7.1_g_cm3, 5, kStateSolid);
     lyso->AddElement(oxygenElement, 0.175801);

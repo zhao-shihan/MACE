@@ -37,12 +37,13 @@
 #include <vector>
 
 namespace MACE::PhaseI::inline Simulation::inline SD {
+
 using namespace Mustard::LiteralUnit;
+
 SciFiSD::SciFiSD(const G4String& sdName) :
     Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fSplitHit{},
-    fEnergyDepositionThreshold{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
 }
@@ -69,7 +70,7 @@ auto SciFiSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     if (eDep < fEnergyDepositionThreshold) { return false; }
     const auto preStepPoint{*step.GetPreStepPoint()};
 
-    const auto x = preStepPoint.GetPosition();
+    const auto x{preStepPoint.GetPosition()};
     const auto fiberID{preStepPoint.GetTouchable()->GetReplicaNumber(1)};
     const auto creatorProcess{track.GetCreatorProcess()};
     const auto vertexEk{track.GetVertexKineticEnergy()};

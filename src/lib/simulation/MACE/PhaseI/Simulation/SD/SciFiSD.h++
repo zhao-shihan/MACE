@@ -22,12 +22,9 @@ public:
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
-    auto NOpticalPhotonHit() const -> std::unordered_map<int, int>;
-
 protected:
     std::unordered_map<int, std::vector<std::unique_ptr<SciFiHit>>> fSplitHit;
     SciFiHitCollection* fHitsCollection;
-    double fEnergyDepositionThreshold;
 };
 
 } // namespace MACE::PhaseI::inline Simulation::inline SD
