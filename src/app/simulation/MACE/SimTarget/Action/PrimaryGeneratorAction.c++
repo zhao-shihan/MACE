@@ -8,7 +8,7 @@
 namespace MACE::SimTarget::inline Action {
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserPrimaryGeneratorAction{},
     fAvailableGenerator{},
     fGenerator{&fAvailableGenerator.gpsx},

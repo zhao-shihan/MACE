@@ -25,7 +25,7 @@
 namespace MACE::SimDose {
 
 Analysis::Analysis() :
-    AnalysisBase{},
+    AnalysisBase{this},
     fMapModel{},
     fMap{},
     fMessengerRegister{this} {}

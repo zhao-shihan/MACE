@@ -6,7 +6,7 @@
 namespace MACE::SimECAL {
 
 PhysicsList::PhysicsList() :
-    PassiveSingleton<PhysicsList>{this},
+    PassiveSingleton{this},
     StandardPhysicsListBase{} {}
 
 auto PhysicsList::ConstructProcess() -> void {

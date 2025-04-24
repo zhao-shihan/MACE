@@ -3,6 +3,10 @@
 
 namespace MACE::SimTarget::inline Action {
 
+RunAction::RunAction() :
+    PassiveSingleton{this},
+    G4UserRunAction{} {}
+
 auto RunAction::BeginOfRunAction(const G4Run* run) -> void {
     Analysis::Instance().RunBegin(run);
 }

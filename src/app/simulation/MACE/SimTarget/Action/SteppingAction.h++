@@ -14,7 +14,7 @@ class SteppingAction final : public Mustard::Env::Memory::PassiveSingleton<Stepp
 public:
     SteppingAction();
 
-    auto SetKillIrrelevants(G4bool val) -> void { fKillIrrelevants = val; }
+    auto KillIrrelevance(G4bool val) -> void { fKillIrrelevance = val; }
 
     auto UserSteppingAction(const G4Step* step) -> void override;
 
@@ -22,7 +22,7 @@ private:
     const G4ParticleDefinition* const fMuonPlus;
     const G4ParticleDefinition* const fMuonium;
     const G4ParticleDefinition* const fAntimuonium;
-    G4bool fKillIrrelevants;
+    G4bool fKillIrrelevance;
 
     ActionMessenger::Register<SteppingAction> fMessengerRegister;
 };

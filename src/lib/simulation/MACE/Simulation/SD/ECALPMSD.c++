@@ -23,7 +23,6 @@ ECALPMSD::ECALPMSD(const G4String& sdName) :
     fHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
-
 }
 
 auto ECALPMSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {

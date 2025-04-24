@@ -1,8 +1,8 @@
 namespace MACE::inline Simulation::inline Action {
 
 template<typename ADerived>
-NeutrinoKillerSteppingAction<ADerived>::NeutrinoKillerSteppingAction() :
-    Mustard::Env::Memory::PassiveSingleton<ADerived>{},
+NeutrinoKillerSteppingAction<ADerived>::NeutrinoKillerSteppingAction(ADerived* derived) :
+    Mustard::Env::Memory::PassiveSingleton<ADerived>{derived},
     G4UserSteppingAction{},
     fEnableNeutrinoKiller{true},
     fMessengerRegister{static_cast<ADerived*>(this)} {}

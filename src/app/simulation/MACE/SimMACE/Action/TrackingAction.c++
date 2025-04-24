@@ -19,7 +19,7 @@
 namespace MACE::SimMACE::inline Action {
 
 TrackingAction::TrackingAction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4UserTrackingAction{},
     fSaveDecayVertexData{true},
     fDecayVertexData{},

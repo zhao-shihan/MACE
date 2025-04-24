@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/PhaseI/SimMACEPhaseI/SD/MRPCSDMessenger.h++"
-#include "MACE/Simulation/Hit/MRPCHit.h++"
+#include "MACE/PhaseI/Simulation/Hit/MRPCHit.h++"
 
 #include "Mustard/Utility/NonMoveableBase.h++"
 

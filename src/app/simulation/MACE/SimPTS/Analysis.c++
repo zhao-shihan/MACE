@@ -18,7 +18,7 @@
 namespace MACE::SimPTS {
 
 Analysis::Analysis() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     fFilePath{"SimPTS_untitled"},
     fFileMode{"NEW"},
     fLastUsedFullFilePath{},

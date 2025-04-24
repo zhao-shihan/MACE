@@ -26,7 +26,7 @@ namespace MACE::SimMACE {
 using namespace Mustard::LiteralUnit::Energy;
 
 PhysicsList::PhysicsList() :
-    PassiveSingleton<PhysicsList>{},
+    PassiveSingleton{this},
     StandardPhysicsListBase{},
     fMACEBiasPxySofteningFactor{0.2_MeV},
     fMACEBiasCosSofteningFactor{0.05},

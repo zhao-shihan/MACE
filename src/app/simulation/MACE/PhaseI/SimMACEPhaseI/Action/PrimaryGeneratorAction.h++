@@ -40,7 +40,7 @@ private:
     G4VPrimaryGenerator* fGenerator;
 
     bool fSavePrimaryVertexData;
-    std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>> fPrimaryVertexData;
+    std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>> fPrimaryVertexData;
 
     AnalysisMessenger::Register<PrimaryGeneratorAction> fAnalysisMessengerRegister;
     PrimaryGeneratorActionMessenger::Register<PrimaryGeneratorAction> fPrimaryGeneratorActionMessengerRegister;
