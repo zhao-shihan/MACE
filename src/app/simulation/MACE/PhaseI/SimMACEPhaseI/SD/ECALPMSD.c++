@@ -4,7 +4,7 @@
 namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 
 auto ECALPMSD::EndOfEvent(G4HCofThisEvent* hc) -> void {
-    Simulation::ECALPMSD::EndOfEvent(hc);
+    MACE::Simulation::ECALPMSD::EndOfEvent(hc);
     Analysis::Instance().SubmitECALPMHC(*fHitsCollection->GetVector());
 }
 

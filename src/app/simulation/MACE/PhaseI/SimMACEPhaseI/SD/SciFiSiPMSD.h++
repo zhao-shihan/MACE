@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Simulation/SD/ECALPMSD.h++"
+#include "MACE/PhaseI/Simulation/SD/SciFiSiPMSD.h++"
 
 namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 
-class ECALPMSD final : public MACE::Simulation::ECALPMSD {
+class SciFiSiPMSD final : public Simulation::SciFiSiPMSD {
 public:
-    using MACE::Simulation::ECALPMSD::ECALPMSD;
+    using Simulation::SciFiSiPMSD::SciFiSiPMSD;
 
     auto EndOfEvent(G4HCofThisEvent* hc) -> void override;
 };
