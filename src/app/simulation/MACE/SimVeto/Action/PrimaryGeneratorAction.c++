@@ -11,7 +11,7 @@
 namespace MACE::SimVeto::inline Action {
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserPrimaryGeneratorAction{},
     fAvailableGenerator{},
     fGenerator{&fAvailableGenerator.ecoMug},

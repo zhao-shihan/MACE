@@ -34,8 +34,10 @@ private:
     G4Material* fEpoxy;
     G4Material* fSiliconeGrease;
     G4Material* fSilicon;
-    G4Material* fWls;
     G4Material* fAl;
+    G4Material* fWlsPS;
+    G4Material* fFP;
+    G4Material* fPMMA;
     std::vector<std::string> fCategoryNames{"Top","Side","Cap1","Cap2"};
 
 };

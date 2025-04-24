@@ -718,8 +718,8 @@ PDSVeto:
     - 350
   PSWidth: 100
   PSThickness: 20
-  PSFiberRadius: 0.69999999999999996
-  PSHoleRadius: 0.75
+  FiberRadius: 0.69999999999999996
+  FiberHoleRadius: 0.75
   PSFiberCurvatureRadius: 130
   InterPSGap: 1
   PerpendicularModuleGap: 5

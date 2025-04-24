@@ -17,7 +17,7 @@
 #include <stdexcept>
 namespace MACE::SimVeto{
 Analysis::Analysis():
-    PassiveSingleton{},
+    PassiveSingleton{this},
     fFilePath{"SimVeto_untiled"},
     fFileMode{"NEW"},
     fLastUsedFullFilePath{},
@@ -29,8 +29,8 @@ Analysis::Analysis():
     fPrimaryVertex{},
     fDecayVertex{},
     fVetoHit{},
-    fVetoPMHit{},
     fCoincidenceWithVeto{true},
+    fVetoPMHit{},
     fMessengerRegister{this}
     {}
 

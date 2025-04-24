@@ -45,8 +45,18 @@ public:
     auto SiPMEnergyBin() const -> const auto& { return *fSiPMEnergyBin; }
     auto SiPMEfficiency() const -> const auto& { return *fSiPMEfficiency; }
 
-    auto PSFiberRadius() const -> const auto& { return *fPSFiberRadius; }
-    auto PSHoleRadius() const -> const auto& { return *fPSHoleRadius; }
+    auto FiberHoleRadius() const -> const auto& { return *fFiberHoleRadius; }
+    auto FiberRadius() const -> const auto& { return *fFiberRadius; }
+    auto FiberInnerRadiusRatio() const -> const auto& { return *fFiberInnerRadiusRatio; }
+    auto FiberCoreRadiusRatio() const -> const auto& { return *fFiberCoreRadiusRatio; }
+    auto FPRIndexEnergy() const -> const auto& { return *fFPRIndexEnergy; }
+    auto FPRIndex() const -> const auto& { return *fFPRIndex;}
+    auto FPAbsEnergy() const -> const auto& { return *fFPAbsEnergy;}
+    auto FPAbsLength() const -> const auto& { return *fFPAbsLength;}
+    auto PMMARIndexEnergy() const -> const auto& { return *fPMMARIndexEnergy; }
+    auto PMMARIndex() const -> const auto& { return *fPMMARIndex;}
+    auto PMMAAbsEnergy() const -> const auto& { return *fPMMAAbsEnergy;}
+    auto PMMAAbsLength() const -> const auto& { return *fPMMAAbsLength;}
     auto WLSRIndexEnergy() const -> const auto& { return *fWLSRIndexEnergy; }
     auto WLSRIndex() const -> const auto& { return *fWLSRIndex; }
     auto WLSVAbsEnergy() const -> const auto& { return *fWLSVAbsEnergy; }
@@ -109,7 +119,9 @@ private:
     auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
-    // Geometry
+
+    Simple<double> fSolenoidWindowRadius;
+
     Simple<std::vector<int>> fNModuleOfACategory; // top 1, side 2 , cap1 4 , cap2 4
     Simple<std::vector<int>> fNLayerPerModuleOfACategory;
     Simple<std::vector<int>> fNStripPerLayerOfACategory;
@@ -132,8 +144,18 @@ private:
     Simple<std::vector<double>> fSiPMEnergyBin;
     Simple<std::vector<double>> fSiPMEfficiency;
 
-    Simple<double> fPSFiberRadius;
-    Simple<double> fPSHoleRadius;
+    Simple<double> fFiberHoleRadius;
+    Simple<double> fFiberRadius;
+    Simple<double> fFiberInnerRadiusRatio;
+    Simple<double> fFiberCoreRadiusRatio;
+    Simple<std::vector<double>> fFPRIndexEnergy;
+    Simple<std::vector<double>> fFPRIndex;
+    Simple<std::vector<double>> fFPAbsEnergy;
+    Simple<std::vector<double>> fFPAbsLength;
+    Simple<std::vector<double>> fPMMARIndexEnergy;
+    Simple<std::vector<double>> fPMMARIndex;
+    Simple<std::vector<double>> fPMMAAbsEnergy;
+    Simple<std::vector<double>> fPMMAAbsLength;
     Simple<std::vector<double>> fWLSRIndexEnergy;
     Simple<std::vector<double>> fWLSRIndex;
     Simple<std::vector<double>> fWLSVAbsEnergy;
@@ -149,7 +171,6 @@ private:
     Simple<double> fModuleOffset;
     Simple<double> fAlAbsorberThickness;
     Simple<double> fReflectiveFilmThickness;
-    Simple<double> fSolenoidWindowRadius;
     Simple<int> fFiberNum;
     Simple<int> fSelectedCategory;
 

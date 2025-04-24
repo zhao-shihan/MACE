@@ -14,6 +14,7 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
@@ -60,8 +61,8 @@ VetoSD::VetoSD(const G4String& sdName, const VetoPMSD* vetoPMSD) :
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
     fSplitHit.reserve([&]() {
-        short nStrip{0};
-        for (short categoryID{0}; categoryID < veto.NModuleOfACategory().size(); categoryID++) {
+        int nStrip{};
+        for (int categoryID{}; categoryID < ssize(veto.NModuleOfACategory()); ++categoryID) {
             nStrip += veto.NModuleOfACategory()[categoryID] * veto.NLayerPerModuleOfACategory()[categoryID] * veto.NStripPerLayerOfACategory()[categoryID];
         }
         return nStrip;
@@ -125,6 +126,7 @@ auto VetoSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto VetoSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    const auto& veto{PDSVeto::Instance()};
     fHitsCollection->GetVector()->reserve(
         muc::ranges::accumulate(fSplitHit, 0,
                                 [](auto&& count, auto&& cellHit) {
@@ -190,13 +192,29 @@ auto VetoSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
 
     if (fVetoPMSD) {
+        // fmt::println("requiring nHit");
         auto nHit{fVetoPMSD->NOpticalPhotonHit()};
+        // if (!nHit.empty()) {
+        //     fmt::println("not empty nHit, Hit on strip 36: {}", nHit.at(36));
+        // } else {
+        //     fmt::println("!!empty nHit");
+        // }
         auto nHitOnEachSiPM{fVetoPMSD->NOpticalPhotonOnEachSiPM()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            Get<"nOptPho">(*hit) = nHit.at(Get<"StripID">(*hit));
-            Get<"nOptPhoOnEachSiPM">(*hit) = nHitOnEachSiPM.at(Get<"StripID">(*hit));
+            // std::cout<< "VetoSD caculated stripID: "<<Get<"StripID">(*hit)<<"\n";    /*debug: check index range*/
+            // fmt::println("reading nHit on strip{}:",stripID);
+            // std::cout << "reading nHit on strip" << stripID << ":" << std::endl;
+            // fmt::println("{} hits", nHit.at(stripID));
+            if (not nHit.empty()) {
+                Get<"nOptPho">(*hit) = nHit.at(Get<"StripID">(*hit));
+                Get<"nOptPhoOnEachSiPM">(*hit) = nHitOnEachSiPM.at(Get<"StripID">(*hit));
+            } else {
+                Get<"nOptPho">(*hit) = 0;
+                Get<"nOptPhoOnEachSiPM">(*hit) = std::vector<int>(veto.FiberNum() * 2, 0);
+            }
         }
     }
+    // fmt::println("VetoSD::EndOfEvent(): this EndOfEvent ended");
 }
 
 } // namespace MACE::inline Simulation::inline SD

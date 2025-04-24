@@ -47,15 +47,16 @@ auto VetoPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto stripID{[&]() {
         const auto stripLocalID{postStepPoint.GetTouchable()->GetReplicaNumber(2)};
         const auto moduleID{postStepPoint.GetTouchable()->GetReplicaNumber(3)};
-        return stripLocalID + veto.StartingStripIDOfAModule()[moduleID];
+        return stripLocalID + veto.StartingStripIDOfAModule().at(moduleID);
     }()};
     const auto localSiPMID{postStepPoint.GetTouchable()->GetReplicaNumber(1)};
-    const auto siliconPMID{localSiPMID + stripID};
+    // const auto siliconPMID{localSiPMID + stripID};
     // new a hit
     auto hit{std::make_unique_for_overwrite<VetoPMHit>()};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"StripID">(*hit) = stripID;
+    // fmt::println("VetoPMSD calculated stripID: {}",stripID);
     Get<"LocalSiPMID">(*hit) = localSiPMID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
     fHit[stripID].emplace_back(std::move(hit));
@@ -63,6 +64,7 @@ auto VetoPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto VetoPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    // fmt::println("VetoPMSD::EndOfEvent() invoked");
     for (int hitID{};
          auto&& [stripID, hitOfUnit] : fHit) {
         for (auto&& hit : hitOfUnit) {
@@ -72,6 +74,7 @@ auto VetoPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
             // Notice: One VetoPMHit unique_ptr released, but pointer object remains
         }
     }
+    // fmt::println("VetoPMSD::hit contents released");
 }
 
 auto VetoPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
@@ -90,8 +93,10 @@ auto VetoPMSD::NOpticalPhotonOnEachSiPM() const -> std::unordered_map<int, std::
     for (auto&& [stripID, hitOfUnit] : fHit) {
         if (hitOfUnit.size() > 0) {
             std::vector<int> nHitOnEachSiPMOfThisStrip(veto.FiberNum() * 2, 0);
+            // std::cout<<"hitted stripID of PM: "<< stripID<<"\n";     /*debug: check index range*/
             for (auto&& aHit : hitOfUnit) {
-                nHitOnEachSiPMOfThisStrip.at(Get<"LocalSiPMID">(*aHit))++;
+                auto sipmID {Get<"LocalSiPMID">(*aHit)};
+                nHitOnEachSiPMOfThisStrip.at(sipmID)++;
             };
             nHitOnEachSiPM[stripID] = nHitOnEachSiPMOfThisStrip;
         }

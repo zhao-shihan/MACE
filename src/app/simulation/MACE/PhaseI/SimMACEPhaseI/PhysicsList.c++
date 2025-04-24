@@ -5,7 +5,7 @@
 namespace MACE::PhaseI::SimMACEPhaseI {
 
 PhysicsList::PhysicsList() :
-    PassiveSingleton<PhysicsList>{},
+    PassiveSingleton<PhysicsList>{this},
     StandardPhysicsListBase{} {
     ReplacePhysics(new Mustard::Geant4X::MuoniumSMAndLFVDecayPhysics{verboseLevel});
 }

@@ -108,7 +108,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     /////////////////////////////////////////////
     // Construct Volumes
     /////////////////////////////////////////////
-
+    auto tranversalScaleFactor{1};
     for (int moduleID{};
          auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) {
         // loop over all ECAL face
@@ -122,14 +122,19 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
         const auto SolidCrystal{
             [&, &centroid = centroid, &vertexIndex = vertexIndex](const auto& name) {
                 const auto innerCentroid{innerRadius * centroid};
-                std::vector<G4ThreeVector> innerVertex(vertexIndex.size());
-                std::ranges::transform(vertexIndex, innerVertex.begin(),
+                std::vector<G4ThreeVector> innerVertexes(vertexIndex.size());
+                std::ranges::transform(vertexIndex, innerVertexes.begin(),
                                        [&](const auto& i) { return ComputeIntersection(innerCentroid, normal, vertex[i], vertex[i]); });
                 const auto outerRadius{innerRadius + crystalHypotenuse};
                 const auto outerCentroid{outerRadius * centroid};
-                std::vector<G4ThreeVector> outerVertex(vertexIndex.size());
-                std::ranges::transform(vertexIndex, outerVertex.begin(),
+                std::vector<G4ThreeVector> outerVertexes(vertexIndex.size());
+                std::ranges::transform(vertexIndex, outerVertexes.begin(),
                                        [&](const auto& i) { return ComputeIntersection(outerCentroid, normal, vertex[i], vertex[i]); });
+                // scaled vertexes
+                std::ranges::transform(innerVertexes, innerVertexes.begin(),
+                                       [&](const auto& aVertex) { return innerCentroid + tranversalScaleFactor * (aVertex - innerCentroid); });
+                std::ranges::transform(outerVertexes, outerVertexes.begin(),
+                                       [&](const auto& aVertex) { return outerCentroid + tranversalScaleFactor * (aVertex - outerCentroid); });
 
                 // clang-format off
                 /* Pentagon:
@@ -151,38 +156,38 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
                 const auto solid{Make<G4TessellatedSolid>(name)};
                 // inner surface
                 solid->AddFacet(new G4TriangularFacet{innerCentroid,
-                                                      innerVertex[0],
-                                                      innerVertex[vertexIndex.size() - 1],
+                                                      innerVertexes[0],
+                                                      innerVertexes[vertexIndex.size() - 1],
                                                       G4FacetVertexType::ABSOLUTE});
                 for (auto i{std::ssize(vertexIndex) - 1}; i > 0; --i) {
                     solid->AddFacet(new G4TriangularFacet{innerCentroid,
-                                                          innerVertex[i],
-                                                          innerVertex[i - 1],
+                                                          innerVertexes[i],
+                                                          innerVertexes[i - 1],
                                                           G4FacetVertexType::ABSOLUTE});
                 }
                 // side surface
                 for (int i{}; i < std::ssize(vertexIndex) - 1; ++i) {
-                    solid->AddFacet(new G4QuadrangularFacet{innerVertex[i],
-                                                            innerVertex[i + 1],
-                                                            outerVertex[i + 1],
-                                                            outerVertex[i],
+                    solid->AddFacet(new G4QuadrangularFacet{innerVertexes[i],
+                                                            innerVertexes[i + 1],
+                                                            outerVertexes[i + 1],
+                                                            outerVertexes[i],
                                                             G4FacetVertexType::ABSOLUTE});
                 }
-                solid->AddFacet(new G4QuadrangularFacet{innerVertex[vertexIndex.size() - 1],
-                                                        innerVertex[0],
-                                                        outerVertex[0],
-                                                        outerVertex[vertexIndex.size() - 1],
+                solid->AddFacet(new G4QuadrangularFacet{innerVertexes[vertexIndex.size() - 1],
+                                                        innerVertexes[0],
+                                                        outerVertexes[0],
+                                                        outerVertexes[vertexIndex.size() - 1],
                                                         G4FacetVertexType::ABSOLUTE});
                 // outer surface
                 for (int i{}; i < std::ssize(vertexIndex) - 1; ++i) {
                     solid->AddFacet(new G4TriangularFacet{outerCentroid,
-                                                          outerVertex[i],
-                                                          outerVertex[i + 1],
+                                                          outerVertexes[i],
+                                                          outerVertexes[i + 1],
                                                           G4FacetVertexType::ABSOLUTE});
                 }
                 solid->AddFacet(new G4TriangularFacet{outerCentroid,
-                                                      outerVertex[vertexIndex.size() - 1],
-                                                      outerVertex[0],
+                                                      outerVertexes[vertexIndex.size() - 1],
+                                                      outerVertexes[0],
                                                       G4FacetVertexType::ABSOLUTE});
                 solid->SetSolidClosed(true);
                 return solid;

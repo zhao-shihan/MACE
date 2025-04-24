@@ -40,7 +40,6 @@ using MRPCHit = Mustard::Data::TupleModel<
     
 using VetoHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
-    VetoRawHit,
-    Mustard::Data::Value<bool, "Good", "Good flag">>;
+    VetoRawHit>;
 
 } // namespace MACE::Data

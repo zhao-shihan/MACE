@@ -18,11 +18,10 @@
 /MACE/Generator/SwitchToGPSX
 /GPSX/NVertex             1
 /GPSX/PulseWidth          0 ns
-/gps/particle             mu+
-/gps/pos/type             Point
-/gps/pos/centre           0 0 0 cm
-/gps/direction            1 -1.1 0
-/gps/ene/mono             100 MeV
+/gps/particle             proton
+/gps/pos/centre           0 0 0 mm
+/gps/direction            690.2 -763.5 0
+/gps/ene/mono             120 GeV
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
 
@@ -40,7 +39,7 @@
 
 /vis/drawVolume
 
-/vis/viewer/set/viewpointVector 0 0 0
+/vis/viewer/set/viewpointVector -1 0 0
 /vis/viewer/set/lightsVector -1 1 1
 #/vis/viewer/set/rotationStyle freeRotation
 /vis/viewer/set/projection p
@@ -53,29 +52,28 @@
 
 /vis/geometry/set/visibility World                         0          no
 # remove all virtrual geometry in veto
-/vis/geometry/set/visibility VetoModuleBox_0                -1          no
-/vis/geometry/set/visibility VetoModuleBox_1                -1          no
-/vis/geometry/set/visibility VetoModuleBox_2                -1          no
-/vis/geometry/set/visibility VetoModuleBox_3                -1          no
-/vis/geometry/set/visibility VetoStripBox_0                 -1          yes
-/vis/geometry/set/visibility VetoStripBox_1                 -1          yes
-/vis/geometry/set/visibility VetoStripBox_2                 -1          yes
-/vis/geometry/set/visibility VetoStripBox_3                 -1          yes
-/vis/geometry/set/visibility VetoAlAbsorber_0                0          yes
-/vis/geometry/set/visibility VetoAlAbsorber_1                0          yes
-/vis/geometry/set/visibility VetoAlAbsorber_2                0          yes
-/vis/geometry/set/visibility VetoAlAbsorber_3                0          yes
-/vis/geometry/set/visibility VirtualPairBox                  0          no
+/vis/geometry/set/visibility VetoModuleBox_0                 0          no
+/vis/geometry/set/visibility VetoModuleBox_1                 0          no
+/vis/geometry/set/visibility VetoModuleBox_2                 0          no
+/vis/geometry/set/visibility VetoModuleBox_3                 0          no
 
 # Colors
-/vis/geometry/set/colour VetoFiberHole_0                       0     1     1     1       0.05
-/vis/geometry/set/colour VetoFiberHole_1                       0     1     1     1       0.05
-/vis/geometry/set/colour VetoFiberHole_2                       0     1     1     1       0.05
-/vis/geometry/set/colour VetoFiberHole_3                       0     1     1     1       0.05
-/vis/geometry/set/colour VetoFiber_0                           0     0     1     0       0.4
-/vis/geometry/set/colour VetoFiber_1                           0     0     1     0       0.4
-/vis/geometry/set/colour VetoFiber_2                           0     0     1     0       0.4
-/vis/geometry/set/colour VetoFiber_3                           0     0     1     0       0.4
+/vis/geometry/set/colour VetoFiberHole_0                       0     1     1     1       0.
+/vis/geometry/set/colour VetoFiberHole_1                       0     1     1     1       0.
+/vis/geometry/set/colour VetoFiberHole_2                       0     1     1     1       0.
+/vis/geometry/set/colour VetoFiberHole_3                       0     1     1     1       0.
+/vis/geometry/set/colour VetoFiberOuter_0                      0     0     1     0       0.1
+/vis/geometry/set/colour VetoFiberInner_0                      0     0     1     0       0.2
+/vis/geometry/set/colour VetoFiberCore_0                       0     0     1     0       0.3
+/vis/geometry/set/colour VetoFiberOuter_1                      0     0     1     0       0.1
+/vis/geometry/set/colour VetoFiberInner_1                      0     0     1     0       0.2
+/vis/geometry/set/colour VetoFiberCore_1                       0     0     1     0       0.3
+/vis/geometry/set/colour VetoFiberOuter_2                      0     0     1     0       0.1
+/vis/geometry/set/colour VetoFiberInner_2                      0     0     1     0       0.2
+/vis/geometry/set/colour VetoFiberCore_2                       0     0     1     0       0.3
+/vis/geometry/set/colour VetoFiberOuter_3                      0     0     1     0       0.1
+/vis/geometry/set/colour VetoFiberInner_3                      0     0     1     0       0.2
+/vis/geometry/set/colour VetoFiberCore_3                       0     0     1     0       0.3
 /vis/geometry/set/colour VetoStrip_0                           0     1     0     0       0.2
 /vis/geometry/set/colour VetoStrip_1                           0     0     0     1       0.2
 /vis/geometry/set/colour VetoStrip_2                           0     0     1     0       0.2
@@ -92,29 +90,10 @@
 /vis/geometry/set/colour VetoSiPM                              0     1     1     1       0.1
 /vis/geometry/set/colour VetoCathode                           0     1     1     1       0.3
 
-
 /vis/scene/add/date
-/vis/scene/add/axes 0 0 0 1 m
+/vis/scene/add/axes 0 0 0 10 cm
 /vis/scene/add/trajectories smooth #rich
 /vis/scene/add/hits
-
-/vis/filtering/trajectories/create/particleFilter
-/vis/filtering/trajectories/particleFilter-0/add mu+
-/vis/filtering/trajectories/particleFilter-0/add mu-
-/vis/filtering/trajectories/particleFilter-0/add muonium
-/vis/filtering/trajectories/particleFilter-0/add anti_muonium
-/vis/filtering/trajectories/particleFilter-0/add e+
-/vis/filtering/trajectories/particleFilter-0/add e-
-/vis/filtering/trajectories/particleFilter-0/add gamma
-/vis/filtering/trajectories/particleFilter-0/add opticalphoton
-/vis/filtering/trajectories/particleFilter-0/add neutron
-/vis/filtering/trajectories/particleFilter-0/add anti_neutron
-/vis/filtering/trajectories/particleFilter-0/add proton
-/vis/filtering/trajectories/particleFilter-0/add anti_proton
-/vis/filtering/trajectories/particleFilter-0/add pi+
-/vis/filtering/trajectories/particleFilter-0/add pi-
-/vis/filtering/trajectories/particleFilter-0/add pi0
-
 /vis/modeling/trajectories/create/drawByParticleID
 /vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts no
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSize 2

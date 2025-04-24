@@ -2,9 +2,9 @@
 # Initialization settings
 #############################################################################
 
-/control/verbose 0
+/control/verbose 2
 #/control/saveHistory
-/run/verbose 0
+/run/verbose 2
 
 #/Mustard/Detector/Description/Export SimVeto_geom.yaml
 /Mustard/Detector/Description/Import SimVeto_geom.yaml
@@ -24,7 +24,9 @@
 /gps/direction            1 -1.1 0
 /gps/ene/mono             120 GeV
 
-/MACE/Analysis/FilePath SimVeto_optical_test
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
+
+/MACE/Analysis/FilePath SimVeto_untitled
 /MACE/Analysis/FileMode RECREATE
 
-/run/beamOn 1000
+/geometry/test/run
