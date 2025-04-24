@@ -108,34 +108,6 @@ auto FindLayerID(int id) -> int {
     return (sciFiTracker.NLayer() - 1);
 }
 
-auto HitNumber(std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>& data, double deltaTime)
-    -> std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>> {
-    const auto& sciFiTracker{MACE::PhaseI::Detector::Description::SciFiTracker::Instance()};
-    std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>> clusterList;
-    muc::timsort(data,
-                 [](auto&& hit1, auto&& hit2) {
-                     return std::tie(Get<"SiPMID">(*hit1), Get<"t">(*hit1)) < std::tie(Get<"SiPMID">(*hit2), Get<"t">(*hit2));
-                 });
-    for (auto&& hit : data) {
-        const auto cluster{std::ranges::find_if(
-            clusterList,
-            [&](auto&& cluster) {
-                return std::ranges::any_of(cluster, [&](auto&& element) {
-                    return std::abs(Get<"t">(*hit) - Get<"t">(*element)) < deltaTime and
-                           (FindLayerID(Get<"SiPMID">(*hit)) / 2) == (FindLayerID(Get<"SiPMID">(*element)) / 2) and
-                           std::abs((Get<"SiPMID">(*hit) - (sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))))) -
-                                    (Get<"SiPMID">(*element) - (sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*element)))))) <= sciFiTracker.ClusterLength();
-                });
-            })};
-        if (cluster != clusterList.end()) {
-            cluster->emplace_back(hit);
-        } else {
-            clusterList.emplace_back().emplace_back(hit);
-        }
-    }
-    return clusterList;
-}
-
 template<typename... Args>
 auto InSameSubarray(Args... args) -> bool {
     const auto& sciFiTracker{MACE::PhaseI::Detector::Description::SciFiTracker::Instance()};
@@ -156,6 +128,36 @@ auto InSameSubarray(Args... args) -> bool {
     return false;
 }
 
+auto HitNumber(std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>& data, double deltaTime)
+    -> std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>> {
+    const auto& sciFiTracker{MACE::PhaseI::Detector::Description::SciFiTracker::Instance()};
+    std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>> clusterList;
+    muc::timsort(data,
+                 [](auto&& hit1, auto&& hit2) {
+                     return std::tie(Get<"SiPMID">(*hit1), Get<"t">(*hit1)) < std::tie(Get<"SiPMID">(*hit2), Get<"t">(*hit2));
+                 });
+    for (auto&& hit : data) {
+        const auto cluster{std::ranges::find_if(
+            clusterList,
+            [&](auto&& cluster) {
+                return std::ranges::any_of(cluster, [&](auto&& element) {
+                    return std::abs(Get<"t">(*hit) - Get<"t">(*element)) < deltaTime and
+                           InSameSubarray(FindLayerID(Get<"SiPMID">(*hit)),
+                                          FindLayerID(Get<"SiPMID">(*element))) and
+                           sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) == sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*element))) and
+                           std::abs((Get<"SiPMID">(*hit) - (sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))))) -
+                                    (Get<"SiPMID">(*element) - (sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*element)))))) <= sciFiTracker.ClusterLength();
+                });
+            })};
+        if (cluster != clusterList.end()) {
+            cluster->emplace_back(hit);
+        } else {
+            clusterList.emplace_back().emplace_back(hit);
+        }
+    }
+    return clusterList;
+}
+
 auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>>& data, double deltaTime)
     -> std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>> {
     const auto& sciFiTracker{MACE::PhaseI::Detector::Description::SciFiTracker::Instance()};
@@ -169,7 +171,6 @@ auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tup
     std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>> newLData;
     std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>> newRData;
     std::vector<std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::SiPMHit>>>> newTData;
-
     for (auto&& cluster : data) {
         if (sciFiTracker.TypeOfLayer()->at(FindLayerID(Get<"SiPMID">(*cluster.front()))) == "LHelical") {
             lData.emplace_back(cluster);
@@ -187,6 +188,7 @@ auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tup
                 for (auto it3{tData.begin()}; it3 != tData.end();) {
                     double avarageLNumber{}, avarageRNumber{}, avarageTNumber{};
                     int lNOptPho{}, rNOptPho{}, tNOptPho{};
+                    double lTime{}, rTime{}, tTime{};
                     if (not InSameSubarray(FindLayerID(Get<"SiPMID">(*it1->front())),
                                            FindLayerID(Get<"SiPMID">(*it3->front())),
                                            FindLayerID(Get<"SiPMID">(*it3->front())))) {
@@ -200,6 +202,7 @@ auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tup
                         if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
                             avarageLNumber += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
                             lNOptPho += Get<"nOptPho">(*hit);
+                            lTime += Get<"t">(*hit) * Get<"nOptPho">(*hit);
                         }
                     }
                     for (auto&& hit : *it2) {
@@ -209,6 +212,7 @@ auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tup
                         if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
                             avarageRNumber += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
                             rNOptPho += Get<"nOptPho">(*hit);
+                            rTime += Get<"t">(*hit) * Get<"nOptPho">(*hit);
                         }
                     }
 
@@ -219,19 +223,23 @@ auto DividedHit(const std::vector<std::vector<std::shared_ptr<Mustard::Data::Tup
                         if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
                             avarageTNumber += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
                             tNOptPho += Get<"nOptPho">(*hit);
+                            tTime += Get<"t">(*hit) * Get<"nOptPho">(*hit);
                         }
                     }
                     avarageLNumber = avarageLNumber / lNOptPho;
                     avarageRNumber = avarageRNumber / rNOptPho;
                     avarageTNumber = avarageTNumber / tNOptPho;
+                    double avarageLTime = lTime / lNOptPho;
+                    double avarageRTime = rTime / rNOptPho;
+                    double avarageTTime = tTime / tNOptPho;
                     int lNumber = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it1->front()))) -
                                   sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it1->front())));
                     int rNumber = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it2->front()))) -
                                   sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it2->front())));
                     int tNumber = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it3->front()))) -
                                   sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*it3->front())));
-                    if (std::abs(Get<"t">(*it3->front()) - Get<"t">(*it1->front())) < deltaTime and
-                        std::abs(Get<"t">(*it3->front()) - Get<"t">(*it2->front())) < deltaTime and
+                    if (std::abs(avarageTTime - avarageLTime) < deltaTime and
+                        std::abs(avarageTTime - avarageRTime) < deltaTime and
                         (((std::fmod((avarageLNumber / lNumber) + (avarageRNumber - rNumber / 2) / rNumber, 2) / 2 * tNumber) - avarageTNumber <= 5) or
                          ((std::fmod((avarageLNumber / lNumber) + (avarageRNumber + rNumber / 2) / rNumber, 2) / 2 * tNumber) - avarageTNumber <= 5))) {
 
@@ -308,7 +316,7 @@ auto PositionTransform(const std::vector<std::vector<std::shared_ptr<Mustard::Da
     std::vector<std::shared_ptr<Mustard::Data::Tuple<MACE::PhaseI::Data::ReconTrack>>> data0;
     for (auto&& cluster : data) {
         double lID{}, rID{}, tID{};
-        double lTime{}, rTime{}, TTime{};
+        double lTime{}, rTime{}, tTime{};
         int lNOptPho{}, rNOptPho{}, tNOptPho{};
         int nLLayer{}, nRLayer{}, nTLayer{};
         double x0 = [&]() {
@@ -357,7 +365,7 @@ auto PositionTransform(const std::vector<std::vector<std::shared_ptr<Mustard::Da
                 }
                 if (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) != 0) {
                     tID += Get<"nOptPho">(*hit) * (Get<"SiPMID">(*hit) - sciFiTracker.FirstIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))));
-                    TTime += Get<"t">(*hit) * Get<"nOptPho">(*hit);
+                    tTime += Get<"t">(*hit) * Get<"nOptPho">(*hit);
                     tNOptPho += Get<"nOptPho">(*hit);
                 }
                 nTLayer = sciFiTracker.LastIDOfLayer()->at(FindLayerID(Get<"SiPMID">(*hit))) -
@@ -371,7 +379,7 @@ auto PositionTransform(const std::vector<std::vector<std::shared_ptr<Mustard::Da
             double avarageTID = tID / tNOptPho;
             double avarageLTime = lTime / lNOptPho;
             double avarageRTime = rTime / rNOptPho;
-            double avarageTTime = TTime / tNOptPho;
+            double avarageTTime = tTime / tNOptPho;
             data0.emplace_back(std::make_shared<Mustard::Data::Tuple<MACE::PhaseI::Data::ReconTrack>>());
             *Get<"t">(*data0.back()) = (avarageLTime * (lNOptPho) + avarageRTime * (rNOptPho) + avarageTTime * (tNOptPho)) / (lNOptPho + rNOptPho + tNOptPho);
             *Get<"EvtID">(*data0.back()) = *Get<"EvtID">(*cluster.front());
@@ -386,7 +394,7 @@ auto PositionTransform(const std::vector<std::vector<std::shared_ptr<Mustard::Da
             double avarageRID = rID / rNOptPho;
             double avarageTID = tID / tNOptPho;
             double avarageRTime = rTime / rNOptPho;
-            double avarageTTime = TTime / tNOptPho;
+            double avarageTTime = tTime / tNOptPho;
             data0.emplace_back(std::make_shared<Mustard::Data::Tuple<MACE::PhaseI::Data::ReconTrack>>());
             *Get<"t">(*data0.back()) = (avarageRTime * (rNOptPho) + avarageTTime * (tNOptPho)) / (rNOptPho + tNOptPho);
             *Get<"EvtID">(*data0.back()) = *Get<"EvtID">(*cluster.front());
@@ -398,7 +406,7 @@ auto PositionTransform(const std::vector<std::vector<std::shared_ptr<Mustard::Da
             double avarageLID = lID / lNOptPho;
             double avarageTID = tID / tNOptPho;
             double avarageLTime = lTime / lNOptPho;
-            double avarageTTime = TTime / tNOptPho;
+            double avarageTTime = tTime / tNOptPho;
             data0.emplace_back(std::make_shared<Mustard::Data::Tuple<MACE::PhaseI::Data::ReconTrack>>());
             *Get<"t">(*data0.back()) = (avarageLTime * (lNOptPho) + avarageTTime * (tNOptPho)) / (lNOptPho + tNOptPho);
             *Get<"EvtID">(*data0.back()) = *Get<"EvtID">(*cluster.front());

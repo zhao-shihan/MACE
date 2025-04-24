@@ -434,7 +434,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                     false,
                     fiberNumber,
                     checkOverlaps);
-
+                fiberNumber++;
                 Make<G4PVPlacement>(
                     G4RotateZ3D{(i + second * 0.5) * 2_pi / nFiber} *
                         G4Transform3D{{},
