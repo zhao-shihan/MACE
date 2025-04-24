@@ -372,7 +372,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                         G4RotateZ3D{std::abs(pitch)} *
                         G4TranslateX3D{-curvature},
                     logicalLightGuide,
-                    scifiName + "HelicalLightguide",
+                    scifiName + "HelicalLightGuide",
                     Mother().LogicalVolume(),
                     false,
                     0,
@@ -385,7 +385,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                         G4RotateZ3D{std::abs(pitch) + 1_pi} *
                         G4TranslateX3D{-curvature},
                     logicalLightGuide,
-                    scifiName + "HelicalLightguide",
+                    scifiName + "HelicalLightGuide",
                     Mother().LogicalVolume(),
                     false,
                     0,
