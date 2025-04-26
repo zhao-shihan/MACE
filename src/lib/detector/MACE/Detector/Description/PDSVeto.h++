@@ -50,13 +50,13 @@ public:
     auto FiberInnerRadiusRatio() const -> const auto& { return *fFiberInnerRadiusRatio; }
     auto FiberCoreRadiusRatio() const -> const auto& { return *fFiberCoreRadiusRatio; }
     auto FPRIndexEnergy() const -> const auto& { return *fFPRIndexEnergy; }
-    auto FPRIndex() const -> const auto& { return *fFPRIndex;}
-    auto FPAbsEnergy() const -> const auto& { return *fFPAbsEnergy;}
-    auto FPAbsLength() const -> const auto& { return *fFPAbsLength;}
+    auto FPRIndex() const -> const auto& { return *fFPRIndex; }
+    auto FPAbsEnergy() const -> const auto& { return *fFPAbsEnergy; }
+    auto FPAbsLength() const -> const auto& { return *fFPAbsLength; }
     auto PMMARIndexEnergy() const -> const auto& { return *fPMMARIndexEnergy; }
-    auto PMMARIndex() const -> const auto& { return *fPMMARIndex;}
-    auto PMMAAbsEnergy() const -> const auto& { return *fPMMAAbsEnergy;}
-    auto PMMAAbsLength() const -> const auto& { return *fPMMAAbsLength;}
+    auto PMMARIndex() const -> const auto& { return *fPMMARIndex; }
+    auto PMMAAbsEnergy() const -> const auto& { return *fPMMAAbsEnergy; }
+    auto PMMAAbsLength() const -> const auto& { return *fPMMAAbsLength; }
     auto WLSRIndexEnergy() const -> const auto& { return *fWLSRIndexEnergy; }
     auto WLSRIndex() const -> const auto& { return *fWLSRIndex; }
     auto WLSVAbsEnergy() const -> const auto& { return *fWLSVAbsEnergy; }
@@ -119,7 +119,6 @@ private:
     auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
-
     Simple<double> fSolenoidWindowRadius;
 
     Simple<std::vector<int>> fNModuleOfACategory; // top 1, side 2 , cap1 4 , cap2 4

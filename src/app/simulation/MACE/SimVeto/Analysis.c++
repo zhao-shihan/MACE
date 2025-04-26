@@ -20,6 +20,7 @@ Analysis::Analysis():
     PassiveSingleton{this},
     fFilePath{"SimVeto_untiled"},
     fFileMode{"NEW"},
+    fCoincidenceWithVeto{true},
     fLastUsedFullFilePath{},
     fFile{},
     fPrimaryVertexOutput{},
@@ -29,7 +30,6 @@ Analysis::Analysis():
     fPrimaryVertex{},
     fDecayVertex{},
     fVetoHit{},
-    fCoincidenceWithVeto{true},
     fVetoPMHit{},
     fMessengerRegister{this}
     {}

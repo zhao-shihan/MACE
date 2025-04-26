@@ -28,7 +28,7 @@ PDSVeto::PDSVeto() :
         coupler: EJ-550
         wls fiber: KURARAY Y-11
                     (may be BICRON BCF-92 later)*/
-    // ECAL solenoid 
+    // ECAL solenoid
     fSolenoidWindowRadius{this, 14_cm},
 
     fNModuleOfACategory{this, 1, 2, 4, 4},
@@ -68,7 +68,7 @@ PDSVeto::PDSVeto() :
     fPMMARIndex{this, 1.49, 1.49},
     fPMMAAbsEnergy{this, 2.00_eV, 3.47_eV},
     fPMMAAbsLength{this, 20.0_m, 20.0_m},
-    // fiber core - WLS PS 
+    // fiber core - WLS PS
     fWLSRIndexEnergy{this, 2.00_eV, 3.47_eV},
     fWLSRIndex{this, 1.60, 1.60},
     fWLSVAbsEnergy{this, {}},

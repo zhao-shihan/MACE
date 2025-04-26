@@ -23,6 +23,7 @@ public:
     auto NSubdivision() const -> auto { return fNSubdivision; }
     auto InnerRadius() const -> auto { return fInnerRadius; }
     auto CrystalHypotenuse() const -> auto { return fCrystalHypotenuse; }
+    auto CrystalPackageThickness() const -> auto { return fCrystalPackageThickness; }
     auto UpstreamWindowRadius() const -> auto { return fUpstreamWindowRadius; }
     auto DownstreamWindowRadius() const -> auto { return fDownstreamWindowRadius; }
     auto ScintillationEnergyBin() const -> const auto& { return fScintillationEnergyBin; }
@@ -61,6 +62,7 @@ public:
     auto NSubdivision(int val) -> void { fNSubdivision = val, SetGeometryOutdated(); }
     auto InnerRadius(double val) -> void { fInnerRadius = val, SetGeometryOutdated(); }
     auto CrystalHypotenuse(double val) -> void { fCrystalHypotenuse = val, SetGeometryOutdated(); }
+    auto CrystalPackageThickness(double val) -> void { fCrystalPackageThickness = val, SetGeometryOutdated(); }
     auto UpstreamWindowRadius(double val) -> void { fUpstreamWindowRadius = val, SetGeometryOutdated(); }
     auto DownstreamWindowRadius(double val) -> void { fDownstreamWindowRadius = val, SetGeometryOutdated(); }
     auto ScintillationEnergyBin(std::vector<double> val) -> void { fScintillationEnergyBin = std::move(val); }
@@ -126,6 +128,7 @@ private:
     int fNSubdivision;
     double fInnerRadius;
     double fCrystalHypotenuse;
+    double fCrystalPackageThickness;
     double fUpstreamWindowRadius;
     double fDownstreamWindowRadius;
     std::vector<double> fScintillationEnergyBin;

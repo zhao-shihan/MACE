@@ -159,6 +159,7 @@ ECAL::ECAL() : // clang-format off
     fNSubdivision{3},
     fInnerRadius{20_cm},
     fCrystalHypotenuse{10_cm},
+    fCrystalPackageThickness{200_um},
     fUpstreamWindowRadius{50_mm},
     fDownstreamWindowRadius{5_mm},
     // BGO optical param.s
@@ -415,6 +416,7 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fNSubdivision, "NSubdivision");
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
+    ImportValue(node, fCrystalPackageThickness, "CrystalPackageThickness");
     ImportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ImportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
     ImportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");
@@ -447,6 +449,7 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fNSubdivision, "NSubdivision");
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
+    ExportValue(node, fCrystalPackageThickness, "CrystalPackageThickness");
     ExportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ExportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
     ExportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");

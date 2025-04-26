@@ -38,8 +38,7 @@ private:
     G4Material* fWlsPS;
     G4Material* fFP;
     G4Material* fPMMA;
-    std::vector<std::string> fCategoryNames{"Top","Side","Cap1","Cap2"};
-
+    std::vector<std::string> fCategoryNames{"Top", "Side", "Cap1", "Cap2"};
 };
 
 } // namespace MACE::Detector::Definition

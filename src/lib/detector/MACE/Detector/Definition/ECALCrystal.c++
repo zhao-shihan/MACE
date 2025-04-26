@@ -30,13 +30,7 @@ using namespace Mustard::LiteralUnit;
 using namespace Mustard::MathConstant;
 using namespace Mustard::PhysicalConstant;
 
-namespace {
-auto ComputeIntersection(G4ThreeVector vertexPlane, G4ThreeVector normPlane, G4ThreeVector vertexLine, G4ThreeVector direcLine) -> G4ThreeVector {
-    double lambda{
-        normPlane.dot(vertexPlane - vertexLine) / normPlane.dot(direcLine)};
-    return vertexLine + direcLine * lambda;
-}
-} // namespace
+// namespace MACE::Detector::Definition
 
 auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto& ecal{Description::ECAL::Instance()};
@@ -108,7 +102,6 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     /////////////////////////////////////////////
     // Construct Volumes
     /////////////////////////////////////////////
-    auto tranversalScaleFactor{1};
     for (int moduleID{};
          auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) {
         // loop over all ECAL face
@@ -121,20 +114,26 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
 
         const auto SolidCrystal{
             [&, &centroid = centroid, &vertexIndex = vertexIndex](const auto& name) {
-                const auto innerCentroid{innerRadius * centroid};
-                std::vector<G4ThreeVector> innerVertexes(vertexIndex.size());
-                std::ranges::transform(vertexIndex, innerVertexes.begin(),
-                                       [&](const auto& i) { return ComputeIntersection(innerCentroid, normal, vertex[i], vertex[i]); });
+                const auto ComputeIntersection{[](G4ThreeVector vertexPlane, G4ThreeVector normPlane, G4ThreeVector vertexLine, G4ThreeVector direcLine) {
+                    double lambda{normPlane.dot(vertexPlane - vertexLine) / normPlane.dot(direcLine)};
+                    return vertexLine + direcLine * lambda;
+                }};
+
                 const auto outerRadius{innerRadius + crystalHypotenuse};
                 const auto outerCentroid{outerRadius * centroid};
                 std::vector<G4ThreeVector> outerVertexes(vertexIndex.size());
+                // outer face cut vertex lines
                 std::ranges::transform(vertexIndex, outerVertexes.begin(),
                                        [&](const auto& i) { return ComputeIntersection(outerCentroid, normal, vertex[i], vertex[i]); });
-                // scaled vertexes
-                std::ranges::transform(innerVertexes, innerVertexes.begin(),
-                                       [&](const auto& aVertex) { return innerCentroid + tranversalScaleFactor * (aVertex - innerCentroid); });
+                // consider package thickness
                 std::ranges::transform(outerVertexes, outerVertexes.begin(),
-                                       [&](const auto& aVertex) { return outerCentroid + tranversalScaleFactor * (aVertex - outerCentroid); });
+                                       [&](const auto& aVertex) { return outerCentroid + (aVertex - outerCentroid).unit() * ((aVertex - outerCentroid).mag() - ecal.CrystalPackageThickness()); });
+                // inner face scaled from outer face
+                const auto innerCentroid{innerRadius * centroid};
+                const auto innerVertexScaleFactor{innerRadius / outerRadius};
+                std::vector<G4ThreeVector> innerVertexes(vertexIndex.size());
+                std::ranges::transform(outerVertexes, innerVertexes.begin(),
+                                       [&](const auto& anOuterVertex) { return anOuterVertex * innerVertexScaleFactor; });
 
                 // clang-format off
                 /* Pentagon:
