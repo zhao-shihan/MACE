@@ -63,7 +63,12 @@
 /vis/geometry/set/colour MMSField                      0     1     1     1     0.05
 /vis/geometry/set/colour MMSMagnet                     0     1     1     1     0.05
 /vis/geometry/set/colour MMSShield                     0     1     1     1     0.05
-/vis/geometry/set/colour TTC                           0     1     1     1     0.05
+/vis/geometry/set/colour TTCVirtualBox                 0     1     1     1     0.05
+/vis/geometry/set/colour TTCPCB                        0     1     1     1     0.05
+/vis/geometry/set/colour TTCWindow                     0     1     1     1     0.05
+/vis/geometry/set/colour TTCSilicone                   0     1     1     1     0.05
+/vis/geometry/set/colour TTCLightCoupler               0     1     1     1     0.05
+/vis/geometry/set/colour TTCScintillator               0     1     1     1     0.05
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour World                         0     1     1     1     0.001
 

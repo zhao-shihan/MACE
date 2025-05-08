@@ -5,14 +5,14 @@
 /control/verbose 0
 /run/verbose 0
 
-#/Mustard/Detector/Description/Ixport mms_geom.yaml
+/Mustard/Detector/Description/Ixport SimTTC/SimTTC.yaml
 
 /MACE/Physics/UseOpticalPhysics
 /run/initialize
 /process/optical/scintillation/setFiniteRiseTime true
 
 /MACE/Generator/SwitchToGPSX
-/gps/particle                         e-
+/gps/particle                         e+
 /gps/pos/type                         Point
 /gps/pos/centre                       0 0 0 m
 /gps/ang/type                         iso
@@ -20,13 +20,12 @@
 
 /MACE/Analysis/SaveTTCHitData         yes
 /MACE/Analysis/SaveTTCSiPMHitData     yes
-/MACE/Analysis/SaveCDCHitData         yes
 
 #############################################################################
 # Run
 #############################################################################
 
-/Mustard/Analysis/FilePath SimMMS_em_mono
+/Mustard/Analysis/FilePath SimTTC_ep_mono
 /Mustard/Analysis/FileMode NEW
 /run/beamOn 10000
 /Mustard/Run/PrintRunSummary
