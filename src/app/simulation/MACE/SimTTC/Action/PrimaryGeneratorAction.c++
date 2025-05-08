@@ -8,7 +8,7 @@
 namespace MACE::SimTTC::inline Action {
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserPrimaryGeneratorAction{},
     fAvailableGenerator{.gpsx{}, .ecoMug{Mustard::Geant4X::EcoMugCosmicRayMuon::Coordinate::Beam}},
     fGenerator{&fAvailableGenerator.gpsx},

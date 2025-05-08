@@ -7,6 +7,10 @@
 
 namespace MACE::SimTTC::inline Action {
 
+EventAction::EventAction() :
+    PassiveSingleton{this},
+    G4UserEventAction{} {}
+
 auto EventAction::BeginOfEventAction(const G4Event*) -> void {
     if (auto& trackingAction{TrackingAction::Instance()};
         trackingAction.SaveDecayVertexData()) {

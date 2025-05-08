@@ -18,7 +18,7 @@
 namespace MACE::SimTTC {
 
 Analysis::Analysis() :
-    AnalysisBase{},
+    AnalysisBase{this},
     fSaveTTCHitData{true},
     fSaveTTCSiPMHitData{true},
     fPrimaryVertexOutput{},
