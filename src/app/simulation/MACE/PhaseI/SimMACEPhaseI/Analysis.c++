@@ -1,9 +1,11 @@
 #include "MACE/PhaseI/SimMACEPhaseI/Action/PrimaryGeneratorAction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Action/TrackingAction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Analysis.h++"
+#include "MACE/PhaseI/Simulation/Hit/MRPCHit.h++"
+#include "MACE/PhaseI/Simulation/Hit/SciFiHit.h++"
+#include "MACE/PhaseI/Simulation/Hit/SciFiSiPMRawHit.h++"
 #include "MACE/Simulation/Hit/ECALHit.h++"
 #include "MACE/Simulation/Hit/ECALPMHit.h++"
-#include "MACE/Simulation/Hit/MRPCHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
@@ -19,7 +21,7 @@
 namespace MACE::PhaseI::SimMACEPhaseI {
 
 Analysis::Analysis() :
-    AnalysisBase{},
+    AnalysisBase{this},
     fCoincidenceWithMRPC{true},
     fCoincidenceWithECAL{true},
     fPrimaryVertexOutput{},
@@ -32,6 +34,8 @@ Analysis::Analysis() :
     fMRPCHit{},
     fECALHit{},
     fECALPMHit{},
+    fSciFiHit{},
+    fSciFiSiPMHit{},
     fMessengerRegister{this} {}
 
 auto Analysis::RunBeginUserAction(int runID) -> void {
@@ -40,6 +44,8 @@ auto Analysis::RunBeginUserAction(int runID) -> void {
     fMRPCSimHitOutput.emplace(fmt::format("G4Run{}/MRPCSimHit", runID));
     fECALSimHitOutput.emplace(fmt::format("G4Run{}/ECALSimHit", runID));
     fECALPMHitOutput.emplace(fmt::format("G4Run{}/ECALPMHit", runID));
+    fSciFiHitOutput.emplace(fmt::format("G4Run{}/SciFiHit", runID));
+    fSciFiSiPMHitOutput.emplace(fmt::format("G4Run{}/SciFiSiPMHit", runID));
 }
 
 auto Analysis::EventEndUserAction() -> void {
@@ -51,12 +57,16 @@ auto Analysis::EventEndUserAction() -> void {
         if (fMRPCHit) { fMRPCSimHitOutput->Fill(*fMRPCHit); }
         if (fECALHit) { fECALSimHitOutput->Fill(*fECALHit); }
         if (fECALPMHit) { fECALPMHitOutput->Fill(*fECALPMHit); }
+        if (fSciFiHit) { fSciFiHitOutput->Fill(*fSciFiHit); }
+        if (fSciFiSiPMHit) { fSciFiSiPMHitOutput->Fill(*fSciFiSiPMHit); }
     }
     fPrimaryVertex = {};
     fDecayVertex = {};
     fMRPCHit = {};
     fECALHit = {};
     fECALPMHit = {};
+    fSciFiHit = {};
+    fSciFiSiPMHit = {};
 }
 
 auto Analysis::RunEndUserAction(int) -> void {
@@ -66,12 +76,16 @@ auto Analysis::RunEndUserAction(int) -> void {
     fMRPCSimHitOutput->Write();
     fECALSimHitOutput->Write();
     fECALPMHitOutput->Write();
+    fSciFiHitOutput->Write();
+    fSciFiSiPMHitOutput->Write();
     // reset output
     fPrimaryVertexOutput.reset();
     fDecayVertexOutput.reset();
     fMRPCSimHitOutput.reset();
     fECALSimHitOutput.reset();
     fECALPMHitOutput.reset();
+    fSciFiHitOutput.reset();
+    fSciFiSiPMHitOutput.reset();
 }
 
 } // namespace MACE::PhaseI::SimMACEPhaseI

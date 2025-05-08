@@ -66,7 +66,7 @@ namespace MACE::SimPTS::inline Action {
 using namespace Mustard::LiteralUnit::Length;
 
 DetectorConstruction::DetectorConstruction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserDetectorConstruction{},
     fCheckOverlap{},
     fMinDriverStep{2_um},

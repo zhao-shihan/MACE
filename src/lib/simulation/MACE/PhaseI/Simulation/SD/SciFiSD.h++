@@ -1,0 +1,30 @@
+#pragma once
+
+#include "MACE/PhaseI/Simulation/Hit/SciFiHit.h++"
+
+#include "Mustard/Utility/NonMoveableBase.h++"
+
+#include "G4VSensitiveDetector.hh"
+
+#include <memory>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
+namespace MACE::PhaseI::inline Simulation::inline SD {
+
+class SciFiSD : public Mustard::NonMoveableBase,
+                public G4VSensitiveDetector {
+public:
+    SciFiSD(const G4String& sdName);
+
+    virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
+    virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
+    virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
+
+protected:
+    std::unordered_map<int, std::vector<std::unique_ptr<SciFiHit>>> fSplitHit;
+    SciFiHitCollection* fHitsCollection;
+};
+
+} // namespace MACE::PhaseI::inline Simulation::inline SD

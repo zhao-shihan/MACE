@@ -6,7 +6,7 @@
 namespace MACE::SimDose::inline Action {
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserPrimaryGeneratorAction{},
     fGPSX{} {}
 

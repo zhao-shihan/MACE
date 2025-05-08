@@ -4,9 +4,9 @@
 
 namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 
-class ECALSD final : public Simulation::ECALSD {
+class ECALSD final : public MACE::Simulation::ECALSD {
 public:
-    using Simulation::ECALSD::ECALSD;
+    using MACE::Simulation::ECALSD::ECALSD;
 
     auto EndOfEvent(G4HCofThisEvent* hc) -> void override;
 };

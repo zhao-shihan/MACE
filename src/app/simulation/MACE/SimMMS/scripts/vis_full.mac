@@ -6,11 +6,12 @@
 #/control/saveHistory
 /run/verbose 2
 
-
 #/Mustard/Detector/Description/Ixport mms_geom.yaml
 
 /MACE/Physics/UseOpticalPhysics
+
 /run/initialize
+
 /process/optical/scintillation/setFiniteRiseTime true
 
 /MACE/Generator/SwitchToGPSX

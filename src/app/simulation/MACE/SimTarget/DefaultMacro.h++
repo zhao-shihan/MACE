@@ -51,7 +51,7 @@ constexpr auto defaultMacro = {
     "/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0",
     "",
     "# kill secondaries",
-    "/MACE/Action/KillIrrelevants    true",
+    "/MACE/Action/KillIrrelevance    true",
     "",
 
 #if MUSTARD_USE_G4VIS

@@ -31,7 +31,7 @@
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
 # kill secondaries
-/MACE/Action/KillIrrelevants    yes
+/MACE/Action/KillIrrelevance    yes
 
 #############################################################################
 # Run

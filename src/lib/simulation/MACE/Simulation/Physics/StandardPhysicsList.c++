@@ -18,14 +18,12 @@
 #include "G4OpticalPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4SpinDecayPhysics.hh"
-#include "G4StoppingPhysics.hh"
 
 #include "muc/utility"
 
 #include "fmt/core.h"
 
 #include <algorithm>
-#include <typeinfo>
 
 namespace MACE::inline Simulation::inline Physics {
 
@@ -64,16 +62,8 @@ auto StandardPhysicsListBase::UseOpticalPhysics() -> void {
     G4OpticalParameters::Instance()->SetBoundaryInvokeSD(true);
 }
 
-auto StandardPhysicsListBase::DisableMuonMinusCapture() -> void {
-    const auto stopping{dynamic_cast<const G4StoppingPhysics*>(GetPhysicsWithType(bStopping))};
-    if (stopping == nullptr) {
-        Mustard::PrettyError("Stopping physics not found");
-        return;
-    }
-    if (typeid(*stopping) == typeid(G4StoppingPhysics)) {
-        Mustard::PrettyWarning(fmt::format("Replacing stopping physics {} with {}", typeid(*stopping).name(), typeid(G4StoppingPhysics).name()));
-    }
-    ReplacePhysics(new G4StoppingPhysics{"stopping", verboseLevel, false});
-}
+StandardPhysicsList::StandardPhysicsList() :
+    PassiveSingleton{this},
+    StandardPhysicsListBase{} {}
 
 } // namespace MACE::inline Simulation::inline Physics

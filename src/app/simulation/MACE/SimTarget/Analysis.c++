@@ -21,7 +21,7 @@
 namespace MACE::SimTarget {
 
 Analysis::Analysis() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     fFilePath{"SimTarget_untitled"},
     fFileMode{"NEW"},
     fEnableYieldAnalysis{true},

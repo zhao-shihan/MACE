@@ -30,7 +30,7 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithABool> fKillIrrelevants;
+    std::unique_ptr<G4UIcmdWithABool> fKillIrrelevance;
 };
 
 } // namespace Messenger

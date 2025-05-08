@@ -18,7 +18,7 @@ using namespace Mustard::LiteralUnit::Density;
 using namespace Mustard::LiteralUnit::Temperature;
 
 DetectorConstruction::DetectorConstruction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserDetectorConstruction{},
     fCheckOverlap{true},
     fWorld{} {

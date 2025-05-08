@@ -15,7 +15,7 @@ namespace MACE::SimTarget::inline Action {
 using namespace Mustard::PhysicalConstant;
 
 TrackingAction::TrackingAction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4UserTrackingAction{},
     fMuoniumTrack{} {}
 
