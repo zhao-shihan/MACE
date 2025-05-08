@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MACE/Detector/Assembly/MMS.h++"
+#include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Simulation/Messenger/NumericMessenger.h++"
 
@@ -31,9 +32,10 @@ public:
     auto Construct() -> G4VPhysicalVolume* override;
 
 public:
-    using DescriptionInUse = muc::tuple_unique_t<muc::tuple_concat_t<
-        Detector::Assembly::MMS::DescriptionInUse,
-        std::tuple<Detector::Description::World>>>;
+    using DescriptionInUse = std::tuple<
+        Detector::Description::MMSField,
+        Detector::Description::TTC,
+        Detector::Description::World>;
 
 private:
     G4bool fCheckOverlap;
