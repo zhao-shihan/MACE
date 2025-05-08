@@ -26,7 +26,7 @@ TTC::TTC() : // clang-format off
     fRadius{this, 48_cm},
     fSlantAngle{this, 46_deg},
     fNAlongPhi{this, 122},
-    fBarrelLength{this, 6_cm},
+    fBarrelLength{this, 180_cm},
 
     fPCBLength{this, 3_cm},
     fPCBWidth{this, 1_cm},
