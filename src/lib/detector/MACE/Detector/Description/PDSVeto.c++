@@ -26,7 +26,7 @@ PDSVeto::PDSVeto() :
     /*  SiPM: microfc-30035-smt
         plastic scintillator: EJ-200
         coupler: EJ-550
-        wls fiber: KURARAY Y-11
+        wls fiber: KURARAY Y-11(M200)
                     (may be BICRON BCF-92 later)*/
     // ECAL solenoid
     fSolenoidWindowRadius{this, 14_cm},
@@ -54,10 +54,23 @@ PDSVeto::PDSVeto() :
     fSiPMEfficiency{this, {}},
 
     // Fiber
-    fFiberHoleRadius{this, 0.75_mm},
+    /*
+    2 types of fibers:
+        - Y11(M200): FP(outer)#0.02R, PMMA(inner)#0.02R, WLS PS(core)#0.96R
+        - BCF-92: PMMA(outter)#0.03R, WLS PS(core)#0.97R
+    */
+
+    fFiberHoleRadius{this, 1.4_mm},
     fFiberRadius{this, 0.7_mm},
+
+    // // fiber material [Y11(M200)]
     fFiberInnerRadiusRatio{this, 0.98},
-    fFiberCoreRadiusRatio{this, 0.96},
+
+    // BCF-92 size (2 layers of same material PMMA as one layer of cladding)
+    fFiberCoreRadiusRatio{this, 0.97},
+    // Y11
+    // fFiberCoreRadiusRatio{this, 0.96},
+
     // fiber outer - FP (Fluorinated Polymer)
     fFPRIndexEnergy{this, 2.00_eV, 3.47_eV},
     fFPRIndex{this, 1.42, 1.42},
@@ -77,9 +90,6 @@ PDSVeto::PDSVeto() :
     fWLSAbsLength{this, {}},
     fWLSEmissionEnergy{this, {}},
     fWLSEmissionAmplitude{this, {}},
-    // fiber material [BICRON BCF-92]
-    // fiber clad - PMMA defined before
-    // fiber core - WLS PS BCF92
 
     fInterPSGap{this, 1_mm},
     fPerpendicularModuleGap{this, 0.5_cm},
@@ -94,7 +104,8 @@ PDSVeto::PDSVeto() :
 
     fCategoryConfiguration{this, [this] { return CalculateCategoryConfiguration(); }},
     fStripInformation{this, [this] { return CalculateStripInformation(); }},
-    fStartingStripIDOfAModule{this, [this] { return CalculateStartingStripIDOfAModule(); }} {
+    fStartingStripIDOfAModule{this, [this] { return CalculateStartingStripIDOfAModule(); }},
+    fNStrip{this, [this] { return CalculateNStrip(); }} {
     fPSScintillationEnergyBin = {2.482953109_eV, 2.489659196_eV, 2.496003695_eV, 2.502381059_eV, 2.508791544_eV, 2.515235634_eV, 2.521712914_eV, 2.528223186_eV, 2.53476796_eV, 2.541347168_eV, 2.548161747_eV,
                                  2.554661489_eV, 2.561202446_eV, 2.567815247_eV, 2.574829427_eV, 2.579956087_eV, 2.585046827_eV, 2.590273296_eV, 2.596648064_eV, 2.602100665_eV, 2.608203377_eV, 2.613926041_eV,
                                  2.61797784_eV, 2.622401485_eV, 2.628222987_eV, 2.632330767_eV, 2.637208697_eV, 2.643026898_eV, 2.647008211_eV, 2.651842137_eV, 2.658691238_eV, 2.665141972_eV, 2.671429914_eV,
@@ -146,10 +157,13 @@ PDSVeto::PDSVeto() :
                        0.327920, 0.321875, 0.316878, 0.311022, 0.304988, 0.299512, 0.295507, 0.290862, 0.284640, 0.276884, 0.267938, 0.256915,
                        0.247440, 0.237114, 0.227097, 0.216229, 0.206211, 0.194671, 0.183234, 0.171318, 0.162100, 0.149589, 0.138679, 0.128470,
                        0.117973, 0.105446, 0.099453, 0.092758, 0.082126, 0.072436, 0.063332, 0.055295, 0.044820, 0.041966, 0.041404};
+
     fWLSVAbsEnergy = {1.910850344_eV, 1.940785336_eV, 1.970888993_eV, 2.001132814_eV, 2.040688494_eV, 2.071396918_eV, 2.111107026_eV,
                       2.141209229_eV, 2.180785635_eV, 2.220856839_eV, 2.261395753_eV, 2.301302736_eV, 2.34043068_eV, 2.380912184_eV};
     fWLSVAbsLength = {14.49489342_m, 16.81308915_m, 20.64029605_m, 15.52541632_m, 7.587889914_m, 12.70061337_m, 18.20429215_m, 19.09754214_m,
                       17.39172749_m, 16.99931524_m, 16.29954689_m, 12.80542565_m, 10.12174192_m, 8.388157991_m};
+
+    // Y11(200)
     fWLSAbsEnergy = {1.997981846_eV, 2.027062605_eV, 2.057002412_eV, 2.085755333_eV, 2.114253037_eV, 2.142441084_eV, 2.171390915_eV,
                      2.201133835_eV, 2.229321308_eV, 2.258240077_eV, 2.286666787_eV, 2.315818293_eV, 2.343091665_eV, 2.372361386_eV,
                      2.400991064_eV, 2.43032019_eV, 2.457480388_eV, 2.486733706_eV, 2.513663605_eV, 2.542729703_eV, 2.570892934_eV,
@@ -175,6 +189,43 @@ PDSVeto::PDSVeto() :
                              12.9, 13.0, 12.8, 12.3, 11.1, 11.0, 12.0, 11.0, 17.0, 16.9,
                              15.0, 9.00, 2.50, 1.00, 0.05, 0.00, 0.00, 0.00, 0.00, 0.00,
                              0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00};
+
+    // BCF-92
+    // fWLSAbsEnergy = {1.5594_eV, 1.6260_eV, 1.7080_eV, 1.7987_eV, 1.8995_eV, 2.0124_eV, 2.1394_eV, 2.2836_eV,
+    //                  2.4487_eV, 2.5405_eV, 2.6394_eV, 2.7464_eV, 2.8032_eV, 2.8624_eV, 2.9007_eV, 2.9262_eV,
+    //                  2.9440_eV, 2.9703_eV, 2.9969_eV, 3.0157_eV, 3.0589_eV, 3.1238_eV, 3.1266_eV, 3.1288_eV,
+    //                  3.1493_eV, 3.1536_eV, 3.1700_eV, 3.1700_eV, 3.1770_eV, 3.1940_eV, 3.2317_eV, 3.2466_eV,
+    //                  3.2484_eV, 3.2927_eV, 3.3034_eV, 3.3078_eV, 3.3256_eV, 3.3449_eV, 3.4053_eV, 3.4146_eV,
+    //                  3.4461_eV, 3.4863_eV, 3.5228_eV, 3.5314_eV, 3.5692_eV, 3.6078_eV, 3.6319_eV, 3.6441_eV,
+    //                  3.6784_eV, 3.7128_eV, 3.7160_eV, 3.7448_eV, 3.7448_eV, 3.7448_eV, 3.7448_eV, 3.7873_eV,
+    //                  3.7973_eV, 3.8308_eV, 3.8376_eV, 3.9144_eV, 4.0445_eV, 4.1488_eV, 4.2808_eV, 4.4205_eV,
+    //                  4.5695_eV, 4.7346_eV, 4.8999_eV, 5.0837_eV, 5.2829_eV, 5.4961_eV, 5.7284_eV, 5.9982_eV,
+    //                  6.2475_eV, 6.5149_eV, 6.5886_eV, 7.5266_eV, 8.8643_eV, 10.8245_eV, 13.8977_eV};
+    // fWLSAbsLength = {361611.6438_mm, 361400.7965_mm, 361164.2021_mm, 360927.7626_mm, 360691.4779_mm, 360455.3479_mm, 360219.3724_mm, 359983.5515_mm,
+    //                  359747.8849_mm, 359630.1095_mm, 359512.3726_mm, 359394.6743_mm, 359335.8396_mm, 360380.8975_mm, 290069.8609_mm, 224728.2956_mm,
+    //                  166538.0963_mm, 132338.7107_mm, 106000.3600_mm, 85104.3536_mm, 77866.6140_mm, 64761.8869_mm, 78559.3526_mm, 55174.5714_mm,
+    //                  44458.4756_mm, 33398.3924_mm, 20381.0637_mm, 27510.5357_mm, 15858.6147_mm, 13246.0310_mm, 14116.4548_mm, 16031.9084_mm,
+    //                  18674.8084_mm, 19294.2398_mm, 16030.0246_mm, 13842.8878_mm, 12231.7983_mm, 10555.3137_mm, 10167.9243_mm, 8656.1221_mm,
+    //                  7584.0771_mm, 6318.8203_mm, 4696.4851_mm, 3367.3059_mm, 2224.5449_mm, 1581.8879_mm, 1225.2626_mm, 937.0545_mm,
+    //                  676.6728_mm, 371.7412_mm, 271.3018_mm, 217.8197_mm, 78.9842_mm, 119.5509_mm, 151.9744_mm, 40.1612_mm,
+    //                  25.1639_mm, 17.3387_mm, 15.6147_mm, 14.2819_mm, 12.8905_mm, 12.4210_mm, 12.1064_mm, 11.7788_mm,
+    //                  11.0497_mm, 10.4916_mm, 10.5997_mm, 10.5980_mm, 10.8642_mm, 10.8466_mm, 10.5928_mm, 10.5122_mm,
+    //                  10.8632_mm, 12.1438_mm, 13.2396_mm, 13.2340_mm, 13.2281_mm, 13.2221_mm, 13.3349_mm};
+
+    // fWLSEmissionEnergy = {2.072668_eV, 2.087627_eV, 2.102804_eV, 2.118203_eV, 2.133829_eV, 2.149687_eV, 2.165783_eV, 2.180947_eV, 2.190779_eV,
+    //                       2.206697_eV, 2.221546_eV, 2.235514_eV, 2.249186_eV, 2.263025_eV, 2.275209_eV, 2.286437_eV, 2.297611_eV, 2.307865_eV, 2.318225_eV,
+    //                       2.326724_eV, 2.334773_eV, 2.342878_eV, 2.351163_eV, 2.361044_eV, 2.369381_eV, 2.379469_eV, 2.387456_eV, 2.393374_eV, 2.399829_eV,
+    //                       2.409937_eV, 2.419943_eV, 2.427271_eV, 2.430846_eV, 2.435892_eV, 2.442553_eV, 2.447967_eV, 2.455639_eV, 2.467317_eV, 2.478633_eV,
+    //                       2.500057_eV, 2.521853_eV, 2.543767_eV, 2.553660_eV, 2.560969_eV, 2.566991_eV, 2.571342_eV, 2.574949_eV, 2.577704_eV, 2.579817_eV,
+    //                       2.582343_eV, 2.585422_eV, 2.588243_eV, 2.592287_eV, 2.593899_eV, 2.596385_eV, 2.598615_eV, 2.601397_eV, 2.603241_eV, 2.606308_eV,
+    //                       2.607797_eV, 2.609798_eV, 2.612417_eV, 2.614666_eV, 2.616624_eV, 2.620815_eV, 2.622568_eV, 2.624592_eV, 2.629949_eV, 2.636227_eV,
+    //                       2.643019_eV, 2.653211_eV, 2.672243_eV};
+    // fWLSEmissionAmplitude = {0.090963, 0.107187, 0.115347, 0.124394, 0.142942, 0.164401, 0.182225, 0.191610, 0.209343, 0.234746, 0.258356,
+    //                          0.289982, 0.322887, 0.349996, 0.376286, 0.404673, 0.432265, 0.460126, 0.487991, 0.515719, 0.544034, 0.571713, 0.599199, 0.625507,
+    //                          0.651503, 0.678989, 0.704660, 0.730222, 0.758730, 0.781543, 0.804684, 0.831051, 0.857657, 0.885776, 0.910673, 0.934254, 0.960825,
+    //                          0.980606, 0.998168, 1.000000, 0.990804, 0.961276, 0.928059, 0.894599, 0.863179, 0.825355, 0.783039, 0.752410, 0.723800, 0.694198,
+    //                          0.662598, 0.630395, 0.597710, 0.566989, 0.534304, 0.501822, 0.468574, 0.433260, 0.397678, 0.365155, 0.333665, 0.302004, 0.268868,
+    //                          0.235958, 0.202735, 0.173761, 0.145028, 0.116393, 0.088598, 0.061922, 0.030952, 0.006711};
 }
 
 auto PDSVeto::CalculateCategoryConfiguration() const -> std::vector<CategoryConfigurationType> {
@@ -348,6 +399,14 @@ auto PDSVeto::CalculateStartingStripIDOfAModule() const -> std::vector<short> {
         stripIDAccumulation += nStripOfAModule(thisModuleID);
     }
     return startingStripIDS;
+}
+
+auto PDSVeto::CalculateNStrip() const -> int {
+    auto nStrip{0};
+    for (int categoryID{}; categoryID < ssize(*fNModuleOfACategory); ++categoryID) {
+        nStrip += (*fNModuleOfACategory)[categoryID] * (*fNLayerPerModuleOfACategory)[categoryID] * (*fNStripPerLayerOfACategory)[categoryID];
+    }
+    return nStrip;
 }
 
 auto PDSVeto::ImportAllValue(const YAML::Node& node) -> void {

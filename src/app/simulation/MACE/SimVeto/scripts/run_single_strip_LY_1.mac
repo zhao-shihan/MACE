@@ -6,12 +6,13 @@
 /run/verbose 0
 
 
-/Mustard/Detector/Description/Import SimVeto_geom.yaml
+/Mustard/Detector/Description/Import SimVeto_geom_1.yaml
 
 /MACE/Physics/UseOpticalPhysics
 
 /run/initialize
 
+/MACE/Generator/SwitchToEcoMug
 /Mustard/EcoMug/Position/Hsphere 0 0 0 m
 /Mustard/EcoMug/Size/Hsphere/Radius 2 m
 
@@ -25,7 +26,7 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimVeto_strip_LY
+/MACE/Analysis/FilePath SimVeto_strip_LY_1
 /MACE/Analysis/FileMode RECREATE
-/run/beamOn 5000000
+/run/beamOn 20000000
 /Mustard/Run/PrintRunSummary

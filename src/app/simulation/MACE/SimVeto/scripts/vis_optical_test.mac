@@ -10,18 +10,23 @@
 /Mustard/Detector/Description/Import SimVeto_geom.yaml
 #/Mustard/Detector/Description/Ixport SimVeto_geom.yaml
 
-/MACE/Physics/UseOpticalPhysics
+#/MACE/Physics/UseOpticalPhysics
 
 
 /run/initialize
 
-/MACE/Generator/SwitchToGPSX
-/GPSX/NVertex             1
-/GPSX/PulseWidth          0 ns
-/gps/particle             proton
-/gps/pos/centre           0 0 0 mm
-/gps/direction            690.2 -763.5 0
-/gps/ene/mono             120 GeV
+#/MACE/Generator/SwitchToGPSX
+#/GPSX/NVertex             1
+#/GPSX/PulseWidth          0 ns
+#/gps/particle             mu-
+#/gps/pos/centre           0 0 0 mm
+#/gps/direction            690.2 -763.5 0
+#/gps/ene/mono             10 GeV
+
+/MACE/Generator/SwitchToEcoMug
+/Mustard/EcoMug/Position/Hsphere 0 0 0 m
+/Mustard/EcoMug/Size/Hsphere/Radius 2 m
+
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
 
@@ -89,9 +94,14 @@
 /vis/geometry/set/colour VetoSiPMCoupler                       0     1     1     1       0.2
 /vis/geometry/set/colour VetoSiPM                              0     1     1     1       0.1
 /vis/geometry/set/colour VetoCathode                           0     1     1     1       0.3
+/vis/geometry/set/colour VetoGeneratorSphere                           0     1     1     1       0.1
+
 
 /vis/scene/add/date
-/vis/scene/add/axes 0 0 0 10 cm
+#/vis/scene/add/axes 0 0 0 0.5 m auto no
+#/vis/scene/add/scale  
+/vis/touchable/set/lineSegmentsPerCircle 1
+/vis/viewer/set/lineSegmentsPerCircle 255
 /vis/scene/add/trajectories smooth #rich
 /vis/scene/add/hits
 /vis/modeling/trajectories/create/drawByParticleID

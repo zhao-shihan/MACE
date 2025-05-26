@@ -33,6 +33,7 @@ using MRPCRawHit = Mustard::Data::TupleModel<
 
 using VetoRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<short, "StripID", "Hit strip ID">,
+    Mustard::Data::Value<short, "ModuleID", "Hit module ID">,
     Mustard::Data::Value<double, "t", "Hit time">,
     Mustard::Data::Value<float, "Edep", "Energy deposition">>;
 

@@ -69,6 +69,7 @@ public:
     auto CategoryConfiguration() const -> const auto& { return *fCategoryConfiguration; }
     auto StripInformation() const -> const auto& { return *fStripInformation; }
     auto StartingStripIDOfAModule() const -> const auto& { return *fStartingStripIDOfAModule; }
+    auto NStrip() const -> const int& { return *fNStrip; }
 
 public:
     struct CategoryConfigurationType {
@@ -114,6 +115,7 @@ private:
     auto CalculateCategoryConfiguration() const -> std::vector<CategoryConfigurationType>;
     auto CalculateStripInformation() const -> std::vector<StripInformationType>;
     auto CalculateStartingStripIDOfAModule() const -> std::vector<short>;
+    auto CalculateNStrip() const -> int;
 
     auto ImportAllValue(const YAML::Node& node) -> void override;
     auto ExportAllValue(YAML::Node& node) const -> void override;
@@ -176,6 +178,7 @@ private:
     Cached<std::vector<CategoryConfigurationType>> fCategoryConfiguration;
     Cached<std::vector<StripInformationType>> fStripInformation;
     Cached<std::vector<short>> fStartingStripIDOfAModule;
+    Cached<int> fNStrip;
     // Cached<std::vector<double>> fModuleLengthOfaCategory;
 };
 

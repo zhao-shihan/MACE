@@ -1,7 +1,6 @@
+#include "MACE/Detector/Description/ECALField.h++"
 #include "MACE/SimVeto/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimVeto/Analysis.h++"
-
-#include "MACE/Detector/Description/ECALField.h++"
 
 #include "Mustard/Utility/LiteralUnit.h++"
 
@@ -9,7 +8,7 @@
 #include "G4PrimaryVertex.hh"
 
 namespace MACE::SimVeto::inline Action {
-
+using namespace Mustard::Utility::LiteralUnit;
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{this},
     G4VUserPrimaryGeneratorAction{},
@@ -18,9 +17,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fSavePrimaryVertexData{true},
     fPrimaryVertexData{},
     fAnalysisMessengerRegister{this},
-    fPrimaryGeneratorActionMessengerRegister{this} 
-    {}
-
+    fPrimaryGeneratorActionMessengerRegister{this} {
+    fAvailableGenerator.ecoMug.UseHSphere();
+    fAvailableGenerator.ecoMug.HSphereRadius(2_m);
+    std::cout << "=====>estimated time of 10000000 CR muon: " << fAvailableGenerator.ecoMug.EstimatedTime(10000000) << " ns" << std::endl;
+}
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
     fGenerator->GeneratePrimaryVertex(event);
     if (fSavePrimaryVertexData) { UpdatePrimaryVertexData(*event); }

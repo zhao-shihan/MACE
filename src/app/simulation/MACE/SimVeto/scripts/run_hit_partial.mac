@@ -1,0 +1,20 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+/control/verbose 2
+#/control/saveHistory
+/run/verbose 2
+
+#/Mustard/Detector/Description/Ixport SimVeto_geom.yaml
+
+/run/initialize
+
+/Mustard/EcoMug/Position/Hsphere 0 0 0 m
+/Mustard/EcoMug/Size/Hsphere/Radius 2 m
+
+
+/MACE/Analysis/FilePath SimVeto_hit_partial_test
+/MACE/Analysis/FileMode RECREATE
+
+/run/beamOn 10000000

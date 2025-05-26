@@ -188,7 +188,7 @@ ECAL::ECAL() : // clang-format off
     fScintillationYield{10000},
     fScintillationTimeConstant1{300_ns},
     fResolutionScale{1.},
-    fUseMPPC{false},
+    fUseMPPC{true},
     fPMTDimensions{{29.3_mm, 25_mm, 87_mm},    // 9442B Type-HEX01
                    {29.3_mm, 25_mm, 87_mm},    // 9442B Type-PEN
                    {39.9_mm, 32_mm, 98.5_mm},  // 9902B Type-HEX02

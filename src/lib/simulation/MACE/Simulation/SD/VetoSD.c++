@@ -60,13 +60,7 @@ VetoSD::VetoSD(const G4String& sdName, const VetoPMSD* vetoPMSD) :
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
-    fSplitHit.reserve([&]() {
-        int nStrip{};
-        for (int categoryID{}; categoryID < ssize(veto.NModuleOfACategory()); ++categoryID) {
-            nStrip += veto.NModuleOfACategory()[categoryID] * veto.NLayerPerModuleOfACategory()[categoryID] * veto.NStripPerLayerOfACategory()[categoryID];
-        }
-        return nStrip;
-    }());
+    fSplitHit.reserve(veto.NStrip());
 }
 
 auto VetoSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
@@ -91,10 +85,10 @@ auto VetoSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& touchable{*preStepPoint.GetTouchable()};
 
     // replica number list 0_strip, 1_stripBox, 2_moduleBox
+    const auto moduleID{touchable.GetReplicaNumber(2)};
     const auto stripID{[&]() {
         const auto& veto{PDSVeto::Instance()};
         const auto stripLocalID{touchable.GetReplicaNumber(1)};
-        const auto moduleID{touchable.GetReplicaNumber(2)};
         return stripLocalID + veto.StartingStripIDOfAModule()[moduleID];
     }()};
 
@@ -108,6 +102,7 @@ auto VetoSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"StripID">(*hit) = stripID;
+    Get<"ModuleID">(*hit) = moduleID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"nOptPho">(*hit) = -1; // to be determined
@@ -192,19 +187,9 @@ auto VetoSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
 
     if (fVetoPMSD) {
-        // fmt::println("requiring nHit");
         auto nHit{fVetoPMSD->NOpticalPhotonHit()};
-        // if (!nHit.empty()) {
-        //     fmt::println("not empty nHit, Hit on strip 36: {}", nHit.at(36));
-        // } else {
-        //     fmt::println("!!empty nHit");
-        // }
         auto nHitOnEachSiPM{fVetoPMSD->NOpticalPhotonOnEachSiPM()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            // std::cout<< "VetoSD caculated stripID: "<<Get<"StripID">(*hit)<<"\n";    /*debug: check index range*/
-            // fmt::println("reading nHit on strip{}:",stripID);
-            // std::cout << "reading nHit on strip" << stripID << ":" << std::endl;
-            // fmt::println("{} hits", nHit.at(stripID));
             if (not nHit.empty()) {
                 Get<"nOptPho">(*hit) = nHit.at(Get<"StripID">(*hit));
                 Get<"nOptPhoOnEachSiPM">(*hit) = nHitOnEachSiPM.at(Get<"StripID">(*hit));
@@ -214,7 +199,6 @@ auto VetoSD::EndOfEvent(G4HCofThisEvent*) -> void {
             }
         }
     }
-    // fmt::println("VetoSD::EndOfEvent(): this EndOfEvent ended");
 }
 
 } // namespace MACE::inline Simulation::inline SD

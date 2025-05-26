@@ -4,6 +4,7 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/PDSVeto.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/World.h++"
 #include "MACE/SimVeto/Action/DetectorConstruction.h++"
 #include "MACE/SimVeto/Messenger/DetectorMessenger.h++"
 #include "MACE/SimVeto/SD/VetoPMSD.h++"
@@ -44,10 +45,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         solenoid.T2Radius(0.);
         ecalField.Length(0.);
     }
-
+    auto& fWorldDescription{MACE::Detector::Description::World::Instance()};
+    fWorldDescription.HalfYExtent(3*m);
     fWorld = std::make_unique<MACE::Detector::Definition::World>();
     auto& pdsVeto{fWorld->NewDaughter<MACE::Detector::Definition::PDSVeto>(fCheckOverlap)};
-
     const auto& vetoName{MACE::Detector::Description::PDSVeto::Instance().Name()};
     const auto& vetoPMSD{new SD::VetoPMSD{vetoName + "PM"}};
     const auto& vetoStripSD{
