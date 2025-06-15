@@ -11,10 +11,10 @@
 #include "G4VSensitiveDetector.hh"
 
 #include <algorithm>
+#include <cmath>
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include <cmath>
 
 namespace MACE::inline Simulation::inline SD {
 

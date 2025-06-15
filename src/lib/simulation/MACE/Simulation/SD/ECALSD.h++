@@ -15,7 +15,7 @@ namespace MACE::inline Simulation::inline SD {
 class ECALPMSD;
 
 class ECALSD : public Mustard::NonMoveableBase,
-              public G4VSensitiveDetector {
+               public G4VSensitiveDetector {
 public:
     ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD = {});
 

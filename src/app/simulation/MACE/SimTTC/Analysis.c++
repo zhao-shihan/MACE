@@ -39,12 +39,10 @@ auto Analysis::RunBeginUserAction(int runID) -> void {
 }
 
 auto Analysis::EventEndUserAction() -> void {
-    
     if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
     if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
     if (fTTCSimHitOutput) { fTTCSimHitOutput->Fill(*fTTCHit); }
     if (fTTCSiPMHitOutput) { fTTCSiPMHitOutput->Fill(*fTTCSiPMHit); }
-        
     fPrimaryVertex = {};
     fDecayVertex = {};
     fTTCHit = {};

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Data/MMSTrack.h++"
-#include "MACE/Data/SimHit.h++"
 #include "MACE/Data/SensorHit.h++"
+#include "MACE/Data/SimHit.h++"
 #include "MACE/Data/SimVertex.h++"
 #include "MACE/SimMMS/Messenger/AnalysisMessenger.h++"
 #include "MACE/Simulation/Analysis/MMSTruthTracker.h++"

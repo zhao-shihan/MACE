@@ -11,8 +11,8 @@
 namespace MACE::inline Simulation::inline Hit {
 
 class ECALHit final : public Mustard::Geant4X::UseG4Allocator<ECALHit>,
-                     public G4VHit,
-                     public Mustard::Data::Tuple<Data::ECALSimHit> {};
+                      public G4VHit,
+                      public Mustard::Data::Tuple<Data::ECALSimHit> {};
 
 using ECALHitCollection = G4THitsCollection<ECALHit>;
 
