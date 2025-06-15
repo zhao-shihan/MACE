@@ -13,6 +13,8 @@
 #include "TFile.h"
 #include "TMacro.h"
 
+#include "mpl/mpl.hpp"
+
 #include "fmt/core.h"
 
 #include <algorithm>
@@ -52,7 +54,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
     }
     fLastUsedFullFilePath = std::move(fullFilePath);
     // save geometry
-    if (filePathChanged and Mustard::Env::MPIEnv::Instance().OnCommWorldMaster()) {
+    if (filePathChanged and mpl::environment::comm_world().rank() == 0) {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimECAL_gdml", "SimECAL.gdml")->Write();
     }
     // initialize outputs

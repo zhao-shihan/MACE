@@ -10,6 +10,8 @@
 #include "TFile.h"
 #include "TMacro.h"
 
+#include "mpl/mpl.hpp"
+
 #include "fmt/format.h"
 
 #include <optional>
@@ -43,7 +45,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
     }
     fLastUsedFullFilePath = std::move(fullFilePath);
     // save geometry
-    if (filePathChanged and Mustard::Env::MPIEnv::Instance().OnCommWorldMaster()) {
+    if (filePathChanged and mpl::environment::comm_world().rank() == 0) {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimPTS_gdml", "SimPTS.gdml")->Write();
     }
     // initialize outputs

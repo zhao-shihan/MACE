@@ -17,32 +17,39 @@ GenFitterBase<AHit, ATrack, AFitter>::GenFitterBase(double driftErrorRMS, double
         Detector::Assembly::MMS mms{world, false};
         mms.Get<Detector::Definition::CDCGas>().RemoveDaughter<Detector::Definition::CDCSuperLayer>();
         // geant4 -> gdml
-        const auto& mpiEnv{Mustard::Env::MPIEnv::Instance()};
+        const auto& commNode{Mustard::Env::MPIEnv::Instance().CommNode()};
         std::filesystem::path gdmlFSPath;
         std::filesystem::path::string_type gdmlPath;
-        if (mpiEnv.OnCommNodeMaster()) {
+        if (commNode.rank() == 0) {
             gdmlFSPath = Mustard::CreateTemporaryFile("mms_temp", ".gdml");
             world.Export(gdmlFSPath);
             gdmlPath = gdmlFSPath;
         }
         auto gdmlPathLength{gdmlPath.length()};
-        MPI_Bcast(&gdmlPathLength, 1, Mustard::MPIX::DataType(gdmlPathLength), 0, mpiEnv.CommNode());
+        commNode.bcast(0, gdmlPathLength);
         gdmlPath.resize(gdmlPathLength);
-        MPI_Bcast(gdmlPath.data(), gdmlPathLength, Mustard::MPIX::DataType(gdmlPath.data()), 0, mpiEnv.CommNode());
+        commNode.bcast(0, gdmlPath.data(), mpl::vector_layout<std::filesystem::path::value_type>{gdmlPathLength});
         // gdml -> root
         TGeoManager::Import(gdmlPath.c_str());
         gGeoManager->SetName(name);
         gGeoManager->GetTopVolume()->SetInvisible();
         // remove gdml
-        MPI_Barrier(mpiEnv.CommNode());
-        if (mpiEnv.OnCommNodeMaster()) {
+        std::byte importCompleteSemaphore{};
+        commNode.reduce([](auto, auto) { return std::byte{}; }, 0, importCompleteSemaphore);
+        if (commNode.rank() == 0) {
             std::error_code ec;
             std::filesystem::remove(gdmlFSPath, ec);
         }
     }
     // setup genfit
-    genfit::MaterialEffects::getInstance()->init(new genfit::TGeoMaterialInterface);
-    genfit::FieldManager::getInstance()->init(new GenFitMMSField);
+    if (const auto materialEffects{genfit::MaterialEffects::getInstance()};
+        not materialEffects->isInitialized()) {
+        materialEffects->init(new genfit::TGeoMaterialInterface);
+    }
+    if (const auto fieldManager{genfit::FieldManager::getInstance()};
+        not fieldManager->isInitialized()) {
+        fieldManager->init(new GenFitMMSField);
+    }
 }
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
