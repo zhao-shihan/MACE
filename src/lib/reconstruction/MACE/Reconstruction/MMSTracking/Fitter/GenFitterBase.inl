@@ -17,26 +17,26 @@ GenFitterBase<AHit, ATrack, AFitter>::GenFitterBase(double driftErrorRMS, double
         Detector::Assembly::MMS mms{world, false};
         mms.Get<Detector::Definition::CDCGas>().RemoveDaughter<Detector::Definition::CDCSuperLayer>();
         // geant4 -> gdml
-        const auto& commNode{Mustard::Env::MPIEnv::Instance().CommNode()};
+        const auto& commShared{Mustard::Env::MPIEnv::Instance().CommShared()};
         std::filesystem::path gdmlFSPath;
         std::filesystem::path::string_type gdmlPath;
-        if (commNode.rank() == 0) {
+        if (commShared.rank() == 0) {
             gdmlFSPath = Mustard::CreateTemporaryFile("mms_temp", ".gdml");
             world.Export(gdmlFSPath);
             gdmlPath = gdmlFSPath;
         }
         auto gdmlPathLength{gdmlPath.length()};
-        commNode.bcast(0, gdmlPathLength);
+        commShared.bcast(0, gdmlPathLength);
         gdmlPath.resize(gdmlPathLength);
-        commNode.bcast(0, gdmlPath.data(), mpl::vector_layout<std::filesystem::path::value_type>{gdmlPathLength});
+        commShared.bcast(0, gdmlPath.data(), mpl::vector_layout<std::filesystem::path::value_type>{gdmlPathLength});
         // gdml -> root
         TGeoManager::Import(gdmlPath.c_str());
         gGeoManager->SetName(name);
         gGeoManager->GetTopVolume()->SetInvisible();
         // remove gdml
         std::byte importCompleteSemaphore{};
-        commNode.reduce([](auto, auto) { return std::byte{}; }, 0, importCompleteSemaphore);
-        if (commNode.rank() == 0) {
+        commShared.reduce([](auto, auto) { return std::byte{}; }, 0, importCompleteSemaphore);
+        if (commShared.rank() == 0) {
             std::error_code ec;
             std::filesystem::remove(gdmlFSPath, ec);
         }
