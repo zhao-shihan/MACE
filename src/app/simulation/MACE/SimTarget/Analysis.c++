@@ -129,15 +129,15 @@ auto Analysis::AnalysisAndWriteYield() -> void {
         }
     }
 
-    const auto& commWorld{mpl::environment::comm_world()};
-    commWorld.reduce(
+    const auto& worldComm{mpl::environment::comm_world()};
+    worldComm.reduce(
         [](const std::array<unsigned long long, 5>& a, const std::array<unsigned long long, 5>& b) {
             std::array<unsigned long long, 5> c;
             std::ranges::transform(a, b, c.begin(), std::plus{});
             return c;
         },
         0, yieldData);
-    if (commWorld.rank() == 0) {
+    if (worldComm.rank() == 0) {
         const auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay]{yieldData};
         fmt::println(fYieldFile, "{},{},{},{},{},{}", fThisRun->GetRunID(), nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay);
     }
