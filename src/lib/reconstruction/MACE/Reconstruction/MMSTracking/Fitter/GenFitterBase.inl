@@ -34,8 +34,7 @@ GenFitterBase<AHit, ATrack, AFitter>::GenFitterBase(double driftErrorRMS, double
         gGeoManager->SetName(name);
         gGeoManager->GetTopVolume()->SetInvisible();
         // remove gdml
-        std::byte importCompleteSemaphore{};
-        intraNodeComm.reduce([](auto, auto) { return std::byte{}; }, 0, importCompleteSemaphore);
+        intraNodeComm.barrier();
         if (intraNodeComm.rank() == 0) {
             std::error_code ec;
             std::filesystem::remove(gdmlFSPath, ec);
