@@ -47,15 +47,14 @@
 
 #include "muc/math"
 #include "muc/numeric"
+#include "muc/ptrvec"
 
 #include "gsl/gsl"
 
 #include <cstddef>
 #include <iterator>
-#include <memory>
 #include <string_view>
 #include <utility>
-#include <vector>
 
 namespace MACE::inline Reconstruction::MMSTracking::inline Fitter {
 
@@ -109,7 +108,7 @@ private:
     double fLowestMomentum;
     bool fEnableEventDisplay;
 
-    std::vector<std::shared_ptr<genfit::Track>> fEventDisplayTrackStore;
+    muc::shared_ptrvec<genfit::Track> fEventDisplayTrackStore;
 
     AFitter fGenFitter;
 };

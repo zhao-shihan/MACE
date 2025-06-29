@@ -19,7 +19,7 @@ MMSTruthTracker::MMSTruthTracker() :
 }
 
 auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitHC,
-                                 const std::vector<gsl::owner<TTCHit*>>& ttcHitHC) -> std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::MMSSimTrack>>> {
+                                 const std::vector<gsl::owner<TTCHit*>>& ttcHitHC) -> muc::shared_ptrvec<Mustard::Data::Tuple<Data::MMSSimTrack>> {
     if (ssize(cdcHitHC) < fTrackFinder.MinNHit() or
         ssize(ttcHitHC) < fMinNTTCHitForQualifiedTrack) { return {}; }
 
@@ -33,7 +33,7 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
 
     // find CDC hits coincidence with TTC hits
 
-    std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::MMSSimTrack>>> mmsTrackData;
+    muc::shared_ptrvec<Mustard::Data::Tuple<Data::MMSSimTrack>> mmsTrackData;
     mmsTrackData.reserve(cdcHitHC.size() / fTrackFinder.MinNHit());
 
     std::ranges::subrange trackTTCHit{ttcHitHC.cbegin(), ttcHitHC.cbegin()};
