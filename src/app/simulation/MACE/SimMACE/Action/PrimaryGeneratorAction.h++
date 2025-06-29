@@ -11,8 +11,7 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-#include <memory>
-#include <vector>
+#include "muc/ptrvec"
 
 namespace MACE::SimMACE::inline Action {
 
@@ -40,7 +39,7 @@ private:
     G4VPrimaryGenerator* fGenerator;
 
     bool fSavePrimaryVertexData;
-    std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>> fPrimaryVertexData;
+    muc::unique_ptrvec<Mustard::Data::Tuple<Data::SimPrimaryVertex>> fPrimaryVertexData;
 
     AnalysisMessenger::Register<PrimaryGeneratorAction> fAnalysisMessengerRegister;
     PrimaryGeneratorActionMessenger::Register<PrimaryGeneratorAction> fPrimaryGeneratorActionMessengerRegister;

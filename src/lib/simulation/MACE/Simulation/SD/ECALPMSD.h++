@@ -6,10 +6,10 @@
 
 #include "G4VSensitiveDetector.hh"
 
-#include <memory>
+#include "muc/ptrvec"
+
 #include <unordered_map>
 #include <utility>
-#include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -25,7 +25,7 @@ public:
     auto NOpticalPhotonHit() const -> std::unordered_map<int, int>;
 
 protected:
-    std::unordered_map<int, std::vector<std::unique_ptr<ECALPMHit>>> fHit;
+    std::unordered_map<int, muc::unique_ptrvec<ECALPMHit>> fHit;
     ECALPMHitCollection* fHitsCollection;
 };
 

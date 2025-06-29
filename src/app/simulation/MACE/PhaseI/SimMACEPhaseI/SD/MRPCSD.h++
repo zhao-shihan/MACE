@@ -7,9 +7,9 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include "muc/ptrvec"
+
 #include <algorithm>
-#include <memory>
-#include <vector>
 
 class G4DataInterpolation;
 
@@ -30,7 +30,7 @@ public:
 protected:
     double fIonizingEnergyDepositionThreshold;
 
-    std::unordered_map<int, std::vector<std::unique_ptr<MRPCHit>>> fSplitHit;
+    std::unordered_map<int, muc::unique_ptrvec<MRPCHit>> fSplitHit;
     MRPCHitCollection* fHitsCollection;
 
     MRPCSDMessenger::Register<MRPCSD> fMessengerRegister;

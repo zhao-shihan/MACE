@@ -7,9 +7,9 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include "muc/ptrvec"
+
 #include <algorithm>
-#include <memory>
-#include <vector>
 
 class G4DataInterpolation;
 
@@ -32,7 +32,7 @@ protected:
 
     std::unique_ptr<G4DataInterpolation> fEfficiency;
 
-    std::vector<std::unique_ptr<MCPHit>> fSplitHit;
+    muc::unique_ptrvec<MCPHit> fSplitHit;
     MCPHitCollection* fHitsCollection;
 
     MCPSDMessenger::Register<MCPSD> fMessengerRegister;

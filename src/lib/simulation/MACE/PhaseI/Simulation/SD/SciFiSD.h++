@@ -6,10 +6,10 @@
 
 #include "G4VSensitiveDetector.hh"
 
-#include <memory>
+#include "muc/ptrvec"
+
 #include <unordered_map>
 #include <utility>
-#include <vector>
 
 namespace MACE::PhaseI::inline Simulation::inline SD {
 
@@ -23,7 +23,7 @@ public:
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
 protected:
-    std::unordered_map<int, std::vector<std::unique_ptr<SciFiHit>>> fSplitHit;
+    std::unordered_map<int, muc::unique_ptrvec<SciFiHit>> fSplitHit;
     SciFiHitCollection* fHitsCollection;
 };
 
