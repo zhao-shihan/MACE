@@ -38,15 +38,15 @@ auto TrackingAction::UpdateDecayVertexData(const G4Track& track) -> void {
         for (auto&& sec : *track.GetStep()->GetSecondary()) {
             secondaryPDGID.emplace_back(sec->GetParticleDefinition()->GetPDGEncoding());
         }
-        auto& vertex{fDecayVertexData.emplace_back()};
-        Get<"EvtID">(vertex) = eventManager.GetConstCurrentEvent()->GetEventID();
-        Get<"TrkID">(vertex) = track.GetTrackID();
-        Get<"PDGID">(vertex) = track.GetParticleDefinition()->GetPDGEncoding();
-        Get<"SecPDGID">(vertex) = std::move(secondaryPDGID);
-        Get<"t">(vertex) = track.GetGlobalTime();
-        Get<"x">(vertex) = track.GetPosition();
-        Get<"Ek">(vertex) = track.GetKineticEnergy();
-        Get<"p">(vertex) = track.GetMomentum();
+        auto& vertex{fDecayVertexData.emplace_back(std::make_unique_for_overwrite<Mustard::Data::Tuple<Data::SimDecayVertex>>())};
+        Get<"EvtID">(*vertex) = eventManager.GetConstCurrentEvent()->GetEventID();
+        Get<"TrkID">(*vertex) = track.GetTrackID();
+        Get<"PDGID">(*vertex) = track.GetParticleDefinition()->GetPDGEncoding();
+        Get<"SecPDGID">(*vertex) = std::move(secondaryPDGID);
+        Get<"t">(*vertex) = track.GetGlobalTime();
+        Get<"x">(*vertex) = track.GetPosition();
+        Get<"Ek">(*vertex) = track.GetKineticEnergy();
+        Get<"p">(*vertex) = track.GetMomentum();
     }
 }
 
