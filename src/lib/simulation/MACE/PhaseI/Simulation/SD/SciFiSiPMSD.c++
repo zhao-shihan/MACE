@@ -34,7 +34,9 @@ auto SciFiSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
 
-    if (&particle != G4OpticalPhoton::Definition()) { return false; }
+    if (&particle != G4OpticalPhoton::Definition()) {
+        return false;
+    }
 
     step.GetTrack()->SetTrackStatus(fStopAndKill);
 

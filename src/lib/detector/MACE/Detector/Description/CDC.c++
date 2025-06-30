@@ -61,7 +61,9 @@ auto CDC::GasMaterial() const -> G4Material* {
     const auto nist{G4NistManager::Instance()};
 
     auto gas{nist->FindMaterial(materialName)};
-    if (gas) { return gas; }
+    if (gas) {
+        return gas;
+    }
 
     const auto heFraction{1 - fGasButaneFraction};
     const auto he{nist->FindOrBuildMaterial("G4_He")};
@@ -119,7 +121,9 @@ auto CDC::CalculateLayerConfiguration() const -> std::vector<SuperLayerConfigura
             [this,
              isAxial = super.isAxial,
              superLayerID] {
-                if (isAxial) { return 0.0; }
+                if (isAxial) {
+                    return 0.0;
+                }
                 if ((fEvenSuperLayerIsAxial ? superLayerID + 3 : superLayerID) % 4 == 0) {
                     return +fMinStereoAngle;
                 } else {

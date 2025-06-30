@@ -49,11 +49,15 @@ auto SmearMACE::Main(int argc, char* argv[]) const -> int {
         Mustard::Throw<std::runtime_error>(fmt::format("Cannot open file '{}' with mode '{}'", outputPath, cli.OutputFileMode()));
     }
     do {
-        if (mpl::environment::comm_world().rank() != 0) { break; }
+        if (mpl::environment::comm_world().rank() != 0) {
+            break;
+        }
         std::stringstream smearingConfigText;
         const auto AppendConfigText{
             [&](const auto& nameInConfigText, const auto& smearingConfig, const auto& identity) {
-                if (smearingConfig.empty() and not identity) { return; }
+                if (smearingConfig.empty() and not identity) {
+                    return;
+                }
                 fmt::print(smearingConfigText, "{}:\n", nameInConfigText);
                 if (not smearingConfig.empty()) {
                     for (auto&& [var, smear] : smearingConfig) {

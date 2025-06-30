@@ -21,7 +21,9 @@ MMSTruthTracker::MMSTruthTracker() :
 auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitHC,
                                  const std::vector<gsl::owner<TTCHit*>>& ttcHitHC) -> muc::shared_ptrvec<Mustard::Data::Tuple<Data::MMSSimTrack>> {
     if (ssize(cdcHitHC) < fTrackFinder.MinNHit() or
-        ssize(ttcHitHC) < fMinNTTCHitForQualifiedTrack) { return {}; }
+        ssize(ttcHitHC) < fMinNTTCHitForQualifiedTrack) {
+        return {};
+    }
 
     constexpr auto ByTrackID{
         [](const auto& hit1, const auto& hit2) {

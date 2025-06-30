@@ -36,7 +36,9 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& particle{*track.GetDefinition()};
     const auto& ttc{MACE::Detector::Description::TTC::Instance()};
 
-    if (&particle != G4OpticalPhoton::Definition()) { return false; }
+    if (&particle != G4OpticalPhoton::Definition()) {
+        return false;
+    }
 
     step.GetTrack()->SetTrackStatus(fStopAndKill);
 

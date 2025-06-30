@@ -60,13 +60,19 @@ auto SciFiSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
 
-    if (&particle == G4OpticalPhoton::Definition()) { return false; }
-    if (particle.GetPDGCharge() == 0) { return false; }
+    if (&particle == G4OpticalPhoton::Definition()) {
+        return false;
+    }
+    if (particle.GetPDGCharge() == 0) {
+        return false;
+    }
     // std::cout << track.GetParentID() << std::endl;
 
     const auto eDep{step.GetTotalEnergyDeposit()};
     const auto fEnergyDepositionThreshold = 1.24_keV;
-    if (eDep < fEnergyDepositionThreshold) { return false; }
+    if (eDep < fEnergyDepositionThreshold) {
+        return false;
+    }
     const auto preStepPoint{*step.GetPreStepPoint()};
 
     const auto x{preStepPoint.GetPosition()};
@@ -141,7 +147,9 @@ auto SciFiSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 // construct real hit
                 Get<"HitID">(*topHit) = hitID++;
                 for (const auto& hit : cluster) {
-                    if (hit == topHit) { continue; }
+                    if (hit == topHit) {
+                        continue;
+                    }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
                 }
                 fHitsCollection->insert(topHit.release());

@@ -69,11 +69,15 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
 
-    if (&particle == G4OpticalPhoton::Definition()) { return false; }
+    if (&particle == G4OpticalPhoton::Definition()) {
+        return false;
+    }
 
     const auto eDep{step.GetTotalEnergyDeposit()};
 
-    if (eDep < fEnergyDepositionThreshold) { return false; }
+    if (eDep < fEnergyDepositionThreshold) {
+        return false;
+    }
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
@@ -153,7 +157,9 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 // construct real hit
                 assert(Get<"TileID">(*topHit) == tileID);
                 for (const auto& hit : cluster) {
-                    if (hit == topHit) { continue; }
+                    if (hit == topHit) {
+                        continue;
+                    }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
                 }
                 fHitsCollection->insert(topHit.release());

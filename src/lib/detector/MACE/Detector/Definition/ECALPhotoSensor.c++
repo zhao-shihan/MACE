@@ -118,8 +118,9 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
         chosenType.emplace_back(typeMap.at(chosen));
     }
     for (auto&& [type, moduleIDList] : idListOfType) { // loop over type(10 total)
-
-        if ((not chosenType.empty()) and (std::find(chosenType.begin(), chosenType.end(), type) == chosenType.end())) { continue; }
+        if ((not chosenType.empty()) and (std::find(chosenType.begin(), chosenType.end(), type) == chosenType.end())) {
+            continue;
+        }
 
         const int mppcNPixelRow{mppcNPixelRows.at(type)};
         const double mppcPixelSize{mppcPixelSizeSet.at(type)};
@@ -147,7 +148,9 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
         assemblyMPPC->MakeImprint(logicWindow, transformInWindow);
 
         for (auto moduleID : moduleIDList) { // loop over ID.s of a type
-            if ((not moduleSelection.empty()) and (std::find(moduleSelection.begin(), moduleSelection.end(), moduleID) == moduleSelection.end())) { continue; }
+            if ((not moduleSelection.empty()) and (std::find(moduleSelection.begin(), moduleSelection.end(), moduleID) == moduleSelection.end())) {
+                continue;
+            }
             const auto couplerTransform{ecal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
                                                                                       mppcCouplerThickness / 2)};
             const auto windowTransform{ecal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
@@ -269,7 +272,9 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     }
     const auto& pmtDimensions{ecal.PMTDimensions()};
     for (auto&& [type, moduleIDList] : std::as_const(idListOfType)) {
-        if ((not chosenType.empty()) and (std::find(chosenType.begin(), chosenType.end(), type) == chosenType.end())) { continue; }
+        if ((not chosenType.empty()) and (std::find(chosenType.begin(), chosenType.end(), type) == chosenType.end())) {
+            continue;
+        }
 
         const auto [pmtDiameter, cathodeDiameter, pmtLength]{pmtDimensions.at(type)};
 
@@ -286,7 +291,9 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
         const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "ECALPMCathode")};
 
         for (auto&& moduleID : moduleIDList) {
-            if ((not moduleSelection.empty()) and (std::find(moduleSelection.begin(), moduleSelection.end(), moduleID) == moduleSelection.end())) { continue; }
+            if ((not moduleSelection.empty()) and (std::find(moduleSelection.begin(), moduleSelection.end(), moduleID) == moduleSelection.end())) {
+                continue;
+            }
 
             const auto couplerTransform{ecal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
                                                                                       pmtCouplerThickness / 2)};

@@ -58,8 +58,12 @@ auto Analysis::RunBegin(G4int runID) -> void {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimECAL_gdml", "SimECAL.gdml")->Write();
     }
     // initialize outputs
-    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID)); }
-    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
+    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) {
+        fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID));
+    }
+    if (TrackingAction::Instance().SaveDecayVertexData()) {
+        fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID));
+    }
     fECALSimHitOutput.emplace(fmt::format("G4Run{}/ECALSimHit", runID));
     fECALPMHitOutput.emplace(fmt::format("G4Run{}/ECALPMHit", runID));
     fMCPSimHitOutput.emplace(fmt::format("G4Run{}/MCPSimHit", runID));
@@ -69,11 +73,21 @@ auto Analysis::EventEnd() -> void {
     const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or fECALHit->size() > 0};
     const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or std::ranges::any_of(*fMCPHit, [](auto&& hit) { return Get<"Trig">(*hit); })};
     if (ecalPassed and mcpPassed) {
-        if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
-        if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
-        if (fECALHit) { fECALSimHitOutput->Fill(*fECALHit); }
-        if (fECALPMHit) { fECALPMHitOutput->Fill(*fECALPMHit); }
-        if (fMCPHit) { fMCPSimHitOutput->Fill(*fMCPHit); }
+        if (fPrimaryVertex and fPrimaryVertexOutput) {
+            fPrimaryVertexOutput->Fill(*fPrimaryVertex);
+        }
+        if (fDecayVertex and fDecayVertexOutput) {
+            fDecayVertexOutput->Fill(*fDecayVertex);
+        }
+        if (fECALHit) {
+            fECALSimHitOutput->Fill(*fECALHit);
+        }
+        if (fECALPMHit) {
+            fECALPMHitOutput->Fill(*fECALPMHit);
+        }
+        if (fMCPHit) {
+            fMCPSimHitOutput->Fill(*fMCPHit);
+        }
     }
     fPrimaryVertex = {};
     fDecayVertex = {};
@@ -84,8 +98,12 @@ auto Analysis::EventEnd() -> void {
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
-    if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
-    if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
+    if (fPrimaryVertexOutput) {
+        fPrimaryVertexOutput->Write();
+    }
+    if (fDecayVertexOutput) {
+        fDecayVertexOutput->Write();
+    }
     fECALSimHitOutput->Write();
     fECALPMHitOutput->Write();
     fMCPSimHitOutput->Write();

@@ -112,7 +112,9 @@ template<typename... Args>
 auto InSameSubarray(Args... args) -> bool {
     const auto& sciFiTracker{MACE::PhaseI::Detector::Description::SciFiTracker::Instance()};
     std::unordered_set<int> target_ids = {args...};
-    if (target_ids.empty()) { return false; }
+    if (target_ids.empty()) {
+        return false;
+    }
 
     for (const auto& sub : *sciFiTracker.CombinationOfLayer()) {
         std::unordered_set<int> sub_set(sub.begin(), sub.end());
@@ -123,7 +125,8 @@ auto InSameSubarray(Args... args) -> bool {
                 break;
             }
         }
-        if (all_found) return true;
+        if (all_found)
+            return true;
     }
     return false;
 }

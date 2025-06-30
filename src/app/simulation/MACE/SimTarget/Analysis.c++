@@ -42,7 +42,9 @@ Analysis::~Analysis() {
 auto Analysis::RunBegin(gsl::not_null<const G4Run*> run) -> void {
     fThisRun = run;
     const auto runID{fThisRun->GetRunID()};
-    if (runID == 0) { Open(); }
+    if (runID == 0) {
+        Open();
+    }
     const auto runDirectory{fmt::format("G4Run{}", runID)};
     fResultFile->mkdir(runDirectory.c_str());
     fResultFile->cd(runDirectory.c_str());
@@ -94,7 +96,9 @@ auto Analysis::WriteResult() -> void {
 }
 
 auto Analysis::CloseResultFile() -> void {
-    if (fResultFile == nullptr) { return; }
+    if (fResultFile == nullptr) {
+        return;
+    }
     fResultFile->Close();
     delete fResultFile;
 }
@@ -144,7 +148,9 @@ auto Analysis::AnalysisAndWriteYield() -> void {
 }
 
 auto Analysis::CloseYieldFile() -> void {
-    if (fYieldFile == nullptr) { return; }
+    if (fYieldFile == nullptr) {
+        return;
+    }
     std::fclose(fYieldFile);
 }
 

@@ -63,7 +63,9 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     assert(0 <= step.GetNonIonizingEnergyDeposit());
     assert(step.GetNonIonizingEnergyDeposit() <= eDep);
-    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) { return false; }
+    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) {
+        return false;
+    }
 
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -167,7 +169,9 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 assert(Get<"CellID">(*topHit) == cellID);
                 auto nTopHit{1};
                 for (const auto& hit : cluster) {
-                    if (hit == topHit) { continue; }
+                    if (hit == topHit) {
+                        continue;
+                    }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit); // sum
                     if (Get<"TrkID">(*hit) == Get<"TrkID">(*topHit)) {
                         ++nTopHit;

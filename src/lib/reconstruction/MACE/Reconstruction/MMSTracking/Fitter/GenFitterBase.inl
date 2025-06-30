@@ -133,7 +133,9 @@ auto GenFitterBase<AHit, ATrack, AFitter>::Finalize(std::shared_ptr<genfit::Trac
                                                     const std::unordered_map<const genfit::AbsMeasurement*, AHitPointer>& measurementHitMap)
     -> Base::template Result<AHitPointer> {
     const auto& status{*genfitTrack->getFitStatus()};
-    if (not status.isFitConvergedPartially()) { return {}; }
+    if (not status.isFitConvergedPartially()) {
+        return {};
+    }
 
     const genfit::MeasuredStateOnPlane* firstState;
     try {
@@ -188,7 +190,9 @@ template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
          std::derived_from<genfit::AbsFitter> AFitter>
 auto GenFitterBase<AHit, ATrack, AFitter>::OpenEventDisplay(bool clearUponClose) -> void {
     genfit::EventDisplay::getInstance()->open();
-    if (clearUponClose) { ClearEventDisplayTrackStore(); }
+    if (clearUponClose) {
+        ClearEventDisplayTrackStore();
+    }
 }
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
