@@ -3,8 +3,6 @@
 #include "MACE/PhaseI/SimMACEPhaseI/SD/MRPCSDMessenger.h++"
 #include "MACE/PhaseI/Simulation/Hit/MRPCHit.h++"
 
-#include "Mustard/Utility/NonMoveableBase.h++"
-
 #include "G4VSensitiveDetector.hh"
 
 #include "muc/ptrvec"
@@ -15,8 +13,7 @@ class G4DataInterpolation;
 
 namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 
-class MRPCSD : public Mustard::NonMoveableBase,
-               public G4VSensitiveDetector {
+class MRPCSD : public G4VSensitiveDetector {
 public:
     MRPCSD(const G4String& sdName);
     ~MRPCSD();

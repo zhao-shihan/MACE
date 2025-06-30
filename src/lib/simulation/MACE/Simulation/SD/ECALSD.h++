@@ -2,8 +2,6 @@
 
 #include "MACE/Simulation/Hit/ECALHit.h++"
 
-#include "Mustard/Utility/NonMoveableBase.h++"
-
 #include "G4VSensitiveDetector.hh"
 
 #include "muc/ptrvec"
@@ -14,8 +12,7 @@ namespace MACE::inline Simulation::inline SD {
 
 class ECALPMSD;
 
-class ECALSD : public Mustard::NonMoveableBase,
-               public G4VSensitiveDetector {
+class ECALSD : public G4VSensitiveDetector {
 public:
     ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD = {});
 

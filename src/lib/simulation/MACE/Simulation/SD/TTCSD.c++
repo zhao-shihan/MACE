@@ -36,7 +36,6 @@
 namespace MACE::inline Simulation::inline SD {
 
 TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fTTCSiPMSD{ttcSiPMSD},
     fEnergyDepositionThreshold{},

@@ -35,7 +35,6 @@ using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::VectorArithmeticOperator;
 
 CDCSD::CDCSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{25_eV},
     fMeanDriftVelocity{},

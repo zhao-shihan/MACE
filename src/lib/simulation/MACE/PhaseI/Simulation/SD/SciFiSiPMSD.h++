@@ -2,8 +2,6 @@
 
 #include "MACE/PhaseI/Simulation/Hit/SciFiSiPMRawHit.h++"
 
-#include "Mustard/Utility/NonMoveableBase.h++"
-
 #include "G4VSensitiveDetector.hh"
 
 #include "muc/ptrvec"
@@ -13,8 +11,7 @@
 
 namespace MACE::PhaseI::inline Simulation::inline SD {
 
-class SciFiSiPMSD : public Mustard::NonMoveableBase,
-                    public G4VSensitiveDetector {
+class SciFiSiPMSD : public G4VSensitiveDetector {
 public:
     SciFiSiPMSD(const G4String& sdName);
 

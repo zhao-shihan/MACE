@@ -41,7 +41,6 @@ namespace MACE::PhaseI::inline Simulation::inline SD {
 using namespace Mustard::LiteralUnit;
 
 SciFiSD::SciFiSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fSplitHit{},
     fHitsCollection{} {

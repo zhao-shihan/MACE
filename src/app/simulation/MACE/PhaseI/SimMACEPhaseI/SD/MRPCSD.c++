@@ -33,7 +33,6 @@ namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 using namespace Mustard::LiteralUnit::Energy;
 
 MRPCSD::MRPCSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{20_eV},
     fSplitHit{},

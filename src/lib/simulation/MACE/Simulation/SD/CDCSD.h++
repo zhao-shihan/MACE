@@ -6,7 +6,6 @@
 #include "MACE/Simulation/SD/CDCSDMessenger.h++"
 
 #include "Mustard/Data/Tuple.h++"
-#include "Mustard/Utility/NonMoveableBase.h++"
 
 #include "G4VSensitiveDetector.hh"
 
@@ -18,8 +17,7 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-class CDCSD : public Mustard::NonMoveableBase,
-              public G4VSensitiveDetector {
+class CDCSD : public G4VSensitiveDetector {
 public:
     CDCSD(const G4String& sdName);
 

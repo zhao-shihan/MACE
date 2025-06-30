@@ -36,7 +36,6 @@
 namespace MACE::inline Simulation::inline SD {
 
 ECALSD::ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fECALPMSD{ecalPMSD},
     fEnergyDepositionThreshold{},

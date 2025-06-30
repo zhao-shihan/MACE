@@ -18,7 +18,6 @@
 namespace MACE::inline Simulation::inline SD {
 
 ECALPMSD::ECALPMSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fHit{},
     fHitsCollection{} {

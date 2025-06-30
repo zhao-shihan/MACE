@@ -19,7 +19,6 @@
 namespace MACE::SimPTS::inline SD {
 
 VirtualSD::VirtualSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
