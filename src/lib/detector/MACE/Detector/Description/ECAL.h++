@@ -7,8 +7,11 @@
 #include "CLHEP/Vector/ThreeVector.h"
 
 #include "muc/array"
+#include "muc/hash_map"
 
 #include <vector>
+#include <unordered_set>
+#include "gsl/gsl"
 
 namespace MACE::Detector::Description {
 
@@ -93,18 +96,17 @@ public:
     auto WaveformIntegralTime(double val) { fWaveformIntegralTime = val; }
 
     struct MeshInformation {
-    private:
-        struct Face {
+        struct Module {
             CLHEP::Hep3Vector centroid;
             CLHEP::Hep3Vector normal;
-            std::vector<std::ptrdiff_t> vertexIndex;
+            std::vector<gsl::index> vertexIndex;
+            int typeID;
+            std::unordered_set<int> neighborModuleID;            
         };
-
-    public:
-        std::vector<HepGeom::Point3D<double>> fVertex;
-        std::vector<Face> fFaceList;
-        std::map<int, int> fTypeMap;
-        std::map<int, std::vector<int>> fClusterMap;
+        std::vector<HepGeom::Point3D<double>> vertexList;
+        std::vector<Module> faceList;
+        // std::vector<int> typeMap; // moduleID -> typeID
+        // std::vector<std::vector<int>> clusterMap; // moduleID -> neighbor moduleIDs
     };
 
 private:
@@ -154,7 +156,7 @@ private:
     double fMPPCWindowThickness;
     std::vector<double> fMPPCEnergyBin;
     std::vector<double> fMPPCEfficiency;
-
+    
     mutable MeshManager fMeshManager;
 
     std::vector<int> fModuleSelection;

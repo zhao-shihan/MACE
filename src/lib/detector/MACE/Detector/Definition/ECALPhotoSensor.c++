@@ -103,16 +103,16 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     /////////////////////////////////////////////
     // Construct Volumes
     /////////////////////////////////////////////
-    const auto& typeMap{ecal.Mesh().fTypeMap};
+    const auto& faceList{ecal.MeshInformation().faceList};
     const auto& moduleSelection{ecal.ModuleSelection()};
     std::map<int, std::vector<int>> idListOfType;
-    for (auto&& [moduleID, type] : typeMap) {
-        idListOfType[type].emplace_back(moduleID);
+    for (int moduleID{};moduleID<faceList.size();++moduleID) {
+        idListOfType[faceList.at(moduleID).typeID].emplace_back(moduleID);
     }
 
     std::vector<int> chosenType;
     for (auto&& chosen : moduleSelection) {
-        chosenType.emplace_back(typeMap.at(chosen));
+        chosenType.emplace_back(faceList.at(chosen).typeID);
     }
     for (auto&& [type, moduleIDList] : idListOfType) { // loop over type(10 total)
 
@@ -253,16 +253,16 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
-    const auto& typeMap{ecal.Mesh().fTypeMap};
+    const auto& faceList{ecal.MeshInformation().faceList};
     const auto& moduleSelection{ecal.ModuleSelection()};
     std::map<int, std::vector<int>> idListOfType;
-    for (auto&& [moduleID, type] : typeMap) {
-        idListOfType[type].emplace_back(moduleID);
+    for (int moduleID{};moduleID<faceList.size();++moduleID) {
+        idListOfType[faceList.at(moduleID).typeID].emplace_back(moduleID);
     }
 
     std::vector<int> chosenType;
     for (auto&& chosen : moduleSelection) {
-        chosenType.emplace_back(typeMap.at(chosen));
+        chosenType.emplace_back(faceList.at(chosen).typeID);
     }
     const auto& pmtDimensions{ecal.PMTDimensions()};
     for (auto&& [type, moduleIDList] : std::as_const(idListOfType)) {

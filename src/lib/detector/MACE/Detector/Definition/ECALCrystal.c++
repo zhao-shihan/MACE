@@ -39,8 +39,8 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto innerRadius{ecal.InnerRadius()};
     const auto crystalHypotenuse{ecal.CrystalHypotenuse()};
 
-    const auto& vertex{ecal.Mesh().fVertex};
-    const auto& faceList{ecal.Mesh().fFaceList};
+    const auto& vertex{ecal.MeshInformation().vertexList};
+    const auto& faceList{ecal.MeshInformation().faceList};
 
     const auto& moduleSelection{ecal.ModuleSelection()};
 
@@ -103,7 +103,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
     for (int moduleID{};
-         auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) {
+         auto&& [centroid, normal, vertexIndex,_1,_2] : std::as_const(faceList)) {
         // loop over all ECAL face
         // centroid here refer to the face 'center' of normalized ball
 

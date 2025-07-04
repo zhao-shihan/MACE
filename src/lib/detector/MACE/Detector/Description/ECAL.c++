@@ -3,6 +3,7 @@
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
+#include "Mustard/Utility/Print.h++"
 #include "Mustard/Utility/VectorCast.h++"
 
 #include "CLHEP/Vector/TwoVector.h"
@@ -18,6 +19,8 @@
 #include "pmp/surface_mesh.h"
 
 #include "muc/math"
+
+#include "fmt/std.h"
 
 #include <concepts>
 #include <queue>
@@ -268,23 +271,23 @@ ECAL::ECAL() : // clang-format off
 
 auto ECAL::ComputeMesh() const -> MeshInformation {
     auto pmpMesh{ECALMesh{fNSubdivision}.Generate()};
-    MeshInformation mesh;
-    auto& [vertex, faceList, typeMap, clusterMap]{mesh};
+    MeshInformation outputMeshInfo;
+    auto& [vertexList, faceList]{outputMeshInfo};
     const auto point{pmpMesh.vertex_property<pmp::Point>("v:point")};
-
+    // construct vertexList
     for (auto&& v : pmpMesh.vertices()) {
-        vertex.emplace_back(Mustard::VectorCast<CLHEP::Hep3Vector>(point[v]));
+        vertexList.emplace_back(Mustard::VectorCast<CLHEP::Hep3Vector>(point[v]));
     }
-
-    for (auto&& f : pmpMesh.faces()) {
-        const auto centroid{Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
+    // construct faceList
+    for (auto&& pmpFace : pmpMesh.faces()) {
+        const auto centroid{Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, pmpFace))};
         if (const auto rXY{fInnerRadius * centroid.perp()};
             centroid.z() < 0) {
             if (rXY < fUpstreamWindowRadius) { continue; }
         } else {
             if (rXY < fDownstreamWindowRadius) { continue; }
         }
-        if (std::ranges::any_of(pmpMesh.vertices(f),
+        if (std::ranges::any_of(pmpMesh.vertices(pmpFace),
                                 [&](const auto& v) {
                                     const auto rXY{fInnerRadius * muc::hypot(point[v][0], point[v][1])};
                                     if (point[v][2] < 0) {
@@ -298,17 +301,24 @@ auto ECAL::ComputeMesh() const -> MeshInformation {
 
         auto& face{faceList.emplace_back()};
         face.centroid = centroid;
-        face.normal = Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::face_normal(pmpMesh, f));
-
-        for (auto&& v : pmpMesh.vertices(f)) {
-            face.vertexIndex.emplace_back(v.idx());
+        face.normal = Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::face_normal(pmpMesh, pmpFace));
+        for (auto&& pmpFaceVertex : pmpMesh.vertices(pmpFace)) {
+            for (auto&& pmpVertexFace : pmpMesh.faces(pmpFaceVertex)) {
+                if (pmpVertexFace != pmpFace) {
+                    face.neighborModuleID.insert(pmpVertexFace.idx());
+                }
+            }
         }
 
+        for (auto&& v : pmpMesh.vertices(pmpFace)) {
+            face.vertexIndex.emplace_back(v.idx());
+        }
+        // vertex ordering of a face
         const auto LocalPhi{
-            [uHat = (vertex[face.vertexIndex.front()] - face.centroid).unit(),
-             vHat = face.normal.cross(vertex[face.vertexIndex.front()] - face.centroid).unit(),
+            [uHat = (vertexList[face.vertexIndex.front()] - face.centroid).unit(),
+             vHat = face.normal.cross(vertexList[face.vertexIndex.front()] - face.centroid).unit(),
              &localOrigin = face.centroid,
-             &vertex = vertex](const auto& i) {
+             &vertex = vertexList](const auto& i) {
                 const auto localPoint = vertex[i] - localOrigin;
                 return std::atan2(localPoint.dot(vHat), localPoint.dot(uHat));
             }};
@@ -318,90 +328,113 @@ auto ECAL::ComputeMesh() const -> MeshInformation {
                           });
     }
 
-    std::map<std::vector<float>, std::vector<int>> edgeLengthSet;
+    // construct type mapping
+    using UnitID = int;
+    using PolygonEdges = std::vector<double>;
+    std::multimap<PolygonEdges, UnitID> edgeLengthsMap;
 
     for (int moduleID{};
-         auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // module types and clusters sorting
-        // sort by edge length
-        std::vector<float> edgeLength; // magic conversion (double to float)
-        std::vector<G4ThreeVector> xV{vertexIndex.size()};
+         auto&& [centroid, _1, vertexIndex, _2, _3] : std::as_const(faceList)) {
+        // edge lengths for type identifying
+        std::vector<G4ThreeVector> vertexCoordinates{vertexIndex.size()};
+        std::ranges::transform(vertexIndex, vertexCoordinates.begin(),
+                               [&](auto&& aIndex) { return vertexList[aIndex]; });
 
-        std::ranges::transform(vertexIndex, xV.begin(),
-                               [&](const auto& i) { return vertex[i]; });
-
-        for (int i{}; i < std::ssize(xV); ++i) {
-            edgeLength.emplace_back(i != std::ssize(xV) - 1 ? (xV[i + 1] - xV[i]).mag() :
-                                                              (xV[0] - xV[i]).mag());
-        };
-
-        std::ranges::sort(edgeLength);
-        edgeLengthSet[edgeLength].emplace_back(moduleID);
-
-        // sort by centroid distance to other faces
-        std::pair<float, int> clusterInfo;
-
-        auto cmp = [](
-                       const std::pair<float, int>& p,
-                       const std::pair<float, int>& q) { return p.first > q.first; };
-
-        std::priority_queue<std::pair<float, int>,
-                            std::vector<std::pair<float, int>>,
-                            decltype(cmp)>
-            centroidPriority(cmp);
-
-        for (int i{}; auto&& [adjacentCentroid, _1, _2] : std::as_const(faceList)) {
-            if (centroid == adjacentCentroid) {
-                i++;
-                continue;
-            }
-            clusterInfo.first = (centroid - adjacentCentroid).mag();
-            clusterInfo.second = i;
-            centroidPriority.push(clusterInfo);
-            i++;
+        PolygonEdges edges;
+        constexpr int reservedDigit{std::numeric_limits<double>::digits10 / 2};
+        for (int i{}; i < vertexCoordinates.size(); ++i) {
+            const auto& current{vertexCoordinates[i]};
+            const auto& next{vertexCoordinates[(i + 1) % vertexCoordinates.size()]};
+            edges.emplace_back(muc::round_to((next - current).mag(), reservedDigit));
         }
-
-        for (int i{}; i < std::ssize(vertexIndex); ++i) {
-            auto top = centroidPriority.top();
-            if (top.first > 0.2) { continue; }
-            clusterMap[moduleID].emplace_back(top.second);
-            centroidPriority.pop();
-        }
-        moduleID++;
+        std::ranges::sort(edges);
+        edgeLengthsMap.insert({edges, moduleID});
+        ++moduleID;
     }
 
+    for (auto it{edgeLengthsMap.begin()}; it != edgeLengthsMap.end();) {
+        int typeID{};
+        auto range{edgeLengthsMap.equal_range(it->first)};
+        for (auto aPolygon{range.first}; aPolygon != range.second; aPolygon = std::next(aPolygon)) {
+            faceList[aPolygon->second].typeID = typeID;
+        }
+        ++typeID;
+        it = range.second;
+    }
+
+    // std::map<std::vector<float>, std::vector<int>> edgeLengthSet;
+
+    // for (int moduleID{};
+    //      auto&& [centroid, _1, vertexIndex,_2,_3] : std::as_const(faceList)) { // module types and clusters sorting
+    //     // sort by edge length
+    //     std::vector<float> edgeLength; // magic conversion (double to float)
+    //     std::vector<G4ThreeVector> xV{vertexIndex.size()};
+
+    // std::ranges::transform(vertexIndex, xV.begin(),
+    //                        [&](const auto& i) { return vertexList[i]; });
+
+    // for (int i{}; i < std::ssize(xV); ++i) {
+    //     edgeLength.emplace_back(i != std::ssize(xV) - 1 ? (xV[i + 1] - xV[i]).mag() :
+    //                                                       (xV[0] - xV[i]).mag());
+    // };
+
+    // std::ranges::sort(edgeLength);
+    // edgeLengthSet[edgeLength].emplace_back(moduleID);
+
+    // // sort by centroid distance to other faces
+    // std::pair<float, int> clusterInfo; //<distance,relativeCentroidID>
+
+    // auto cmp = [](
+    //                const std::pair<float, int>& p,
+    //                const std::pair<float, int>& q) { return p.first > q.first; };
+
+    // std::priority_queue<std::pair<float, int>,
+    //                     std::vector<std::pair<float, int>>,
+    //                     decltype(cmp)>
+    //     centroidPriority(cmp);
+
+    // for (int i{}; auto&& [adjacentCentroid, _1, _2,_3,_4] : std::as_const(faceList)) {
+    //     if (centroid == adjacentCentroid) {
+    //         i++;
+    //         continue;
+    //     }
+    //     clusterInfo.first = (centroid - adjacentCentroid).mag();
+    //     clusterInfo.second = i;
+    //     centroidPriority.push(clusterInfo);
+    //     i++;
+    // }
+
+    // for (int i{}; i < std::ssize(vertexIndex); ++i) {
+    //     auto top = centroidPriority.top();
+    //     if (top.first > 0.2) { continue; }
+    //     clusterMap[moduleID].emplace_back(top.second);
+    //     centroidPriority.pop();
+    // }
+    // moduleID++;
+    // }
     if (Mustard::Env::VerboseLevelReach<'V'>()) {
-        std::cout << ">>--->>edgeLengthSet" << "\n";
-        for (int type{1}; auto&& pair : edgeLengthSet) {
-            std::ranges::sort(pair.second);
-            std::cout << "--->>type " << type << " : " << "\n";
-            std::cout << ">>lengths: " << "\n";
-            for (auto&& value : pair.first) {
-                std::cout << value << " ";
+        for (auto&& [edgeLengthList, _] : edgeLengthsMap) {
+            int typeID{};
+            const auto range{edgeLengthsMap.equal_range(edgeLengthList)};
+            const std::ranges::subrange equalRange{range.first, range.second};
+            Mustard::MasterPrintLn(">>--->>edgeLengthsMap");
+            Mustard::MasterPrintLn("--->>type {}:", typeID);
+            Mustard::MasterPrintLn("\t >>lengths:");
+            Mustard::MasterPrintLn("{}, ", equalRange.front().first);
+            Mustard::MasterPrintLn("\t>>units({} in total):", std::ranges::distance(equalRange));
+            for (auto&& [_, moduleID] : equalRange) {
+                Mustard::MasterPrintLn("{}, ", moduleID);
             }
-            std::cout << "\n>>units(" << pair.second.size() << "units total): " << "\n";
-            for (auto&& value : pair.second) {
-                std::cout << value << " ";
-            }
-            std::cout << "\n";
-            std::cout << "======================================================\n";
-            type++;
+            Mustard::MasterPrintLn("======================================================\n");
+            ++typeID;
         }
     }
-
-    int typeID{};
-    for (auto&& pair : edgeLengthSet) {
-        for (auto&& value : pair.second) {
-            typeMap[value] = typeID; // unitID->typeID
-        }
-        typeID++;
-    }
-
-    return mesh;
+    return outputMeshInfo;
 }
 
 auto ECAL::ComputeTransformToOuterSurfaceWithOffset(int moduleID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
-    const auto& faceList{Mesh().fFaceList};
-    auto&& [centroid, normal, vertexIndex]{faceList[moduleID]};
+    const auto& faceList{MeshInformation().faceList};
+    auto&& [centroid, normal, vertexIndex, _1, _2]{faceList[moduleID]};
 
     const auto centroidMagnitude{centroid.mag()};
     const auto crystalOuterRadius{(fInnerRadius + fCrystalHypotenuse) * centroidMagnitude};
