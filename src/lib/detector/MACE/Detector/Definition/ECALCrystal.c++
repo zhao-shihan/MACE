@@ -39,8 +39,8 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto innerRadius{ecal.InnerRadius()};
     const auto crystalHypotenuse{ecal.CrystalHypotenuse()};
 
-    const auto& vertex{ecal.MeshInformation().vertexList};
-    const auto& faceList{ecal.MeshInformation().faceList};
+    const auto& vertex{ecal.Mesh().vertexList};
+    const auto& faceList{ecal.Mesh().faceList};
 
     const auto& moduleSelection{ecal.ModuleSelection()};
 
