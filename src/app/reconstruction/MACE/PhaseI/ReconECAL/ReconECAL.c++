@@ -63,7 +63,7 @@ auto ReconECAL::Main(int argc, char* argv[]) const -> int {
     }
 
     const auto& ecal{MACE::Detector::Description::ECAL::Instance()};
-    const auto& faceList{ecal.MeshInformation().faceList};
+    const auto& faceList{ecal.Mesh().faceList};
 
     std::map<int, CLHEP::Hep3Vector> centroidMap;
 
@@ -122,7 +122,7 @@ auto ReconECAL::Main(int argc, char* argv[]) const -> int {
                         set.insert(neighbor);
                         for (auto&& secondNeighbor : faceList[neighbor].neighborModuleID) {
                             set.insert(secondNeighbor);
-                            set.insert(faceList[secondNeighbor].begin(), faceList[secondNeighbor].end());
+                            set.insert(faceList[secondNeighbor].neighborModuleID.begin(), faceList[secondNeighbor].neighborModuleID.end());
                         }
                     }
                 };

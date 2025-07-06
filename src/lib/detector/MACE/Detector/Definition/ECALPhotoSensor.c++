@@ -106,7 +106,7 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     const auto& faceList{ecal.Mesh().faceList};
     const auto& moduleSelection{ecal.ModuleSelection()};
     std::map<int, std::vector<int>> idListOfType;
-    for (int moduleID{};moduleID<faceList.size();++moduleID) {
+    for (int moduleID{};moduleID<std::ssize(faceList);++moduleID) {
         idListOfType[faceList.at(moduleID).typeID].emplace_back(moduleID);
     }
 
@@ -256,7 +256,7 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     const auto& faceList{ecal.Mesh().faceList};
     const auto& moduleSelection{ecal.ModuleSelection()};
     std::map<int, std::vector<int>> idListOfType;
-    for (int moduleID{};moduleID<faceList.size();++moduleID) {
+    for (auto moduleID{0};moduleID<std::ssize(faceList);++moduleID) {
         idListOfType[faceList.at(moduleID).typeID].emplace_back(moduleID);
     }
 
