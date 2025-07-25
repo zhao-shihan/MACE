@@ -13,8 +13,8 @@
 /run/initialize
 
 /MACE/Generator/SwitchToEcoMug
-/Mustard/EcoMug/Position/Hsphere 0 0 0 m
-/Mustard/EcoMug/Size/Hsphere/Radius 2 m
+/Mustard/EcoMug/Position/HSphere 0 0 0 m
+/Mustard/EcoMug/Size/HSphere/Radius 2 m
 
 
 
