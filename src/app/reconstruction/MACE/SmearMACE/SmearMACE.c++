@@ -16,7 +16,7 @@
 #include "TInterpreter.h"
 #include "TMacro.h"
 
-#include "mpl/mpl.hpp"
+#include "mplr/mplr.hpp"
 
 #include "gsl/gsl"
 
@@ -49,7 +49,7 @@ auto SmearMACE::Main(int argc, char* argv[]) const -> int {
         Mustard::Throw<std::runtime_error>(fmt::format("Cannot open file '{}' with mode '{}'", outputPath, cli.OutputFileMode()));
     }
     do {
-        if (mpl::environment::comm_world().rank() != 0) {
+        if (mplr::comm_world().rank() != 0) {
             break;
         }
         std::stringstream smearingConfigText;

@@ -14,7 +14,7 @@
 
 #include "G4Run.hh"
 
-#include "mpl/mpl.hpp"
+#include "mplr/mplr.hpp"
 
 #include "fmt/format.h"
 
@@ -84,7 +84,7 @@ auto Analysis::OpenResultFile() -> void {
         throw std::runtime_error{Mustard::PrettyException(fmt::format("Cannot open file '{}' with mode '{}'",
                                                                       fullFilePath, fFileMode))};
     }
-    if (mpl::environment::comm_world().rank() == 0) {
+    if (mplr::comm_world().rank() == 0) {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimTarget_gdml", "SimTarget.gdml")->Write();
     }
 }
@@ -104,7 +104,7 @@ auto Analysis::CloseResultFile() -> void {
 }
 
 auto Analysis::OpenYieldFile() -> void {
-    if (mpl::environment::comm_world().rank() == 0) {
+    if (mplr::comm_world().rank() == 0) {
         fYieldFile = std::fopen(std::string{fFilePath}.append("_yield.csv").c_str(), "w");
         fmt::println(fYieldFile, "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay");
     }
@@ -133,7 +133,7 @@ auto Analysis::AnalysisAndWriteYield() -> void {
         }
     }
 
-    const auto& worldComm{mpl::environment::comm_world()};
+    const auto& worldComm{mplr::comm_world()};
     worldComm.reduce(
         [](const std::array<unsigned long long, 5>& a, const std::array<unsigned long long, 5>& b) {
             std::array<unsigned long long, 5> c;

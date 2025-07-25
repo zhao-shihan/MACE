@@ -28,7 +28,7 @@ GenFitterBase<AHit, ATrack, AFitter>::GenFitterBase(double driftErrorRMS, double
         auto gdmlPathLength{gdmlPath.length()};
         intraNodeComm.bcast(0, gdmlPathLength);
         gdmlPath.resize(gdmlPathLength);
-        intraNodeComm.bcast(0, gdmlPath.data(), mpl::vector_layout<std::filesystem::path::value_type>{gdmlPathLength});
+        intraNodeComm.bcast(0, gdmlPath.data(), mplr::vector_layout<std::filesystem::path::value_type>{gdmlPathLength});
         // gdml -> root
         TGeoManager::Import(gdmlPath.c_str());
         gGeoManager->SetName(name);
