@@ -15,9 +15,9 @@ AllowShortBlocksOnASingleLine: Always
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortEnumsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: All
-AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortIfStatementsOnASingleLine: false
 AllowShortLambdasOnASingleLine: All
-AllowShortLoopsOnASingleLine: true
+AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
@@ -52,6 +52,9 @@ IncludeCategories:
     Priority: 2
     CaseSensitive: true
   - Regex: '"TrackPoint\.h"'
+    Priority: 2
+    CaseSensitive: true
+  - Regex: '"TGeoMaterialInterface\.h"'
     Priority: 2
     CaseSensitive: true
   - Regex: '"Randomize\.hh"'
@@ -94,33 +97,45 @@ IncludeCategories:
   - Regex: '"yaml-cpp/.*"'
     Priority: 7
     CaseSensitive: true
-  - Regex: '"argparse/.*"'
+  - Regex: '"indicators/.*"'
     Priority: 8
     CaseSensitive: true
-  - Regex: '"Eigen/.*"'
+  - Regex: '"argparse/.*"'
     Priority: 9
     CaseSensitive: true
-  - Regex: '"gsl.*\.h"'
+  - Regex: '"Eigen/.*"'
     Priority: 10
     CaseSensitive: true
-  - Regex: '"mpi.*\.h"'
+  - Regex: '"gsl.*\.h"'
     Priority: 11
     CaseSensitive: true
-  - Regex: '"muc/.*"'
+  - Regex: '"mplr/mplr.hpp"'
     Priority: 12
     CaseSensitive: true
-  - Regex: '"gsl/.*"'
+  - Regex: '"mpi.*\.h"'
     Priority: 13
     CaseSensitive: true
-  - Regex: '"fmt/.*\.h"'
+  - Regex: '"EFM/.*\.h.*"'
     Priority: 14
+    CaseSensitive: true
+  - Regex: '"muc/.*"'
+    Priority: 15
+    CaseSensitive: true
+  - Regex: '"envparse/.*\.h.*"'
+    Priority: 16
+    CaseSensitive: true
+  - Regex: '"gsl/.*"'
+    Priority: 17
+    CaseSensitive: true
+  - Regex: '"fmt/.*\.h"'
+    Priority: 18
     CaseSensitive: true
   # very general
   - Regex: '".*"'
     Priority: 2
     CaseSensitive: true
   - Regex: "<.*>"
-    Priority: 15
+    Priority: 19
     CaseSensitive: true
 IndentAccessModifiers: false
 IndentCaseBlocks: false

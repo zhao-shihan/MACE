@@ -2,20 +2,17 @@
 
 #include "MACE/Simulation/Hit/ECALHit.h++"
 
-#include "Mustard/Utility/NonMoveableBase.h++"
-
 #include "G4VSensitiveDetector.hh"
 
-#include <memory>
+#include "muc/ptrvec"
+
 #include <unordered_map>
-#include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
 class ECALPMSD;
 
-class ECALSD : public Mustard::NonMoveableBase,
-              public G4VSensitiveDetector {
+class ECALSD : public G4VSensitiveDetector {
 public:
     ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD = {});
 
@@ -28,7 +25,7 @@ protected:
 
     double fEnergyDepositionThreshold;
 
-    std::unordered_map<int, std::vector<std::unique_ptr<ECALHit>>> fSplitHit;
+    std::unordered_map<int, muc::unique_ptrvec<ECALHit>> fSplitHit;
     ECALHitCollection* fHitsCollection;
 };
 

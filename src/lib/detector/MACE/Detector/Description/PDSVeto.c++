@@ -437,6 +437,7 @@ auto PDSVeto::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fReflectiveFilmThickness, "ReflectiveFilmThickness");
     ImportValue(node, fSiPMThickness, "SiPMThickness");
     ImportValue(node, fSiPMCathodeThickness, "SiPMCathodeThickness");
+    ImportValue(node, fSiPMCathodeThickness, "SiPMCathodeThickness");
     ImportValue(node, fSiPMCouplerThickness, "SiPMCouplerThickness");
     ImportValue(node, fSiPMSize, "SiPMSize");
     ImportValue(node, fSolenoidWindowRadius, "SolenoidWindowRadius");
@@ -471,6 +472,7 @@ auto PDSVeto::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fModuleOffset, "ModuleOffset");
     ExportValue(node, fAlAbsorberThickness, "AlAbsorberThickness");
     ExportValue(node, fSiPMThickness, "SiPMThickness");
+    ExportValue(node, fSiPMCathodeThickness, "SiPMCathodeThickness");
     ExportValue(node, fSiPMCathodeThickness, "SiPMCathodeThickness");
     ExportValue(node, fSiPMCouplerThickness, "SiPMCouplerThickness");
     ExportValue(node, fSiPMSize, "SiPMSize");

@@ -3,6 +3,7 @@
 
 #include "Mustard/Math/Parity.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/VectorCast.h++"
 
 #include "G4Box.hh"
@@ -11,7 +12,6 @@
 #include "G4NistManager.hh"
 #include "G4OpticalSurface.hh"
 #include "G4PVPlacement.hh"
-#include "G4PhysicalConstants.hh"
 #include "G4Transform3D.hh"
 
 #include "gsl/gsl"
@@ -24,6 +24,7 @@
 namespace MACE::Detector::Definition {
 
 using namespace Mustard::LiteralUnit::MathConstantSuffix;
+using namespace Mustard::MathConstant;
 
 auto TTC::Construct(G4bool checkOverlaps) -> void {
     const auto& ttc{Description::TTC::Instance()};

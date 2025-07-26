@@ -109,7 +109,9 @@ auto Target::CuboidTarget::PerforatedCuboid::DetailContain(const Mustard::Concep
     const auto deltaY{x[1] - y0};
     const auto deltaXY2MinusR2{muc::pow<2>(deltaX) + (deltaY + fRadius) * (deltaY - fRadius)};
 
-    if (deltaXY2MinusR2 <= 0) { return false; }
+    if (deltaXY2MinusR2 <= 0) {
+        return false;
+    }
     const auto deltaXY2MinusR2PlusP2{deltaXY2MinusR2 + muc::pow<2>(p)};
     const auto pDeltaX{p * deltaX};
     return deltaXY2MinusR2PlusP2 > muc::abs(2 * pDeltaX) and
@@ -171,7 +173,9 @@ auto Target::MultiLayerTarget::PerforatedMultiLayer::DetailContain(const Mustard
     const auto deltaY{x[1] - y0};
     const auto deltaZY2MinusR2{muc::pow<2>(deltaZ) + (deltaY + fRadius) * (deltaY - fRadius)};
 
-    if (deltaZY2MinusR2 <= 0) { return false; }
+    if (deltaZY2MinusR2 <= 0) {
+        return false;
+    }
     const auto deltaZY2MinusR2PlusP2{deltaZY2MinusR2 + muc::pow<2>(p)};
     const auto pDeltaZ{p * deltaZ};
     return deltaZY2MinusR2PlusP2 > muc::abs(2 * pDeltaZ) and

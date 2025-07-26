@@ -10,6 +10,8 @@
 #include "TFile.h"
 #include "TMacro.h"
 
+#include "mplr/mplr.hpp"
+
 #include "fmt/format.h"
 
 #include <optional>
@@ -43,19 +45,29 @@ auto Analysis::RunBegin(G4int runID) -> void {
     }
     fLastUsedFullFilePath = std::move(fullFilePath);
     // save geometry
-    if (filePathChanged and Mustard::Env::MPIEnv::Instance().OnCommWorldMaster()) {
+    if (filePathChanged and mplr::comm_world().rank() == 0) {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimPTS_gdml", "SimPTS.gdml")->Write();
     }
     // initialize outputs
-    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID)); }
-    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
+    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) {
+        fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID));
+    }
+    if (TrackingAction::Instance().SaveDecayVertexData()) {
+        fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID));
+    }
     fVirtualHitOutput.emplace(fmt::format("G4Run{}/VirtualHit", runID));
 }
 
 auto Analysis::EventEnd() -> void {
-    if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
-    if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
-    if (fVirtualHit) { fVirtualHitOutput->Fill(*fVirtualHit); }
+    if (fPrimaryVertex and fPrimaryVertexOutput) {
+        fPrimaryVertexOutput->Fill(*fPrimaryVertex);
+    }
+    if (fDecayVertex and fDecayVertexOutput) {
+        fDecayVertexOutput->Fill(*fDecayVertex);
+    }
+    if (fVirtualHit) {
+        fVirtualHitOutput->Fill(*fVirtualHit);
+    }
     fPrimaryVertex = {};
     fDecayVertex = {};
     fVirtualHit = {};
@@ -63,8 +75,12 @@ auto Analysis::EventEnd() -> void {
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
-    if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
-    if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
+    if (fPrimaryVertexOutput) {
+        fPrimaryVertexOutput->Write();
+    }
+    if (fDecayVertexOutput) {
+        fDecayVertexOutput->Write();
+    }
     fVirtualHitOutput->Write();
     // close file
     fFile->Close(option);

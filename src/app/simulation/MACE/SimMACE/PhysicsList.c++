@@ -28,10 +28,10 @@ using namespace Mustard::LiteralUnit::Energy;
 PhysicsList::PhysicsList() :
     PassiveSingleton{this},
     StandardPhysicsListBase{},
-    fMACEBiasPxySofteningFactor{0.2_MeV},
-    fMACEBiasCosSofteningFactor{0.05},
+    fMACEBiasPxySofteningFactor{0.5_MeV},
+    fMACEBiasCosSofteningFactor{0.1},
     fMACEBiasEkLow{5_keV},
-    fMACEBiasEkSofteningFactor{0.5_keV},
+    fMACEBiasEkSofteningFactor{1_keV},
     fMessengerRegister{this} {}
 
 auto PhysicsList::ApplyMACEBias(bool apply) -> void {

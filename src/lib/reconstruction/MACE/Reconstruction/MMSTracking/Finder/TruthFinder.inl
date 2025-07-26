@@ -72,7 +72,9 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
         Get<"EvtID">(*seed) = Get<"EvtID">(firstHit);
         Get<"TrkID">(*seed) = outputTrackID;
         Get<"HitID">(*seed)->reserve(track.size());
-        for (auto&& hit : track) { Get<"HitID">(*seed)->emplace_back(Get<"HitID">(*hit)); }
+        for (auto&& hit : track) {
+            Get<"HitID">(*seed)->emplace_back(Get<"HitID">(*hit));
+        }
         Get<"chi2">(*seed) = 0;
         Get<"t0">(*seed) = Get<"t0">(firstHit);
         Get<"PDGID">(*seed) = Get<"PDGID">(firstHit);

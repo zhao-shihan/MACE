@@ -33,7 +33,6 @@ namespace MACE::inline Simulation::inline SD {
 using namespace Mustard::LiteralUnit::Energy;
 
 MCPSD::MCPSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{20_eV},
     fEfficiency{},
@@ -68,7 +67,9 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     assert(0 <= step.GetNonIonizingEnergyDeposit());
     assert(step.GetNonIonizingEnergyDeposit() <= eDep);
-    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) { return false; }
+    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) {
+        return false;
+    }
 
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -140,7 +141,9 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                    })};
             // construct real hit
             for (const auto& hit : cluster) {
-                if (hit == topHit) { continue; }
+                if (hit == topHit) {
+                    continue;
+                }
                 Get<"Edep">(*topHit) += Get<"Edep">(*hit);
             }
             fHitsCollection->insert(topHit.release());

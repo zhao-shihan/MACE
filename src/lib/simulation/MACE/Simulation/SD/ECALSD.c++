@@ -36,7 +36,6 @@
 namespace MACE::inline Simulation::inline SD {
 
 ECALSD::ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fECALPMSD{ecalPMSD},
     fEnergyDepositionThreshold{},
@@ -70,11 +69,15 @@ auto ECALSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
 
-    if (&particle == G4OpticalPhoton::Definition()) { return false; }
+    if (&particle == G4OpticalPhoton::Definition()) {
+        return false;
+    }
 
     const auto eDep{step.GetTotalEnergyDeposit()};
 
-    if (eDep < fEnergyDepositionThreshold) { return false; }
+    if (eDep < fEnergyDepositionThreshold) {
+        return false;
+    }
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
@@ -152,7 +155,9 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 // construct real hit
                 assert(Get<"ModID">(*topHit) == modID);
                 for (const auto& hit : cluster) {
-                    if (hit == topHit) { continue; }
+                    if (hit == topHit) {
+                        continue;
+                    }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
                 }
                 fHitsCollection->insert(topHit.release());

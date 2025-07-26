@@ -76,7 +76,9 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
     processor.Process<PhaseI::Data::SciFiSiPMRawHit>(
         ROOT::RDataFrame{"G4Run0/SciFiSiPMHit", fileName}, int{}, "EvtID",
         [&](bool byPass, auto&& event) {
-            if (byPass) { return; }
+            if (byPass) {
+                return;
+            }
             muc::timsort(event,
                          [](auto&& hit1, auto&& hit2) {
                              return std::tie(Get<"SiPMID">(*hit1), Get<"t">(*hit1)) < std::tie(Get<"SiPMID">(*hit2), Get<"t">(*hit2));

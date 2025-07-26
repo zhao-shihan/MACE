@@ -16,6 +16,8 @@
 #include "TInterpreter.h"
 #include "TMacro.h"
 
+#include "mplr/mplr.hpp"
+
 #include "gsl/gsl"
 
 #include "fmt/format.h"
@@ -41,17 +43,21 @@ auto SmearMACE::Main(int argc, char* argv[]) const -> int {
             }};
     )");
 
-    const auto outputName{Mustard::MPIX::ParallelizePath(cli.OutputFilePath()).replace_extension(".root").generic_string()};
-    TFile file{outputName.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
+    const auto outputPath{Mustard::MPIX::ParallelizePath(cli.OutputFilePath()).replace_extension(".root").generic_string()};
+    TFile file{outputPath.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
     if (not file.IsOpen()) {
-        throw std::runtime_error{Mustard::PrettyException(fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode()))};
+        Mustard::Throw<std::runtime_error>(fmt::format("Cannot open file '{}' with mode '{}'", outputPath, cli.OutputFileMode()));
     }
     do {
-        if (env.OnCommNodeWorker()) { break; }
+        if (mplr::comm_world().rank() != 0) {
+            break;
+        }
         std::stringstream smearingConfigText;
         const auto AppendConfigText{
             [&](const auto& nameInConfigText, const auto& smearingConfig, const auto& identity) {
-                if (smearingConfig.empty() and not identity) { return; }
+                if (smearingConfig.empty() and not identity) {
+                    return;
+                }
                 fmt::print(smearingConfigText, "{}:\n", nameInConfigText);
                 if (not smearingConfig.empty()) {
                     for (auto&& [var, smear] : smearingConfig) {

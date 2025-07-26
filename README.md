@@ -21,20 +21,20 @@ For more information, please check out [the image repository homepage](https://g
 
 1. A C++ compiler (that supports ≥ C++20. [GCC](https://gcc.gnu.org/) ≥ 12, [LLVM Clang](https://clang.llvm.org/) ≥ 16, or MSVC ≥ 19.30 (i.e., [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0))
 2. A C++ library (that supports ≥ C++20. [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/) ≥ 12, or [MSVC STL](https://github.com/microsoft/STL) with [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0)
-3. [CMake](https://cmake.org/) (≥ 3.16)
+3. [CMake](https://cmake.org/) (≥ 3.21)
 4. A build system compatible with CMake ([GNU Make](https://www.gnu.org/software/make/), [Ninja](https://ninja-build.org), or etc.)
 
 ### Libraries
 
 Required:
 
-1. [Mustard (A modern, distributed offline software framework for HEP experiments)](https://github.com/zhao-shihan/Mustard) (≥ 0.8.0, built-in if not found)
+1. [Mustard (A modern, distributed offline software framework for HEP experiments)](https://github.com/zhao-shihan/Mustard) (≥ 0.25.725, built-in if not found)
 
 Required, built-in if not found (network or pre-downloaded source is required):
 
 1. [zhao-shihan/GenFit (A generic track-fitting toolkit)](https://github.com/zhao-shihan/GenFit) (a GenFit fork, built-in if not found)
 2. [PMP (Polygon Mesh Processing Library)](https://www.pmp-library.org/) (≥ 3.0.0, built-in if not found)
-3. [MACE offline data](http://gitlab.iyu.icu:6680/zhaoshihan/mace_offline_data) (built-in if not found)
+3. [MACE offline data](https://code.ihep.ac.cn/zhaoshh7/mace_offline_data) (built-in if not found)
 
 ## Cite
 

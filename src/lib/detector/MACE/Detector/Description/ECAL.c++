@@ -283,9 +283,13 @@ auto ECAL::CalculateMeshInformation() const -> MeshInformation {
         const auto centroid{Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, pmpFace))};
         if (const auto rXY{fInnerRadius * centroid.perp()};
             centroid.z() < 0) {
-            if (rXY < fUpstreamWindowRadius) { continue; }
+            if (rXY < fUpstreamWindowRadius) {
+                continue;
+            }
         } else {
-            if (rXY < fDownstreamWindowRadius) { continue; }
+            if (rXY < fDownstreamWindowRadius) {
+                continue;
+            }
         }
         if (std::ranges::any_of(pmpMesh.vertices(pmpFace),
                                 [&](const auto& v) {

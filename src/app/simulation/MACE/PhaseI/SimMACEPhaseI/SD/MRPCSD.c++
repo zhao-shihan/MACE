@@ -33,7 +33,6 @@ namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 using namespace Mustard::LiteralUnit::Energy;
 
 MRPCSD::MRPCSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{20_eV},
     fSplitHit{},
@@ -56,7 +55,9 @@ auto MRPCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     assert(0 <= step.GetNonIonizingEnergyDeposit());
     assert(step.GetNonIonizingEnergyDeposit() <= eDep);
-    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) { return false; }
+    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) {
+        return false;
+    }
 
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -72,7 +73,9 @@ auto MRPCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
 
-    if (particle.GetPDGCharge() == 0) { return false; }
+    if (particle.GetPDGCharge() == 0) {
+        return false;
+    }
 
     // new a hit
     const auto& hit{fSplitHit[modID].emplace_back(std::make_unique_for_overwrite<MRPCHit>())};
@@ -138,7 +141,9 @@ auto MRPCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 // construct real hit
                 assert(Get<"ModID">(*topHit) == modID);
                 for (const auto& hit : cluster) {
-                    if (hit == topHit) { continue; }
+                    if (hit == topHit) {
+                        continue;
+                    }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
                 }
                 fHitsCollection->insert(topHit.release());
