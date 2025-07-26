@@ -18,7 +18,7 @@ namespace MACE::inline Simulation::inline SD {
 using namespace MACE::Detector::Description;
 
 VetoPMSD::VetoPMSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
+    // Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fHit{},
     fHitsCollection{} {

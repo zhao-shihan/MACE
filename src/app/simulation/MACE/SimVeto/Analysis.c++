@@ -11,6 +11,8 @@
 #include "TFile.h"
 #include "TMacro.h"
 
+#include "mplr/mplr.hpp"
+
 #include "fmt/core.h"
 
 #include <algorithm>
@@ -46,7 +48,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
     }
     fLastUsedFullFilePath = std::move(fullFilePath);
     // save geometry
-    if (filePathChanged and Mustard::Env::MPIEnv::Instance().OnCommWorldMaster()) {
+    if (filePathChanged and mplr::comm_world().rank() == 0) {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimVeto_gdml", "SimVeto.gdml")->Write();
     }
     // initialize outputs

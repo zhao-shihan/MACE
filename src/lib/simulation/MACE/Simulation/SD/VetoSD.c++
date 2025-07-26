@@ -39,7 +39,7 @@ namespace MACE::inline Simulation::inline SD {
 using namespace MACE::Detector::Description;
 
 VetoSD::VetoSD(const G4String& sdName, const VetoPMSD* vetoPMSD) :
-    Mustard::NonMoveableBase{},
+    // Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fVetoPMSD{vetoPMSD},
     fEnergyDepositionThreshold{},

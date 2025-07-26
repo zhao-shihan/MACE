@@ -2,19 +2,18 @@
 
 #include "MACE/Simulation/Hit/VetoPMHit.h++"
 
-#include "Mustard/Utility/NonMoveableBase.h++"
-
 #include "G4VSensitiveDetector.hh"
 
-#include <memory>
+#include "muc/ptrvec"
+
+// #include <memory>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
-class VetoPMSD : public Mustard::NonMoveableBase,
-                 public G4VSensitiveDetector {
+class VetoPMSD : public G4VSensitiveDetector {
 public:
     VetoPMSD(const G4String& sdName);
 
