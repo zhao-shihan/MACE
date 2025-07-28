@@ -348,10 +348,10 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
             auto downCurvedFiber1Transform{G4Transform3D(downCurvedFiber1Rotation, downCurvedFiber1Translate)};
             auto downCurvedFiber2Transform{G4Transform3D(downCurvedFiber2Rotation, downCurvedFiber2Translate)};
 
-            auto phyUpCurvedFiber1{Make<G4PVPlacement>(upCurvedFiber1Transform, logicCurvedFiberHole, "UpCurveHole1", logicVirtualPairBox, false, sideCount, checkOverlaps)};
-            auto phyUpCurvedFiber2{Make<G4PVPlacement>(upCurvedFiber2Transform, logicCurvedFiberHole, "UpCurveHole2", logicVirtualPairBox, false, sideCount, checkOverlaps)};
-            auto phyDownCurvedFiber1{Make<G4PVPlacement>(downCurvedFiber1Transform, logicCurvedFiberHole, "DownCurveHole1", logicVirtualPairBox, false, sideCount, checkOverlaps)};
-            auto phyDownCurvedFiber2{Make<G4PVPlacement>(downCurvedFiber2Transform, logicCurvedFiberHole, "DownCurveHole2", logicVirtualPairBox, false, sideCount, checkOverlaps)};
+            Make<G4PVPlacement>(upCurvedFiber1Transform, logicCurvedFiberHole, "UpCurveHole1", logicVirtualPairBox, false, sideCount, checkOverlaps);
+            Make<G4PVPlacement>(upCurvedFiber2Transform, logicCurvedFiberHole, "UpCurveHole2", logicVirtualPairBox, false, sideCount, checkOverlaps);
+            Make<G4PVPlacement>(downCurvedFiber1Transform, logicCurvedFiberHole, "DownCurveHole1", logicVirtualPairBox, false, sideCount, checkOverlaps);
+            Make<G4PVPlacement>(downCurvedFiber2Transform, logicCurvedFiberHole, "DownCurveHole2", logicVirtualPairBox, false, sideCount, checkOverlaps);
         }
         Make<G4PVPlacement>(G4Transform3D::Identity, logicStraightFiber, "StraightFiber", logicStraightFiberHole, false, 0, checkOverlaps);
         Make<G4PVPlacement>(G4Transform3D::Identity, logicCurvedFiber, "CurvedFiber", logicCurvedFiberHole, false, 0, checkOverlaps);
