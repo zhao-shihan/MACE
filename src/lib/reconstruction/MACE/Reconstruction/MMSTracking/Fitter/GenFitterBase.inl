@@ -60,7 +60,7 @@ template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPoi
 auto GenFitterBase<AHit, ATrack, AFitter>::Initialize(const std::vector<AHitPointer>& hitData, ASeedPointer seed)
     -> std::pair<std::shared_ptr<genfit::Track>,
                  std::unordered_map<const genfit::AbsMeasurement*, AHitPointer>> {
-    if (Mustard::Math::Norm2(*Get<"p0">(*seed)) < muc::pow<2>(fLowestMomentum)) {
+    if (Mustard::Math::NormSq(*Get<"p0">(*seed)) < muc::pow<2>(fLowestMomentum)) {
         return {};
     }
     if (TDatabasePDG::Instance()->GetParticle(Get<"PDGID">(*seed)) == nullptr) {

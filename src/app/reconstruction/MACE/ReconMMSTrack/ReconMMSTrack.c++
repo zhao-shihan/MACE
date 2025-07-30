@@ -11,8 +11,7 @@
 #include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/MPIX/DataType.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
 #include "Mustard/Utility/VectorArithmeticOperator.h++"
 
 #include "ROOT/RDataFrame.hxx"
@@ -41,7 +40,7 @@ auto ReconMMSTrack::Main(int argc, char* argv[]) const -> int {
         files.emplace_back(argv[i]);
     }
 
-    TFile file{Mustard::MPIX::ParallelizePath("output.root").generic_string().c_str(), "RECREATE"};
+    TFile file{Mustard::Parallel::ProcessSpecificPath("output.root").generic_string().c_str(), "RECREATE"};
     Mustard::Data::Output<Data::MMSTrack> reconTrack{"G4Run0/MMSTrack"};
     Mustard::Data::Output<Data::MMSTrack> reconTrackError{"G4Run0/MMSTrackError"};
 

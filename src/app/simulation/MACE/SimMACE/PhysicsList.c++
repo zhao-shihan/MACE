@@ -4,9 +4,9 @@
 #include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/PhysicsList.h++"
 
-#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
-#include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalConversionDecayChannel.h++"
-#include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
+#include "Mustard/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
+#include "Mustard/Geant4X/DecayChannel/MuoniumInternalConversionDecayChannel.h++"
+#include "Mustard/Geant4X/Particle/Muonium.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
 #include "Mustard/Utility/PrettyLog.h++"

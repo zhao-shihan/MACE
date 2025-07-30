@@ -6,8 +6,7 @@
 #include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/MPIX/DataType.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
@@ -69,7 +68,7 @@ auto ReconECAL::Main(int argc, char* argv[]) const -> int {
         i++;
     }
 
-    TFile outputFile{Mustard::MPIX::ParallelizePath("dual_coin.root").generic_string().c_str(), "RECREATE"};
+    TFile outputFile{Mustard::Parallel::ProcessSpecificPath("dual_coin.root").generic_string().c_str(), "RECREATE"};
     using ECALEnergy = Mustard::Data::TupleModel<Mustard::Data::Value<float, "Edep", "Energy deposition">,
                                                  Mustard::Data::Value<float, "Edep1", "Energy deposition 1">,
                                                  Mustard::Data::Value<float, "Edep2", "Energy deposition 2">,

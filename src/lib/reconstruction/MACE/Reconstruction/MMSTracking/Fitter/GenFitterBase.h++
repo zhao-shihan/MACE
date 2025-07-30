@@ -13,7 +13,6 @@
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/MPIX/DataType.h++"
 #include "Mustard/Math/Norm.h++"
 #include "Mustard/Utility/ConvertG3G4Unit.h++"
 #include "Mustard/Utility/CreateTemporaryFile.h++"

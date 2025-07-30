@@ -5,10 +5,10 @@
 
 #include "Mustard/Env/CLI/MonteCarloCLI.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/CLHEPX/Random/Xoshiro.h++"
-#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
-#include "Mustard/Extension/MPIX/Execution/Executor.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/CLHEPX/Random/Xoshiro.h++"
+#include "Mustard/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
+#include "Mustard/Execution/Executor.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
@@ -68,7 +68,7 @@ auto GenMuonICDecay::Main(int argc, char* argv[]) const -> int {
     Mustard::UseXoshiro<256> random;
     cli.SeedRandomIfFlagged();
 
-    const auto filePath{Mustard::MPIX::ParallelizePath(cli->get("--output")).generic_string()};
+    const auto filePath{Mustard::Parallel::ProcessSpecificPath(cli->get("--output")).generic_string()};
     TFile file{filePath.c_str(), cli->get("--output-mode").c_str(), "",
                std::bit_cast<ROOT::RCompressionSetting::EDefaults::EValues>(
                    cli->get<std::underlying_type_t<ROOT::RCompressionSetting::EDefaults::EValues>>("--compression-level"))};
@@ -129,7 +129,7 @@ auto GenMuonICDecay::Main(int argc, char* argv[]) const -> int {
             return std::log((p + pz) / (p - pz)) / 2;
         }};
 
-    Mustard::MPIX::Executor<unsigned long long> executor;
+    Mustard::Executor<unsigned long long> executor;
     icDecay.Initialize();
     executor.Execute(
         cli->get<unsigned long long>("n"),

@@ -1,7 +1,7 @@
 #include "MACE/PhaseI/Detector/Definition/SciFiTracker.h++"
 #include "MACE/PhaseI/Detector/Description/SciFiTracker.h++"
 
-#include "Mustard/Extension/Geant4X/Geometry/HelicalBox.h++"
+#include "Mustard/Geant4X/Geometry/HelicalBox.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
@@ -210,7 +210,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
 
     auto logicalHelicalFiber{
         [&](auto helicalRadius, auto fiberCladdingWidth, auto fiberCoreWidth, auto pitch) {
-            const auto solidHelicalFiberCladding{Make<Mustard::Extension::Geant4X::HelicalBox>(
+            const auto solidHelicalFiberCladding{Make<Mustard::Geant4X::HelicalBox>(
                 scifiName + "HelicalFiber",
                 helicalRadius,
                 fiberCladdingWidth,
@@ -222,7 +222,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 solidHelicalFiberCladding,
                 pmma,
                 scifiName + "HelicalFiber")};
-            const auto solidHelicalFiberCore{Make<Mustard::Extension::Geant4X::HelicalBox>(
+            const auto solidHelicalFiberCore{Make<Mustard::Geant4X::HelicalBox>(
                 scifiName + "HelicalFiberCore",
                 helicalRadius,
                 fiberCoreWidth,

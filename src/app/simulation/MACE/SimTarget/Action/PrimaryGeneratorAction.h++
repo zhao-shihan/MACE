@@ -3,8 +3,8 @@
 #include "MACE/SimTarget/Messenger/PrimaryGeneratorActionMessenger.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
-#include "Mustard/Extension/Geant4X/Generator/FromDataPrimaryGenerator.h++"
-#include "Mustard/Extension/Geant4X/Generator/GeneralParticleSourceX.h++"
+#include "Mustard/Geant4X/Generator/FromDataPrimaryGenerator.h++"
+#include "Mustard/Geant4X/Generator/GeneralParticleSourceX.h++"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 

@@ -6,8 +6,8 @@
 #include "MACE/Simulation/Hit/TTCSiPMHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Geant4X/Utility/ConvertGeometry.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
 
 #include "TFile.h"
 #include "TMacro.h"

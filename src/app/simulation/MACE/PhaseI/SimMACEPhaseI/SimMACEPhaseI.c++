@@ -4,7 +4,7 @@
 
 #include "Mustard/Env/CLI/Geant4CLI.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/Geant4X/Interface/MPIExecutive.h++"
+#include "Mustard/Geant4X/Interface/MPIExecutive.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
 
 namespace MACE::PhaseI::SimMACEPhaseI {

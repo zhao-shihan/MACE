@@ -3,8 +3,8 @@
 #include "MACE/SimPTS/Analysis.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Geant4X/Utility/ConvertGeometry.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
 #include "Mustard/Utility/PrettyLog.h++"
 
 #include "TFile.h"
@@ -35,7 +35,7 @@ Analysis::Analysis() :
 
 auto Analysis::RunBegin(G4int runID) -> void {
     // open ROOT file
-    auto fullFilePath{Mustard::MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
+    auto fullFilePath{Mustard::Parallel::ProcessSpecificPath(fFilePath).replace_extension(".root").generic_string()};
     const auto filePathChanged{fullFilePath != fLastUsedFullFilePath};
     fFile = TFile::Open(fullFilePath.c_str(), filePathChanged ? fFileMode.c_str() : "UPDATE",
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);

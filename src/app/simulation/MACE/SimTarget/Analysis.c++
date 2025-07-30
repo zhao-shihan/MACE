@@ -5,8 +5,8 @@
 
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Geant4X/Utility/ConvertGeometry.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
 #include "Mustard/Utility/PrettyLog.h++"
 
 #include "TFile.h"
@@ -77,7 +77,7 @@ auto Analysis::Close() -> void {
 }
 
 auto Analysis::OpenResultFile() -> void {
-    const auto fullFilePath{Mustard::MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
+    const auto fullFilePath{Mustard::Parallel::ProcessSpecificPath(fFilePath).replace_extension(".root").generic_string()};
     fResultFile = TFile::Open(fullFilePath.c_str(), fFileMode.c_str(),
                               "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fResultFile == nullptr) {

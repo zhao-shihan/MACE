@@ -184,12 +184,12 @@ auto Target::MultiLayerTarget::PerforatedMultiLayer::DetailContain(const Mustard
 
 auto Target::CylinderTarget::VolumeContain(const Mustard::Concept::InputVector3D auto& x) const -> bool {
     return -fThickness / 2 <= x[2] and x[2] <= fThickness / 2 and
-           muc::hypot2(x[0], x[1]) <= muc::pow<2>(fRadius);
+           muc::hypot_sq(x[0], x[1]) <= muc::pow<2>(fRadius);
 }
 
 auto Target::CylinderTarget::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -> bool {
     return x[2] > fThickness / 2 or
-           muc::hypot2(x[0], x[1]) > muc::pow<2>(fRadius);
+           muc::hypot_sq(x[0], x[1]) > muc::pow<2>(fRadius);
 }
 
 } // namespace MACE::Detector::Description
