@@ -417,20 +417,23 @@ auto ECAL::CalculateMeshInformation() const -> MeshInformation {
     // moduleID++;
     // }
     if (Mustard::Env::VerboseLevelReach<'V'>()) {
-        for (auto&& [edgeLengthList, _] : edgeLengthsMap) {
-            int typeID{};
-            const auto range{edgeLengthsMap.equal_range(edgeLengthList)};
+        int typeID{};
+        Mustard::MasterPrintLn(">>--->>edgeLengthsMap");
+        auto it{edgeLengthsMap.begin()};
+        while (it != edgeLengthsMap.end()) {
+            auto currentEdgeLengths{it->first};
+            const auto range{edgeLengthsMap.equal_range(currentEdgeLengths)};
             const std::ranges::subrange equalRange{range.first, range.second};
-            Mustard::MasterPrintLn(">>--->>edgeLengthsMap");
             Mustard::MasterPrintLn("--->>type {}:", typeID);
             Mustard::MasterPrintLn("\t >>lengths:");
-            Mustard::MasterPrintLn("{}, ", equalRange.front().first);
+            Mustard::MasterPrintLn("{}, ", currentEdgeLengths);
             Mustard::MasterPrintLn("\t>>units({} in total):", std::ranges::distance(equalRange));
             for (auto&& [_, moduleID] : equalRange) {
-                Mustard::MasterPrintLn("{}, ", moduleID);
+                Mustard::MasterPrint("{}, ", moduleID);
             }
             Mustard::MasterPrintLn("======================================================\n");
             ++typeID;
+            it = range.second;
         }
     }
     return outputMeshInfo;

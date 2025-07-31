@@ -7,6 +7,8 @@
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
+#include "Mustard/Utility/Print.h++"
+
 
 #include "G4Box.hh"
 #include "G4IntersectionSolid.hh"
@@ -103,7 +105,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
     for (int moduleID{};
-         auto&& [centroid, normal, vertexIndex,_1,_2] : std::as_const(faceList)) {
+         auto&& [centroid, normal, vertexIndex, _1, _2] : std::as_const(faceList)) {
         // loop over all ECAL face
         // centroid here refer to the face 'center' of normalized ball
 
@@ -130,6 +132,9 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
                                        [&](const auto& aVertex) { return outerCentroid + (aVertex - outerCentroid).unit() * ((aVertex - outerCentroid).mag() - ecal.CrystalPackageThickness()); });
                 // inner face scaled from outer face
                 const auto innerCentroid{innerRadius * centroid};
+                if (Mustard::Env::VerboseLevelReach<'W'>()) {
+                    Mustard::MasterPrintLn("{}\t{}\t{}\t{}", moduleID, innerCentroid.x(), innerCentroid.y(), innerCentroid.z());
+                }
                 const auto innerVertexScaleFactor{innerRadius / outerRadius};
                 std::vector<G4ThreeVector> innerVertexes(vertexIndex.size());
                 std::ranges::transform(outerVertexes, innerVertexes.begin(),
