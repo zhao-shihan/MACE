@@ -1,6 +1,5 @@
 #include "MACE/Detector/Description/CDC.h++"
 
-#include "Mustard/Math/Parity.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
 
@@ -9,6 +8,7 @@
 
 #include "Eigen/Geometry"
 
+#include "muc/math"
 #include "muc/numeric"
 
 #include <algorithm>
@@ -91,8 +91,8 @@ auto CDC::CalculateLayerConfiguration() const -> std::vector<SuperLayerConfigura
                                   layerConfig.front()};
 
         super.isAxial = fEvenSuperLayerIsAxial ?
-                            Mustard::Math::IsEven(superLayerID) :
-                            Mustard::Math::IsOdd(superLayerID);
+                            muc::even(superLayerID) :
+                            muc::odd(superLayerID);
         super.superLayerID = superLayerID;
         super.innerRadius = superLayerID > 0 ?
                                 lastSuper.outerRadius + fMinAdjacentSuperLayersDistance :
@@ -177,7 +177,7 @@ auto CDC::CalculateLayerConfiguration() const -> std::vector<SuperLayerConfigura
                                                          lastSuper.sense.back().cell.back().cellID + 1 :
                                                          0) +
                                                     senseLayerLocalID * super.nCellPerSenseLayer)};
-            const auto firstCellAzimuth{Mustard::Math::IsEven(sense.senseLayerID) ?
+            const auto firstCellAzimuth{muc::even(sense.senseLayerID) ?
                                             0 :
                                             halfPhiCell};
             sense.cell.reserve(super.nCellPerSenseLayer);

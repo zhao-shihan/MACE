@@ -1,7 +1,8 @@
 #include "MACE/SmearMACE/CLI.h++"
 
-#include "Mustard/Math/Parity.h++"
 #include "Mustard/Utility/PrettyLog.h++"
+
+#include "muc/math"
 
 #include "fmt/core.h"
 
@@ -136,7 +137,7 @@ auto CLIModule::ParseSmearingConfig(std::string_view arg) const -> std::unordere
         return {};
     }
     std::unordered_map<std::string, std::string> config;
-    assert(Mustard::Math::IsEven(var->size()));
+    assert(muc::even(var->size()));
     for (gsl::index i{}; i < ssize(*var); i += 2) {
         auto [_, inserted]{config.try_emplace(std::move(var->at(i)), std::move(var->at(i + 1)))};
         if (not inserted) {

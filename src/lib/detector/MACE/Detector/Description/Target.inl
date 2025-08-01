@@ -119,7 +119,7 @@ auto Target::CuboidTarget::PerforatedCuboid::DetailContain(const Mustard::Concep
 }
 
 auto Target::MultiLayerTarget::VolumeContain(const Mustard::Concept::InputVector3D auto& x) const -> bool {
-    const auto x0{Mustard::Math::IsEven(fCount) ? fSpacing / 2 : -fThickness / 2};
+    const auto x0{muc::even(fCount) ? fSpacing / 2 : -fThickness / 2};
     const auto r{fSpacing + fThickness};
     const auto u{(x[0] + x0) / r};
     return u - muc::llround(u - 0.5) >= fSpacing / r and
@@ -140,7 +140,7 @@ auto Target::MultiLayerTarget::Contain(const Mustard::Concept::InputVector3D aut
 }
 
 auto Target::MultiLayerTarget::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -> bool {
-    const auto x0{Mustard::Math::IsEven(fCount) ? fSpacing / 2 : -fThickness / 2};
+    const auto x0{muc::even(fCount) ? fSpacing / 2 : -fThickness / 2};
     const auto r{fSpacing + fThickness};
     const auto u{(x[0] + x0) / r};
     const auto notShadowed{u - muc::llround(u - 0.5) < fSpacing / r or
