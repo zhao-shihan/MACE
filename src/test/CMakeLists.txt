@@ -17,10 +17,3 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/
      DESTINATION ${CMAKE_BINARY_DIR}/test/scripts
      FILES_MATCHING PATTERN "*")
      
-# set(Test_COPY_DIR test)
-# add_subdirectory(scripts)
-# foreach(_scripts ${Test_SCRIPTS})
-#     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${Test_SCRIPTS_COPY_DIR})
-#     configure_file(${_scripts} ${CMAKE_BINARY_DIR}/${Test_SCRIPTS_COPY_DIR} COPYONLY)
-#     install(FILES ${_scripts} DESTINATION ${MACE_DATAROOTDIR}/${Test_SCRIPTS_COPY_DIR})
-# endforeach()
