@@ -1,4 +1,5 @@
 #include "ROOT/RDataFrame.hxx"
+#include "ROOT/RVec.hxx"
 #include "TBranch.h"
 #include "TDirectory.h"
 #include "TFile.h"
@@ -14,7 +15,6 @@
 
 #include <array>
 #include <iostream>
-#include <ranges>
 #include <string>
 #include <string_view>
 #include <unordered_set>
@@ -193,13 +193,31 @@ void FillProcess::Fill() {
             auto hist = df.Histo1D({branchName.data(), branchName.data(), nBins_value_type, xMin, xMax}, branchName);
             hist->Write();
         }
+
         if (isboolBranch) {
             std::cout << "Get bool branch named " << branchName << std::endl;
             auto hist = df.Histo1D({branchName.data(), branchName.data(), 2, 0, 1}, branchName);
             hist->Write();
         }
+
         if (isArrayfBranch) {
-            // TODO
+            auto arraySize{df.Take<ROOT::VecOps::RVec<float>>(branchName).GetValue().at(0).size()};
+            auto hists{std::vector<TH1F>()};
+            auto arrayComponents{std::vector<std::vector<float>>(arraySize)};
+            df.Foreach([&](const ROOT::RVec<float>& aArray) {
+                for (size_t i{}; i < arraySize; ++i) {
+                    arrayComponents[i].emplace_back(aArray[i]);
+                }
+            },
+                       {branchName.data()});
+
+            for (size_t i{}; i < arraySize; ++i) {
+                auto thisHistName{(std::string(branchName) + std::to_string(i)).c_str()};
+                hists.emplace_back(TH1F(thisHistName, thisHistName, nBins_value_type, arrayComponents.at(i).data()));
+            }
+            for (auto aHist : hists) {
+                aHist.Write();
+            }
         }
     }
 }
