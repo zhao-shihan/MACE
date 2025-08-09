@@ -46,7 +46,9 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         ecalField.Length(0.);
     }
     auto& fWorldDescription{MACE::Detector::Description::World::Instance()};
-    fWorldDescription.HalfYExtent(3*m);
+    fWorldDescription.HalfYExtent(10*m);
+    fWorldDescription.HalfZExtent(10*m);
+    fWorldDescription.HalfXExtent(10*m);
     fWorld = std::make_unique<MACE::Detector::Definition::World>();
     auto& pdsVeto{fWorld->NewDaughter<MACE::Detector::Definition::PDSVeto>(fCheckOverlap)};
     const auto& vetoName{MACE::Detector::Description::PDSVeto::Instance().Name()};
