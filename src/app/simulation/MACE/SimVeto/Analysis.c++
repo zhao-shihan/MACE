@@ -1,7 +1,7 @@
 #include "MACE/SimVeto/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimVeto/Analysis.h++"
-#include "MACE/Simulation/Hit/VetoPMHit.h++"
 #include "MACE/Simulation/Hit/VetoHit.h++"
+#include "MACE/Simulation/Hit/VetoPMHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
@@ -17,8 +17,8 @@
 
 #include <algorithm>
 #include <stdexcept>
-namespace MACE::SimVeto{
-Analysis::Analysis():
+namespace MACE::SimVeto {
+Analysis::Analysis() :
     PassiveSingleton{this},
     fFilePath{"SimVeto_untiled"},
     fFileMode{"NEW"},
@@ -33,8 +33,7 @@ Analysis::Analysis():
     fDecayVertex{},
     fVetoHit{},
     fVetoPMHit{},
-    fMessengerRegister{this}
-    {}
+    fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
     // open ROOT file
@@ -52,7 +51,9 @@ auto Analysis::RunBegin(G4int runID) -> void {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimVeto_gdml", "SimVeto.gdml")->Write();
     }
     // initialize outputs
-    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID)); }
+    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) {
+        fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID));
+    }
     // if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
     fVetoSimHitOutput.emplace(fmt::format("G4Run{}/VetoSimHit", runID));
     fVetoPMHitOutput.emplace(fmt::format("G4Run{}/VetoPMHit", runID));
@@ -60,11 +61,19 @@ auto Analysis::RunBegin(G4int runID) -> void {
 
 auto Analysis::EventEnd() -> void {
     const auto vetoPassed{not fCoincidenceWithVeto or fVetoHit == nullptr or fVetoHit->size() > 0};
-    if(vetoPassed){
-        if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
-        if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
-        if (fVetoHit) { fVetoSimHitOutput->Fill(*fVetoHit); }
-        if (fVetoPMHit) { fVetoPMHitOutput->Fill(*fVetoPMHit); }
+    if (vetoPassed) {
+        if (fPrimaryVertex and fPrimaryVertexOutput) {
+            fPrimaryVertexOutput->Fill(*fPrimaryVertex);
+        }
+        if (fDecayVertex and fDecayVertexOutput) {
+            fDecayVertexOutput->Fill(*fDecayVertex);
+        }
+        if (fVetoHit) {
+            fVetoSimHitOutput->Fill(*fVetoHit);
+        }
+        if (fVetoPMHit) {
+            fVetoPMHitOutput->Fill(*fVetoPMHit);
+        }
     }
     fPrimaryVertex = {};
     fDecayVertex = {};
@@ -74,18 +83,27 @@ auto Analysis::EventEnd() -> void {
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
-    if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
-    if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
-    fVetoSimHitOutput->Write();
-    fVetoPMHitOutput->Write();
-    // close file
-    fFile->Close(option);
-    delete fFile;
+    if (fPrimaryVertexOutput) {
+        fPrimaryVertexOutput->Write();
+    }
+    if (fDecayVertexOutput) {
+        fDecayVertexOutput->Write();
+    }
+    if (fVetoSimHitOutput) {
+        fVetoSimHitOutput->Write();
+    }
+    if (fVetoPMHitOutput) {
+        fVetoPMHitOutput->Write();
+    }
     // reset output
     fPrimaryVertexOutput.reset();
     fDecayVertexOutput.reset();
     fVetoSimHitOutput.reset();
     fVetoPMHitOutput.reset();
+    
+    // close file
+    fFile->Close(option);
+    delete fFile;
 }
 
 } // namespace MACE::SimVeto
