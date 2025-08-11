@@ -19,14 +19,16 @@
 namespace MACE::SimMACE::inline Action {
 
 TrackingAction::TrackingAction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4UserTrackingAction{},
     fSaveDecayVertexData{true},
     fDecayVertexData{},
     fMessengerRegister{this} {}
 
 auto TrackingAction::PostUserTrackingAction(const G4Track* track) -> void {
-    if (fSaveDecayVertexData) { UpdateDecayVertexData(*track); }
+    if (fSaveDecayVertexData) {
+        UpdateDecayVertexData(*track);
+    }
 }
 
 auto TrackingAction::UpdateDecayVertexData(const G4Track& track) -> void {

@@ -1,0 +1,112 @@
+# SimMACEPhaseI: geometry description
+
+CentralBeamPipe:
+  Length: 1000
+  InnerRadius: 40
+  BerylliumLength: 200
+  BerylliumThickness: 0.5
+  AluminiumThickness: 2
+  VacuumPressure: 0.62415090744607638
+ECAL:
+  NSubdivision: 3
+  InnerRadius: 240
+  CrystalHypotenuse: 140
+  UpstreamWindowRadius: 140
+  DownstreamWindowRadius: 140
+  PMTDimensions:
+    - - 29.300000000000001
+      - 25
+      - 87
+    - - 29.300000000000001
+      - 25
+      - 87
+    - - 39.899999999999999
+      - 32
+      - 98.5
+    - - 39.899999999999999
+      - 32
+      - 98.5
+    - - 39.899999999999999
+      - 32
+      - 98.5
+    - - 39.899999999999999
+      - 32
+      - 98.5
+    - - 39.899999999999999
+      - 32
+      - 98.5
+    - - 39.899999999999999
+      - 32
+      - 98.5
+    - - 39.899999999999999
+      - 32
+      - 98.5
+    - - 39.899999999999999
+      - 32
+      - 98.5
+  PMTCouplerThickness: 0.10000000000000001
+  PMTWindowThickness: 1
+  PMTCathodeThickness: 2.0000000000000005e-05
+  MPPCPitch: 0.20000000000000001
+  MPPCThickness: 0.10000000000000001
+  MPPCCouplerThickness: 0.10000000000000001
+  MPPCWindowThickness: 0.20000000000000001
+  ScintillationYield: 54000
+  ScintillationTimeConstant1: 1000
+  ResolutionScale: 1
+  ModuleSelection: []
+  WaveformIntegralTime: 100
+MRPC:
+  HoneyCombThickness: 4
+  PCBThickness: 1.5
+  MylarThickness: 0.34999999999999998
+  AnodeThickness: 0.13
+  OuterGlassThickness: 0.69999999999999996
+  InnerGlassThickness: 0.54000000000000004
+  NGaps: 6
+  GasGapThickness: 0.22
+  GasTankThickness: 1.5
+  NMRPCs: 8
+  CentralRadius: 63.5
+  CentralMRPCLength: 300
+  CentralMRPCWidth: 100
+  CornerRadius: 116
+  CornerMRPCLength: 300
+  CornerMRPCWidth: 100
+  TimeResolutionFWHM: 0.10000000000000001
+  SpacialResolutionFWHM: 1
+
+Target:
+  ShapeType: Cylinder
+  Cuboid:
+    Width: 60
+    Thickness: 10
+    DetailType: Perforated
+    Perforated:
+      Extent: 40
+      Spacing: 0.055
+      Diameter: 0.184
+      Depth: 2
+  MultiLayer:
+    Width: 60
+    Height: 50
+    Thickness: 3
+    Spacing: 2
+    Count: 11
+    DetailType: Perforated
+    Perforated:
+      ExtentZ: 50
+      ExtentY: 40
+      Spacing: 0.055
+      Diameter: 0.184
+  Cylinder:
+    Radius: 30
+    Thickness: 60
+  SilicaAerogelDensity: 1.6852074501044058e+17
+  EffectiveTemperature: 400
+  FormationProbability: 0
+  MeanFreePath: 0.00020000000000000004
+World:
+  XExtent: 1000
+  YExtent: 1000
+  ZExtent: 1000

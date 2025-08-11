@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::SimTarget {
 
 constexpr auto defaultMacro = {
@@ -47,10 +51,10 @@ constexpr auto defaultMacro = {
     "/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0",
     "",
     "# kill secondaries",
-    "/MACE/Action/KillIrrelevants    true",
+    "/MACE/Action/KillIrrelevance    true",
     "",
 
-#if MACE_USE_G4VIS
+#if MUSTARD_USE_G4VIS
 
     "#############################################################################",
     "# Visualization settings",

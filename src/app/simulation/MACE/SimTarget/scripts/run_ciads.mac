@@ -1,0 +1,41 @@
+#############################################################################
+#
+# Macro file demo for SimTarget in batch session
+#
+#############################################################################
+
+#############################################################################
+# Initialization settings
+#############################################################################
+
+# Set some default verbose
+/control/verbose 0
+/run/verbose 0
+
+# I/O & Analysis
+/MACE/Analysis/FilePath                        SimTarget_CiADS
+/MACE/Analysis/FileMode                        NEW
+/MACE/Analysis/EnableYieldAnalysis             yes
+
+# Geometry
+#/Mustard/Detector/Description/Import              geom.yaml
+
+# Initialize kernel
+/run/initialize
+
+# Muon beam properties
+/MACE/Generator/SwitchToFromDataPrimaryGenerator
+/Mustard/Generator/FromDataPrimaryGenerator/EventData R_line.root R_line
+
+# Set physics
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
+
+# kill secondaries
+/MACE/Action/KillIrrelevance    yes
+
+#############################################################################
+# Run
+#############################################################################
+
+/run/beamOn 1000
+/Mustard/Run/PrintRunSummary

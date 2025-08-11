@@ -1,8 +1,8 @@
 #include "MACE/Detector/Description/ECAL.h++"
-#include "MACE/Simulation/SD/ECALPMTSD.h++"
+#include "MACE/Simulation/SD/ECALPMSD.h++"
 #include "MACE/Simulation/SD/ECALSD.h++"
 
-#include "Mustard/Env/Print.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -35,24 +35,23 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-ECALSD::ECALSD(const G4String& sdName, const ECALPMTSD* ecalPMTSD) :
-    Mustard::NonMoveableBase{},
+ECALSD::ECALSD(const G4String& sdName, const ECALPMSD* ecalPMSD) :
     G4VSensitiveDetector{sdName},
-    fECALPMTSD{ecalPMTSD},
+    fECALPMSD{ecalPMSD},
     fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
 
     const auto& ecal{Detector::Description::ECAL::Instance()};
-    assert(ecal.ScintillationWavelengthBin().size() == ecal.ScintillationComponent1().size());
-    std::vector<double> dE(ecal.ScintillationWavelengthBin().size());
-    muc::ranges::adjacent_difference(ecal.ScintillationWavelengthBin(), dE.begin());
+    assert(ecal.ScintillationEnergyBin().size() == ecal.ScintillationComponent1().size());
+    std::vector<double> dE(ecal.ScintillationEnergyBin().size());
+    muc::ranges::adjacent_difference(ecal.ScintillationEnergyBin(), dE.begin());
     std::vector<double> spectrum(ecal.ScintillationComponent1().size());
-    muc::ranges::adjacent_difference(ecal.ScintillationWavelengthBin(), spectrum.begin(), muc::midpoint<double>);
+    muc::ranges::adjacent_difference(ecal.ScintillationEnergyBin(), spectrum.begin(), muc::midpoint<double>);
     const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
-    std::vector<double> meanE(ecal.ScintillationWavelengthBin().size());
-    muc::ranges::adjacent_difference(ecal.ScintillationWavelengthBin(), meanE.begin(), muc::midpoint<double>);
+    std::vector<double> meanE(ecal.ScintillationEnergyBin().size());
+    muc::ranges::adjacent_difference(ecal.ScintillationEnergyBin(), meanE.begin(), muc::midpoint<double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
@@ -70,26 +69,30 @@ auto ECALSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
 
-    if (&particle == G4OpticalPhoton::Definition()) { return false; }
+    if (&particle == G4OpticalPhoton::Definition()) {
+        return false;
+    }
 
     const auto eDep{step.GetTotalEnergyDeposit()};
 
-    if (eDep < fEnergyDepositionThreshold) { return false; }
+    if (eDep < fEnergyDepositionThreshold) {
+        return false;
+    }
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& touchable{*preStepPoint.GetTouchable()};
-    const auto unitID{touchable.GetReplicaNumber()};
+    const auto modID{touchable.GetReplicaNumber()};
     // calculate (Ek0, p0)
     const auto vertexEk{track.GetVertexKineticEnergy()};
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
     // new a hit
-    const auto& hit{fSplitHit[unitID].emplace_back(std::make_unique_for_overwrite<ECALHit>())};
+    const auto& hit{fSplitHit[modID].emplace_back(std::make_unique_for_overwrite<ECALHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
-    Get<"UnitID">(*hit) = unitID;
+    Get<"ModID">(*hit) = modID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"nOptPho">(*hit) = -1; // to be determined
@@ -114,15 +117,13 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                     return count + cellHit.second.size();
                                 }));
 
-    for (int hitID{};
-         auto&& [unitID, splitHit] : fSplitHit) {
+    for (auto&& [modID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
             muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
-            Get<"HitID">(*hit) = hitID++;
-            assert(Get<"UnitID">(*hit) == unitID);
+            assert(Get<"ModID">(*hit) == modID);
             fHitsCollection->insert(hit.release());
         } break;
         default: {
@@ -140,7 +141,7 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
+                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {
@@ -152,10 +153,11 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                        })};
                 // construct real hit
-                Get<"HitID">(*topHit) = hitID++;
-                assert(Get<"UnitID">(*topHit) == unitID);
+                assert(Get<"ModID">(*topHit) == modID);
                 for (const auto& hit : cluster) {
-                    if (hit == topHit) { continue; }
+                    if (hit == topHit) {
+                        continue;
+                    }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
                 }
                 fHitsCollection->insert(topHit.release());
@@ -167,14 +169,18 @@ auto ECALSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
     muc::timsort(*fHitsCollection->GetVector(),
                  [](const auto& hit1, const auto& hit2) {
-                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
-                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                     return std::tie(Get<"TrkID">(*hit1), Get<"t">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"t">(*hit2));
                  });
 
-    if (fECALPMTSD) {
-        auto nHit{fECALPMTSD->NOpticalPhotonHit()};
+    for (int hitID{}; auto&& hit : *fHitsCollection->GetVector()) {
+        Get<"HitID">(*hit) = hitID++;
+    }
+
+    if (fECALPMSD) {
+        auto nHit{fECALPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            Get<"nOptPho">(*hit) = nHit[Get<"UnitID">(*hit)];
+            Get<"nOptPho">(*hit) = nHit[Get<"ModID">(*hit)];
         }
     }
 }

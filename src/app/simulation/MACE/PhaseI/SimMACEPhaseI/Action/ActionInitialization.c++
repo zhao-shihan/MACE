@@ -7,6 +7,10 @@
 
 namespace MACE::PhaseI::SimMACEPhaseI::inline Action {
 
+ActionInitialization::ActionInitialization() :
+    PassiveSingleton{this},
+    G4VUserActionInitialization{} {}
+
 auto ActionInitialization::Build() const -> void {
     SetUserAction(new PrimaryGeneratorAction);
     SetUserAction(new RunAction);

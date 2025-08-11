@@ -8,16 +8,20 @@
 namespace MACE::SimMACE::inline Action {
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserPrimaryGeneratorAction{},
-    fGPSX{},
+    fAvailableGenerator{},
+    fGenerator{&fAvailableGenerator.gpsx},
     fSavePrimaryVertexData{true},
     fPrimaryVertexData{},
-    fMessengerRegister{this} {}
+    fAnalysisMessengerRegister{this},
+    fPrimaryGeneratorActionMessengerRegister{this} {}
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
-    fGPSX.GeneratePrimaryVertex(event);
-    if (fSavePrimaryVertexData) { UpdatePrimaryVertexData(*event); }
+    fGenerator->GeneratePrimaryVertex(event);
+    if (fSavePrimaryVertexData) {
+        UpdatePrimaryVertexData(*event);
+    }
 }
 
 auto PrimaryGeneratorAction::UpdatePrimaryVertexData(const G4Event& event) -> void {

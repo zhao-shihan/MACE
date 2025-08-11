@@ -1,13 +1,7 @@
-file(GLOB_RECURSE SimPTS_srcs ${CMAKE_CURRENT_SOURCE_DIR}/*.c++)
-add_executable(SimPTS ${SimPTS_srcs})
-target_link_libraries(SimPTS MACEData MACEDetector Mustard::Mustard MACESimulation)
-
 file(GLOB SimPTS_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/scripts/*)
 foreach(_scripts ${SimPTS_SCRIPTS})
-    configure_file(${_scripts} ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
-endforeach()
-
-install(TARGETS SimPTS DESTINATION ${CMAKE_INSTALL_BINDIR})
-foreach(_scripts ${SimPTS_SCRIPTS})
-    install(FILES ${_scripts} DESTINATION ${MACE_DATAROOTDIR}/SimPTS)
+    set(SimPTS_SCRIPTS_COPY_DIR SimPTS)
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${SimPTS_SCRIPTS_COPY_DIR})
+    configure_file(${_scripts} ${CMAKE_BINARY_DIR}/${SimPTS_SCRIPTS_COPY_DIR} COPYONLY)
+    install(FILES ${_scripts} DESTINATION ${MACE_DATAROOTDIR}/${SimPTS_SCRIPTS_COPY_DIR})
 endforeach()

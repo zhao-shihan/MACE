@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::PhaseI::SimMACEPhaseI {
 
 constexpr auto defaultMacro = {
@@ -25,8 +29,8 @@ constexpr auto defaultMacro = {
     "/gps/pos/radius           0 mm",
     "/gps/pos/sigma_r          5 mm",
     "/gps/ene/type             Gauss",
-    "/gps/ene/mono             3.647 MeV    # momentum 28 MeV",
-    "/gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%",
+    "/gps/ene/mono             3.224 MeV    # momentum 26.3 MeV",
+    "/gps/ene/sigma            0.459 MeV    # momentum spreading 1.9 MeV",
     "/GPSX/NVertex             1",
     "/GPSX/PulseWidth          0 ns",
     "",
@@ -40,7 +44,7 @@ constexpr auto defaultMacro = {
     "/MACE/Analysis/FileMode RECREATE",
     "",
 
-#if MACE_USE_G4VIS
+#if MUSTARD_USE_G4VIS
 
     "#############################################################################",
     "# Visualization settings",
@@ -64,16 +68,40 @@ constexpr auto defaultMacro = {
     "#/vis/viewer/addCutawayPlane 0 0 0",
     "",
     "# Visibility",
-    "/vis/geometry/set/visibility CentralBeamPipeVacuum     0 false",
-    "/vis/geometry/set/visibility World                     0 false",
-    "",
+    "/vis/geometry/set/visibility CentralBeamPipeVacuum     0 no",
+    "/vis/geometry/set/visibility World                     0 no",
+
     "# Colors",
-    "/vis/geometry/set/colour CentralBeamPipe               0     1     1     1     0.1",
-    "/vis/geometry/set/colour ECALCrystal                   0     1     1     1     0.1",
-    "/vis/geometry/set/colour ECALPMTCathode                0     1     1     1     0.1",
-    "/vis/geometry/set/colour ECALPMTCoupler                0     1     1     1     0.1",
-    "/vis/geometry/set/colour ECALPMTShell                  0     1     1     1     0.1",
-    "/vis/geometry/set/colour Target                        0     1     1     1     0.1",
+    "/vis/geometry/set/colour CentralBeamPipe                        0     1     1     1     0.1",
+    "",
+    "/vis/geometry/set/colour MRPCGasTank                            0     1     1     1     0.05",
+    "/vis/geometry/set/colour MRPCInnerGlass                         0     1     1     1     0.1",
+    "/vis/geometry/set/colour MRPCOuterGlass                         0     1     1     1     0.1",
+    "/vis/geometry/set/colour MRPCAnode                              0     1     1     1     0.1",
+    "/vis/geometry/set/colour MRPCMylar                              0     1     1     1     0.1",
+    "/vis/geometry/set/colour MRPCPCB                                0     1     1     1     0.1",
+    "/vis/geometry/set/colour MRPCHoneyComb                          0     1     1     1     0.1",
+    "",
+    "/vis/geometry/set/colour ECALCrystal                            0     1     1     1     0.1",
+    "/vis/geometry/set/colour ECALPMTCoupler                         0     1     1     1     0.1",
+    "/vis/geometry/set/colour ECALPMTShell                           0     1     1     1     0.05",
+    "/vis/geometry/set/colour ECALPMTVacuum                          0     1     1     1     0.",
+    "/vis/geometry/set/colour ECALMPPCWindow                         0     1     1     1     0.2",
+    "/vis/geometry/set/colour ECALMPPCCoupler                        0     1     1     1     0.1",
+    "/vis/geometry/set/colour ECALPMCathode                          0     1     1     1     0.3",
+    "",
+    "/vis/geometry/set/colour SciFiTrackerHelicalFiber               0     1     1     1     0.1",
+    "/vis/geometry/set/colour SciFiTrackerHelicalFiberCore           0     1     1     1     0.05",
+    "/vis/geometry/set/colour SciFiTrackerTransverseFiber            0     1     1     1     0.1",
+    "/vis/geometry/set/colour SciFiTrackerTransverseFiberCore        0     1     1     1     0.05",
+    "/vis/geometry/set/colour SciFiTrackerHelicalLightGuide          0     1     1     1     0.1",
+    "/vis/geometry/set/colour SciFiTrackerHelicalLightGuideCore      0     1     1     1     0.05",
+    "/vis/geometry/set/colour SciFiTrackerTransverseLightGuide       0     1     1     1     0.1",
+    "/vis/geometry/set/colour SciFiTrackerTransverseLightGuideCore   0     1     1     1     0.05",
+    "/vis/geometry/set/colour SciFiTrackerBraket                     0     1     1     1     0.05",
+    "",
+    "/vis/geometry/set/colour Target                             0     1     1     1     0.1",
+
     "",
     "/vis/scene/add/date",
     "/vis/scene/add/axes 0 0 0 10 cm",

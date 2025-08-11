@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mustard/Extension/Geant4X/Interface/SingletonMessenger.h++"
+#include "Mustard/Geant4X/Interface/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -30,7 +30,7 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithABool> fKillIrrelevants;
+    std::unique_ptr<G4UIcmdWithABool> fKillIrrelevance;
 };
 
 } // namespace Messenger

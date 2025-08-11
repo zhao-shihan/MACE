@@ -1,7 +1,7 @@
 #include "MACE/Detector/Description/Target.h++"
 
-#include "Mustard/Env/Print.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "CLHEP/Vector/Rotation.h"
 
@@ -57,8 +57,10 @@ auto Target::ImportAllValue(const YAML::Node& node) -> void {
                 fShapeType = TargetShapeType::Cuboid;
             } else if (shape == "MultiLayer") {
                 fShapeType = TargetShapeType::MultiLayer;
+            } else if (shape == "Cylinder") {
+                fShapeType = TargetShapeType::Cylinder;
             } else {
-                Mustard::Env::PrintLnError("MACE::Detector::Description::Target::ImportAllValue: Unknown target shape '{}', skipping", shape);
+                Mustard::PrintError(fmt::format("Unknown target shape '{}', skipping", shape));
             }
         },
         "ShapeType");
@@ -76,7 +78,7 @@ auto Target::ImportAllValue(const YAML::Node& node) -> void {
                 } else if (detail == "Perforated") {
                     fCuboid.DetailType(CuboidTarget::ShapeDetailType::Perforated);
                 } else {
-                    Mustard::Env::PrintLnError("MACE::Detector::Description::Target::ImportAllValue: Unknown cuboid target detail '{}', skipping", detail);
+                    Mustard::PrintError(fmt::format("Unknown cuboid target detail '{}', skipping", detail));
                 }
             },
             "Cuboid", "DetailType");
@@ -118,7 +120,7 @@ auto Target::ImportAllValue(const YAML::Node& node) -> void {
                 } else if (detail == "Perforated") {
                     fMultiLayer.DetailType(MultiLayerTarget::ShapeDetailType::Perforated);
                 } else {
-                    Mustard::Env::PrintError("MACE::Detector::Description::Target::ImportAllValue: Unknown MultiLayer target detail '{}', skipping", detail);
+                    Mustard::PrintError(fmt::format("Unknown MultiLayer target detail '{}', skipping", detail));
                 }
             },
             "MultiLayer", "DetailType");
@@ -222,21 +224,21 @@ auto Target::ExportAllValue(YAML::Node& node) const -> void {
 }
 
 Target::CuboidTarget::CuboidTarget() :
-    ShapeBase{},
+    ShapeBase{this},
     fWidth{6_cm},
     fThickness{1_cm},
     fDetailType{ShapeDetailType::Perforated},
     fPerforated{} {}
 
 Target::CuboidTarget::PerforatedCuboid::PerforatedCuboid() :
-    DetailBase{},
+    DetailBase{this},
     fHalfExtent{4_cm / 2},
     fSpacing{55_um},
     fRadius{184_um / 2},
     fDepth{2_mm} {}
 
 Target::MultiLayerTarget::MultiLayerTarget() :
-    ShapeBase{},
+    ShapeBase{this},
     fWidth{6_cm},
     fHeight{5_cm},
     fThickness{3_mm},
@@ -246,14 +248,14 @@ Target::MultiLayerTarget::MultiLayerTarget() :
     fPerforated{} {}
 
 Target::MultiLayerTarget::PerforatedMultiLayer::PerforatedMultiLayer() :
-    DetailBase{},
-    fHalfExtentZ{6_cm / 2},
-    fHalfExtentY{5_cm / 2},
+    DetailBase{this},
+    fHalfExtentZ{5_cm / 2},
+    fHalfExtentY{4_cm / 2},
     fSpacing{55_um},
     fRadius{184_um / 2} {}
 
 Target::CylinderTarget::CylinderTarget() :
-    ShapeBase{},
+    ShapeBase{this},
     fRadius{30_mm},
     fThickness{60_mm} {}
 

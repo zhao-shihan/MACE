@@ -1,7 +1,9 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+file(GLOB_RECURSE AppMACEReconstruction_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/MACE/*.c++)
+add_library(AppMACEReconstruction STATIC ${AppMACEReconstruction_SOURCES})
+target_include_directories(AppMACEReconstruction PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(AppMACEReconstruction PUBLIC MACEData
+                                                   MACEDetector
+                                                   MACEReconstruction
+                                                   Mustard::Mustard)
 
-add_subdirectory(MACE/ReconMMSTrack)
-add_subdirectory(MACE/ReconECAL)
-# add_subdirectory(MACE/ReconMuonium)
-# add_subdirectory(MACE/ReconTracks)
 add_subdirectory(MACE/SmearMACE)

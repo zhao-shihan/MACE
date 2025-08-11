@@ -1,6 +1,7 @@
 #include "MACE/Data/Hit.h++"
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/SimHit.h++"
+#include "MACE/ReconMMSTrack/ReconMMSTrack.h++"
 #include "MACE/Reconstruction/MMSTracking/Finder/TruthFinder.h++"
 #include "MACE/Reconstruction/MMSTracking/Fitter/GenFitDAFFitter.h++"
 #include "MACE/Reconstruction/MMSTracking/Fitter/GenFitReferenceKalmanFitter.h++"
@@ -10,9 +11,7 @@
 #include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Env/Print.h++"
-#include "Mustard/Extension/MPIX/DataType.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
 #include "Mustard/Utility/VectorArithmeticOperator.h++"
 
 #include "ROOT/RDataFrame.hxx"
@@ -28,15 +27,20 @@
 #include <unordered_set>
 #include <vector>
 
-using namespace MACE;
+namespace MACE::ReconMMSTrack {
 
-auto main(int argc, char* argv[]) -> int {
+ReconMMSTrack::ReconMMSTrack() :
+    Subprogram{"ReconMMSTrack", "Michel magnetic spectrometer (MMS) track reconstruction."} {}
+
+auto ReconMMSTrack::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, {}};
 
     std::vector<std::string> files;
-    for (auto i{1}; i < argc; ++i) { files.emplace_back(argv[i]); }
+    for (auto i{1}; i < argc; ++i) {
+        files.emplace_back(argv[i]);
+    }
 
-    TFile file{Mustard::MPIX::ParallelizePath("output.root").generic_string().c_str(), "RECREATE"};
+    TFile file{Mustard::Parallel::ProcessSpecificPath("output.root").generic_string().c_str(), "RECREATE"};
     Mustard::Data::Output<Data::MMSTrack> reconTrack{"G4Run0/MMSTrack"};
     Mustard::Data::Output<Data::MMSTrack> reconTrackError{"G4Run0/MMSTrackError"};
 
@@ -48,12 +52,16 @@ auto main(int argc, char* argv[]) -> int {
     Mustard::Data::Processor processor;
     auto nextTrackID{0};
     processor.Process<Data::CDCSimHit>(
-        ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, "EvtID",
+        ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, int{}, "EvtID",
         [&](bool byPass, auto&& event) {
-            if (byPass) { return; }
+            if (byPass) {
+                return;
+            }
             for (auto&& [trackID, good] : finder(event, nextTrackID).good) {
                 const auto track{fitter(good.hitData, good.seed).track};
-                if (track == nullptr) { continue; }
+                if (track == nullptr) {
+                    continue;
+                }
                 reconTrack.Fill(*track);
 
                 using namespace Mustard::VectorArithmeticOperator;
@@ -84,3 +92,5 @@ auto main(int argc, char* argv[]) -> int {
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::ReconMMSTrack

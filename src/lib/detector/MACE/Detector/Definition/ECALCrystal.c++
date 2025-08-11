@@ -1,5 +1,5 @@
 #include "MACE/Detector/Definition/ECALCrystal.h++"
-#include "MACE/Detector/Definition/ECALPMTAssemblies.h++"
+#include "MACE/Detector/Definition/ECALPhotoSensor.h++"
 #include "MACE/Detector/Description/ECAL.h++"
 
 #include "Mustard/Detector/Definition/DefinitionBase.h++"
@@ -30,6 +30,14 @@ using namespace Mustard::LiteralUnit;
 using namespace Mustard::MathConstant;
 using namespace Mustard::PhysicalConstant;
 
+namespace {
+auto ComputeIntersection(G4ThreeVector vertexPlane, G4ThreeVector normPlane, G4ThreeVector vertexLine, G4ThreeVector direcLine) -> G4ThreeVector {
+    double lambda{
+        normPlane.dot(vertexPlane - vertexLine) / normPlane.dot(direcLine)};
+    return vertexLine + direcLine * lambda;
+}
+} // namespace
+
 auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto& ecal{Description::ECAL::Instance()};
     const auto name{ecal.Name()};
@@ -37,85 +45,91 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto innerRadius{ecal.InnerRadius()};
     const auto crystalHypotenuse{ecal.CrystalHypotenuse()};
 
-    const auto scintillationWavelengthBin{ecal.ScintillationWavelengthBin()};
-    const auto scintillationComponent1{ecal.ScintillationComponent1()};
-    const auto scintillationYield{ecal.ScintillationYield()};
-    const auto scintillationTimeConstant1{ecal.ScintillationTimeConstant1()};
-    const auto resolutionScale{ecal.ResolutionScale()};
-
     const auto& vertex{ecal.Mesh().fVertex};
     const auto& faceList{ecal.Mesh().fFaceList};
+
+    const auto& moduleSelection{ecal.ModuleSelection()};
 
     /////////////////////////////////////////////
     // Construct Element and Material
     /////////////////////////////////////////////
 
-    const auto nistManager{G4NistManager::Instance()};
+    const auto nist{G4NistManager::Instance()};
 
-    const auto iodideElement{nistManager->FindOrBuildElement("I")};
-    const auto cesiumElement{nistManager->FindOrBuildElement("Cs")};
-    const auto thalliumElement{nistManager->FindOrBuildElement("Tl")};
+    const auto oxygenElement = nist->FindOrBuildElement("O");
+    const auto siliconElement = nist->FindOrBuildElement("Si");
+    const auto iodideElement{nist->FindOrBuildElement("I")};
+    const auto cesiumElement{nist->FindOrBuildElement("Cs")};
+    const auto thalliumElement{nist->FindOrBuildElement("Tl")};
+    const auto yttriumElement = nist->FindOrBuildElement("Y");
+    const auto lutetiumElement = nist->FindOrBuildElement("Lu");
 
     const auto csI{new G4Material("CsI", 4.51_g_cm3, 3, kStateSolid)};
     csI->AddElement(cesiumElement, 0.507556);
     csI->AddElement(iodideElement, 0.484639);
     csI->AddElement(thalliumElement, 0.007805);
 
+    // const auto bgo{nist->FindOrBuildMaterial("G4_BGO")};
+
+    const auto lyso = new G4Material("LYSO", 7.1_g_cm3, 5, kStateSolid);
+    lyso->AddElement(oxygenElement, 0.175801);
+    lyso->AddElement(siliconElement, 0.061720);
+    lyso->AddElement(yttriumElement, 0.019538);
+    lyso->AddElement(lutetiumElement, 0.730562);
+    lyso->AddElement(cesiumElement, 0.012379);
+
     //////////////////////////////////////////////////
     // Construct Material Optical Properties Tables
     //////////////////////////////////////////////////
 
-    constexpr auto fLambdaMin{200_nm};
-    constexpr auto fLambdaMax{700_nm};
-    const std::vector<G4double> fEnergyPair{h_Planck * c_light / fLambdaMax,
-                                            h_Planck * c_light / fLambdaMin};
-
-    const auto csiPropertiesTable{new G4MaterialPropertiesTable};
-    csiPropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.79, 1.79});
-    csiPropertiesTable->AddProperty("ABSLENGTH", fEnergyPair, {370_mm, 370_mm});
-    csiPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", scintillationWavelengthBin, scintillationComponent1);
-    csiPropertiesTable->AddConstProperty("SCINTILLATIONYIELD", scintillationYield);
-    csiPropertiesTable->AddConstProperty("SCINTILLATIONTIMECONSTANT1", scintillationTimeConstant1);
-    csiPropertiesTable->AddConstProperty("RESOLUTIONSCALE", resolutionScale);
-    csI->SetMaterialPropertiesTable(csiPropertiesTable);
+    const auto [minPhotonEnergy, maxPhotonEnergy]{std::ranges::minmax(ecal.ScintillationEnergyBin())};
+    const auto crystalPropertiesTable{new G4MaterialPropertiesTable};
+    crystalPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.79, 1.79});
+    crystalPropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, {370_mm, 370_mm});
+    crystalPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", ecal.ScintillationEnergyBin(), ecal.ScintillationComponent1());
+    crystalPropertiesTable->AddConstProperty("SCINTILLATIONYIELD", ecal.ScintillationYield());
+    crystalPropertiesTable->AddConstProperty("SCINTILLATIONTIMECONSTANT1", ecal.ScintillationTimeConstant1());
+    crystalPropertiesTable->AddConstProperty("RESOLUTIONSCALE", ecal.ResolutionScale());
+    csI->SetMaterialPropertiesTable(crystalPropertiesTable);
 
     if (Mustard::Env::VerboseLevelReach<'V'>()) {
-        csiPropertiesTable->DumpTable();
+        crystalPropertiesTable->DumpTable();
     }
 
     const auto rfSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0.985, 0.985});
+    rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0.99, 0.99});
 
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", fEnergyPair, {1, 1});
+    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1, 1});
 
     const auto airPaintSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    airPaintSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0, 0});
+    airPaintSurfacePropertiesTable->AddProperty("REFLECTIVITY", {minPhotonEnergy, maxPhotonEnergy}, {0, 0});
 
     /////////////////////////////////////////////
     // Construct Volumes
     /////////////////////////////////////////////
 
     for (int moduleID{};
-         auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all ECAL face
-        const auto centroidMagnitude{centroid.mag()};
-        const auto crystalLength{crystalHypotenuse * centroidMagnitude};
-        const auto outerHypotenuse{innerRadius + crystalHypotenuse};
+         auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) {
+        // loop over all ECAL face
+        // centroid here refer to the face 'center' of normalized ball
 
-        const auto MakeTessellatedSolid{
+        if ((not moduleSelection.empty()) and std::find(moduleSelection.begin(), moduleSelection.end(), moduleID) == moduleSelection.end()) {
+            moduleID++;
+            continue;
+        }
+
+        const auto SolidCrystal{
             [&, &centroid = centroid, &vertexIndex = vertexIndex](const auto& name) {
-                constexpr auto crystalHypotenuseExtension = 1_cm;
-
-                const auto innerHypotenuseHere{innerRadius - crystalHypotenuseExtension};
-                const auto innerCentroidHere{innerHypotenuseHere * centroid};
-                std::vector<G4ThreeVector> innerVertexHere(vertexIndex.size());
-                std::ranges::transform(vertexIndex, innerVertexHere.begin(),
-                                       [&](const auto& i) { return innerHypotenuseHere * vertex[i]; });
-                const auto outerHypotenuseHere{outerHypotenuse + crystalHypotenuseExtension};
-                const auto outerCentroidHere{outerHypotenuseHere * centroid};
-                std::vector<G4ThreeVector> outerVertexHere(vertexIndex.size());
-                std::ranges::transform(vertexIndex, outerVertexHere.begin(),
-                                       [&](const auto& i) { return outerHypotenuseHere * vertex[i]; });
+                const auto innerCentroid{innerRadius * centroid};
+                std::vector<G4ThreeVector> innerVertex(vertexIndex.size());
+                std::ranges::transform(vertexIndex, innerVertex.begin(),
+                                       [&](const auto& i) { return ComputeIntersection(innerCentroid, normal, vertex[i], vertex[i]); });
+                const auto outerRadius{innerRadius + crystalHypotenuse};
+                const auto outerCentroid{outerRadius * centroid};
+                std::vector<G4ThreeVector> outerVertex(vertexIndex.size());
+                std::ranges::transform(vertexIndex, outerVertex.begin(),
+                                       [&](const auto& i) { return ComputeIntersection(outerCentroid, normal, vertex[i], vertex[i]); });
 
                 // clang-format off
                 /* Pentagon:
@@ -136,66 +150,50 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
 
                 const auto solid{Make<G4TessellatedSolid>(name)};
                 // inner surface
-                solid->AddFacet(new G4TriangularFacet{innerCentroidHere,
-                                                      innerVertexHere[0],
-                                                      innerVertexHere[vertexIndex.size() - 1],
+                solid->AddFacet(new G4TriangularFacet{innerCentroid,
+                                                      innerVertex[0],
+                                                      innerVertex[vertexIndex.size() - 1],
                                                       G4FacetVertexType::ABSOLUTE});
                 for (auto i{std::ssize(vertexIndex) - 1}; i > 0; --i) {
-                    solid->AddFacet(new G4TriangularFacet{innerCentroidHere,
-                                                          innerVertexHere[i],
-                                                          innerVertexHere[i - 1],
+                    solid->AddFacet(new G4TriangularFacet{innerCentroid,
+                                                          innerVertex[i],
+                                                          innerVertex[i - 1],
                                                           G4FacetVertexType::ABSOLUTE});
                 }
                 // side surface
                 for (int i{}; i < std::ssize(vertexIndex) - 1; ++i) {
-                    solid->AddFacet(new G4QuadrangularFacet{innerVertexHere[i],
-                                                            innerVertexHere[i + 1],
-                                                            outerVertexHere[i + 1],
-                                                            outerVertexHere[i],
+                    solid->AddFacet(new G4QuadrangularFacet{innerVertex[i],
+                                                            innerVertex[i + 1],
+                                                            outerVertex[i + 1],
+                                                            outerVertex[i],
                                                             G4FacetVertexType::ABSOLUTE});
                 }
-                solid->AddFacet(new G4QuadrangularFacet{innerVertexHere[vertexIndex.size() - 1],
-                                                        innerVertexHere[0],
-                                                        outerVertexHere[0],
-                                                        outerVertexHere[vertexIndex.size() - 1],
+                solid->AddFacet(new G4QuadrangularFacet{innerVertex[vertexIndex.size() - 1],
+                                                        innerVertex[0],
+                                                        outerVertex[0],
+                                                        outerVertex[vertexIndex.size() - 1],
                                                         G4FacetVertexType::ABSOLUTE});
                 // outer surface
                 for (int i{}; i < std::ssize(vertexIndex) - 1; ++i) {
-                    solid->AddFacet(new G4TriangularFacet{outerCentroidHere,
-                                                          outerVertexHere[i],
-                                                          outerVertexHere[i + 1],
+                    solid->AddFacet(new G4TriangularFacet{outerCentroid,
+                                                          outerVertex[i],
+                                                          outerVertex[i + 1],
                                                           G4FacetVertexType::ABSOLUTE});
                 }
-                solid->AddFacet(new G4TriangularFacet{outerCentroidHere,
-                                                      outerVertexHere[vertexIndex.size() - 1],
-                                                      outerVertexHere[0],
+                solid->AddFacet(new G4TriangularFacet{outerCentroid,
+                                                      outerVertex[vertexIndex.size() - 1],
+                                                      outerVertex[0],
                                                       G4FacetVertexType::ABSOLUTE});
                 solid->SetSolidClosed(true);
                 return solid;
             }};
 
-        const auto crystalTransform{ecal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
-                                                                                  -crystalLength / 2)};
-
         // Crystal
 
-        const auto solidCrystal{MakeTessellatedSolid(fmt::format("temp_{}", moduleID))};
-        const auto cutCrystalBox{
-            Make<G4Box>(
-                "temp",
-                1_m,
-                1_m,
-                crystalLength / 2)};
-        const auto cutSolidCrystal{
-            Make<G4IntersectionSolid>(
-                "ECALCrystal",
-                solidCrystal,
-                cutCrystalBox,
-                crystalTransform)};
         const auto logicCrystal{
             Make<G4LogicalVolume>(
-                cutSolidCrystal,
-                csI,
+                SolidCrystal(fmt::format("ECALCrystal_{}", moduleID)),
+                lyso,
                 "ECALCrystal")};
         const auto physicalCrystal{
             Make<G4PVPlacement>(
@@ -212,19 +210,19 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
         /////////////////////////////////////////////
 
         const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
-        new G4LogicalSkinSurface{"reflectorSurface", logicCrystal, rfSurface};
+        new G4LogicalSkinSurface{"airPaintSurface", logicCrystal, rfSurface};
         rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
 
         const auto airPaintSurface{new G4OpticalSurface("AirPaint", unified, polished, dielectric_metal)};
         new G4LogicalBorderSurface{"airPaintSurface", Mother().PhysicalVolume(), physicalCrystal, airPaintSurface};
         airPaintSurface->SetMaterialPropertiesTable(airPaintSurfacePropertiesTable);
 
-        const auto ecalPMTCoupler{FindSibling<ECALPMTAssemblies>()};
-        if (ecalPMTCoupler) {
+        const auto ecalPMCoupler{FindSibling<ECALPhotoSensor>()};
+        if (ecalPMCoupler) {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",
                                        physicalCrystal,
-                                       ecalPMTCoupler->PhysicalVolume("ECALPMTCoupler", moduleID),
+                                       ecalPMCoupler->PhysicalVolume("ECALPMCoupler", moduleID),
                                        couplerSurface};
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }

@@ -2,7 +2,6 @@
 #include "MACE/SimDose/Analysis.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Env/Print.h++"
 #include "Mustard/Utility/PrettyLog.h++"
 
 #include "TH3F.h"
@@ -26,7 +25,7 @@
 namespace MACE::SimDose {
 
 Analysis::Analysis() :
-    AnalysisBase{},
+    AnalysisBase{this},
     fMapModel{},
     fMap{},
     fMessengerRegister{this} {}
@@ -36,59 +35,83 @@ auto Analysis::AddMap(std::string name) -> void {
 }
 
 auto Analysis::MapNBinX(int val) -> void {
-    if (not CheckMapAdded()) { return; }
+    if (not CheckMapAdded()) {
+        return;
+    }
     fMapModel.back().nBinX = val;
 }
 
 auto Analysis::MapXMin(double val) -> void {
-    if (not CheckMapAdded()) { return; }
+    if (not CheckMapAdded()) {
+        return;
+    }
     fMapModel.back().xMin = val;
 }
 
 auto Analysis::MapXMax(double val) -> void {
-    if (not CheckMapAdded()) { return; }
+    if (not CheckMapAdded()) {
+        return;
+    }
     fMapModel.back().xMax = val;
 }
 
 auto Analysis::MapNBinY(int val) -> void {
-    if (not CheckMapAdded()) { return; }
+    if (not CheckMapAdded()) {
+        return;
+    }
     fMapModel.back().nBinY = val;
 }
 
 auto Analysis::MapYMin(double val) -> void {
-    if (not CheckMapAdded()) { return; }
+    if (not CheckMapAdded()) {
+        return;
+    }
     fMapModel.back().yMin = val;
 }
 
 auto Analysis::MapYMax(double val) -> void {
-    if (not CheckMapAdded()) { return; }
+    if (not CheckMapAdded()) {
+        return;
+    }
     fMapModel.back().yMax = val;
 }
 
 auto Analysis::MapNBinZ(int val) -> void {
-    if (not CheckMapAdded()) { return; }
+    if (not CheckMapAdded()) {
+        return;
+    }
     fMapModel.back().nBinZ = val;
 }
 
 auto Analysis::MapZMin(double val) -> void {
-    if (not CheckMapAdded()) { return; }
+    if (not CheckMapAdded()) {
+        return;
+    }
     fMapModel.back().zMin = val;
 }
 
 auto Analysis::MapZMax(double val) -> void {
-    if (not CheckMapAdded()) { return; }
+    if (not CheckMapAdded()) {
+        return;
+    }
     fMapModel.back().zMax = val;
 }
 
 auto Analysis::FillMap(const G4Step& step) const -> void {
     const auto& post{*step.GetPostStepPoint()};
     const auto status{post.GetStepStatus()};
-    if (status == fGeomBoundary or status == fWorldBoundary or status == fUndefined) { return; }
+    if (status == fGeomBoundary or status == fWorldBoundary or status == fUndefined) {
+        return;
+    }
 
     const auto eDep{step.GetTotalEnergyDeposit()};
-    if (eDep == 0) { return; }
+    if (eDep == 0) {
+        return;
+    }
 
-    if (dynamic_cast<const G4Transportation*>(post.GetProcessDefinedStep())) { return; }
+    if (dynamic_cast<const G4Transportation*>(post.GetProcessDefinedStep())) {
+        return;
+    }
 
     const auto& pre{*step.GetPreStepPoint()};
     const auto x0{pre.GetPosition()};
@@ -126,12 +149,24 @@ auto Analysis::FillMap(const G4Step& step) const -> void {
 auto Analysis::RunBeginUserAction(int) -> void {
     fMap.reserve(fMapModel.size());
     for (auto&& [name, nBinX, xMin, xMax, nBinY, yMin, yMax, nBinZ, zMin, zMax] : std::as_const(fMapModel)) {
-        if (nBinX == 0) { throw std::runtime_error{Mustard::PrettyException("Map nBinX == 0")}; }
-        if (nBinY == 0) { throw std::runtime_error{Mustard::PrettyException("Map nBinY == 0")}; }
-        if (nBinZ == 0) { throw std::runtime_error{Mustard::PrettyException("Map nBinZ == 0")}; }
-        if (xMin >= xMax) { throw std::runtime_error{Mustard::PrettyException("Map xMin >= xMax")}; }
-        if (yMin >= yMax) { throw std::runtime_error{Mustard::PrettyException("Map yMin >= yMax")}; }
-        if (zMin >= zMax) { throw std::runtime_error{Mustard::PrettyException("Map zMin >= zMax")}; }
+        if (nBinX == 0) {
+            throw std::runtime_error{Mustard::PrettyException("Map nBinX == 0")};
+        }
+        if (nBinY == 0) {
+            throw std::runtime_error{Mustard::PrettyException("Map nBinY == 0")};
+        }
+        if (nBinZ == 0) {
+            throw std::runtime_error{Mustard::PrettyException("Map nBinZ == 0")};
+        }
+        if (xMin >= xMax) {
+            throw std::runtime_error{Mustard::PrettyException("Map xMin >= xMax")};
+        }
+        if (yMin >= yMax) {
+            throw std::runtime_error{Mustard::PrettyException("Map yMin >= yMax")};
+        }
+        if (zMin >= zMax) {
+            throw std::runtime_error{Mustard::PrettyException("Map zMin >= zMax")};
+        }
 
         auto& map{fMap.emplace_back()};
 
@@ -171,7 +206,7 @@ auto Analysis::RunEndUserAction(int runID) -> void {
 
 auto Analysis::CheckMapAdded() -> bool {
     if (fMapModel.empty()) {
-        Mustard::Env::PrintLnWarning("MACE::SimDose::Analysis::CheckMapAdded: No map was added");
+        Mustard::PrintWarning("No map was added");
         return false;
     }
     return true;

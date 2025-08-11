@@ -1,0 +1,34 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+/control/verbose 0
+/run/verbose 0
+
+/Mustard/Detector/Description/Import ciads.yaml
+
+/run/initialize
+
+/MACE/Generator/SwitchToFromDataPrimaryGenerator
+/Mustard/Generator/FromDataPrimaryGenerator/EventData R_line.root R_line
+
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
+
+/MACE/Physics/ApplyProductionCutNearTarget                         yes
+
+/MACE/Analysis/SavePrimaryVertexData  yes
+/MACE/Analysis/SaveDecayVertexData    yes
+/MACE/Analysis/CoincidenceWithMMS     no
+/MACE/Analysis/CoincidenceWithMCP     no
+/MACE/Analysis/CoincidenceWithECAL    no
+/MACE/Analysis/SaveTTCHitData         no
+/MACE/Analysis/SaveCDCHitData         no
+
+#############################################################################
+# Run
+#############################################################################
+
+/Mustard/Analysis/FilePath SimMACE_CiADS_R_line
+/Mustard/Analysis/FileMode NEW
+/run/beamOn 1000000
+/Mustard/Run/PrintRunSummary

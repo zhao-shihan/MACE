@@ -3,7 +3,7 @@
 /event/verbose 0
 /tracking/verbose 0
 
-/MACE/Physics/UseRadioactiveDecayPhysics
+#/MACE/Physics/UseRadioactiveDecayPhysics
 /MACE/Physics/UseOpticalPhysics
 
 #/Mustard/Detector/Description/Import test_10L_15R.yaml
@@ -19,5 +19,5 @@
 
 /MACE/Analysis/FilePath test
 /MACE/Analysis/FileMode RECREATE
-/run/beamOn 5000
+/run/beamOn 1000
 /MPIRun/PrintRunSummary

@@ -1,11 +1,8 @@
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Simulation/SD/MCPSD.h++"
 
-#include "Mustard/Env/Print.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PrettyLog.h++"
-
-#include "Randomize.hh"
 
 #include "G4DataInterpolation.hh"
 #include "G4Event.hh"
@@ -20,6 +17,7 @@
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
+#include "Randomize.hh"
 
 #include "muc/algorithm"
 
@@ -35,7 +33,6 @@ namespace MACE::inline Simulation::inline SD {
 using namespace Mustard::LiteralUnit::Energy;
 
 MCPSD::MCPSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{20_eV},
     fEfficiency{},
@@ -70,7 +67,9 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     assert(0 <= step.GetNonIonizingEnergyDeposit());
     assert(step.GetNonIonizingEnergyDeposit() <= eDep);
-    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) { return false; }
+    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) {
+        return false;
+    }
 
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -112,14 +111,11 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
         break;
     case 1: {
         auto& hit{fSplitHit.front()};
-        if (G4UniformRand() > fEfficiency->CubicSplineInterpolation(Get<"Ek">(*hit))) { break; }
-        Get<"HitID">(*hit) = 0;
         fHitsCollection->insert(hit.release());
     } break;
     default: {
         const auto timeResolutionFWHM{Detector::Description::MCP::Instance().TimeResolutionFWHM()};
         assert(timeResolutionFWHM >= 0);
-        int hitID{};
         // sort hit by time
         muc::timsort(fSplitHit,
                      [](const auto& hit1, const auto& hit2) {
@@ -127,13 +123,12 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
                      });
         // loop over all hits and cluster to real hits by times
         std::ranges::subrange cluster{fSplitHit.begin(), fSplitHit.begin()};
-        auto& rng{*G4Random::getTheEngine()};
         while (cluster.end() != fSplitHit.end()) {
             const auto tFirst{*Get<"t">(**cluster.end())};
             const auto windowClosingTime{tFirst + timeResolutionFWHM};
             if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                 timeResolutionFWHM != 0) [[unlikely]] {
-                Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
+                Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
             }
             cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), fSplitHit.end(),
                                                                [&windowClosingTime](const auto& hit) {
@@ -144,13 +139,11 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                    [](const auto& hit1, const auto& hit2) {
                                                        return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                    })};
-            if (rng.flat() < fEfficiency->CubicSplineInterpolation(Get<"Ek">(*topHit))) {
-                Get<"Trig">(*topHit) = true;
-            }
             // construct real hit
-            Get<"HitID">(*topHit) = hitID++;
             for (const auto& hit : cluster) {
-                if (hit == topHit) { continue; }
+                if (hit == topHit) {
+                    continue;
+                }
                 Get<"Edep">(*topHit) += Get<"Edep">(*hit);
             }
             fHitsCollection->insert(topHit.release());
@@ -161,9 +154,18 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
     muc::timsort(*fHitsCollection->GetVector(),
                  [](const auto& hit1, const auto& hit2) {
-                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
-                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                     return std::tie(Get<"TrkID">(*hit1), Get<"t">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"t">(*hit2));
                  });
+
+    auto& rng{*G4Random::getTheEngine()};
+    for (int hitID{}; auto&& hit : *fHitsCollection->GetVector()) {
+        if (rng.flat() > fEfficiency->CubicSplineInterpolation(Get<"Ek">(*hit))) {
+            continue;
+        }
+        Get<"HitID">(*hit) = hitID++;
+        Get<"Trig">(*hit) = true;
+    }
 }
 
 } // namespace MACE::inline Simulation::inline SD

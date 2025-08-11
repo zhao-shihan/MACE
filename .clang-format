@@ -15,9 +15,9 @@ AllowShortBlocksOnASingleLine: Always
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortEnumsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: All
-AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortIfStatementsOnASingleLine: false
 AllowShortLambdasOnASingleLine: All
-AllowShortLoopsOnASingleLine: true
+AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
@@ -43,60 +43,100 @@ EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: LogicalBlock
 FixNamespaceComments: true
 IncludeBlocks: Regroup
-IncludeCategories: 
+IncludeCategories:
   # special
   - Regex: '"RKTrackRep\.h"'
     Priority: 2
+    CaseSensitive: true
   - Regex: '"Track\.h"'
     Priority: 2
+    CaseSensitive: true
   - Regex: '"TrackPoint\.h"'
     Priority: 2
+    CaseSensitive: true
+  - Regex: '"TGeoMaterialInterface\.h"'
+    Priority: 2
+    CaseSensitive: true
   - Regex: '"Randomize\.hh"'
-    Priority: 4
+    Priority: 5
+    CaseSensitive: true
   - Regex: '"globals\.hh"'
-    Priority: 4
+    Priority: 5
+    CaseSensitive: true
   # general
   - Regex: '"MACE/.*\.h.*"'
     Priority: 0
+    CaseSensitive: true
   - Regex: '"Mustard/.*\.h.*"'
     Priority: 1
+    CaseSensitive: true
   - Regex: '"CLHEP/.*"'
     Priority: 3
+    CaseSensitive: true
   - Regex: '"ROOT/.*"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '"R.*\.hxx"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '"R.*\.h"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '".*/T.*\.h"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '"T.*\.h"'
     Priority: 4
+    CaseSensitive: true
   - Regex: '"G4.*"'
     Priority: 5
+    CaseSensitive: true
   - Regex: '"pmp/.*"'
     Priority: 6
+    CaseSensitive: true
   - Regex: '"yaml-cpp/.*"'
     Priority: 7
-  - Regex: '"argparse/.*"'
+    CaseSensitive: true
+  - Regex: '"indicators/.*"'
     Priority: 8
-  - Regex: '"Eigen/.*"'
+    CaseSensitive: true
+  - Regex: '"argparse/.*"'
     Priority: 9
-  - Regex: '"gsl.*\.h"'
+    CaseSensitive: true
+  - Regex: '"Eigen/.*"'
     Priority: 10
-  - Regex: '"mpi.*\.h"'
+    CaseSensitive: true
+  - Regex: '"gsl.*\.h"'
     Priority: 11
-  - Regex: '"muc/.*"'
+    CaseSensitive: true
+  - Regex: '"mplr/mplr.hpp"'
     Priority: 12
-  - Regex: '"gsl/.*"'
+    CaseSensitive: true
+  - Regex: '"mpi.*\.h"'
     Priority: 13
-  - Regex: '"fmt/.*\.h"'
+    CaseSensitive: true
+  - Regex: '"EFM/.*\.h.*"'
     Priority: 14
+    CaseSensitive: true
+  - Regex: '"muc/.*"'
+    Priority: 15
+    CaseSensitive: true
+  - Regex: '"envparse/.*\.h.*"'
+    Priority: 16
+    CaseSensitive: true
+  - Regex: '"gsl/.*"'
+    Priority: 17
+    CaseSensitive: true
+  - Regex: '"fmt/.*\.h"'
+    Priority: 18
+    CaseSensitive: true
   # very general
   - Regex: '".*"'
     Priority: 2
-  - Regex: '<.*>'
-    Priority: 15
+    CaseSensitive: true
+  - Regex: "<.*>"
+    Priority: 19
+    CaseSensitive: true
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false

@@ -7,6 +7,10 @@
 
 namespace MACE::PhaseI::SimMACEPhaseI::inline Action {
 
+EventAction::EventAction() :
+    PassiveSingleton{this},
+    G4UserEventAction{} {}
+
 auto EventAction::BeginOfEventAction(const G4Event*) -> void {
     if (auto& trackingAction{TrackingAction::Instance()};
         trackingAction.SaveDecayVertexData()) {
@@ -20,7 +24,7 @@ auto EventAction::EndOfEventAction(const G4Event*) -> void {
         trackingAction.SaveDecayVertexData()) {
         analysis.SubmitDecayVertexData(trackingAction.DecayVertexData());
     }
-    analysis.EventEnd();
+    analysis.EventEndAction();
 }
 
 } // namespace MACE::PhaseI::SimMACEPhaseI::inline Action

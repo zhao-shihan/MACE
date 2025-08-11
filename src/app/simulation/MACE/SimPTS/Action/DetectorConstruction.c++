@@ -66,7 +66,7 @@ namespace MACE::SimPTS::inline Action {
 using namespace Mustard::LiteralUnit::Length;
 
 DetectorConstruction::DetectorConstruction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserDetectorConstruction{},
     fCheckOverlap{},
     fMinDriverStep{2_um},
@@ -100,31 +100,31 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 2
 
-    auto& ecalMagnet{ecalField.NewDaughter<MACE::Detector::Definition::ECALMagnet>(fCheckOverlap)};
+    ecalField.NewDaughter<MACE::Detector::Definition::ECALMagnet>(fCheckOverlap);
     auto& mcpChamber{ecalField.NewDaughter<MACE::Detector::Definition::MCPChamber>(fCheckOverlap)};
 
-    auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};
-    auto& solenoidS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidS1>(fCheckOverlap)};
+    solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap);
+    solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidS1>(fCheckOverlap);
     auto& solenoidShieldS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidShieldS1>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS2{solenoidFieldS2.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS2>(fCheckOverlap)};
-    auto& solenoidS2{solenoidFieldS2.NewDaughter<MACE::Detector::Definition::SolenoidS2>(fCheckOverlap)};
+    solenoidFieldS2.NewDaughter<MACE::Detector::Definition::SolenoidS2>(fCheckOverlap);
     auto& solenoidShieldS2{solenoidFieldS2.NewDaughter<MACE::Detector::Definition::SolenoidShieldS2>(fCheckOverlap)};
 
-    auto& solenoidBeamPipeS3{solenoidFieldS3.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS3>(fCheckOverlap)};
-    auto& solenoidS3{solenoidFieldS3.NewDaughter<MACE::Detector::Definition::SolenoidS3>(fCheckOverlap)};
+    solenoidFieldS3.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS3>(fCheckOverlap);
+    solenoidFieldS3.NewDaughter<MACE::Detector::Definition::SolenoidS3>(fCheckOverlap);
     auto& solenoidShieldS3{solenoidFieldS3.NewDaughter<MACE::Detector::Definition::SolenoidShieldS3>(fCheckOverlap)};
 
-    auto& solenoidBeamPipeT1{solenoidFieldT1.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeT1>(fCheckOverlap)};
+    solenoidFieldT1.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeT1>(fCheckOverlap);
     auto& solenoidShieldT1{solenoidFieldT1.NewDaughter<MACE::Detector::Definition::SolenoidShieldT1>(fCheckOverlap)};
-    auto& solenoidT1{solenoidFieldT1.NewDaughter<MACE::Detector::Definition::SolenoidT1>(fCheckOverlap)};
+    solenoidFieldT1.NewDaughter<MACE::Detector::Definition::SolenoidT1>(fCheckOverlap);
 
-    auto& solenoidBeamPipeT2{solenoidFieldT2.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeT2>(fCheckOverlap)};
+    solenoidFieldT2.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeT2>(fCheckOverlap);
     auto& solenoidShieldT2{solenoidFieldT2.NewDaughter<MACE::Detector::Definition::SolenoidShieldT2>(fCheckOverlap)};
-    auto& solenoidT2{solenoidFieldT2.NewDaughter<MACE::Detector::Definition::SolenoidT2>(fCheckOverlap)};
+    solenoidFieldT2.NewDaughter<MACE::Detector::Definition::SolenoidT2>(fCheckOverlap);
 
     auto& mmsBeamPipe{mmsField.NewDaughter<MACE::Detector::Definition::MMSBeamPipe>(fCheckOverlap)};
-    auto& mmsMagnet{mmsField.NewDaughter<MACE::Detector::Definition::MMSMagnet>(fCheckOverlap)};
+    mmsField.NewDaughter<MACE::Detector::Definition::MMSMagnet>(fCheckOverlap);
 
     // 3
 

@@ -1,20 +1,22 @@
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/SmearMACE/CLI.h++"
+#include "MACE/SmearMACE/SmearMACE.h++"
 #include "MACE/SmearMACE/Smearer.h++"
 
 #include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
-#include "Mustard/Utility/MPIReseedRandomEngine.h++"
-#include "Mustard/Utility/MakeTextTMacro.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
+#include "Mustard/ROOTX/MakeTextTMacro.h++"
 #include "Mustard/Utility/PrettyLog.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
 
 #include "TFile.h"
 #include "TInterpreter.h"
 #include "TMacro.h"
+
+#include "mplr/mplr.hpp"
 
 #include "gsl/gsl"
 
@@ -24,14 +26,16 @@
 #include <sstream>
 #include <stdexcept>
 
-using namespace MACE;
+namespace MACE::SmearMACE {
 
-auto main(int argc, char* argv[]) -> int {
-    SmearMACE::CLI cli;
+SmearMACE::SmearMACE() :
+    Subprogram{"SmearMACE", "Add resolution effect to simulation data."} {}
+
+auto SmearMACE::Main(int argc, char* argv[]) const -> int {
+    CLI cli;
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
     Mustard::UseXoshiro<256> random;
-    Mustard::MPIReseedRandomEngine();
     gInterpreter->ProcessLine(R"(
         const auto Gauss{
             [](auto mu, auto sigma) {
@@ -39,17 +43,21 @@ auto main(int argc, char* argv[]) -> int {
             }};
     )");
 
-    const auto outputName{Mustard::MPIX::ParallelizePath(cli.OutputFilePath()).replace_extension(".root").generic_string()};
-    TFile file{outputName.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
+    const auto outputPath{Mustard::Parallel::ProcessSpecificPath(cli.OutputFilePath()).replace_extension(".root").generic_string()};
+    TFile file{outputPath.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
     if (not file.IsOpen()) {
-        throw std::runtime_error{Mustard::PrettyException(fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode()))};
+        Mustard::Throw<std::runtime_error>(fmt::format("Cannot open file '{}' with mode '{}'", outputPath, cli.OutputFileMode()));
     }
     do {
-        if (env.OnCommNodeWorker()) { break; }
+        if (mplr::comm_world().rank() != 0) {
+            break;
+        }
         std::stringstream smearingConfigText;
         const auto AppendConfigText{
             [&](const auto& nameInConfigText, const auto& smearingConfig, const auto& identity) {
-                if (smearingConfig.empty() and not identity) { return; }
+                if (smearingConfig.empty() and not identity) {
+                    return;
+                }
                 fmt::print(smearingConfigText, "{}:\n", nameInConfigText);
                 if (not smearingConfig.empty()) {
                     for (auto&& [var, smear] : smearingConfig) {
@@ -62,14 +70,12 @@ auto main(int argc, char* argv[]) -> int {
         AppendConfigText("MMSSimTrack", cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
         AppendConfigText("MCPSimHit", cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
         AppendConfigText("ECALSimHit", cli.ECALSimHitSmearingConfig(), cli.ECALSimHitIdentity());
-        Mustard::MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
+        Mustard::ROOTX::MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
     } while (false);
     {
         Mustard::Data::Processor<> processor;
-        const auto batchSizeProposal{cli.BatchSize()};
-        if (batchSizeProposal) { processor.BatchSizeProposal(*batchSizeProposal); }
 
-        SmearMACE::Smearer smearer{cli.InputFilePath(), processor};
+        Smearer smearer{cli.InputFilePath(), processor};
         const auto [iFirst, iLast]{cli.DatasetIndexRange()};
         const auto Smear{
             [&, iFirst = iFirst, iLast = iLast]<
@@ -90,3 +96,5 @@ auto main(int argc, char* argv[]) -> int {
 
     return EXIT_SUCCESS;
 }
+
+} // namespace MACE::SmearMACE

@@ -1,6 +1,5 @@
 #include "MACE/Detector/Description/CDC.h++"
 
-#include "Mustard/Math/Parity.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
 
@@ -9,6 +8,7 @@
 
 #include "Eigen/Geometry"
 
+#include "muc/math"
 #include "muc/numeric"
 
 #include <algorithm>
@@ -61,7 +61,9 @@ auto CDC::GasMaterial() const -> G4Material* {
     const auto nist{G4NistManager::Instance()};
 
     auto gas{nist->FindMaterial(materialName)};
-    if (gas) { return gas; }
+    if (gas) {
+        return gas;
+    }
 
     const auto heFraction{1 - fGasButaneFraction};
     const auto he{nist->FindOrBuildMaterial("G4_He")};
@@ -89,8 +91,8 @@ auto CDC::CalculateLayerConfiguration() const -> std::vector<SuperLayerConfigura
                                   layerConfig.front()};
 
         super.isAxial = fEvenSuperLayerIsAxial ?
-                            Mustard::Math::IsEven(superLayerID) :
-                            Mustard::Math::IsOdd(superLayerID);
+                            muc::even(superLayerID) :
+                            muc::odd(superLayerID);
         super.superLayerID = superLayerID;
         super.innerRadius = superLayerID > 0 ?
                                 lastSuper.outerRadius + fMinAdjacentSuperLayersDistance :
@@ -119,7 +121,9 @@ auto CDC::CalculateLayerConfiguration() const -> std::vector<SuperLayerConfigura
             [this,
              isAxial = super.isAxial,
              superLayerID] {
-                if (isAxial) { return 0.0; }
+                if (isAxial) {
+                    return 0.0;
+                }
                 if ((fEvenSuperLayerIsAxial ? superLayerID + 3 : superLayerID) % 4 == 0) {
                     return +fMinStereoAngle;
                 } else {
@@ -173,7 +177,7 @@ auto CDC::CalculateLayerConfiguration() const -> std::vector<SuperLayerConfigura
                                                          lastSuper.sense.back().cell.back().cellID + 1 :
                                                          0) +
                                                     senseLayerLocalID * super.nCellPerSenseLayer)};
-            const auto firstCellAzimuth{Mustard::Math::IsEven(sense.senseLayerID) ?
+            const auto firstCellAzimuth{muc::even(sense.senseLayerID) ?
                                             0 :
                                             halfPhiCell};
             sense.cell.reserve(super.nCellPerSenseLayer);

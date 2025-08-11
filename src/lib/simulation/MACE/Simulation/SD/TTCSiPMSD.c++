@@ -1,3 +1,4 @@
+#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Simulation/SD/TTCSiPMSD.h++"
 
 #include "G4Event.hh"
@@ -15,7 +16,6 @@
 namespace MACE::inline Simulation::inline SD {
 
 TTCSiPMSD::TTCSiPMSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fHit{},
     fHitsCollection{} {
@@ -34,18 +34,23 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
+    const auto& ttc{MACE::Detector::Description::TTC::Instance()};
 
-    if (&particle != G4OpticalPhoton::Definition()) { return false; }
+    if (&particle != G4OpticalPhoton::Definition()) {
+        return false;
+    }
 
     step.GetTrack()->SetTrackStatus(fStopAndKill);
 
     const auto postStepPoint{*step.GetPostStepPoint()};
-    const auto tileID{postStepPoint.GetTouchable()->GetReplicaNumber()};
+    const auto tileID{postStepPoint.GetTouchable()->GetReplicaNumber(2)};
+    const auto siPMLocalID{postStepPoint.GetTouchable()->GetReplicaNumber(1)};
     // new a hit
     auto hit{std::make_unique_for_overwrite<TTCSiPMHit>()};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"TileID">(*hit) = tileID;
+    Get<"SiPMID">(*hit) = tileID * ttc.NSiPM() - siPMLocalID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
     // Get<"TTCHitID">(*hit) = -1; // to be determined
     fHit[tileID].emplace_back(std::move(hit));
@@ -64,11 +69,14 @@ auto TTCSiPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
 }
 
-auto TTCSiPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
-    std::unordered_map<int, int> nHit;
-    for (auto&& [tileID, hit] : fHit) {
-        if (hit.size() > 0) {
-            nHit[tileID] = hit.size();
+auto TTCSiPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, std::vector<int>> {
+    std::unordered_map<int, std::vector<int>> nHit;
+    for (auto&& [tileID, hitofDetector] : fHit) {
+        if (hitofDetector.size() > 0) {
+            auto upSiPMNOpticalPhotonHit = std::ranges::count_if(hitofDetector, [](const auto& hit) { return Get<"SiPMID">(*hit) % 2 != 0; });
+            auto downSiPMNOpticalPhotonHit = hitofDetector.size() - upSiPMNOpticalPhotonHit;
+            nHit[tileID].emplace_back(upSiPMNOpticalPhotonHit);
+            nHit[tileID].emplace_back(downSiPMNOpticalPhotonHit);
         }
     }
     return nHit;

@@ -17,17 +17,27 @@ class PhysicsList final : public Mustard::Env::Memory::PassiveSingleton<PhysicsL
 public:
     PhysicsList();
 
-    auto MACECutMaxLowerPositronEk() const -> auto { return fMACECutMaxLowerPositronEk; }
-    auto MACECutMaxLowerPositronEk(double val) -> void { fMACECutMaxLowerPositronEk = val; }
+    auto MACEBiasPxySofteningFactor() const -> auto { return fMACEBiasPxySofteningFactor; }
+    auto MACEBiasCosSofteningFactor() const -> auto { return fMACEBiasCosSofteningFactor; }
+    auto MACEBiasEkLow() const -> auto { return fMACEBiasEkLow; }
+    auto MACEBiasEkSofteningFactor() const -> auto { return fMACEBiasEkSofteningFactor; }
 
-    auto ApplyMACECut(bool apply) -> void;
+    auto MACEBiasPxySofteningFactor(double val) { fMACEBiasPxySofteningFactor = val; }
+    auto MACEBiasCosSofteningFactor(double val) { fMACEBiasCosSofteningFactor = val; }
+    auto MACEBiasEkLow(double val) { fMACEBiasEkLow = val; }
+    auto MACEBiasEkSofteningFactor(double val) { fMACEBiasEkSofteningFactor = val; }
+
+    auto ApplyMACEBias(bool apply) -> void;
 
 private:
     template<std::derived_from<G4VDecayChannel> C, std::derived_from<G4ParticleDefinition> P>
     auto FindICDecayChannel(const P* particle) -> C&;
 
 private:
-    double fMACECutMaxLowerPositronEk; // for mu+ and M IC decay
+    double fMACEBiasPxySofteningFactor;
+    double fMACEBiasCosSofteningFactor;
+    double fMACEBiasEkLow;
+    double fMACEBiasEkSofteningFactor;
 
     PhysicsMessenger::Register<PhysicsList> fMessengerRegister;
 };

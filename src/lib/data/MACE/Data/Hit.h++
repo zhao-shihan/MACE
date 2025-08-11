@@ -34,4 +34,8 @@ using ECALHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     ECALRawHit>;
 
+using MRPCHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    MRPCRawHit>;
+
 } // namespace MACE::Data

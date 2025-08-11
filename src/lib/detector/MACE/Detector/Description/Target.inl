@@ -37,7 +37,8 @@ auto Target::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -
 }
 
 template<typename ADerivedShape>
-Target::ShapeBase<ADerivedShape>::ShapeBase() {
+Target::ShapeBase<ADerivedShape>::ShapeBase(ADerivedShape* derived) :
+    Mustard::Env::Memory::WeakSingleton<ADerivedShape>{derived} {
     static_assert(
         requires(const ADerivedShape shape, double x[3], bool inside) {
             requires std::is_base_of_v<ShapeBase<ADerivedShape>, ADerivedShape>;
@@ -50,7 +51,8 @@ Target::ShapeBase<ADerivedShape>::ShapeBase() {
 
 template<typename ADerivedShape>
 template<typename ADerivedDetail>
-Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
+Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase(ADerivedDetail* derived) :
+    Mustard::Env::Memory::WeakSingleton<ADerivedDetail>{derived} {
     static_assert(
         requires(const ADerivedDetail detail, double x[3]) {
             requires std::is_base_of_v<DetailBase<ADerivedDetail>, ADerivedDetail>;
@@ -107,7 +109,9 @@ auto Target::CuboidTarget::PerforatedCuboid::DetailContain(const Mustard::Concep
     const auto deltaY{x[1] - y0};
     const auto deltaXY2MinusR2{muc::pow<2>(deltaX) + (deltaY + fRadius) * (deltaY - fRadius)};
 
-    if (deltaXY2MinusR2 <= 0) { return false; }
+    if (deltaXY2MinusR2 <= 0) {
+        return false;
+    }
     const auto deltaXY2MinusR2PlusP2{deltaXY2MinusR2 + muc::pow<2>(p)};
     const auto pDeltaX{p * deltaX};
     return deltaXY2MinusR2PlusP2 > muc::abs(2 * pDeltaX) and
@@ -115,7 +119,7 @@ auto Target::CuboidTarget::PerforatedCuboid::DetailContain(const Mustard::Concep
 }
 
 auto Target::MultiLayerTarget::VolumeContain(const Mustard::Concept::InputVector3D auto& x) const -> bool {
-    const auto x0{Mustard::Math::IsEven(fCount) ? fSpacing / 2 : -fThickness / 2};
+    const auto x0{muc::even(fCount) ? fSpacing / 2 : -fThickness / 2};
     const auto r{fSpacing + fThickness};
     const auto u{(x[0] + x0) / r};
     return u - muc::llround(u - 0.5) >= fSpacing / r and
@@ -136,7 +140,7 @@ auto Target::MultiLayerTarget::Contain(const Mustard::Concept::InputVector3D aut
 }
 
 auto Target::MultiLayerTarget::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -> bool {
-    const auto x0{Mustard::Math::IsEven(fCount) ? fSpacing / 2 : -fThickness / 2};
+    const auto x0{muc::even(fCount) ? fSpacing / 2 : -fThickness / 2};
     const auto r{fSpacing + fThickness};
     const auto u{(x[0] + x0) / r};
     const auto notShadowed{u - muc::llround(u - 0.5) < fSpacing / r or
@@ -169,7 +173,9 @@ auto Target::MultiLayerTarget::PerforatedMultiLayer::DetailContain(const Mustard
     const auto deltaY{x[1] - y0};
     const auto deltaZY2MinusR2{muc::pow<2>(deltaZ) + (deltaY + fRadius) * (deltaY - fRadius)};
 
-    if (deltaZY2MinusR2 <= 0) { return false; }
+    if (deltaZY2MinusR2 <= 0) {
+        return false;
+    }
     const auto deltaZY2MinusR2PlusP2{deltaZY2MinusR2 + muc::pow<2>(p)};
     const auto pDeltaZ{p * deltaZ};
     return deltaZY2MinusR2PlusP2 > muc::abs(2 * pDeltaZ) and
@@ -178,12 +184,12 @@ auto Target::MultiLayerTarget::PerforatedMultiLayer::DetailContain(const Mustard
 
 auto Target::CylinderTarget::VolumeContain(const Mustard::Concept::InputVector3D auto& x) const -> bool {
     return -fThickness / 2 <= x[2] and x[2] <= fThickness / 2 and
-           muc::hypot2(x[0], x[1]) <= muc::pow<2>(fRadius);
+           muc::hypot_sq(x[0], x[1]) <= muc::pow<2>(fRadius);
 }
 
 auto Target::CylinderTarget::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -> bool {
     return x[2] > fThickness / 2 or
-           muc::hypot2(x[0], x[1]) > muc::pow<2>(fRadius);
+           muc::hypot_sq(x[0], x[1]) > muc::pow<2>(fRadius);
 }
 
 } // namespace MACE::Detector::Description

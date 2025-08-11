@@ -8,17 +8,20 @@
 namespace MACE::SimECAL::inline Action {
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    PassiveSingleton{},
+    PassiveSingleton{this},
     G4VUserPrimaryGeneratorAction{},
-    fAvailableGenerator{},
+    fAvailableGenerator{{}, {Mustard::Geant4X::EcoMugCosmicRayMuon::Coordinate::Beam}},
     fGenerator{&fAvailableGenerator.gpsx},
     fSavePrimaryVertexData{true},
     fPrimaryVertexData{},
-    fMessengerRegister{this} {}
+    fAnalysisMessengerRegister{this},
+    fPrimaryGeneratorActionMessengerRegister{this} {}
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
     fGenerator->GeneratePrimaryVertex(event);
-    if (fSavePrimaryVertexData) { UpdatePrimaryVertexData(*event); }
+    if (fSavePrimaryVertexData) {
+        UpdatePrimaryVertexData(*event);
+    }
 }
 
 auto PrimaryGeneratorAction::UpdatePrimaryVertexData(const G4Event& event) -> void {

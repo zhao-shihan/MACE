@@ -34,8 +34,8 @@
 /gps/pos/radius           0 mm
 /gps/pos/sigma_r          5 mm
 /gps/ene/type             Gauss
-/gps/ene/mono             3.647 MeV    # momentum 28 MeV
-/gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%
+/gps/ene/mono             3.224 MeV    # momentum 26.3 MeV
+/gps/ene/sigma            0.459 MeV    # momentum spreading 1.9 MeV
 /GPSX/NVertex             2000         # 50 kHz beam
 /GPSX/PulseWidth          0 ns
 
@@ -43,7 +43,7 @@
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
 # kill secondaries
-/MACE/Action/KillIrrelevants    yes
+/MACE/Action/KillIrrelevance    yes
 
 #############################################################################
 # Run

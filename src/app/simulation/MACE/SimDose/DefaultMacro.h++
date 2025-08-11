@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::SimDose {
 
 constexpr auto defaultMacro = {
@@ -74,7 +78,7 @@ constexpr auto defaultMacro = {
     "/Mustard/Analysis/FileMode RECREATE",
     "",
 
-#if MACE_USE_G4VIS
+#if MUSTARD_USE_G4VIS
 
     "#############################################################################",
     "# Visualization settings",
@@ -100,7 +104,7 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/visibility CDCCell             -1 false",
     "/vis/geometry/set/visibility CDCSuperLayer        0 false",
     "/vis/geometry/set/visibility ECALField             0 false",
-    "/vis/geometry/set/visibility ECALPMTCathode        0 false",
+    "/vis/geometry/set/visibility ECALPMCathode        0 false",
     "/vis/geometry/set/visibility ECALPMTCoupler        0 false",
     "/vis/geometry/set/visibility MMSField             0 false",
     "/vis/geometry/set/visibility SolenoidFieldS1      0 false",
@@ -126,10 +130,16 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/colour ECALCrystal                   0     1     1     1     0.1",
     "/vis/geometry/set/colour ECALField                     0     1     1     1     0.05",
     "/vis/geometry/set/colour ECALMagnet                    0     1     1     1     0.05",
-    "/vis/geometry/set/colour ECALPMTCathode                0     1     1     1     0.1",
-    "/vis/geometry/set/colour ECALPMTCoupler                0     1     1     1     0.1",
-    "/vis/geometry/set/colour ECALPMTShell                  0     1     1     1     0.1",
+
     "/vis/geometry/set/colour ECALShield                    0     1     1     1     0.05",
+
+    "/vis/geometry/set/colour ECALPMTCoupler                0     1     1     1     0.1",
+    "/vis/geometry/set/colour ECALPMTShell                  0     1     1     1     0.05",
+    "/vis/geometry/set/colour ECALPMTVacuum                 0     1     1     1     0.",
+    "/vis/geometry/set/colour ECALMPPCWindow                0     1     1     1     0.2",
+    "/vis/geometry/set/colour ECALMPPCCoupler               0     1     1     1     0.1",
+    "/vis/geometry/set/colour ECALPMCathode                0     1     1     1     0.3",
+
     "/vis/geometry/set/colour MCP                           0     1     1     1     0.1",
     "/vis/geometry/set/colour MCPAnode                      0     1     1     1     0.1",
     "/vis/geometry/set/colour MCPChamber                    0     1     1     1     0.05",

@@ -1,3 +1,7 @@
+#pragma once
+
+#include <initializer_list>
+
 namespace MACE::SimMMS {
 
 constexpr auto defaultMacro = {
@@ -11,7 +15,11 @@ constexpr auto defaultMacro = {
     "",
     "#/Mustard/Detector/Description/Ixport mms_geom.yaml",
     "",
+    "/MACE/Physics/UseOpticalPhysics",
+    "",
     "/run/initialize",
+    "",
+    "/process/optical/scintillation/setFiniteRiseTime true",
     "",
     "/gps/particle                         e+",
     "/gps/pos/type                         Point",
@@ -19,11 +27,15 @@ constexpr auto defaultMacro = {
     "/gps/ang/type                         iso",
     "/gps/ene/mono                         52.8 MeV",
     "",
+    "/MACE/Analysis/SaveTTCHitData         yes",
+    "/MACE/Analysis/SaveTTCSiPMHitData     yes",
+    "/MACE/Analysis/SaveCDCHitData         yes",
+    "",
     "/Mustard/Analysis/FilePath SimMMS_vis",
     "/Mustard/Analysis/FileMode RECREATE",
     "",
 
-#if MACE_USE_G4VIS
+#if MUSTARD_USE_G4VIS
 
     "#############################################################################",
     "# Visualization settings",
@@ -48,7 +60,8 @@ constexpr auto defaultMacro = {
     "# Visibility",
     "/vis/geometry/set/visibility CDCCell             -1 false",
     "/vis/geometry/set/visibility CDCSuperLayer        0 false",
-    "/vis/geometry/set/visibility MMSField    0 false",
+    "/vis/geometry/set/visibility MMSField             0 false",
+    "/vis/geometry/set/visibility TTCVirtualBox        0 false",
     "",
     "# Colors",
     "/vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05",
@@ -68,7 +81,12 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/colour MMSMagnet                     0     1     1     1     0.05",
     "/vis/geometry/set/colour MMSShield                     0     1     1     1     0.05",
     "/vis/geometry/set/colour Target                        0     1     1     1     0.1",
-    "/vis/geometry/set/colour TTC                           0     1     1     1     0.05",
+    "/vis/geometry/set/colour TTCVirtualBox                 0     1     1     1     0.05",
+    "/vis/geometry/set/colour TTCPCB                        0     1     1     1     0.05",
+    "/vis/geometry/set/colour TTCWindow                     0     1     1     1     0.05",
+    "/vis/geometry/set/colour TTCSilicone                   0     1     1     1     0.05",
+    "/vis/geometry/set/colour TTCLightCoupler               0     1     1     1     0.05",
+    "/vis/geometry/set/colour TTCScintillator               0     1     1     1     0.05",
     "/vis/geometry/set/colour World                         0     1     1     1     0.001",
     "",
     "/vis/scene/add/date",

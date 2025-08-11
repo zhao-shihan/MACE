@@ -154,108 +154,116 @@ using namespace Mustard::LiteralUnit::Time;
 using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::PhysicalConstant;
 
-ECAL::ECAL() :
-    DescriptionBase{
-        "ECAL"
-},
+ECAL::ECAL() : // clang-format off
+    DescriptionBase{"ECAL"}, // clang-format on
     fNSubdivision{3},
     fInnerRadius{20_cm},
     fCrystalHypotenuse{10_cm},
     fUpstreamWindowRadius{50_mm},
     fDownstreamWindowRadius{5_mm},
-    fPMTDimensions{
-        {29.3_mm, 25_mm, 87_mm},   // 9442B Type-HEX01
-        {29.3_mm, 25_mm, 87_mm},   // 9442B Type-PEN
-        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX02
-        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX03
-        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX04
-        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX05
-        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX06
-        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX07
-        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX08
-        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX09
-    },
+    // BGO optical param.s
+    fScintillationEnergyBin{1.945507481_eV, 1.956691365_eV, 1.974526166_eV, 1.992686315_eV, 2.011182111_eV,
+                            2.030023135_eV, 2.049218172_eV, 2.068776498_eV, 2.088712977_eV, 2.109036_eV,
+                            2.12975713_eV, 2.150887751_eV, 2.171451222_eV, 2.190391881_eV, 2.209663573_eV,
+                            2.229274743_eV, 2.247116958_eV, 2.265244608_eV, 2.283666187_eV, 2.301276603_eV,
+                            2.318032238_eV, 2.333890214_eV, 2.349966255_eV, 2.368619281_eV, 2.389971082_eV,
+                            2.412936123_eV, 2.437596391_eV, 2.464039018_eV, 2.492373025_eV, 2.521380095_eV,
+                            2.551089015_eV, 2.581526478_eV, 2.612727511_eV, 2.644717279_eV, 2.677523383_eV,
+                            2.708082211_eV, 2.733054836_eV, 2.75369941_eV, 2.773041191_eV, 2.792667214_eV,
+                            2.810903696_eV, 2.827691812_eV, 2.844122034_eV, 2.861882767_eV, 2.877806421_eV,
+                            2.894720751_eV, 2.911600212_eV, 2.929633378_eV, 2.947486552_eV, 2.965972235_eV,
+                            2.984688528_eV, 3.003641613_eV, 3.024116133_eV, 3.04551166_eV, 3.067869957_eV,
+                            3.091903493_eV, 3.118356404_eV, 3.147344518_eV, 3.178997019_eV, 3.215638088_eV,
+                            3.253129005_eV, 3.281477983_eV, 3.302608153_eV},
+    fScintillationComponent1{0.195254826, 0.214876564, 0.247266504, 0.281705118, 0.316502611, 0.351368412, 0.387289114,
+                             0.424968103, 0.459795422, 0.494441782, 0.528656318, 0.562776635, 0.595129123, 0.628156693,
+                             0.66160206, 0.695627571, 0.726322943, 0.757562051, 0.788164087, 0.818063582, 0.846719321,
+                             0.873933468, 0.900421966, 0.925228448, 0.945965637, 0.963539434, 0.978127738, 0.991670468,
+                             0.999665211, 1, 0.991116414, 0.973225812, 0.943719198, 0.904954051, 0.858628733, 0.81043525,
+                             0.766603628, 0.72769847, 0.690508334, 0.650827878, 0.615158969, 0.582925251, 0.549468551,
+                             0.518706558, 0.485613932, 0.454237279, 0.422103766, 0.389336957, 0.357120837, 0.324825964,
+                             0.293908848, 0.263908054, 0.234764495, 0.208390636, 0.1828993, 0.156768192, 0.13171465,
+                             0.107656381, 0.084704457, 0.061552239, 0.040184081, 0.024471847, 0.012727081},
+    fScintillationYield{10000},
+    fScintillationTimeConstant1{300_ns},
+    fResolutionScale{1.},
+    fUseMPPC{false},
+    fPMTDimensions{{29.3_mm, 25_mm, 87_mm},    // 9442B Type-HEX01
+                   {29.3_mm, 25_mm, 87_mm},    // 9442B Type-PEN
+                   {39.9_mm, 32_mm, 98.5_mm},  // 9902B Type-HEX02
+                   {39.9_mm, 32_mm, 98.5_mm},  // 9902B Type-HEX03
+                   {39.9_mm, 32_mm, 98.5_mm},  // 9902B Type-HEX04
+                   {39.9_mm, 32_mm, 98.5_mm},  // 9902B Type-HEX05
+                   {39.9_mm, 32_mm, 98.5_mm},  // 9902B Type-HEX06
+                   {39.9_mm, 32_mm, 98.5_mm},  // 9902B Type-HEX07
+                   {39.9_mm, 32_mm, 98.5_mm},  // 9902B Type-HEX08
+                   {39.9_mm, 32_mm, 98.5_mm}}, // 9902B Type-HEX09
     fPMTCouplerThickness{0.1_mm},
     fPMTWindowThickness{1_mm},
     fPMTCathodeThickness{20_nm},
-    fPMTWaveLengthBin{715.759, 704.541, 687.714, 670.887, 654.06, 637.234, 620.807, 606.384,
-                      592.562, 584.019, 577.939, 571.814, 566.671, 562.542, 558.307, 553.099,
-                      547.49, 541.48, 534.669, 527.057, 519.361, 511.903, 505.422, 499.413,
-                      493.804, 487.821, 481.651, 473.856, 465.246, 456.513, 443.724, 427.297,
-                      410.47, 393.643, 376.816, 359.989, 347.57, 341.159, 335.766, 332.51,
-                      328.633, 325.763, 323.291, 320.44, 318.552, 316.506, 313.615, 312.091,
-                      309.509, 307.334, 305.549, 302.698, 301.596, 299.342, 296.555, 294.161,
-                      291.88, 288.847, 285.737, 281.108},
-    fPMTQuantumEfficiency{0.206, 0.237, 0.282, 0.398, 0.74, 1.321, 2.113, 3.024,
-                          3.969, 4.905, 5.856, 6.819, 7.723, 8.636, 9.57, 10.508,
-                          11.467, 12.374, 13.281, 14.205, 15.191, 16.195, 17.195,
-                          18.114, 18.987, 19.886, 20.83, 21.794, 22.8, 23.806, 24.644,
-                          25.312, 25.713, 25.932, 25.835, 25.279, 24.266, 23.367, 22.357,
-                          21.43, 20.344, 19.319, 18.363, 17.294, 16.265, 15.232, 14.053,
-                          12.759, 11.486, 10.345, 9.229, 8.193, 7.198, 6.108, 5.136, 4.241,
-                          3.37, 2.403, 1.447, 0.466}, // ET 9269B
-    fMPPCWidthSet{
-        12_mm,
-        12_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-    },
-    fMPPCThickness{0.1_mm},
+    fPMTEnergyBin{1.732649965_eV, 1.760237951_eV, 1.803307489_eV, 1.848537542_eV, 1.896094863_eV, 1.946160761_eV, 1.997657575_eV,
+                  2.045172376_eV, 2.092877718_eV, 2.123492226_eV, 2.145831664_eV, 2.168816794_eV, 2.18850057_eV, 2.204563937_eV,
+                  2.221286508_eV, 2.242202221_eV, 2.265173439_eV, 2.290315074_eV, 2.319490762_eV, 2.352989916_eV, 2.387857013_eV,
+                  2.422646099_eV, 2.453711564_eV, 2.48323493_eV, 2.511441394_eV, 2.542243582_eV, 2.574809989_eV, 2.617165988_eV,
+                  2.665600148_eV, 2.716592531_eV, 2.794890081_eV, 2.902336797_eV, 3.021316555_eV, 3.150468334_eV, 3.291154851_eV,
+                  3.444993614_eV, 3.568086447_eV, 3.6351373_eV, 3.69352408_eV, 3.729691757_eV, 3.773692253_eV, 3.806938806_eV,
+                  3.836048038_eV, 3.8701779_eV, 3.893115743_eV, 3.918282138_eV, 3.954402073_eV, 3.973712174_eV, 4.006861856_eV,
+                  4.035218382_eV, 4.0587919_eV, 4.097020153_eV, 4.111990233_eV, 4.142952897_eV, 4.181888035_eV, 4.215921914_eV,
+                  4.248868735_eV, 4.293483423_eV, 4.340214275_eV, 4.411684499_eV},
+    fPMTQuantumEfficiency{0.00206, 0.00237, 0.00282, 0.00398, 0.0074, 0.01321, 0.02113, 0.03024, 0.03969, 0.04905, 0.05856, 0.06819,
+                          0.07723, 0.08636, 0.0957, 0.10508, 0.11467, 0.12374, 0.13281, 0.14205, 0.15191, 0.16195, 0.17195, 0.18114,
+                          0.18987, 0.19886, 0.2083, 0.21794, 0.228, 0.23806, 0.24644, 0.25312, 0.25713, 0.25932, 0.25835, 0.25279,
+                          0.24266, 0.23367, 0.22357, 0.2143, 0.20344, 0.19319, 0.18363, 0.17294, 0.16265, 0.15232, 0.14053, 0.12759,
+                          0.11486, 0.10345, 0.09229, 0.08193, 0.07198, 0.06108, 0.05136, 0.04241, 0.0337, 0.02403, 0.01447, 0.00466}, // ET 9269B
+    fMPPCNPixelRows{4,
+                    4,
+                    8,
+                    8,
+                    8,
+                    8,
+                    8,
+                    8,
+                    8,
+                    8},
+    fMPPCPixelSizeSet{3_mm,
+                      3_mm,
+                      3_mm,
+                      3_mm,
+                      3_mm,
+                      3_mm,
+                      3_mm,
+                      3_mm,
+                      3_mm,
+                      3_mm},
+    fMPPCPitch{0.2_mm},     // gap between pixels
+    fMPPCThickness{0.1_mm}, // cathode
     fMPPCCouplerThickness{0.1_mm},
-    fMPPCWindowThickness{0.15_mm},
-    fMPPCWaveLengthBin{886.244, 871.228, 856.21, 841.193, 826.176, 810.974, 796.366, 781.121, 766.101, 751.082,
-                       736.061, 721.04, 705.896, 694.41, 682.947, 669.145, 657.534, 647.289, 637.726, 628.163,
-                       618.599, 606.122, 595.757, 585.127, 576.93, 568.732, 560.534, 552.336, 544.138, 536.29,
-                       527.266, 517.491, 509.566, 502.072, 494.349, 485.647, 475.13, 460.112, 445.101, 430.094,
-                       417.538, 402.822, 386.469, 375.348, 356.387, 335.359, 319.688, 310.159, 302.229, 299.024,
-                       296.299, 294.815, 291.379, 289.225, 282.082},
-    fMPPCEfficiency{0.045, 0.053, 0.061, 0.069, 0.077, 0.088, 0.096, 0.105, 0.116, 0.127,
-                    0.139, 0.152, 0.164, 0.177, 0.188, 0.201, 0.216, 0.229, 0.242, 0.255,
-                    0.269, 0.287, 0.302, 0.317, 0.33, 0.342, 0.354, 0.367, 0.38, 0.393,
-                    0.408, 0.425, 0.44, 0.454, 0.468, 0.485, 0.497, 0.505, 0.507, 0.502,
-                    0.493, 0.477, 0.449, 0.422, 0.397, 0.373, 0.346, 0.318, 0.28, 0.25,
-                    0.217, 0.184, 0.083, 0.051, 0.025}, // S14161
-    fScintillationWavelengthBin{1.75_eV, 1.77_eV, 1.78_eV, 1.80_eV, 1.82_eV, 1.83_eV, 1.85_eV, 1.87_eV,
-                                1.88_eV, 1.89_eV, 1.91_eV, 1.92_eV, 1.93_eV, 1.94_eV, 1.95_eV, 1.96_eV,
-                                1.98_eV, 1.98_eV, 2.00_eV, 2.01_eV, 2.02_eV, 2.04_eV, 2.05_eV, 2.07_eV,
-                                2.08_eV, 2.09_eV, 2.11_eV, 2.11_eV, 2.13_eV, 2.15_eV, 2.16_eV, 2.18_eV,
-                                2.20_eV, 2.22_eV, 2.25_eV, 2.28_eV, 2.32_eV, 2.35_eV, 2.37_eV, 2.39_eV,
-                                2.41_eV, 2.43_eV, 2.44_eV, 2.46_eV, 2.47_eV, 2.49_eV, 2.50_eV, 2.52_eV,
-                                2.53_eV, 2.55_eV, 2.56_eV, 2.57_eV, 2.59_eV, 2.61_eV, 2.62_eV, 2.65_eV,
-                                2.67_eV, 2.69_eV, 2.72_eV, 2.74_eV, 2.77_eV, 2.80_eV, 2.84_eV, 2.87_eV,
-                                2.92_eV, 2.98_eV, 3.04_eV, 3.11_eV, 3.18_eV, 3.25_eV, 3.32_eV, 3.40_eV,
-                                3.48_eV, 3.57_eV},
-    fScintillationComponent1{0.126974051, 0.143090606, 0.16675108, 0.19144027, 0.216129461, 0.240818651, 0.263450409, 0.289682674,
-                             0.314886222, 0.341118487, 0.364264603, 0.390188253, 0.415186058, 0.441418323, 0.46147829, 0.48805346,
-                             0.515485894, 0.535545861, 0.562121031, 0.589553465, 0.609613432, 0.637491643, 0.666192827, 0.690367659,
-                             0.717114282, 0.737174249, 0.762377798, 0.782437765, 0.810315976, 0.837816991, 0.866621046, 0.895082196,
-                             0.921828819, 0.948061084, 0.974293348, 0.986295038, 0.974293348, 0.9490898, 0.923886251, 0.899197061,
-                             0.869021384, 0.840354491, 0.813813611, 0.789124421, 0.760937595, 0.729973235, 0.698597389, 0.668764618,
-                             0.633273906, 0.59932627, 0.558691977, 0.525773057, 0.497295271, 0.466450419, 0.440801093, 0.408499402,
-                             0.377295009, 0.349451089, 0.323115952, 0.299661221, 0.272194497, 0.250420003, 0.226930981, 0.203270507,
-                             0.181153108, 0.158178444, 0.136918308, 0.117715605, 0.098855806, 0.08136763, 0.063879453, 0.046734182,
-                             0.030960533, 0.015186883},
-    fScintillationYield{54000},
-    fScintillationTimeConstant1{1000_ns},
-    // fScintillationWavelengthBin{635.961, 630.508, 623.237, 615.967, 608.697, 601.426, 594.156, 586.885, 579.615, 572.345,
-    //               565.756, 559.849, 554.169, 548.716, 543.263, 538.037, 533.266, 528.722, 523.724, 517.817,
-    //               511.228, 504.184, 496.914, 489.644, 482.373, 475.103, 467.832, 460.789, 454.882, 450.338,
-    //               446.476, 442.840, 439.205, 435.570, 432.162, 428.981, 425.800, 422.620, 419.439, 416.258,
-    //               413.077, 409.896, 406.488, 402.853, 398.764, 393.992, 388.767, 383.314, 379.096, 374.932},
-    // fScintillationComponent1{0.114, 0.134, 0.163, 0.195, 0.228, 0.264, 0.301, 0.339, 0.379, 0.419,
-    //                             0.461, 0.500, 0.540, 0.581, 0.624, 0.666, 0.707, 0.748, 0.791, 0.832,
-    //                             0.874, 0.916, 0.954, 0.981, 0.994, 0.991, 0.969, 0.934, 0.891, 0.850,
-    //                             0.809, 0.768, 0.725, 0.681, 0.639, 0.597, 0.554, 0.510, 0.464, 0.419,
-    //                             0.374, 0.331, 0.287, 0.245, 0.203, 0.160, 0.117, 0.076, 0.046, 0.015},
-    // fScintillationYield{54000},
-    // fScintillationTimeConstant1{1000_ns},
-    fResolutionScale{1} {}
+    fMPPCWindowThickness{0.2_mm},
+    // 0.1(epoxy)+0.1(cathode),window change  from epoxy to epoxy&silicon Pixels, may change name "window" later
+    // S14161
+    fMPPCEnergyBin{1.391655126_eV, 1.413303953_eV, 1.436778788_eV, 1.461046623_eV, 1.486148332_eV, 1.512127645_eV, 1.533451437_eV,
+                   1.553243676_eV, 1.579239384_eV, 1.601331725_eV, 1.618380329_eV, 1.644070091_eV, 1.668575932_eV, 1.695332333_eV,
+                   1.722960822_eV, 1.750124077_eV, 1.769418592_eV, 1.796139112_eV, 1.823679036_eV, 1.850275906_eV, 1.880443107_eV,
+                   1.905389876_eV, 1.927096598_eV, 1.948591293_eV, 1.968750142_eV, 1.989552718_eV, 2.012699006_eV, 2.044509747_eV,
+                   2.086746867_eV, 2.108593697_eV, 2.13196381_eV, 2.162065168_eV, 2.196197125_eV, 2.211510324_eV, 2.240146328_eV,
+                   2.277682676_eV, 2.31087249_eV, 2.342157708_eV, 2.374301646_eV, 2.410389305_eV, 2.452932479_eV, 2.507137915_eV,
+                   2.565089699_eV, 2.6485729_eV, 2.732230683_eV, 2.795153262_eV, 2.842415847_eV, 2.907557927_eV, 2.975755876_eV,
+                   3.029226473_eV, 3.073774257_eV, 3.139907148_eV, 3.179961838_eV, 3.207163267_eV, 3.244659512_eV, 3.289219352_eV,
+                   3.307290247_eV, 3.327878491_eV, 3.363166032_eV, 3.399209944_eV, 3.435444057_eV, 3.46043183_eV, 3.48852431_eV,
+                   3.516457699_eV, 3.550580722_eV, 3.563879348_eV, 3.57404697_eV, 3.587160946_eV, 3.60984247_eV, 3.628195256_eV,
+                   3.637441808_eV, 3.651400344_eV, 3.670179231_eV, 3.684390646_eV, 3.696659746_eV, 3.720794081_eV, 3.721383683_eV,
+                   3.742354188_eV, 3.755013028_eV, 3.787037996_eV, 3.809782448_eV, 3.840536792_eV},
+    fMPPCEfficiency{0.038361565, 0.043881036, 0.050158203, 0.056879188, 0.063896051, 0.071245776, 0.077096023, 0.082806497, 0.09049302,
+                    0.096846043, 0.102167517, 0.110439587, 0.118523116, 0.127329437, 0.136497387, 0.144697087, 0.152101728, 0.160383488,
+                    0.169784037, 0.17901796, 0.189932435, 0.197788503, 0.2061559, 0.215114701, 0.226013151, 0.23524354, 0.244663368,
+                    0.255647156, 0.270165176, 0.278993559, 0.28798576, 0.297864503, 0.310058789, 0.315182084, 0.324696839, 0.336285043,
+                    0.347467345, 0.356656635, 0.364883088, 0.373827813, 0.382839555, 0.3902882, 0.395495771, 0.400343653, 0.401560403,
+                    0.396238242, 0.390316468, 0.384591232, 0.375317514, 0.365819506, 0.358254968, 0.346811362, 0.335599315, 0.326263057,
+                    0.314742636, 0.300694748, 0.29059875, 0.283296713, 0.270049269, 0.257841507, 0.247144881, 0.237727757, 0.22854291,
+                    0.217013978, 0.206721701, 0.200096265, 0.191250653, 0.181575856, 0.168947005, 0.159534377, 0.149674853, 0.139503115,
+                    0.129670093, 0.120230653, 0.108280609, 0.091831406, 0.098424138, 0.083937488, 0.073056832, 0.060399447, 0.047887957,
+                    0.034501313},
+    fWaveformIntegralTime{100_ns} {}
 
 auto ECAL::ComputeMesh() const -> MeshInformation {
     auto pmpMesh{ECALMesh{fNSubdivision}.Generate()};
@@ -271,9 +279,13 @@ auto ECAL::ComputeMesh() const -> MeshInformation {
         const auto centroid{Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
         if (const auto rXY{fInnerRadius * centroid.perp()};
             centroid.z() < 0) {
-            if (rXY < fUpstreamWindowRadius) { continue; }
+            if (rXY < fUpstreamWindowRadius) {
+                continue;
+            }
         } else {
-            if (rXY < fDownstreamWindowRadius) { continue; }
+            if (rXY < fDownstreamWindowRadius) {
+                continue;
+            }
         }
         if (std::ranges::any_of(pmpMesh.vertices(f),
                                 [&](const auto& v) {
@@ -353,17 +365,38 @@ auto ECAL::ComputeMesh() const -> MeshInformation {
 
         for (int i{}; i < std::ssize(vertexIndex); ++i) {
             auto top = centroidPriority.top();
-            if (top.first > 0.2) { continue; }
+            if (top.first > 0.2) {
+                continue;
+            }
             clusterMap[moduleID].emplace_back(top.second);
             centroidPriority.pop();
         }
         moduleID++;
     }
 
+    if (Mustard::Env::VerboseLevelReach<'V'>()) {
+        std::cout << ">>--->>edgeLengthSet" << "\n";
+        for (int type{1}; auto&& pair : edgeLengthSet) {
+            std::ranges::sort(pair.second);
+            std::cout << "--->>type " << type << " : " << "\n";
+            std::cout << ">>lengths: " << "\n";
+            for (auto&& value : pair.first) {
+                std::cout << value << " ";
+            }
+            std::cout << "\n>>units(" << pair.second.size() << "units total): " << "\n";
+            for (auto&& value : pair.second) {
+                std::cout << value << " ";
+            }
+            std::cout << "\n";
+            std::cout << "======================================================\n";
+            type++;
+        }
+    }
+
     int typeID{};
     for (auto&& pair : edgeLengthSet) {
         for (auto&& value : pair.second) {
-            typeMap[value] = typeID;
+            typeMap[value] = typeID; // unitID->typeID
         }
         typeID++;
     }
@@ -390,23 +423,28 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ImportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ImportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
-    ImportValue(node, fPMTDimensions, "PMTDimensions");
-    ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
-    ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
-    ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-    ImportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
-    ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    ImportValue(node, fMPPCWidthSet, "MPPCWidthSet");
-    ImportValue(node, fMPPCThickness, "MPPCThickness");
-    ImportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
-    ImportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
-    ImportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
-    ImportValue(node, fMPPCEfficiency, "MPPCEfficiency");
-    ImportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
+    ImportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");
     ImportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ImportValue(node, fScintillationYield, "ScintillationYield");
     ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ImportValue(node, fResolutionScale, "ResolutionScale");
+    ImportValue(node, fUseMPPC, "UseMPPC");
+    ImportValue(node, fPMTDimensions, "PMTDimensions");
+    ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
+    ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
+    ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
+    ImportValue(node, fPMTEnergyBin, "PMTEnergyBin");
+    ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    ImportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
+    ImportValue(node, fMPPCPixelSizeSet, "MPPCPixelSizeSet");
+    ImportValue(node, fMPPCPitch, "MPPCPitch");
+    ImportValue(node, fMPPCThickness, "MPPCThickness");
+    ImportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
+    ImportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
+    ImportValue(node, fMPPCEnergyBin, "MPPCEnergyBin");
+    ImportValue(node, fMPPCEfficiency, "MPPCEfficiency");
+    ImportValue(node, fModuleSelection, "ModuleSelection");
+    ImportValue(node, fWaveformIntegralTime, "WaveformIntegralTime");
 
     SetGeometryOutdated();
 }
@@ -417,23 +455,28 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ExportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ExportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
-    ExportValue(node, fPMTDimensions, "PMTDimensions");
-    ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
-    ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
-    ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-    ExportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
-    ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    ExportValue(node, fMPPCWidthSet, "MPPCWidthSet");
-    ExportValue(node, fMPPCThickness, "MPPCThickness");
-    ExportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
-    ExportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
-    ExportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
-    ExportValue(node, fMPPCEfficiency, "MPPCEfficiency");
-    ExportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
+    ExportValue(node, fScintillationEnergyBin, "ScintillationEnergyBin");
     ExportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ExportValue(node, fScintillationYield, "ScintillationYield");
     ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ExportValue(node, fResolutionScale, "ResolutionScale");
+    ExportValue(node, fUseMPPC, "UseMPPC");
+    ExportValue(node, fPMTDimensions, "PMTDimensions");
+    ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
+    ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
+    ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
+    ExportValue(node, fPMTEnergyBin, "PMTEnergyBin");
+    ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    ExportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
+    ExportValue(node, fMPPCPixelSizeSet, "MPPCPixelSizeSet");
+    ExportValue(node, fMPPCPitch, "MPPCPitch");
+    ExportValue(node, fMPPCThickness, "MPPCThickness");
+    ExportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
+    ExportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
+    ExportValue(node, fMPPCEnergyBin, "MPPCEnergyBin");
+    ExportValue(node, fMPPCEfficiency, "MPPCEfficiency");
+    ExportValue(node, fModuleSelection, "ModuleSelection");
+    ExportValue(node, fWaveformIntegralTime, "WaveformIntegralTime");
 }
 
 } // namespace MACE::Detector::Description

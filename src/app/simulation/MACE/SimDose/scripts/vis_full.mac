@@ -18,8 +18,8 @@
 /gps/pos/radius           0 mm
 /gps/pos/sigma_r          5 mm
 /gps/ene/type             Gauss
-/gps/ene/mono             3.647 MeV    # momentum 28 MeV
-/gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%
+/gps/ene/mono             3.224 MeV    # momentum 26.3 MeV
+/gps/ene/sigma            0.459 MeV    # momentum spreading 1.9 MeV
 /GPSX/NVertex             1
 /GPSX/PulseWidth          1.5 us
 
@@ -107,10 +107,16 @@
 /vis/geometry/set/colour ECALCrystal                   0     1     1     1     0.1
 /vis/geometry/set/colour ECALField                     0     1     1     1     0.05
 /vis/geometry/set/colour ECALMagnet                    0     1     1     1     0.05
-/vis/geometry/set/colour ECALPMTCathode                0     1     1     1     0.1
-/vis/geometry/set/colour ECALPMTCoupler                0     1     1     1     0.1
-/vis/geometry/set/colour ECALPMTShell                  0     1     1     1     0.1
+
 /vis/geometry/set/colour ECALShield                    0     1     1     1     0.05
+
+/vis/geometry/set/colour ECALPMTCoupler                0     1     1     1     0.1
+/vis/geometry/set/colour ECALPMTShell                  0     1     1     1     0.05
+/vis/geometry/set/colour ECALPMTVacuum                 0     1     1     1     0.
+/vis/geometry/set/colour ECALMPPCWindow                0     1     1     1     0.2
+/vis/geometry/set/colour ECALMPPCCoupler               0     1     1     1     0.1
+/vis/geometry/set/colour ECALPMCathode                0     1     1     1     0.3
+
 /vis/geometry/set/colour MCP                           0     1     1     1     0.1
 /vis/geometry/set/colour MCPAnode                      0     1     1     1     0.1
 /vis/geometry/set/colour MCPChamber                    0     1     1     1     0.05

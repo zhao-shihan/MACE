@@ -2,7 +2,7 @@
 #include "MACE/Simulation/SD/TTCSD.h++"
 #include "MACE/Simulation/SD/TTCSiPMSD.h++"
 
-#include "Mustard/Env/Print.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -36,7 +36,6 @@
 namespace MACE::inline Simulation::inline SD {
 
 TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fTTCSiPMSD{ttcSiPMSD},
     fEnergyDepositionThreshold{},
@@ -56,7 +55,7 @@ TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
-    fSplitHit.reserve(ttc.NAlongPhi() * ttc.NAlongZ());
+    fSplitHit.reserve(ttc.NAlongPhi() * ttc.Width().size());
 }
 
 auto TTCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
@@ -70,15 +69,19 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
 
-    if (&particle == G4OpticalPhoton::Definition()) { return false; }
+    if (&particle == G4OpticalPhoton::Definition()) {
+        return false;
+    }
 
     const auto eDep{step.GetTotalEnergyDeposit()};
 
-    if (eDep < fEnergyDepositionThreshold) { return false; }
+    if (eDep < fEnergyDepositionThreshold) {
+        return false;
+    }
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
-    const auto tileID{preStepPoint.GetTouchable()->GetReplicaNumber()};
+    const auto tileID{preStepPoint.GetTouchable()->GetReplicaNumber(1)};
     // calculate (Ek0, p0)
     const auto vertexEk{track.GetVertexKineticEnergy()};
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
@@ -92,7 +95,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"Good">(*hit) = false; // to be determined
-    Get<"nOptPho">(*hit) = -1; // to be determined
+    Get<"nOptPho">(*hit) = {}; // to be determined
     Get<"x">(*hit) = preStepPoint.GetPosition();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
@@ -114,20 +117,20 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                     return count + cellHit.second.size();
                                 }));
 
-    for (int hitID{};
-         auto&& [tileID, splitHit] : fSplitHit) {
+    for (auto&& [tileID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
             muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
-            Get<"HitID">(*hit) = hitID++;
             assert(Get<"TileID">(*hit) == tileID);
             fHitsCollection->insert(hit.release());
         } break;
         default: {
-            const auto scintillationTimeConstant1{Detector::Description::TTC::Instance().ScintillationTimeConstant1()};
-            assert(scintillationTimeConstant1 >= 0);
+            const auto scintillationRiseTimeConstant1{Detector::Description::TTC::Instance().ScintillationRiseTimeConstant1()};
+            const auto scintillationDecayTimeConstant1{Detector::Description::TTC::Instance().ScintillationDecayTimeConstant1()};
+            assert(scintillationRiseTimeConstant1 >= 0 and scintillationDecayTimeConstant1 >= 0);
+            const auto triggerTimeWindow{scintillationRiseTimeConstant1 + scintillationDecayTimeConstant1};
             // sort hit by time
             muc::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
@@ -137,10 +140,10 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             std::ranges::subrange cluster{splitHit.begin(), splitHit.begin()};
             while (cluster.end() != splitHit.end()) {
                 const auto tFirst{*Get<"t">(**cluster.end())};
-                const auto windowClosingTime{tFirst + scintillationTimeConstant1};
+                const auto windowClosingTime{tFirst + triggerTimeWindow};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
-                    scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
+                    triggerTimeWindow != 0) [[unlikely]] {
+                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, triggerTimeWindow));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {
@@ -152,10 +155,11 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                        })};
                 // construct real hit
-                Get<"HitID">(*topHit) = hitID++;
                 assert(Get<"TileID">(*topHit) == tileID);
                 for (const auto& hit : cluster) {
-                    if (hit == topHit) { continue; }
+                    if (hit == topHit) {
+                        continue;
+                    }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
                 }
                 fHitsCollection->insert(topHit.release());
@@ -167,9 +171,13 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
     muc::timsort(*fHitsCollection->GetVector(),
                  [](const auto& hit1, const auto& hit2) {
-                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
-                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                     return std::tie(Get<"TrkID">(*hit1), Get<"t">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"t">(*hit2));
                  });
+
+    for (int hitID{}; auto&& hit : *fHitsCollection->GetVector()) {
+        Get<"HitID">(*hit) = hitID++;
+    }
 
     if (fTTCSiPMSD) {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};

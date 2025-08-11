@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mustard/Extension/Geant4X/Interface/SingletonMessenger.h++"
+#include "Mustard/Geant4X/Interface/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -36,6 +36,7 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fSavePrimaryVertexData;
     std::unique_ptr<G4UIcmdWithABool> fSaveDecayVertexData;
     std::unique_ptr<G4UIcmdWithABool> fSaveTTCHitData;
+    std::unique_ptr<G4UIcmdWithABool> fSaveTTCSiPMHitData;
     std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
 };
 
