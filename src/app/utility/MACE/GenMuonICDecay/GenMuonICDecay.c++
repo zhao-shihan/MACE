@@ -3,11 +3,11 @@
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/GenMuonICDecay/GenMuonICDecay.h++"
 
+#include "Mustard/CLHEPX/Random/Xoshiro.h++"
 #include "Mustard/Env/CLI/MonteCarloCLI.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/CLHEPX/Random/Xoshiro.h++"
-#include "Mustard/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
 #include "Mustard/Execution/Executor.h++"
+#include "Mustard/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
 #include "Mustard/Parallel/ProcessSpecificPath.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
@@ -33,7 +33,6 @@
 #include "muc/numeric"
 #include "muc/utility"
 
-#include <bit>
 #include <cmath>
 #include <string>
 #include <type_traits>
@@ -57,7 +56,7 @@ auto GenMuonICDecay::Main(int argc, char* argv[]) const -> int {
     cli->add_argument("-d", "--metropolis-delta").help("State step in Metropolis-Hasting sampling.").required().nargs(1).scan<'g', double>();
     cli->add_argument("-s", "--metropolis-discard").help("Number of states discarded between two samples in Metropolis-Hasting sampling.").required().nargs(1).scan<'i', int>();
     auto& cliMG0{cli->add_mutually_exclusive_group()};
-    cliMG0.add_argument("-l", "--ep-ek-upper-bound").help("Add upper bound for energetic positron kinetic energy.").nargs(1).scan<'g', double>();
+    cliMG0.add_argument("-l", "--ep-ek-upper-bound").help("Add upper bound for atomic positron kinetic energy.").nargs(1).scan<'g', double>();
     cliMG0.add_argument("-b", "--bias").help("Enable bias (importance sampling).").flag();
     cli->add_argument("-p", "--pxy-softening-factor").help("Softening factor for transverse momentum soft comparision in bias.").default_value(0.2_MeV).required().nargs(1).scan<'g', double>();
     cli->add_argument("-c", "--cos-theta-softening-factor").help("Softening factor for momentum cosine soft comparision in bias.").default_value(0.05).required().nargs(1).scan<'g', double>();
@@ -70,7 +69,7 @@ auto GenMuonICDecay::Main(int argc, char* argv[]) const -> int {
 
     const auto filePath{Mustard::Parallel::ProcessSpecificPath(cli->get("--output")).generic_string()};
     TFile file{filePath.c_str(), cli->get("--output-mode").c_str(), "",
-               std::bit_cast<ROOT::RCompressionSetting::EDefaults::EValues>(
+               static_cast<ROOT::RCompressionSetting::EDefaults::EValues>(
                    cli->get<std::underlying_type_t<ROOT::RCompressionSetting::EDefaults::EValues>>("--compression-level"))};
     if (not file.IsOpen()) {
         return EXIT_FAILURE;

@@ -2,7 +2,7 @@
 #include "MACE/SimDose/Analysis.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Utility/PrettyLog.h++"
+#include "Mustard/IO/PrettyLog.h++"
 
 #include "TH3F.h"
 
@@ -150,22 +150,22 @@ auto Analysis::RunBeginUserAction(int) -> void {
     fMap.reserve(fMapModel.size());
     for (auto&& [name, nBinX, xMin, xMax, nBinY, yMin, yMax, nBinZ, zMin, zMax] : std::as_const(fMapModel)) {
         if (nBinX == 0) {
-            throw std::runtime_error{Mustard::PrettyException("Map nBinX == 0")};
+            Mustard::Throw<std::runtime_error>("Map nBinX == 0");
         }
         if (nBinY == 0) {
-            throw std::runtime_error{Mustard::PrettyException("Map nBinY == 0")};
+            Mustard::Throw<std::runtime_error>("Map nBinY == 0");
         }
         if (nBinZ == 0) {
-            throw std::runtime_error{Mustard::PrettyException("Map nBinZ == 0")};
+            Mustard::Throw<std::runtime_error>("Map nBinZ == 0");
         }
         if (xMin >= xMax) {
-            throw std::runtime_error{Mustard::PrettyException("Map xMin >= xMax")};
+            Mustard::Throw<std::runtime_error>("Map xMin >= xMax");
         }
         if (yMin >= yMax) {
-            throw std::runtime_error{Mustard::PrettyException("Map yMin >= yMax")};
+            Mustard::Throw<std::runtime_error>("Map yMin >= yMax");
         }
         if (zMin >= zMax) {
-            throw std::runtime_error{Mustard::PrettyException("Map zMin >= zMax")};
+            Mustard::Throw<std::runtime_error>("Map zMin >= zMax");
         }
 
         auto& map{fMap.emplace_back()};
