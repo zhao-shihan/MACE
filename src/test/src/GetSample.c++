@@ -72,100 +72,56 @@ Sample.root
 
 
                                                                           */
-int GetSample(std::string moduleName, std::string srcFileName, std::string srcTreeName, std::string targetFileName) {
-    auto aProcess{FillProcess(moduleName, srcFileName, srcTreeName, targetFileName)};
-    aProcess.Fill();
-    return 0;
-}
+// int GetSample(std::string moduleName, std::string srcFileName, std::string srcTreeName, std::string targetFileName) {
+//     auto aProcess{FillProcess(moduleName, srcFileName, srcTreeName, targetFileName)};
+//     aProcess.Fill();
+//     return 0;
+// }
 
 using namespace std::string_view_literals;
 using namespace ROOT::Internal;
 
-class FillProcess {
+int main(int argc, char* argv[]) {
+    std::string moduleName{argv[1]};
+    std::string srcFileName{argv[2]};
+    std::string srcTreeName{argv[3]};
+    std::string targetFileName{argv[4]};
+    auto srcFile{new TFile(srcFileName.c_str(), "READ")};
+    auto targetFile{new TFile(targetFileName.c_str(), "UPDATE")};
 
-public:
-    FillProcess(std::string moduleName,
-                std::string srcFileName,
-                std::string srcTreeName,
-                std::string targetFileName = "Sample.root");
-
-    FillProcess() = delete;
-    FillProcess(const FillProcess&) = delete;
-    FillProcess(FillProcess&&) = delete;
-    FillProcess& operator=(const FillProcess&) = delete;
-
-    ~FillProcess() {
-        if (fSrcFile)
-            fSrcFile->Delete();
-        if (fTargetFile)
-            fTargetFile->Delete();
-        if (fModuleDir)
-            fModuleDir->Delete();
-        if (fFillDir)
-            fFillDir->Delete();
+    if (!srcFile || srcFile->IsZombie()) {
+        throw std::runtime_error("Error: Failed to open source file: " + srcFileName);
     }
 
-    void Fill();
-
-private:
-    std::string fModuleName;
-    std::string fSrcFileName;
-    std::string fSrcTreeName;
-    std::string fTargetFileName;
-    gsl::owner<TFile*> fSrcFile{nullptr};
-    gsl::owner<TFile*> fTargetFile{nullptr};
-    gsl::owner<TDirectory*> fModuleDir{nullptr};
-    gsl::owner<TDirectory*> fFillDir{nullptr};
-};
-
-FillProcess::FillProcess(std::string moduleName,
-                         std::string srcFileName,
-                         std::string srcTreeName,
-                         std::string targetFileName) :
-    fModuleName{std::move(moduleName)},
-    fSrcFileName{std::move(srcFileName)},
-    fSrcTreeName{std::move(srcTreeName)},
-    fTargetFileName{std::move(targetFileName)},
-    fSrcFile{TFile::Open(fSrcFileName.c_str(), "READ")},
-    fTargetFile{TFile::Open(fTargetFileName.c_str(), "UPDATE")} {
-
-    if (!fSrcFile || fSrcFile->IsZombie()) {
-        throw std::runtime_error("Error: Failed to open source file: " + fSrcFileName);
+    if (!targetFile || targetFile->IsZombie()) {
+        throw std::runtime_error("Error: Failed to open target file: " + targetFileName);
     }
 
-    if (!fTargetFile || fTargetFile->IsZombie()) {
-        throw std::runtime_error("Error: Failed to open target file: " + fTargetFileName);
-    }
-
-    if (fSrcTreeName.empty()) {
+    if (srcTreeName.empty()) {
         throw std::runtime_error("Error: Empty tree name");
     }
 
-    fModuleDir = fTargetFile->GetDirectory(fModuleName.c_str());
-    if (!fModuleDir) {
-        fModuleDir = fTargetFile->mkdir(fModuleName.c_str());
+    auto moduleDir{targetFile->GetDirectory(moduleName.c_str())};
+    if (!moduleDir) {
+        moduleDir = targetFile->mkdir(moduleName.c_str());
     }
 
-    fFillDir = fModuleDir->GetDirectory(fSrcTreeName.c_str());
-    if (!fFillDir) {
-        fFillDir = fModuleDir->mkdir(fSrcTreeName.c_str());
+    auto fillDir{moduleDir->GetDirectory(srcTreeName.c_str())};
+    if (!fillDir) {
+        fillDir = moduleDir->mkdir(srcTreeName.c_str());
     }
-}
-
-void FillProcess::Fill() {
-
-    auto srcTree = dynamic_cast<TTree*>(fSrcFile->Get(fSrcTreeName.c_str()));
+    auto srcTree = dynamic_cast<TTree*>(srcFile->Get(srcTreeName.c_str()));
     if (!srcTree) {
-        std::cerr << "Error: Could not find tree " << fSrcTreeName << " in source file\n";
-        return;
+        std::cerr << "Error: Could not find tree " << srcTreeName << " in source file\n";
+        return 1;
     }
     auto srcTreeReader{TTreeReader(srcTree)};
-    auto df{ROOT::RDataFrame(fSrcTreeName.c_str(), fSrcFileName.c_str())};
+    auto df{ROOT::RDataFrame(srcTreeName.c_str(), srcFileName.c_str())};
 
     const std::unordered_set skipBranches = {"EvtID"sv, "HitID"sv, "Good"sv, "PDGID"sv, "CreatProc"sv, "nOptPho"sv, "nOptPhoOnEachSiPM"sv, "SecPDGID"sv};
     const std::unordered_set arrayfBranches = {"x"sv, "x0"sv, "p"sv, "p0"sv, "c0"sv};
 
-    fFillDir->cd();
+    fillDir->cd();
     auto srcBranchList{srcTree->GetListOfBranches()};
     for (auto* branch : TRangeDynCast<TBranch>(srcBranchList)) {
 
@@ -189,8 +145,9 @@ void FillProcess::Fill() {
         bool isFloatBranch{floatReader.GetSetupStatus() == TTreeReaderValueBase::ESetupStatus::kSetupMatch};
         bool isShortBranch{shortReader.GetSetupStatus() == TTreeReaderValueBase::ESetupStatus::kSetupMatch};
         bool isboolBranch{boolReader.GetSetupStatus() == TTreeReaderValueBase::ESetupStatus::kSetupMatch};
-        bool isArrayfBranch{arrayfBranches.count(branchName)};
+        bool isArrayfBranch{static_cast<bool>(arrayfBranches.count(branchName))};
 
+        std::cout << isIntBranch << " " << isFloatBranch << " " << isShortBranch << " " << isboolBranch << " " << isArrayfBranch << " " << std::endl;
         if (isIntBranch or isFloatBranch or isShortBranch) {
             std::cout << "Get value_type branch named " << branchName << std::endl;
             auto xMin{*df.Min(branchName.data())};
@@ -206,6 +163,7 @@ void FillProcess::Fill() {
         }
 
         if (isArrayfBranch) {
+            std::cout << "Get array branch named " << branchName << std::endl;
             auto arraySize{df.Take<ROOT::VecOps::RVec<float>>(branchName).GetValue().at(0).size()};
             auto hists{std::vector<TH1F>()};
             auto arrayComponents{std::vector<std::vector<float>>(arraySize)};
@@ -225,6 +183,15 @@ void FillProcess::Fill() {
             }
         }
     }
+    if (srcFile)
+        srcFile->Close();
+    if (targetFile)
+        targetFile->Close();
+    // if (moduleDir)
+    //     moduleDir->Delete();
+    // if (fillDir)
+    //     fillDir->Delete();
+    return 0;
 }
 
 //
