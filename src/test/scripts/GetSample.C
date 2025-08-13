@@ -71,8 +71,13 @@ Sample.root
 
 
 
-*/
-namespace name {
+                                                                          */
+int GetSample(std::string moduleName, std::string srcFileName, std::string srcTreeName, std::string targetFileName) {
+    auto aProcess{FillProcess(moduleName, srcFileName, srcTreeName, targetFileName)};
+    aProcess.Fill();
+    return 0;
+}
+
 using namespace std::string_view_literals;
 using namespace ROOT::Internal;
 
@@ -221,8 +226,6 @@ void FillProcess::Fill() {
         }
     }
 }
-
-} // namespace name
 
 //
 // auto FillTree(TFile* srcFile, TFile* targetFile, char* treeName, TDirectory* moduleDir) -> void {
