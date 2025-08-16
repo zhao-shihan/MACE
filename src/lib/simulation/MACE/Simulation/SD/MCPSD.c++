@@ -1,8 +1,8 @@
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Simulation/SD/MCPSD.h++"
 
+#include "Mustard/IO/PrettyLog.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
-#include "Mustard/Utility/PrettyLog.h++"
 
 #include "G4DataInterpolation.hh"
 #include "G4Event.hh"
@@ -43,7 +43,7 @@ MCPSD::MCPSD(const G4String& sdName) :
 
     const auto& mcp{Detector::Description::MCP::Instance()};
     if (mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()) {
-        throw std::runtime_error{Mustard::PrettyException("mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()")};
+        Mustard::Throw<std::runtime_error>("mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()");
     }
     const auto n{mcp.EfficiencyEnergy().size()};
     fEfficiency = std::make_unique<G4DataInterpolation>(const_cast<double*>(mcp.EfficiencyEnergy().data()), // stupid interface accepts non-const ptr only
@@ -128,7 +128,7 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
             const auto windowClosingTime{tFirst + timeResolutionFWHM};
             if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                 timeResolutionFWHM != 0) [[unlikely]] {
-                Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
+                Mustard::PrintWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
             }
             cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), fSplitHit.end(),
                                                                [&windowClosingTime](const auto& hit) {

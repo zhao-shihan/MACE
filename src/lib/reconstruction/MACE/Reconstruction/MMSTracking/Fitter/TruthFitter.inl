@@ -30,7 +30,7 @@ auto TruthFitter<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
 
 #define MACE_RECONSTRUCTION_MMSTRACKING_FITTER_TRUTHFITTER_HIT_DATA_CONSISTENCY_CHECK(cond) \
     if (cond) {                                                                             \
-        throw std::invalid_argument{Mustard::PrettyException(#cond)};                       \
+        Mustard::Throw<std::invalid_argument>(#cond);                                       \
     }
     for (auto&& hit : hitData) {
         MACE_RECONSTRUCTION_MMSTRACKING_FITTER_TRUTHFITTER_HIT_DATA_CONSISTENCY_CHECK(Get<"EvtID">(*hit) != Get<"EvtID">(firstHit))

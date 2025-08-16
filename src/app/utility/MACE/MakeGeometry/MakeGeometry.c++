@@ -49,8 +49,8 @@
 #include "Mustard/Detector/Description/DescriptionIO.h++"
 #include "Mustard/Env/BasicEnv.h++"
 #include "Mustard/Env/CLI/BasicCLI.h++"
+#include "Mustard/IO/PrettyLog.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
-#include "Mustard/Utility/PrettyLog.h++"
 
 #include "TGeoManager.h"
 

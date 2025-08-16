@@ -6,8 +6,8 @@
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Geant4X/Utility/ConvertGeometry.h++"
+#include "Mustard/IO/PrettyLog.h++"
 #include "Mustard/Parallel/ProcessSpecificPath.h++"
-#include "Mustard/Utility/PrettyLog.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -81,8 +81,8 @@ auto Analysis::OpenResultFile() -> void {
     fResultFile = TFile::Open(fullFilePath.c_str(), fFileMode.c_str(),
                               "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fResultFile == nullptr) {
-        throw std::runtime_error{Mustard::PrettyException(fmt::format("Cannot open file '{}' with mode '{}'",
-                                                                      fullFilePath, fFileMode))};
+        Mustard::Throw<std::runtime_error>(fmt::format("Cannot open file '{}' with mode '{}'",
+                                                       fullFilePath, fFileMode));
     }
     if (mplr::comm_world().rank() == 0) {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimTarget_gdml", "SimTarget.gdml")->Write();

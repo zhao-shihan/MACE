@@ -1,6 +1,6 @@
 #include "MACE/SmearMACE/CLI.h++"
 
-#include "Mustard/Utility/PrettyLog.h++"
+#include "Mustard/IO/PrettyLog.h++"
 
 #include "muc/math"
 
