@@ -107,15 +107,15 @@ auto Analysis::RunEnd(Option_t* option) -> void {
     fECALSimHitOutput->Write();
     fECALPMHitOutput->Write();
     fMCPSimHitOutput->Write();
-    // close file
-    fFile->Close(option);
-    delete fFile;
     // reset output
     fPrimaryVertexOutput.reset();
     fDecayVertexOutput.reset();
     fECALSimHitOutput.reset();
     fECALPMHitOutput.reset();
     fMCPSimHitOutput.reset();
+    // close file
+    fFile->Close(option);
+    delete fFile;
 }
 
 } // namespace MACE::SimECAL

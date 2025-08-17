@@ -6,7 +6,7 @@
 /run/verbose 0
 
 
-/Mustard/Detector/Description/Ixport SimTTC/SimTTC.yaml
+#/Mustard/Detector/Description/Ixport SimTTC/SimTTC.yaml
 
 /MACE/Physics/UseOpticalPhysics
 /run/initialize
@@ -33,5 +33,11 @@
 
 /Mustard/Analysis/FilePath SimTTC_em_flat
 /Mustard/Analysis/FileMode NEW
-/run/beamOn 10000
+#/run/beamOn 10000
+
+# for test benchmark
+/run/beamOn 3000
+# for test
+#/run/beamOn 300
+
 /Mustard/Run/PrintRunSummary

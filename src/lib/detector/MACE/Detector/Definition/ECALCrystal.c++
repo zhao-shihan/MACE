@@ -132,7 +132,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
                                        [&](const auto& aVertex) { return outerCentroid + (aVertex - outerCentroid).unit() * ((aVertex - outerCentroid).mag() - ecal.CrystalPackageThickness()); });
                 // inner face scaled from outer face
                 const auto innerCentroid{innerRadius * centroid};
-                if (Mustard::Env::VerboseLevelReach<'W'>()) {
+                if (Mustard::Env::VerboseLevelReach<'V'>()) {
                     Mustard::MasterPrintLn("{}\t{}\t{}\t{}", moduleID, innerCentroid.x(), innerCentroid.y(), innerCentroid.z());
                 }
                 const auto innerVertexScaleFactor{innerRadius / outerRadius};

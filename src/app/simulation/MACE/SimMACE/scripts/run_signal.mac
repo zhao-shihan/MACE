@@ -40,5 +40,11 @@
 
 /Mustard/Analysis/FilePath SimMACE_signal
 /Mustard/Analysis/FileMode NEW
-/run/beamOn 8000
+#/run/beamOn 8000
+
+# for test benchmark
+/run/beamOn 1000000
+# for test
+#/run/beamOn 100000 
+
 /Mustard/Run/PrintRunSummary
