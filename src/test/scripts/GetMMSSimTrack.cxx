@@ -51,7 +51,7 @@ auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int 
         {"x0z",    df.Min("x0z"),    df.Max("x0z")   },
         {"c0x",    df.Min("c0x"),    df.Max("c0x")   },
         {"c0y",    df.Min("c0y"),    df.Max("c0y")   },
-        {"c0z",    df.Min("c0z"),    df.Max("c0z")   },
+        {"c0z",    df.Min("c0z"),    df.Max("c0z")   }
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

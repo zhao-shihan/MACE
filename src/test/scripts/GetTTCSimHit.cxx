@@ -37,7 +37,6 @@ auto GetTTCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
         {"TileID",  0,             4500                                                                                      },
-        {"d",       0.,            df.Max("d")                                                                               },
         {"Ek",      0.,            df.Max("Ek")                                                                              },
         {"Ek0",     0.,            df.Max("Ek0")                                                                             },
         {"xx",      df.Min("xx"),  df.Max("xx")                                                                              },

@@ -56,7 +56,7 @@ auto GetMCPSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
         {"t0",    0,                                                                                  std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })    },
         {"x0x",   std::function([&]() -> double { return *df.Mean("x0x") - 2 * *df.StdDev("x0x"); }), std::function([&]() -> double { return *df.Mean("x0x") + 2 * *df.StdDev("x0x"); })  },
         {"x0y",   std::function([&]() -> double { return *df.Mean("x0y") - 2 * *df.StdDev("x0y"); }), std::function([&]() -> double { return *df.Mean("x0y") + 2 * *df.StdDev("x0y"); })  },
-        {"x0z",   std::function([&]() -> double { return *df.Mean("x0z") - 2 * *df.StdDev("x0z"); }), std::function([&]() -> double { return *df.Mean("x0z") + 2 * *df.StdDev("x0z"); })  },
+        {"x0z",   std::function([&]() -> double { return *df.Mean("x0z") - 2 * *df.StdDev("x0z"); }), std::function([&]() -> double { return *df.Mean("x0z") + 2 * *df.StdDev("x0z"); })  }
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

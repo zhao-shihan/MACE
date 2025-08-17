@@ -32,7 +32,7 @@ auto GetSimDecayVertex(auto moduleName, auto srcFileName, auto dstFileName) -> i
         {"t",  0.,                                                                               std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })  },
         {"xx", std::function([&]() -> double { return *df.Mean("xx") - 3 * *df.StdDev("xx"); }), std::function([&]() -> double { return *df.Mean("xx") + 3 * *df.StdDev("xx"); })},
         {"yy", std::function([&]() -> double { return *df.Mean("yy") - 3 * *df.StdDev("yy"); }), std::function([&]() -> double { return *df.Mean("yy") + 3 * *df.StdDev("yy"); })},
-        {"zz", std::function([&]() -> double { return *df.Mean("zz") - 3 * *df.StdDev("zz"); }), std::function([&]() -> double { return *df.Mean("zz") + 3 * *df.StdDev("zz"); })},
+        {"zz", std::function([&]() -> double { return *df.Mean("zz") - 3 * *df.StdDev("zz"); }), std::function([&]() -> double { return *df.Mean("zz") + 3 * *df.StdDev("zz"); })}
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;
