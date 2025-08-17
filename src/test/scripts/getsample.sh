@@ -17,3 +17,6 @@ root '../GetECALSimHit.cxx("SimECAL_test","SimECAL_test.root","Sample.root")'
 
 ../../MACE SimMACE ../../SimMACE/run_signal.mac
 root '../GetMCPSimHit.cxx("SimMACE_signal","SimMACE_signal.root","Sample.root")'
+
+../../MACE PhaseI SimMACEPhaseI ../../PhaseI/SimMACEPhaseI/run_M2ee.mac
+root '../GetMRPCSimHit.cxx("SimMACEPhaseI_M2ee","SimMACEPhaseI_M2ee.root","Sample.root")'
