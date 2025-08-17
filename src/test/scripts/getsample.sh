@@ -15,4 +15,5 @@ root '../GetTTCSimHit.cxx("SimTTC_em_flat","SimTTC_em_flat.root","Sample.root")'
 ../../MACE SimECAL ../../SimECAL/test.mac 
 root '../GetECALSimHit.cxx("SimECAL_test","SimECAL_test.root","Sample.root")'
 
-# ../MACE Sim
+../../MACE SimMACE ../../SimMACE/run_signal.mac
+root '../GetMCPSimHit.cxx("SimMACE_signal","SimMACE_signal.root","Sample.root")'
