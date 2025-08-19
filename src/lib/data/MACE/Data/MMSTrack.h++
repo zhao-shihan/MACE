@@ -94,7 +94,7 @@ constexpr auto CalculateVertex(Mustard::Data::SuperTuple<Mustard::Data::Tuple<MM
 
     const auto pXY{-charge * magneticFluxDensity * c_light * r0};
     const auto pZ{pXY / std::tan(theta0)};
-    const auto ek0{std::sqrt(muc::hypot_sq(pXY, pZ) + muc::pow<2>(electron_mass_c2)) - electron_mass_c2};
+    const auto ek0{std::sqrt(muc::hypot_sq(pXY, pZ) + muc::pow(electron_mass_c2, 2)) - electron_mass_c2};
     const muc::array3d p0{-pXY * sin0,
                           pXY * cos0,
                           pZ};

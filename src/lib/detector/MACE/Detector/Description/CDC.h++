@@ -110,7 +110,7 @@ public:
             double halfLength;
             double stereoAzimuthAngle;
             auto TanStereoZenithAngle(double r) const -> auto { return r * std::tan(stereoAzimuthAngle / 2) / halfLength; }
-            auto SecStereoZenithAngle(double r) const -> auto { return std::sqrt(1 + muc::pow<2>(TanStereoZenithAngle(r))); }
+            auto SecStereoZenithAngle(double r) const -> auto { return std::sqrt(1 + muc::pow(TanStereoZenithAngle(r), 2)); }
             auto CosStereoZenithAngle(double r) const -> auto { return 1 / SecStereoZenithAngle(r); }
             auto SinStereoZenithAngle(double r) const -> auto { return TanStereoZenithAngle(r) / SecStereoZenithAngle(r); }
             auto StereoZenithAngle(double r) const -> auto { return std::atan(TanStereoZenithAngle(r)); }
