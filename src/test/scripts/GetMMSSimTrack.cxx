@@ -30,7 +30,6 @@ auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int 
                 .Define("x0z", "x0[2]")
                 .Define("c0x", "c0[0]")
                 .Define("c0y", "c0[1]")
-                .Define("c0z", "c0[2]")
                 .Define("p0x", "p0[0]")
                 .Define("p0y", "p0[1]")
                 .Define("p0z", "p0[2]")};
@@ -50,8 +49,7 @@ auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int 
         {"x0y",    df.Min("x0y"),    df.Max("x0y")   },
         {"x0z",    df.Min("x0z"),    df.Max("x0z")   },
         {"c0x",    df.Min("c0x"),    df.Max("c0x")   },
-        {"c0y",    df.Min("c0y"),    df.Max("c0y")   },
-        {"c0z",    df.Min("c0z"),    df.Max("c0z")   }
+        {"c0y",    df.Min("c0y"),    df.Max("c0y")   }
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

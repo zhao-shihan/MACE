@@ -27,7 +27,6 @@ auto GetMCPSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
 
     auto df{df0.Define("xx", "x[0]")
                 .Define("yy", "x[1]")
-                .Define("zz", "x[2]")
                 .Define("x0x", "x0[0]")
                 .Define("x0y", "x0[1]")
                 .Define("x0z", "x0[2]")
@@ -42,7 +41,6 @@ auto GetMCPSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
         {"TrkID", 0,                                                                                  20                                                                                  },
         {"xx",    df.Min("xx"),                                                                       df.Max("xx")                                                                        },
         {"yy",    df.Min("yy"),                                                                       df.Max("yy")                                                                        },
-        {"zz",    df.Min("zz"),                                                                       df.Max("zz")                                                                        },
         // {"p0x",   df.Min("p0x"),                                                                      df.Max("p0x")                                                                       },
         // {"p0y",   df.Min("p0y"),                                                                      df.Max("p0y")                                                                       },
         // {"p0z",   df.Min("p0z"),                                                                      df.Max("p0z")                                                                       },
