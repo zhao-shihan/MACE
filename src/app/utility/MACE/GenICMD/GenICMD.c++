@@ -44,11 +44,10 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     cli->add_argument("-p", "--polarization").help("Parent particle polarization vector").required().nargs(3).scan<'g', double>();
     auto& cliMG0{cli->add_mutually_exclusive_group()};
     cliMG0.add_argument("--ep-ek-upper-bound").help("Add upper bound for atomic positron kinetic energy.").nargs(1).scan<'g', double>();
-    cliMG0.add_argument("--bias").help("Enable bias (importance sampling).").flag();
-    cli->add_argument("--pxy-softening-factor").help("Softening factor for transverse momentum soft comparision in bias.").default_value(0.2_MeV).required().nargs(1).scan<'g', double>();
-    cli->add_argument("--cos-theta-softening-factor").help("Softening factor for momentum cosine soft comparision in bias.").default_value(0.05).required().nargs(1).scan<'g', double>();
-    cli->add_argument("--ep-ek-soft-cut").help("Soft kinetic energy upper bound for energetic positron track in bias.").default_value(5_keV).required().nargs(1).scan<'g', double>();
-    cli->add_argument("--ep-ek-softening-factor").help("Softening factor for energetic positron kinetic energy soft comparision in bias.").default_value(0.5_keV).required().nargs(1).scan<'g', double>();
+    cliMG0.add_argument("--bias").help("Enable MACE detector bias (importance sampling).").flag();
+    cli->add_argument("--pxy-softening-factor").help("Softening factor for transverse momentum soft comparision in bias.").default_value(0.5_MeV).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--cos-theta-softening-factor").help("Softening factor for momentum cosine soft comparision in bias.").default_value(0.1).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--ep-ek-softening-factor").help("Softening factor for energetic positron kinetic energy soft comparision in bias.").default_value(1_keV).required().nargs(1).scan<'g', double>();
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
     Mustard::UseXoshiro<256> random;
@@ -71,7 +70,6 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
         generator.Bias(
             [scPxy = muc::soft_cmp{cli->get<double>("--pxy-softening-factor")},
              scCos = muc::soft_cmp{cli->get<double>("--cos-theta-softening-factor")},
-             epEkCut = cli->get<double>("--ep-ek-soft-cut"),
              scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& momenta) {
                 const auto& cdc{Detector::Description::CDC::Instance()};
                 const auto& ttc{Detector::Description::TTC::Instance()};
@@ -79,16 +77,13 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
                 const auto inPxyCut{scPxy((cdc.GasInnerRadius() / 2) * mmsB * c_light)};
                 const auto outPxyCut{scPxy((ttc.Radius() / 2) * mmsB * c_light)};
                 const auto cosCut{scCos(1 / muc::hypot(2 * cdc.GasOuterRadius() / cdc.GasOuterLength(), 1.))};
-                const auto lowEkCut{scEk(epEkCut)};
 
                 // .         e+ n   n   e-  e+
                 const auto& [p, _1, _2, p1, p2]{momenta};
+                const auto pLow{scEk(p.e() - electron_mass_c2) < scEk(0)};
                 const auto p1Seen{scPxy(muc::hypot(p1.x(), p1.y())) > outPxyCut and scCos(muc::abs(p1.cosTheta())) < cosCut};
-                const auto pMiss{scPxy(muc::hypot(p.x(), p.y())) < inPxyCut or scCos(muc::abs(p.cosTheta())) > cosCut};
                 const auto p2Miss{scPxy(muc::hypot(p2.x(), p2.y())) < inPxyCut or scCos(muc::abs(p2.cosTheta())) > cosCut};
-                const auto pLow{scEk(p.e() - electron_mass_c2) < lowEkCut};
-                const auto p2Low{scEk(p2.e() - electron_mass_c2) < lowEkCut};
-                return p1Seen and ((pMiss and p2Low) or (p2Miss and pLow));
+                return pLow and p1Seen and p2Miss;
             });
     }
 
@@ -97,19 +92,17 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     Mustard::MasterPrintLn(" Done.");
 
     Mustard::Executor<unsigned long long> executor;
-    executor.Execute(
-        cli->get<unsigned long long>("n"),
-        [&](auto) {
-            const auto [weight, pdgID, p]{generator()};
-            Mustard::Data::Tuple<Mustard::Data::GeneratedKinematics> event;
-            // 0: e+, 3: e-, 4: e+
-            Get<"pdgID">(event) = {pdgID[0], pdgID[3], pdgID[4]};
-            Get<"px">(event) = {float(p[0].x()), float(p[3].x()), float(p[4].x())};
-            Get<"py">(event) = {float(p[0].y()), float(p[3].y()), float(p[4].y())};
-            Get<"pz">(event) = {float(p[0].z()), float(p[3].z()), float(p[4].z())};
-            Get<"w">(event) = weight;
-            writer.Fill(event);
-        });
+    executor(cli->get<unsigned long long>("n"), [&](auto) {
+        const auto [weight, pdgID, p]{generator()};
+        Mustard::Data::Tuple<Mustard::Data::GeneratedKinematics> event;
+        // 0: e+, 3: e-, 4: e+
+        Get<"pdgID">(event) = {pdgID[0], pdgID[3], pdgID[4]};
+        Get<"px">(event) = {float(p[0].x()), float(p[3].x()), float(p[4].x())};
+        Get<"py">(event) = {float(p[0].y()), float(p[3].y()), float(p[4].y())};
+        Get<"pz">(event) = {float(p[0].z()), float(p[3].z()), float(p[4].z())};
+        Get<"w">(event) = weight;
+        writer.Fill(event);
+    });
     executor.PrintExecutionSummary();
 
     writer.Write();
