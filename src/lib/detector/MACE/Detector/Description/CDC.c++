@@ -163,13 +163,13 @@ auto CDC::CalculateLayerConfiguration() const -> std::vector<SuperLayerConfigura
                  lastRIn = notFirstSenseLayerOfThisSuperLayer ?
                                lastSense.innerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) :
                                super.innerRadius,
-                 tan2ThetaS = muc::pow<2>(tanInnerStereoZenithAngle)] {
+                 tan2ThetaS = muc::pow(tanInnerStereoZenithAngle, 2)] {
                     return (lastHL +
                             eta * (std::sqrt(
-                                       muc::pow<2>(rIn) +
+                                       muc::pow(rIn, 2) +
                                        (lastHL + eta * (rIn - lastRIn)) * (lastHL - eta * (rIn + lastRIn)) * tan2ThetaS) -
                                    lastRIn)) /
-                           (1 - muc::pow<2>(*eta) * tan2ThetaS);
+                           (1 - muc::pow(*eta, 2) * tan2ThetaS);
                 }();
             sense.stereoAzimuthAngle = 2 * std::atan(sense.halfLength / sense.innerRadius * tanInnerStereoZenithAngle);
 

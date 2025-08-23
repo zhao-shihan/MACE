@@ -60,7 +60,7 @@ template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPoi
 auto GenFitterBase<AHit, ATrack, AFitter>::Initialize(const std::vector<AHitPointer>& hitData, ASeedPointer seed)
     -> std::pair<std::shared_ptr<genfit::Track>,
                  std::unordered_map<const genfit::AbsMeasurement*, AHitPointer>> {
-    if (Mustard::Math::NormSq(*Get<"p0">(*seed)) < muc::pow<2>(fLowestMomentum)) {
+    if (Mustard::Math::NormSq(*Get<"p0">(*seed)) < muc::pow(fLowestMomentum, 2)) {
         return {};
     }
     if (TDatabasePDG::Instance()->GetParticle(Get<"PDGID">(*seed)) == nullptr) {
@@ -102,7 +102,7 @@ auto GenFitterBase<AHit, ATrack, AFitter>::Initialize(const std::vector<AHitPoin
                 rawHitCoords[6] = Mustard::ToG3<"Length">(*Get<"d">(*hit));
 
                 TMatrixDSym rawHitCov(7);
-                const auto varD{muc::pow<2>(Mustard::ToG3<"Length">(this->DriftErrorRMS()))};
+                const auto varD{muc::pow(Mustard::ToG3<"Length">(this->DriftErrorRMS()), 2)};
                 rawHitCov(0, 0) = varD;
                 rawHitCov(1, 1) = varD;
                 rawHitCov(2, 2) = varD;
@@ -161,7 +161,7 @@ auto GenFitterBase<AHit, ATrack, AFitter>::Finalize(std::shared_ptr<genfit::Trac
     const auto p0{Mustard::ToG4<"Energy">(firstState->getMom())};
     const auto mass{Mustard::ToG4<"Energy">(firstState->getMass())};
     const auto pdgID{firstState->getPDG()};
-    const auto ek0{std::sqrt(p0.Mag2() + muc::pow<2>(mass)) - mass};
+    const auto ek0{std::sqrt(p0.Mag2() + muc::pow(mass, 2)) - mass};
 
     auto track{std::make_shared_for_overwrite<Mustard::Data::Tuple<ATrack>>()};
     Get<"EvtID">(*track) = Get<"EvtID">(*seed);

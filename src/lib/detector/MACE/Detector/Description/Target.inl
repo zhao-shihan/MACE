@@ -107,12 +107,12 @@ auto Target::CuboidTarget::PerforatedCuboid::DetailContain(const Mustard::Concep
 
     const auto deltaX{x[0] - x0};
     const auto deltaY{x[1] - y0};
-    const auto deltaXY2MinusR2{muc::pow<2>(deltaX) + (deltaY + fRadius) * (deltaY - fRadius)};
+    const auto deltaXY2MinusR2{muc::pow(deltaX, 2) + (deltaY + fRadius) * (deltaY - fRadius)};
 
     if (deltaXY2MinusR2 <= 0) {
         return false;
     }
-    const auto deltaXY2MinusR2PlusP2{deltaXY2MinusR2 + muc::pow<2>(p)};
+    const auto deltaXY2MinusR2PlusP2{deltaXY2MinusR2 + muc::pow(p, 2)};
     const auto pDeltaX{p * deltaX};
     return deltaXY2MinusR2PlusP2 > muc::abs(2 * pDeltaX) and
            deltaXY2MinusR2PlusP2 > muc::abs(pDeltaX + sqrt3 * p * deltaY);
@@ -171,12 +171,12 @@ auto Target::MultiLayerTarget::PerforatedMultiLayer::DetailContain(const Mustard
 
     const auto deltaZ{x[2] - z0};
     const auto deltaY{x[1] - y0};
-    const auto deltaZY2MinusR2{muc::pow<2>(deltaZ) + (deltaY + fRadius) * (deltaY - fRadius)};
+    const auto deltaZY2MinusR2{muc::pow(deltaZ, 2) + (deltaY + fRadius) * (deltaY - fRadius)};
 
     if (deltaZY2MinusR2 <= 0) {
         return false;
     }
-    const auto deltaZY2MinusR2PlusP2{deltaZY2MinusR2 + muc::pow<2>(p)};
+    const auto deltaZY2MinusR2PlusP2{deltaZY2MinusR2 + muc::pow(p, 2)};
     const auto pDeltaZ{p * deltaZ};
     return deltaZY2MinusR2PlusP2 > muc::abs(2 * pDeltaZ) and
            deltaZY2MinusR2PlusP2 > muc::abs(pDeltaZ + sqrt3 * p * deltaY);
@@ -184,12 +184,12 @@ auto Target::MultiLayerTarget::PerforatedMultiLayer::DetailContain(const Mustard
 
 auto Target::CylinderTarget::VolumeContain(const Mustard::Concept::InputVector3D auto& x) const -> bool {
     return -fThickness / 2 <= x[2] and x[2] <= fThickness / 2 and
-           muc::hypot_sq(x[0], x[1]) <= muc::pow<2>(fRadius);
+           muc::hypot_sq(x[0], x[1]) <= muc::pow(fRadius, 2);
 }
 
 auto Target::CylinderTarget::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -> bool {
     return x[2] > fThickness / 2 or
-           muc::hypot_sq(x[0], x[1]) > muc::pow<2>(fRadius);
+           muc::hypot_sq(x[0], x[1]) > muc::pow(fRadius, 2);
 }
 
 } // namespace MACE::Detector::Description
