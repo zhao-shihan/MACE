@@ -37,17 +37,20 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     cli->add_argument("n").help("Number of events to generate.").nargs(1).scan<'i', unsigned long long>();
     cli->add_argument("-o", "--output").help("Output file path.").default_value("mu2ennee.root"s).required().nargs(1);
     cli->add_argument("-m", "--output-mode").help("Output file creation mode (see ROOT documentation for details).").default_value("NEW"s).required().nargs(1);
-    cli->add_argument("--compression-level").help("Output file compression level (see ROOT documentation for details).").default_value(muc::to_underlying(ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose)).required().nargs(1).scan<'i', std::underlying_type_t<ROOT::RCompressionSetting::EDefaults::EValues>>();
     cli->add_argument("-t", "--output-tree").help("Output tree name.").default_value("mu2ennee"s).required().nargs(1);
     cli->add_argument("-d", "--mcmc-delta").help("Step size in MCMC sampling.").required().nargs(1).scan<'g', double>();
     cli->add_argument("-x", "--mcmc-discard").help("Number of states discarded between two samples in MCMC sampling.").required().nargs(1).scan<'i', int>();
     cli->add_argument("-p", "--polarization").help("Parent particle polarization vector").required().nargs(3).scan<'g', double>();
-    auto& cliMG0{cli->add_mutually_exclusive_group()};
-    cliMG0.add_argument("--ep-ek-upper-bound").help("Add upper bound for atomic positron kinetic energy.").nargs(1).scan<'g', double>();
-    cliMG0.add_argument("--bias").help("Enable MACE detector bias (importance sampling).").flag();
-    cli->add_argument("--pxy-softening-factor").help("Softening factor for transverse momentum soft comparision in bias.").default_value(0.5_MeV).required().nargs(1).scan<'g', double>();
-    cli->add_argument("--cos-theta-softening-factor").help("Softening factor for momentum cosine soft comparision in bias.").default_value(0.1).required().nargs(1).scan<'g', double>();
-    cli->add_argument("--ep-ek-softening-factor").help("Softening factor for energetic positron kinetic energy soft comparision in bias.").default_value(1_keV).required().nargs(1).scan<'g', double>();
+    auto& biasCLI{cli->add_mutually_exclusive_group()};
+    biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
+    biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for atomic positron kinetic energy.").flag();
+    biasCLI.add_argument("--emiss-bias").help("Apply soft upper bound for missing energy.").flag();
+    cli->add_argument("--pxy-softening-factor").help("Softening factor for transverse momentum soft cut in --mace-bias.").default_value(0.25_MeV).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--cos-theta-softening-factor").help("Softening factor for momentum cosine soft cut in --mace-bias.").default_value(0.025).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--ep-ek-soft-upper-bound").help("Soft upper bound for atomic positron kinetic energy in --ep-ek-bias or --mace-bias.").default_value(0_eV).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--ep-ek-softening-factor").help("Softening factor for atomic positron kinetic energy upper bound in --ep-ek-bias or --mace-bias.").default_value(1_keV).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--emiss-soft-upper-bound").help("Soft upper bound for missing energy in --emiss-bias.").default_value(20_MeV).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--emiss-softening-factor").help("Softening factor for missing energy upper bound in --emiss-bias.").default_value(2_MeV).required().nargs(1).scan<'g', double>();
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
     Mustard::UseXoshiro<256> random;
@@ -60,38 +63,44 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     Mustard::InternalConversionMuonDecay generator("mu+", {polarization[0], polarization[1], polarization[2]},
                                                    cli->get<double>("--mcmc-delta"), cli->get<int>("--mcmc-discard"));
 
-    if (cli->present("--ep-ek-upper-bound")) {
-        generator.Bias(
-            [epEkUpperBound = cli->get<double>("--ep-ek-upper-bound")](auto&& momenta) {
-                const auto& [p, p1, p2, k1, k2]{momenta};
-                return p.e() < electron_mass_c2 + epEkUpperBound;
-            });
-    } else if (cli["--bias"] == true) {
-        generator.Bias(
-            [scPxy = muc::soft_cmp{cli->get<double>("--pxy-softening-factor")},
-             scCos = muc::soft_cmp{cli->get<double>("--cos-theta-softening-factor")},
-             scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& momenta) {
-                const auto& cdc{Detector::Description::CDC::Instance()};
-                const auto& ttc{Detector::Description::TTC::Instance()};
-                const auto mmsB{Detector::Description::MMSField::Instance().FastField()};
-                const auto inPxyCut{scPxy((cdc.GasInnerRadius() / 2) * mmsB * c_light)};
-                const auto outPxyCut{scPxy((ttc.Radius() / 2) * mmsB * c_light)};
-                const auto cosCut{scCos(1 / muc::hypot(2 * cdc.GasOuterRadius() / cdc.GasOuterLength(), 1.))};
-
-                // .         e+ n   n   e-  e+
-                const auto& [p, _1, _2, p1, p2]{momenta};
-                const auto pLow{scEk(p.e() - electron_mass_c2) < scEk(0)};
-                const auto p1Seen{scPxy(muc::hypot(p1.x(), p1.y())) > outPxyCut and scCos(muc::abs(p1.cosTheta())) < cosCut};
-                const auto p2Miss{scPxy(muc::hypot(p2.x(), p2.y())) < inPxyCut or scCos(muc::abs(p2.cosTheta())) > cosCut};
-                return pLow and p1Seen and p2Miss;
-            });
+    if (cli["--mace-bias"] == true) {
+        const auto& cdc{Detector::Description::CDC::Instance()};
+        const auto& ttc{Detector::Description::TTC::Instance()};
+        const auto mmsB{Detector::Description::MMSField::Instance().FastField()};
+        generator.Bias([inPxyCut = (cdc.GasInnerRadius() / 2) * mmsB * c_light,
+                        outPxyCut = (ttc.Radius() / 2) * mmsB * c_light,
+                        cosCut = 1 / muc::hypot(2 * cdc.GasOuterRadius() / cdc.GasOuterLength(), 1.),
+                        epEkCut = cli->get<double>("--ep-ek-soft-upper-bound"),
+                        scPxy = muc::soft_cmp{cli->get<double>("--pxy-softening-factor")},
+                        scCos = muc::soft_cmp{cli->get<double>("--cos-theta-softening-factor")},
+                        scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& momenta) {
+            // .         e+ n   n   e-  e+
+            const auto& [p0, _1, _2, p3, p4]{momenta};
+            const auto p3Seen{scPxy(p3.perp()) > scPxy(outPxyCut) and scCos(muc::abs(p3.cosTheta())) < scCos(cosCut)};
+            const auto p0Miss{scPxy(p0.perp()) < scPxy(inPxyCut) or scCos(muc::abs(p0.cosTheta())) > scCos(cosCut)};
+            const auto p4Miss{scPxy(p4.perp()) < scPxy(inPxyCut) or scCos(muc::abs(p4.cosTheta())) > scCos(cosCut)};
+            const auto p0Low{scEk(p0.e() - electron_mass_c2) < scEk(epEkCut)};
+            const auto p4Low{scEk(p4.e() - electron_mass_c2) < scEk(epEkCut)};
+            return p3Seen and ((p0Miss and p4Low) or (p4Miss and p0Low));
+        });
+    } else if (cli["--ep-ek-bias"] == true) {
+        generator.Bias([epEkCut = cli->get<double>("--ep-ek-soft-upper-bound"),
+                        scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& p) {
+            const auto epEk{p[0].e() - electron_mass_c2};
+            return scEk(epEk) < scEk(epEkCut);
+        });
+    } else if (cli["--emiss-bias"] == true) {
+        generator.Bias([eMissCut = cli->get<double>("--emiss-soft-upper-bound"),
+                        scEMiss = muc::soft_cmp{cli->get<double>("--emiss-softening-factor")}](auto&& momenta) {
+            // .         e+ n   n   e-  e+
+            const auto& [p0, _1, _2, p3, p4]{momenta};
+            const auto eMiss{muon_mass_c2 - (p0.e() + p3.e() + p4.e())};
+            return scEMiss(eMiss) < scEMiss(eMissCut);
+        });
     }
 
-    Mustard::MasterPrint("Burning-in, please wait...");
-    generator.BurnIn();
-    Mustard::MasterPrintLn(" Done.");
-
     Mustard::Executor<unsigned long long> executor;
+    generator.BurnInWithNotice();
     executor(cli->get<unsigned long long>("n"), [&](auto) {
         const auto [weight, pdgID, p]{generator()};
         Mustard::Data::Tuple<Mustard::Data::GeneratedKinematics> event;
