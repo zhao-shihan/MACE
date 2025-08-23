@@ -16,6 +16,8 @@
 #include "Mustard/Utility/PhysicalConstant.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
 
+#include "CLHEP/Random/Random.h"
+
 #include "muc/numeric"
 #include "muc/utility"
 
@@ -34,17 +36,18 @@ GenICMD::GenICMD() :
 
 auto GenICMD::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::CLI::MonteCarloCLI<> cli;
-    cli->add_argument("n").help("Number of events to generate.").nargs(1).scan<'i', unsigned long long>();
+    cli->add_argument("n-event").help("Number of events to generate.").nargs(1).scan<'i', unsigned long long>();
     cli->add_argument("-o", "--output").help("Output file path.").default_value("mu2ennee.root"s).required().nargs(1);
     cli->add_argument("-m", "--output-mode").help("Output file creation mode (see ROOT documentation for details).").default_value("NEW"s).required().nargs(1);
     cli->add_argument("-t", "--output-tree").help("Output tree name.").default_value("mu2ennee"s).required().nargs(1);
     cli->add_argument("-d", "--mcmc-delta").help("Step size in MCMC sampling.").required().nargs(1).scan<'g', double>();
-    cli->add_argument("-x", "--mcmc-discard").help("Number of states discarded between two samples in MCMC sampling.").required().nargs(1).scan<'i', int>();
+    cli->add_argument("-x", "--mcmc-discard").help("Number of states discarded between two samples in MCMC sampling.").required().nargs(1).scan<'i', unsigned>();
     cli->add_argument("-p", "--polarization").help("Parent particle polarization vector").required().nargs(3).scan<'g', double>();
     auto& biasCLI{cli->add_mutually_exclusive_group()};
     biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
     biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for atomic positron kinetic energy.").flag();
     biasCLI.add_argument("--emiss-bias").help("Apply soft upper bound for missing energy.").flag();
+    cli->add_argument("-n", "--n-normalization").help("Number of samples to estimate normalization factor.").nargs(1).scan<'i', unsigned long long>();
     cli->add_argument("--pxy-softening-factor").help("Softening factor for transverse momentum soft cut in --mace-bias.").default_value(0.25_MeV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--cos-theta-softening-factor").help("Softening factor for momentum cosine soft cut in --mace-bias.").default_value(0.025).required().nargs(1).scan<'g', double>();
     cli->add_argument("--ep-ek-soft-upper-bound").help("Soft upper bound for atomic positron kinetic energy in --ep-ek-bias or --mace-bias.").default_value(0_eV).required().nargs(1).scan<'g', double>();
@@ -60,9 +63,11 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     Mustard::Data::Output<Mustard::Data::GeneratedKinematics> writer{cli->get("--output-tree")};
 
     const auto polarization{cli->get<std::vector<double>>("--polarization")};
-    Mustard::InternalConversionMuonDecay generator("mu+", {polarization[0], polarization[1], polarization[2]},
-                                                   cli->get<double>("--mcmc-delta"), cli->get<int>("--mcmc-discard"));
+    const auto mcmcDelta{cli->get<double>("--mcmc-delta")};
+    const auto mcmcDiscard{cli->get<unsigned>("--mcmc-discard")};
+    Mustard::InternalConversionMuonDecay generator("mu+", {polarization[0], polarization[1], polarization[2]}, mcmcDelta, mcmcDiscard);
 
+    bool biased{};
     if (cli["--mace-bias"] == true) {
         const auto& cdc{Detector::Description::CDC::Instance()};
         const auto& ttc{Detector::Description::TTC::Instance()};
@@ -83,12 +88,14 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
             const auto p4Low{scEk(p4.e() - electron_mass_c2) < scEk(epEkCut)};
             return p3Seen and ((p0Miss and p4Low) or (p4Miss and p0Low));
         });
+        biased = true;
     } else if (cli["--ep-ek-bias"] == true) {
         generator.Bias([epEkCut = cli->get<double>("--ep-ek-soft-upper-bound"),
                         scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& p) {
             const auto epEk{p[0].e() - electron_mass_c2};
             return scEk(epEk) < scEk(epEkCut);
         });
+        biased = true;
     } else if (cli["--emiss-bias"] == true) {
         generator.Bias([eMissCut = cli->get<double>("--emiss-soft-upper-bound"),
                         scEMiss = muc::soft_cmp{cli->get<double>("--emiss-softening-factor")}](auto&& momenta) {
@@ -97,19 +104,48 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
             const auto eMiss{muon_mass_c2 - (p0.e() + p3.e() + p4.e())};
             return scEMiss(eMiss) < scEMiss(eMissCut);
         });
+        biased = true;
     }
 
-    Mustard::Executor<unsigned long long> executor;
+    // B(mu -> e nu nu e e) = (3.605327 +/- 0.000076) * 10^-5 (QED LO)
+    constexpr auto fullBR{3.605327e-5};
+    constexpr auto fullBRError{0.000076e-5};
+
+    // Calculate weight scale first
+    Mustard::Executor<unsigned long long> executor{"Generation", "Sample"};
+    const auto nEvent{cli->get<unsigned long long>("n-event")};
+    double branchingRatio;
+    double branchingRatioError;
+    if (not biased) {
+        branchingRatio = fullBR;
+        branchingRatioError = fullBRError;
+    } else {
+        const auto nSample{cli->present("--n-normalization") ?
+                               cli->get<unsigned long long>("--n-normalization") :
+                               nEvent * (mcmcDiscard + 1)};
+        const auto factor{generator.EstimateNormalizationFactor(nSample, executor)};
+        executor.PrintExecutionSummary();
+        if (not generator.CheckNormalizationFactor(factor)) {
+            return EXIT_FAILURE;
+        }
+        branchingRatio = factor.value * fullBR;
+        branchingRatioError = std::hypot(factor.error * fullBR, fullBRError);
+    }
+    Mustard::MasterPrintLn("Branching ratio = {} +/- {}", branchingRatio, branchingRatioError);
+    const auto weightScale{branchingRatio / nEvent};
+
+    // Generate events
+    Mustard::MasterPrintLn("");
     generator.BurnInWithNotice();
-    executor(cli->get<unsigned long long>("n"), [&](auto) {
-        const auto [weight, pdgID, p]{generator()};
+    executor(nEvent, [&, &rng = *CLHEP::HepRandom::getTheEngine()](auto) {
+        const auto [weight, pdgID, p]{generator(rng)};
         Mustard::Data::Tuple<Mustard::Data::GeneratedKinematics> event;
         // 0: e+, 3: e-, 4: e+
         Get<"pdgID">(event) = {pdgID[0], pdgID[3], pdgID[4]};
         Get<"px">(event) = {float(p[0].x()), float(p[3].x()), float(p[4].x())};
         Get<"py">(event) = {float(p[0].y()), float(p[3].y()), float(p[4].y())};
         Get<"pz">(event) = {float(p[0].z()), float(p[3].z()), float(p[4].z())};
-        Get<"w">(event) = weight;
+        Get<"w">(event) = weightScale * weight;
         writer.Fill(event);
     });
     executor.PrintExecutionSummary();
