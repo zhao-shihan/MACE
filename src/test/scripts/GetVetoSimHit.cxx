@@ -39,9 +39,9 @@ auto GetVetoSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
                 .Define("p0z", "p0[2]")};
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
-        {"HitID",    0,                                                                                  20                                                                                  },
-        {"StripID",  0,                                                                                  4500                                                                                },
-        {"ModuleID", 0,                                                                                  4500                                                                                },
+        {"HitID",    0.,                                                                                 10.                                                                                 },
+        {"StripID",  0.,                                                                                 200.                                                                                },
+        {"ModuleID", 0.,                                                                                 11.                                                                                 },
         {"x0x",      df.Min("x0x"),                                                                      df.Max("x0x")                                                                       },
         {"x0y",      df.Min("x0y"),                                                                      df.Max("x0y")                                                                       },
         {"x0z",      df.Min("x0z"),                                                                      df.Max("x0z")                                                                       },

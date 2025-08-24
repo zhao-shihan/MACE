@@ -36,7 +36,7 @@ auto GetECALSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
                 .Define("p0z", "p0[2]")};
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
-        {"ModID", 0,                                                                                640                                                                                   },
+        {"ModID", 0.,                                                                               640.                                                                                  },
         {"xx",    df.Min("xx"),                                                                     df.Max("xx")                                                                          },
         {"yy",    df.Min("yy"),                                                                     df.Max("yy")                                                                          },
         {"zz",    df.Min("zz"),                                                                     df.Max("zz")                                                                          },
@@ -46,12 +46,12 @@ auto GetECALSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
         {"p0x",   df.Min("p0x"),                                                                    df.Max("p0x")                                                                         }, // for SimECAL
         {"p0y",   df.Min("p0y"),                                                                    df.Max("p0y")                                                                         }, // for SimECAL
         {"p0z",   df.Min("p0z"),                                                                    df.Max("p0z")                                                                         }, // for SimECAL
-        {"t",     0,                                                                                std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })        },
-        {"t0",    0,                                                                                std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })      },
+        {"t",     0.,                                                                               std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })        },
+        {"t0",    0.,                                                                               std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })      },
         {"TrkID", 0.,                                                                               std::function([&]() -> double { return *df.Mean("TrkID") + 2 * *df.StdDev("TrkID"); })},
         {"Edep",  std::function([&]() -> double { return *df.Mean("Edep") - *df.StdDev("Edep"); }), std::function([&]() -> double { return *df.Mean("Edep") + *df.StdDev("Edep"); })      }, // for SimECAL
         {"Ek0",   std::function([&]() -> double { return *df.Mean("Ek0") - *df.StdDev("Ek0"); }),   std::function([&]() -> double { return *df.Mean("Ek0") + *df.StdDev("Ek0"); })        }, // for SimECAL
-        {"Ek",    std::function([&]() -> double { return *df.Mean("Ek") - *df.StdDev("Ek"); }),     std::function([&]() -> double { return *df.Mean("Ek") + *df.StdDev("Ek"); })          } // for SimECAL
+        {"Ek",    std::function([&]() -> double { return *df.Mean("Ek") - *df.StdDev("Ek"); }),     std::function([&]() -> double { return *df.Mean("Ek") + *df.StdDev("Ek"); })          }  // for SimECAL
         // {"Edep",  0.,                                                                                 std::function([&]() -> double { return *df.Mean("Edep") + 0.5 * *df.StdDev("Edep"); })},// for SimPhaseI
         // {"Ek0",   0.,                                                                                 std::function([&]() -> double { return *df.Mean("Ek0") + 0.5 * *df.StdDev("Ek0"); })  },// for SimPhaseI
         // {"Ek",    0.,                                                                                 std::function([&]() -> double { return *df.Mean("Ek") + 0.5 * *df.StdDev("Ek"); })    },// for SimPhaseI

@@ -39,6 +39,6 @@
 # for test benchmark
 /run/beamOn 3000
 # for test
-/run/beamOn 300
+#/run/beamOn 300
 
 /Mustard/Run/PrintRunSummary

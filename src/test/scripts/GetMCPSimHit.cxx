@@ -38,26 +38,26 @@ auto GetMCPSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
                 .Define("p0z", "p0[2]")};
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
-        {"TrkID", 0,                                                                                  20                                                                                  },
-        {"xx",    df.Min("xx"),                                                                       df.Max("xx")                                                                        },
-        {"yy",    df.Min("yy"),                                                                       df.Max("yy")                                                                        },
+        {"TrkID", 0.,                                                                                 10.                                                                               },
+        {"xx",    df.Min("xx"),                                                                       df.Max("xx")                                                                      },
+        {"yy",    df.Min("yy"),                                                                       df.Max("yy")                                                                      },
         // {"p0x",   df.Min("p0x"),                                                                      df.Max("p0x")                                                                       },
         // {"p0y",   df.Min("p0y"),                                                                      df.Max("p0y")                                                                       },
         // {"p0z",   df.Min("p0z"),                                                                      df.Max("p0z")                                                                       },
         // {"Ek0",   df.Min("Ek0"),                                                                      df.Max("Ek0")                                                                       },
         // {"Ek",    df.Min("Ek"),                                                                       df.Max("Ek")                                                                        },
         // {"Edep",  0.,                                                                                 std::function([&]() -> double { return *df.Mean("Edep") + 3 * *df.StdDev("Edep"); })},
-        {"t",     0,                                                                                  std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })      },
-        {"t0",    0,                                                                                  std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })    },
-        {"px",    std::function([&]() -> double { return *df.Mean("px") - 3 * *df.StdDev("px"); }),   std::function([&]() -> double { return *df.Mean("px") + 3 * *df.StdDev("px"); })    },
-        {"py",    std::function([&]() -> double { return *df.Mean("py") - 3 * *df.StdDev("py"); }),   std::function([&]() -> double { return *df.Mean("py") + 3 * *df.StdDev("py"); })    },
-        {"pz",    std::function([&]() -> double { return *df.Mean("pz") - 3 * *df.StdDev("pz"); }),   std::function([&]() -> double { return *df.Mean("pz") + 3 * *df.StdDev("pz"); })    },
-        {"p0x",   std::function([&]() -> double { return *df.Mean("p0x") - 3 * *df.StdDev("p0x"); }), std::function([&]() -> double { return *df.Mean("p0x") + 3 * *df.StdDev("p0x"); })  },
-        {"p0y",   std::function([&]() -> double { return *df.Mean("p0y") - 3 * *df.StdDev("p0y"); }), std::function([&]() -> double { return *df.Mean("p0y") + 3 * *df.StdDev("p0y"); })  },
-        {"p0z",   std::function([&]() -> double { return *df.Mean("p0z") - 3 * *df.StdDev("p0z"); }), std::function([&]() -> double { return *df.Mean("p0z") + 3 * *df.StdDev("p0z"); })  },
-        {"x0x",   std::function([&]() -> double { return *df.Mean("x0x") - 2 * *df.StdDev("x0x"); }), std::function([&]() -> double { return *df.Mean("x0x") + 2 * *df.StdDev("x0x"); })  },
-        {"x0y",   std::function([&]() -> double { return *df.Mean("x0y") - 2 * *df.StdDev("x0y"); }), std::function([&]() -> double { return *df.Mean("x0y") + 2 * *df.StdDev("x0y"); })  },
-        {"x0z",   std::function([&]() -> double { return *df.Mean("x0z") - 2 * *df.StdDev("x0z"); }), std::function([&]() -> double { return *df.Mean("x0z") + 2 * *df.StdDev("x0z"); })  }
+        {"t",     0.,                                                                                 std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })    },
+        {"t0",    0.,                                                                                 std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })  },
+        {"px",    std::function([&]() -> double { return *df.Mean("px") - 3 * *df.StdDev("px"); }),   std::function([&]() -> double { return *df.Mean("px") + 3 * *df.StdDev("px"); })  },
+        {"py",    std::function([&]() -> double { return *df.Mean("py") - 3 * *df.StdDev("py"); }),   std::function([&]() -> double { return *df.Mean("py") + 3 * *df.StdDev("py"); })  },
+        {"pz",    std::function([&]() -> double { return *df.Mean("pz") - 3 * *df.StdDev("pz"); }),   std::function([&]() -> double { return *df.Mean("pz") + 3 * *df.StdDev("pz"); })  },
+        {"p0x",   std::function([&]() -> double { return *df.Mean("p0x") - 3 * *df.StdDev("p0x"); }), std::function([&]() -> double { return *df.Mean("p0x") + 3 * *df.StdDev("p0x"); })},
+        {"p0y",   std::function([&]() -> double { return *df.Mean("p0y") - 3 * *df.StdDev("p0y"); }), std::function([&]() -> double { return *df.Mean("p0y") + 3 * *df.StdDev("p0y"); })},
+        {"p0z",   std::function([&]() -> double { return *df.Mean("p0z") - 3 * *df.StdDev("p0z"); }), std::function([&]() -> double { return *df.Mean("p0z") + 3 * *df.StdDev("p0z"); })},
+        {"x0x",   std::function([&]() -> double { return *df.Mean("x0x") - 2 * *df.StdDev("x0x"); }), std::function([&]() -> double { return *df.Mean("x0x") + 2 * *df.StdDev("x0x"); })},
+        {"x0y",   std::function([&]() -> double { return *df.Mean("x0y") - 2 * *df.StdDev("x0y"); }), std::function([&]() -> double { return *df.Mean("x0y") + 2 * *df.StdDev("x0y"); })},
+        {"x0z",   std::function([&]() -> double { return *df.Mean("x0z") - 2 * *df.StdDev("x0z"); }), std::function([&]() -> double { return *df.Mean("x0z") + 2 * *df.StdDev("x0z"); })}
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

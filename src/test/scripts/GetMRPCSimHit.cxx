@@ -39,7 +39,7 @@ auto GetMRPCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
                 .Define("p0z", "p0[2]")};
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
-        {"ModID", 0,                                                                                  8                                                                                   },
+        {"ModID", 0.,                                                                                 8.                                                                                  },
         {"xx",    df.Min("xx"),                                                                       df.Max("xx")                                                                        },
         {"yy",    df.Min("yy"),                                                                       df.Max("yy")                                                                        },
         {"zz",    df.Min("zz"),                                                                       df.Max("zz")                                                                        },
@@ -51,9 +51,9 @@ auto GetMRPCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
         {"p0z",   *df.Min("p0z"),                                                                     *df.Max("p0z")                                                                      },
         {"Ek0",   *df.Min("Ek0"),                                                                     *df.Max("Ek0")                                                                      },
         {"Ek",    *df.Min("Ek"),                                                                      *df.Max("Ek")                                                                       },
-        {"t",     0,                                                                                  std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })      },
+        {"t",     0.,                                                                                 std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })      },
         {"Edep",  0.,                                                                                 std::function([&]() -> double { return *df.Mean("Edep") + 3 * *df.StdDev("Edep"); })},
-        {"t0",    0,                                                                                  std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })    },
+        {"t0",    0.,                                                                                 std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })    },
         {"x0x",   std::function([&]() -> double { return *df.Mean("x0x") - 3 * *df.StdDev("x0x"); }), std::function([&]() -> double { return *df.Mean("x0x") + 3 * *df.StdDev("x0x"); })  },
         {"x0y",   std::function([&]() -> double { return *df.Mean("x0y") - 3 * *df.StdDev("x0y"); }), std::function([&]() -> double { return *df.Mean("x0y") + 3 * *df.StdDev("x0y"); })  },
         {"x0z",   std::function([&]() -> double { return *df.Mean("x0z") - 3 * *df.StdDev("x0z"); }), std::function([&]() -> double { return *df.Mean("x0z") + 3 * *df.StdDev("x0z"); })  }
