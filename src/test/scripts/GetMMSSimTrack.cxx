@@ -21,6 +21,13 @@ auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int 
         moduleDir = dstFile->mkdir(moduleName);
     }
     auto dstDir{moduleDir->mkdir(DataTupleName)};
+    if (!dstDir) {
+        std::cout << "Make TDirectory " << DataTupleName << " Failed. ";
+        if (moduleDir->Get(DataTupleName)) {
+            std::cout << "Already exist." << std::endl;
+            return 1;
+        }
+    }
     std::clog << "Getting " << DataTupleName << " from module: " << moduleName << std::endl;
     dstFile->cd();
     dstDir->cd();
@@ -41,7 +48,7 @@ auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int 
         {"chi2",   0.,               df.Max("chi2")  },
         {"Ek0",    0.,               df.Max("Ek0")   },
         {"r0",     0.,               df.Max("r0")    },
-        {"t0",     0,                df.Max("t0")    },
+        {"t0",     0.,               df.Max("t0")    },
         {"p0x",    df.Min("p0x"),    df.Max("p0x")   },
         {"p0y",    df.Min("p0y"),    df.Max("p0y")   },
         {"p0z",    df.Min("p0z"),    df.Max("p0z")   },
@@ -67,7 +74,10 @@ auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int 
                                    return 0;
                                }};
                                std::clog << "Hist: " << expression << std::endl;
-                               return df.Histo1D({expression.data(), expression.data(), nBinsValueType, Cast(xLow), Cast(xUp)}, expression);
+                               auto xMin{Cast(xLow)};
+                               auto xMax{Cast(xUp)};
+                               auto margin{(xMax - xMin) / nBinsValueType};
+                               return df.Histo1D({expression.data(), expression.data(), nBinsValueType, xMin - margin, xMax + margin}, expression);
                            });
 
     for (auto aHist : histList) {
