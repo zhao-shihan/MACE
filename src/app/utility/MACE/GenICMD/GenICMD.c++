@@ -2,6 +2,7 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/GenICMD/GenICMD.h++"
+#include "MACE/GeneratorAppUtility/MTMGeneratorNormalizationUI.h++"
 
 #include "Mustard/CLHEPX/Random/Xoshiro.h++"
 #include "Mustard/Data/GeneratedEvent.h++"
@@ -47,20 +48,18 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
     biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for atomic positron kinetic energy.").flag();
     biasCLI.add_argument("--emiss-bias").help("Apply soft upper bound for missing energy.").flag();
-    cli->add_argument("-n", "--n-normalization").help("Number of samples to estimate normalization factor.").nargs(1).scan<'i', unsigned long long>();
     cli->add_argument("--pxy-softening-factor").help("Softening factor for transverse momentum soft cut in --mace-bias.").default_value(0.25_MeV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--cos-theta-softening-factor").help("Softening factor for momentum cosine soft cut in --mace-bias.").default_value(0.025).required().nargs(1).scan<'g', double>();
     cli->add_argument("--ep-ek-soft-upper-bound").help("Soft upper bound for atomic positron kinetic energy in --ep-ek-bias or --mace-bias.").default_value(0_eV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--ep-ek-softening-factor").help("Softening factor for atomic positron kinetic energy upper bound in --ep-ek-bias or --mace-bias.").default_value(1_keV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--emiss-soft-upper-bound").help("Soft upper bound for missing energy in --emiss-bias.").default_value(20_MeV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--emiss-softening-factor").help("Softening factor for missing energy upper bound in --emiss-bias.").default_value(2_MeV).required().nargs(1).scan<'g', double>();
+    cli->add_argument("-n", "--n-normalization").help("Number of samples to estimate normalization factor.").nargs(1).scan<'i', unsigned long long>();
+    cli->add_argument("-f", "--normalization-factor").help("Pre-computed normalization factor. Program will skip normalization factor estimation and use this value if set.").nargs(1).scan<'g', double>();
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
     Mustard::UseXoshiro<256> random;
     cli.SeedRandomIfFlagged();
-
-    Mustard::File<TFile> file{cli->get("--output"), cli->get("--output-mode")};
-    Mustard::Data::Output<Mustard::Data::GeneratedKinematics> writer{cli->get("--output-tree")};
 
     const auto polarization{cli->get<std::vector<double>>("--polarization")};
     const auto mcmcDelta{cli->get<double>("--mcmc-delta")};
@@ -109,47 +108,37 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
 
     // B(mu -> e nu nu e e) = (3.605327 +/- 0.000076) * 10^-5 (QED LO)
     constexpr auto fullBR{3.605327e-5};
-    constexpr auto fullBRError{0.000076e-5};
+    constexpr auto fullBRUncertainty{0.000076e-5};
 
     // Calculate weight scale first
     Mustard::Executor<unsigned long long> executor{"Generation", "Sample"};
-    const auto nEvent{cli->get<unsigned long long>("n-event")};
-    double branchingRatio;
-    double branchingRatioError;
-    if (not biased) {
-        branchingRatio = fullBR;
-        branchingRatioError = fullBRError;
-    } else {
-        const auto nSample{cli->present("--n-normalization") ?
-                               cli->get<unsigned long long>("--n-normalization") :
-                               nEvent * (mcmcDiscard + 1)};
-        const auto factor{generator.EstimateNormalizationFactor(nSample, executor)};
-        executor.PrintExecutionSummary();
-        if (not generator.CheckNormalizationFactor(factor)) {
-            return EXIT_FAILURE;
-        }
-        branchingRatio = factor.value * fullBR;
-        branchingRatioError = std::hypot(factor.error * fullBR, fullBRError);
+    const auto weightScale{GeneratorAppUtility::MTMGeneratorNormalizationUI(cli, executor, generator, biased, fullBR, fullBRUncertainty)};
+    if (not weightScale.has_value()) {
+        return EXIT_FAILURE;
     }
-    Mustard::MasterPrintLn("Branching ratio = {} +/- {}", branchingRatio, branchingRatioError);
-    const auto weightScale{branchingRatio / nEvent};
 
     // Generate events
+    const auto nEvent{cli->get<unsigned long long>("n-event")};
+    if (nEvent == 0) {
+        return EXIT_SUCCESS;
+    }
     Mustard::MasterPrintLn("");
+    Mustard::File<TFile> file{cli->get("--output"), cli->get("--output-mode")};
+    Mustard::Data::Output<Mustard::Data::GeneratedKinematics> writer{cli->get("--output-tree")};
     generator.BurnInWithNotice();
     executor(nEvent, [&, &rng = *CLHEP::HepRandom::getTheEngine()](auto) {
         const auto [weight, pdgID, p]{generator(rng)};
         Mustard::Data::Tuple<Mustard::Data::GeneratedKinematics> event;
         // 0: e+, 3: e-, 4: e+
         Get<"pdgID">(event) = {pdgID[0], pdgID[3], pdgID[4]};
+        Get<"E">(event) = {float(p[0].e()), float(p[3].e()), float(p[4].e())};
         Get<"px">(event) = {float(p[0].x()), float(p[3].x()), float(p[4].x())};
         Get<"py">(event) = {float(p[0].y()), float(p[3].y()), float(p[4].y())};
         Get<"pz">(event) = {float(p[0].z()), float(p[3].z()), float(p[4].z())};
-        Get<"w">(event) = weightScale * weight;
+        Get<"w">(event) = *weightScale * weight;
         writer.Fill(event);
     });
     executor.PrintExecutionSummary();
-
     writer.Write();
 
     return EXIT_SUCCESS;
