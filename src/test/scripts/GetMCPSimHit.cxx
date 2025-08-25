@@ -21,6 +21,13 @@ auto GetMCPSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
         moduleDir = dstFile->mkdir(moduleName);
     }
     auto dstDir{moduleDir->mkdir(DataTupleName)};
+    if (!dstDir) {
+        std::cout << "Make TDirectory " << DataTupleName << " Failed. ";
+        if (moduleDir->Get(DataTupleName)) {
+            std::cout << "Already exist." << std::endl;
+            return 1;
+        }
+    }
     std::clog << "Getting " << DataTupleName << " from module: " << moduleName << std::endl;
     dstFile->cd();
     dstDir->cd();

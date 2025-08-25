@@ -28,7 +28,7 @@ const void Judge(double pValue) {
 }
 
 // int main()
-auto TestCDCSimHit(std::string moduleName, std::string testFileName, std::string sampleFileName) {
+auto TestVetoSimHit(std::string moduleName, std::string testFileName, std::string sampleFileName) {
     gErrorIgnoreLevel = kError;
     ROOT::RDataFrame df0("G4Run0/" + dataTupleName, testFileName);
     auto sampleFile{new TFile(sampleFileName.data(), "READ")};
