@@ -8,6 +8,24 @@
 #include <string>
 
 const std::string dataTupleName{"CDCSimHit"};
+const void Judge(double pValue) {
+    const std::string boldBlue = "\033[1;34m";
+    const std::string boldGreen = "\033[1;32m";
+    const std::string boldRed = "\033[1;31m";
+    const std::string boldOrange = "\033[1;33m";
+    const std::string reset = "\033[0m";
+
+    std::clog << "(#) Judgement: ";
+    if (pValue == 0) {
+        std::cout << boldBlue << "IDENTICAL" << reset << " (p = " << pValue << ")" << std::endl;
+    } else if (pValue < 0.05) {
+        std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
+    } else if (pValue < 0.5) {
+        std::cout << boldOrange << "WARN" << reset << " (p = " << pValue << ")" << std::endl;
+    } else {
+        std::cout << boldGreen << "PASS" << reset << " (p = " << pValue << ")" << std::endl;
+    }
+}
 
 // int main()
 auto TestCDCSimHit(std::string moduleName, std::string testFileName, std::string sampleFileName) {
@@ -41,7 +59,7 @@ auto TestCDCSimHit(std::string moduleName, std::string testFileName, std::string
 
     auto histKeyList{sampleDir->GetListOfKeys()};
     std::clog << "Get " << histKeyList->GetEntries() << " entries from sample file." << std::endl;
-
+    int idx{};
     for (auto&& obj : *histKeyList) {
         auto key{(TKey*)obj};
         auto hist{static_cast<TH1D*>(key->ReadObj())};
@@ -51,8 +69,10 @@ auto TestCDCSimHit(std::string moduleName, std::string testFileName, std::string
         auto nBins{hist->GetNbinsX()};
 
         auto testHist{df.Histo1D({"", "", nBins, xMin, xMax}, branchName)};
-        auto pValue{hist->Chi2Test(testHist.GetPtr())};
-        std::clog << "[ ] Column " << branchName << " pValue: " << pValue << std::endl;
+        std::clog << "[" << ++idx << "] " << " Column " << branchName << std::endl;
+        auto pValue{hist->Chi2Test(testHist.GetPtr(), "P")};
+        Judge(pValue);
+        std::cout << "\n";
     }
     std::clog << "Test " << moduleName << " " << dataTupleName << " end." << std::endl;
     return 0;
