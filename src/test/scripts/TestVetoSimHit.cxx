@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-const std::string dataTupleName{"MMSSimTrack"};
+const std::string dataTupleName{"VetoSimHit"};
 const void Judge(double pValue) {
     const std::string boldBlue = "\033[1;34m";
     const std::string boldGreen = "\033[1;32m";
@@ -28,7 +28,7 @@ const void Judge(double pValue) {
 }
 
 // int main()
-auto TestMMSSimTrack(std::string moduleName, std::string testFileName, std::string sampleFileName) {
+auto TestCDCSimHit(std::string moduleName, std::string testFileName, std::string sampleFileName) {
     gErrorIgnoreLevel = kError;
     ROOT::RDataFrame df0("G4Run0/" + dataTupleName, testFileName);
     auto sampleFile{new TFile(sampleFileName.data(), "READ")};
@@ -44,11 +44,15 @@ auto TestMMSSimTrack(std::string moduleName, std::string testFileName, std::stri
 
     std::clog << "[Note] testing. Module: " << moduleName << "DataTuple: " << dataTupleName << std::endl;
 
-    auto df{df0.Define("x0x", "x0[0]")
+    auto df{df0.Define("xx", "x[0]")
+                .Define("yy", "x[1]")
+                .Define("zz", "x[2]")
+                .Define("px", "p[0]")
+                .Define("py", "p[1]")
+                .Define("pz", "p[2]")
+                .Define("x0x", "x0[0]")
                 .Define("x0y", "x0[1]")
                 .Define("x0z", "x0[2]")
-                .Define("c0x", "c0[0]")
-                .Define("c0y", "c0[1]")
                 .Define("p0x", "p0[0]")
                 .Define("p0y", "p0[1]")
                 .Define("p0z", "p0[2]")};

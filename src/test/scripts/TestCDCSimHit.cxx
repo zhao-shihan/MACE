@@ -29,9 +29,6 @@ const void Judge(double pValue) {
 
 // int main()
 auto TestCDCSimHit(std::string moduleName, std::string testFileName, std::string sampleFileName) {
-    // std::string moduleName{"SimMMS_em_flat"};
-    // std::string testFileName{"SimMMS_em_flat1.root"};
-    // std::string sampleFileName{"Sample.root"};
     gErrorIgnoreLevel = kError;
     ROOT::RDataFrame df0("G4Run0/" + dataTupleName, testFileName);
     auto sampleFile{new TFile(sampleFileName.data(), "READ")};
