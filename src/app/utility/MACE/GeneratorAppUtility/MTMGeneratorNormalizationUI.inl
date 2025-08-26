@@ -4,7 +4,7 @@ template<int M, int N, typename A>
 auto MTMGeneratorNormalizationUI(Mustard::Env::CLI::CLI<>& cli,
                                  Mustard::Executor<unsigned long long>& executor,
                                  Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator,
-                                 bool biased, double fullBR, double fullBRUncertainty) -> std::optional<double> {
+                                 bool biased, double fullBR, double fullBRUncertainty) -> double {
     const auto nEvent{cli->get<unsigned long long>("n-event")};
     double branchingRatio;
     double branchingRatioUncertainty;
@@ -18,19 +18,26 @@ auto MTMGeneratorNormalizationUI(Mustard::Env::CLI::CLI<>& cli,
         branchingRatioUncertainty = std::numeric_limits<double>::quiet_NaN();
         Mustard::MasterPrintLn("Using pre-computed normalization factor {}.", normalizationFactor);
     } else {
-        const auto nSample{cli->is_used("--n-normalization") ?
-                               cli->get<unsigned long long>("--n-normalization") :
-                               nEvent * (cli->get<unsigned>("--mcmc-discard") + 1)};
-        const auto factor{generator.EstimateNormalizationFactor(nSample, executor)};
-        executor.PrintExecutionSummary();
-        if (not generator.CheckNormalizationFactor(factor)) {
-            Mustard::MasterPrintWarning("Use option -n or --n-normalization to independently set number of samples used in normalization");
-            return {};
+        struct Mustard::MultipleTryMetropolisGenerator<M, N, A>::IntegrationResult factor;
+        const auto precisionGoal{cli->get<double>("--normalization-precision-goal")};
+        if (cli->is_used("--continue-normalization")) {
+            std::array<struct Mustard::MultipleTryMetropolisGenerator<M, N, A>::IntegrationState, 2> integrationState;
+            const auto inputIntegrationState{cli->get<std::vector<long double>>("--continue-normalization")};
+            integrationState[0].sum[0] = inputIntegrationState[0];
+            integrationState[0].sum[1] = inputIntegrationState[1];
+            integrationState[0].n = inputIntegrationState[2];
+            integrationState[1].sum[0] = inputIntegrationState[3];
+            integrationState[1].sum[1] = inputIntegrationState[4];
+            integrationState[1].n = inputIntegrationState[5];
+            factor = generator.EstimateNormalizationFactor(executor, precisionGoal, integrationState).first;
+        } else {
+            factor = generator.EstimateNormalizationFactor(executor, precisionGoal).first;
         }
         branchingRatio = factor.value * fullBR;
-        branchingRatioUncertainty = std::hypot(factor.uncertainty * fullBR, fullBRUncertainty);
-        Mustard::MasterPrintLn("You can save the normalization factor for future use "
-                               "as long as bias does not change (see option -f or --normalization-factor).");
+        branchingRatioUncertainty = std::hypot(fullBR * factor.uncertainty, factor.value * fullBRUncertainty);
+        Mustard::MasterPrintLn("You can save the normalization factor and integration state for future use "
+                               "as long as bias does not change (see option -f or --normalization-factor, "
+                               "and option --continue-normalization).");
     }
     Mustard::MasterPrintLn("Branching ratio = {} +/- {}", branchingRatio, branchingRatioUncertainty);
     const auto weightScale{branchingRatio / nEvent};
