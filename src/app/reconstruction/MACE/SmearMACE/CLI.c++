@@ -1,7 +1,8 @@
 #include "MACE/SmearMACE/CLI.h++"
 
-#include "Mustard/Math/Parity.h++"
-#include "Mustard/Utility/PrettyLog.h++"
+#include "Mustard/IO/PrettyLog.h++"
+
+#include "muc/math"
 
 #include "fmt/core.h"
 
@@ -113,8 +114,9 @@ auto CLIModule::DatasetIndexRange() const -> std::pair<gsl::index, gsl::index> {
 }
 
 auto CLIModule::OutputFilePath() const -> std::filesystem::path {
-    if (auto output{ArgParser().present("-o")};
-        output) { return *std::move(output); }
+    if (auto output{ArgParser().present("-o")}) {
+        return *std::move(output);
+    }
     auto inputList{InputFilePath()};
     if (inputList.size() > 1) {
         Mustard::PrintError("Cannot automatically construct output file path since # input file path > 1. Use -o or --output");
@@ -131,9 +133,11 @@ auto CLIModule::OutputFilePath() const -> std::filesystem::path {
 
 auto CLIModule::ParseSmearingConfig(std::string_view arg) const -> std::unordered_map<std::string, std::string> {
     auto var{ArgParser().present<std::vector<std::string>>(arg)};
-    if (not var.has_value()) { return {}; }
+    if (not var.has_value()) {
+        return {};
+    }
     std::unordered_map<std::string, std::string> config;
-    assert(Mustard::Math::IsEven(var->size()));
+    assert(muc::even(var->size()));
     for (gsl::index i{}; i < ssize(*var); i += 2) {
         auto [_, inserted]{config.try_emplace(std::move(var->at(i)), std::move(var->at(i + 1)))};
         if (not inserted) {

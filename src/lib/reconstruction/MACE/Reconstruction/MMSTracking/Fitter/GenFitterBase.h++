@@ -13,10 +13,9 @@
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/MPIX/DataType.h++"
+#include "Mustard/IO/CreateTemporaryFile.h++"
 #include "Mustard/Math/Norm.h++"
 #include "Mustard/Utility/ConvertG3G4Unit.h++"
-#include "Mustard/Utility/CreateTemporaryFile.h++"
 #include "Mustard/Utility/InlineMacro.h++"
 
 #include "AbsFitter.h"
@@ -28,6 +27,7 @@
 #include "MeasuredStateOnPlane.h"
 #include "RKTrackRep.h"
 #include "StateOnPlane.h"
+#include "TGeoMaterialInterface.h"
 #include "Track.h"
 #include "TrackPoint.h"
 #include "WireMeasurement.h"
@@ -37,24 +37,23 @@
 
 #include "TDatabasePDG.h"
 #include "TGeoManager.h"
-#include "TGeoMaterialInterface.h"
 #include "TMatrixDSymfwd.h"
 #include "TMatrixTSym.h"
 #include "TVector3.h"
 #include "TVectorD.h"
 
-#include "mpi.h"
+#include "mplr/mplr.hpp"
 
 #include "muc/math"
 #include "muc/numeric"
+#include "muc/ptrvec"
 
 #include "gsl/gsl"
 
+#include <cstddef>
 #include <iterator>
-#include <memory>
 #include <string_view>
 #include <utility>
-#include <vector>
 
 namespace MACE::inline Reconstruction::MMSTracking::inline Fitter {
 
@@ -108,7 +107,7 @@ private:
     double fLowestMomentum;
     bool fEnableEventDisplay;
 
-    std::vector<std::shared_ptr<genfit::Track>> fEventDisplayTrackStore;
+    muc::shared_ptrvec<genfit::Track> fEventDisplayTrackStore;
 
     AFitter fGenFitter;
 };

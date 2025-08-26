@@ -43,11 +43,11 @@ public:
     auto SiPMEnergyBin() const -> const auto& { return fSiPMEnergyBin; }
     auto SiPMQuantumEfficiency() const -> const auto& { return fSiPMQuantumEfficiency; }
     // Reconstruction
-    auto Threshold() const -> const auto { return fThreshold; }
-    auto ClusterLength() const -> const auto { return fClusterLength; }
-    auto ThresholdTime() const -> const auto { return fThresholdTime; }
-    auto TimeWindow() const -> const auto { return fTimeWindow; }
-    auto DeadTime() const -> const auto { return fDeadtime; }
+    auto Threshold() const -> auto { return fThreshold; }
+    auto ClusterLength() const -> auto { return fClusterLength; }
+    auto ThresholdTime() const -> auto { return fThresholdTime; }
+    auto TimeWindow() const -> auto { return fTimeWindow; }
+    auto DeadTime() const -> auto { return fDeadtime; }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 

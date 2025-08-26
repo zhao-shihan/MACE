@@ -4,14 +4,14 @@
 #include "MACE/PhaseI/Simulation/Hit/MRPCHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiSiPMRawHit.h++"
-#include "MACE/Simulation/Hit/ECALHit.h++"
-#include "MACE/Simulation/Hit/ECALPMHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/TTCHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/TTCSiPMHit.h++"
+#include "MACE/Simulation/Hit/ECALHit.h++"
+#include "MACE/Simulation/Hit/ECALPMHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Geant4X/Utility/ConvertGeometry.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -48,10 +48,18 @@ Analysis::Analysis() :
     fMessengerRegister{this} {}
 
 auto Analysis::RunBeginUserAction(int runID) -> void {
-    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID)); }
-    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
-    if (fSaveTTCHitData) { fTTCSimHitOutput.emplace(fmt::format("G4Run{}/TTCSimHit", runID)); }
-    if (fSaveTTCSiPMHitData) { fTTCSiPMHitOutput.emplace(fmt::format("G4Run{}/TTCSiPMHit", runID)); }
+    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) {
+        fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID));
+    }
+    if (TrackingAction::Instance().SaveDecayVertexData()) {
+        fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID));
+    }
+    if (fSaveTTCHitData) {
+        fTTCSimHitOutput.emplace(fmt::format("G4Run{}/TTCSimHit", runID));
+    }
+    if (fSaveTTCSiPMHitData) {
+        fTTCSiPMHitOutput.emplace(fmt::format("G4Run{}/TTCSiPMHit", runID));
+    }
     fMRPCSimHitOutput.emplace(fmt::format("G4Run{}/MRPCSimHit", runID));
     fECALSimHitOutput.emplace(fmt::format("G4Run{}/ECALSimHit", runID));
     fECALPMHitOutput.emplace(fmt::format("G4Run{}/ECALPMHit", runID));
@@ -63,15 +71,33 @@ auto Analysis::EventEndUserAction() -> void {
     const auto mrpcPassed{not fCoincidenceWithMRPC or fMRPCHit == nullptr or fMRPCHit->size() > 0};
     const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or fECALHit->size() > 0};
     if (mrpcPassed and ecalPassed) {
-        if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
-        if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
-        if (fMRPCHit) { fMRPCSimHitOutput->Fill(*fMRPCHit); }
-        if (fECALHit) { fECALSimHitOutput->Fill(*fECALHit); }
-        if (fECALPMHit) { fECALPMHitOutput->Fill(*fECALPMHit); }
-        if (fSciFiHit) { fSciFiHitOutput->Fill(*fSciFiHit); }
-        if (fSciFiSiPMHit) { fSciFiSiPMHitOutput->Fill(*fSciFiSiPMHit); }
-        if (fTTCSimHitOutput) { fTTCSimHitOutput->Fill(*fTTCHit); }
-        if (fTTCSiPMHitOutput) { fTTCSiPMHitOutput->Fill(*fTTCSiPMHit); }
+        if (fPrimaryVertex and fPrimaryVertexOutput) {
+            fPrimaryVertexOutput->Fill(*fPrimaryVertex);
+        }
+        if (fDecayVertex and fDecayVertexOutput) {
+            fDecayVertexOutput->Fill(*fDecayVertex);
+        }
+        if (fMRPCHit) {
+            fMRPCSimHitOutput->Fill(*fMRPCHit);
+        }
+        if (fECALHit) {
+            fECALSimHitOutput->Fill(*fECALHit);
+        }
+        if (fECALPMHit) {
+            fECALPMHitOutput->Fill(*fECALPMHit);
+        }
+        if (fSciFiHit) {
+            fSciFiHitOutput->Fill(*fSciFiHit);
+        }
+        if (fSciFiSiPMHit) {
+            fSciFiSiPMHitOutput->Fill(*fSciFiSiPMHit);
+        }
+        if (fTTCSimHitOutput) {
+            fTTCSimHitOutput->Fill(*fTTCHit);
+        }
+        if (fTTCSiPMHitOutput) {
+            fTTCSiPMHitOutput->Fill(*fTTCSiPMHit);
+        }
     }
     fPrimaryVertex = {};
     fDecayVertex = {};
@@ -86,10 +112,18 @@ auto Analysis::EventEndUserAction() -> void {
 
 auto Analysis::RunEndUserAction(int) -> void {
     // write data
-    if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
-    if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
-    if (fTTCSimHitOutput) { fTTCSimHitOutput->Write(); }
-    if (fTTCSiPMHitOutput) { fTTCSiPMHitOutput->Write(); }
+    if (fPrimaryVertexOutput) {
+        fPrimaryVertexOutput->Write();
+    }
+    if (fDecayVertexOutput) {
+        fDecayVertexOutput->Write();
+    }
+    if (fTTCSimHitOutput) {
+        fTTCSimHitOutput->Write();
+    }
+    if (fTTCSiPMHitOutput) {
+        fTTCSiPMHitOutput->Write();
+    }
     fMRPCSimHitOutput->Write();
     fECALSimHitOutput->Write();
     fECALPMHitOutput->Write();

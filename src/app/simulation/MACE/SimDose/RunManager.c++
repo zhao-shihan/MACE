@@ -5,9 +5,9 @@
 #include "MACE/SimDose/RunManager.h++"
 
 #include "Mustard/Env/BasicEnv.h++"
-#include "Mustard/Extension/Geant4X/Physics/MuonNLODecayPhysics.h++"
-#include "Mustard/Extension/Geant4X/Physics/MuoniumNLODecayPhysics.h++"
-#include "Mustard/Extension/Geant4X/Physics/MuoniumPhysics.h++"
+#include "Mustard/Geant4X/Physics/MuonNLODecayPhysics.h++"
+#include "Mustard/Geant4X/Physics/MuoniumNLODecayPhysics.h++"
+#include "Mustard/Geant4X/Physics/MuoniumPhysics.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4RadioactiveDecayPhysics.hh"

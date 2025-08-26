@@ -93,7 +93,7 @@ auto FindCrossCoordinates(double lID, double rID, double tID, int lNumber, int r
 
         return coordinates;
     } else {
-        throw std::runtime_error{Mustard::PrettyException(fmt::format("Too much ID are negitive!"))};
+        Mustard::Throw<std::runtime_error>(fmt::format("Too much ID are negitive!"));
         return coordinates;
     }
 }
@@ -112,7 +112,9 @@ template<typename... Args>
 auto InSameSubarray(Args... args) -> bool {
     const auto& sciFiTracker{MACE::PhaseI::Detector::Description::SciFiTracker::Instance()};
     std::unordered_set<int> target_ids = {args...};
-    if (target_ids.empty()) { return false; }
+    if (target_ids.empty()) {
+        return false;
+    }
 
     for (const auto& sub : *sciFiTracker.CombinationOfLayer()) {
         std::unordered_set<int> sub_set(sub.begin(), sub.end());
@@ -123,7 +125,8 @@ auto InSameSubarray(Args... args) -> bool {
                 break;
             }
         }
-        if (all_found) return true;
+        if (all_found)
+            return true;
     }
     return false;
 }
@@ -330,8 +333,7 @@ auto PositionTransform(const std::vector<std::vector<std::shared_ptr<Mustard::Da
                     return avaRadius / sciFiTracker.CombinationOfLayer()->at(i).size();
                 }
             }
-            throw std::logic_error{Mustard::PrettyException(fmt::format(
-                "nLayer Out of range"))};
+            Mustard::Throw<std::logic_error>("nLayer Out of range");
         }();
         double y0 = 0;
         for (auto&& hit : cluster) {

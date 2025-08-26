@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Mustard/Env/CLI/Module/Geant4ReferencePhysicsListModule.h++"
-#include "Mustard/Extension/Geant4X/Run/MPIRunManager.h++"
+#include "Mustard/Geant4X/Run/MPIRunManager.h++"
 
 #include <memory>
 

@@ -13,12 +13,14 @@
 
 #include "G4Types.hh"
 
+#include "muc/ptrvec"
+
 #include "gsl/gsl"
 
 #include <filesystem>
-#include <memory>
 #include <optional>
 #include <utility>
+#include <vector>
 
 class TFile;
 
@@ -46,8 +48,8 @@ public:
     auto SaveTTCHitData(bool val) -> void { fSaveTTCHitData = val; }
     auto SaveTTCSiPMHitData(bool val) -> void { fSaveTTCSiPMHitData = val; }
 
-    auto SubmitPrimaryVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>>& data) -> void { fPrimaryVertex = &data; }
-    auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
+    auto SubmitPrimaryVertexData(const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>& data) -> void { fPrimaryVertex = &data; }
+    auto SubmitDecayVertexData(const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>& data) -> void { fDecayVertex = &data; }
     auto SubmitMRPCHC(const std::vector<gsl::owner<MRPCHit*>>& hc) -> void { fMRPCHit = &hc; }
     auto SubmitECALHC(const std::vector<gsl::owner<ECALHit*>>& hc) -> void { fECALHit = &hc; }
     auto SubmitECALPMHC(const std::vector<gsl::owner<ECALPMHit*>>& hc) -> void { fECALPMHit = &hc; }
@@ -76,8 +78,8 @@ private:
     std::optional<Mustard::Data::Output<Data::TTCSimHit>> fTTCSimHitOutput;
     std::optional<Mustard::Data::Output<Data::TTCSiPMHit>> fTTCSiPMHitOutput;
 
-    const std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>>* fPrimaryVertex;
-    const std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>>* fDecayVertex;
+    const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>* fPrimaryVertex;
+    const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>* fDecayVertex;
     const std::vector<gsl::owner<MRPCHit*>>* fMRPCHit;
     const std::vector<gsl::owner<ECALHit*>>* fECALHit;
     const std::vector<gsl::owner<ECALPMHit*>>* fECALPMHit;
