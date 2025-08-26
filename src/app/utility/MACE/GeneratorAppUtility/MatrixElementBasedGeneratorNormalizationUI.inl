@@ -1,21 +1,19 @@
 namespace MACE::GeneratorAppUtility {
 
 template<int M, int N, typename A>
-auto MTMGeneratorNormalizationUI(Mustard::Env::CLI::CLI<>& cli,
-                                 Mustard::Executor<unsigned long long>& executor,
-                                 Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator,
-                                 bool biased, double fullBR, double fullBRUncertainty) -> double {
-    const auto nEvent{cli->get<unsigned long long>("n-event")};
-    double branchingRatio;
-    double branchingRatioUncertainty;
+auto MatrixElementBasedGeneratorNormalizationUI(Mustard::Env::CLI::CLI<>& cli,
+                                                Mustard::Executor<unsigned long long>& executor,
+                                                Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator,
+                                                bool biased, double fullBR, double fullBRUncertainty) -> BranchingRatio {
+    BranchingRatio bR;
     if (not biased) {
-        branchingRatio = fullBR;
-        branchingRatioUncertainty = fullBRUncertainty;
+        bR.value = fullBR;
+        bR.uncertainty = fullBRUncertainty;
         Mustard::MasterPrintLn("No bias has been set.");
     } else if (cli->is_used("--normalization-factor")) {
         const auto normalizationFactor{cli->get<double>("--normalization-factor")};
-        branchingRatio = normalizationFactor * fullBR;
-        branchingRatioUncertainty = std::numeric_limits<double>::quiet_NaN();
+        bR.value = normalizationFactor * fullBR;
+        bR.uncertainty = std::numeric_limits<double>::quiet_NaN();
         Mustard::MasterPrintLn("Using pre-computed normalization factor {}.", normalizationFactor);
     } else {
         struct Mustard::MultipleTryMetropolisGenerator<M, N, A>::IntegrationResult factor;
@@ -33,16 +31,15 @@ auto MTMGeneratorNormalizationUI(Mustard::Env::CLI::CLI<>& cli,
         } else {
             factor = generator.EstimateNormalizationFactor(executor, precisionGoal).first;
         }
-        branchingRatio = factor.value * fullBR;
-        branchingRatioUncertainty = std::hypot(fullBR * factor.uncertainty, factor.value * fullBRUncertainty);
-        Mustard::MasterPrintLn("You can save the normalization factor and integration state for future use as long as "
+        bR.value = factor.value * fullBR;
+        bR.uncertainty = std::hypot(fullBR * factor.uncertainty, factor.value * fullBRUncertainty);
+        Mustard::MasterPrintLn("You can save the above normalization factor and integration state for future use as long as "
                                "bias does not change (see option --normalization-factor and --continue-normalization).");
     }
     Mustard::MasterPrintLn("Branching ratio:\n"
-                           "  {} +/- {}",
-                           branchingRatio, branchingRatioUncertainty);
-    const auto weightScale{branchingRatio / nEvent};
-    return weightScale;
+                           "  {} +/- {}  (rel. unc.: {:.2}%)",
+                           bR.value, bR.uncertainty, bR.uncertainty / bR.value * 100);
+    return bR;
 }
 
 } // namespace MACE::GeneratorAppUtility

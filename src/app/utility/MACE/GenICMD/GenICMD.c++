@@ -2,7 +2,7 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/GenICMD/GenICMD.h++"
-#include "MACE/GeneratorAppUtility/MTMGeneratorNormalizationUI.h++"
+#include "MACE/GeneratorAppUtility/MatrixElementBasedGeneratorNormalizationUI.h++"
 
 #include "Mustard/CLHEPX/Random/Xoshiro.h++"
 #include "Mustard/Data/GeneratedEvent.h++"
@@ -33,17 +33,17 @@ using namespace Mustard::PhysicalConstant;
 using namespace std::string_literals;
 
 GenICMD::GenICMD() :
-    Subprogram{"GenICMD", "Generate internal conversion muon decay (mu->ennee) events for physical study or test."} {}
+    Subprogram{"GenICMD", "Generate internal conversion muon decay (mu->ennee) events."} {}
 
 auto GenICMD::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::CLI::MonteCarloCLI<> cli;
-    cli->add_argument("n-event").help("Number of events to generate.").nargs(1).scan<'i', unsigned long long>();
-    cli->add_argument("-o", "--output").help("Output file path.").default_value("mu2ennee.root"s).required().nargs(1);
-    cli->add_argument("-m", "--output-mode").help("Output file creation mode (see ROOT documentation for details).").default_value("NEW"s).required().nargs(1);
-    cli->add_argument("-t", "--output-tree").help("Output tree name.").default_value("mu2ennee"s).required().nargs(1);
     cli->add_argument("-d", "--mcmc-delta").help("Step size in MCMC sampling.").required().nargs(1).scan<'g', double>();
     cli->add_argument("-x", "--mcmc-discard").help("Number of states discarded between two samples in MCMC sampling.").required().nargs(1).scan<'i', unsigned>();
     cli->add_argument("-p", "--polarization").help("Parent particle polarization vector").required().nargs(3).scan<'g', double>();
+    cli->add_argument("-n", "--n-generate").help("Number of events to generate. Program will skip event generation if not set.").nargs(1).scan<'i', unsigned long long>();
+    cli->add_argument("-o", "--output").help("Output file path.").default_value("mu2ennee.root"s).required().nargs(1);
+    cli->add_argument("-m", "--output-mode").help("Output file creation mode (see ROOT documentation for details).").default_value("NEW"s).required().nargs(1);
+    cli->add_argument("-t", "--output-tree").help("Output tree name.").default_value("mu2ennee"s).required().nargs(1);
     auto& biasCLI{cli->add_mutually_exclusive_group()};
     biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
     biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for atomic positron kinetic energy.").flag();
@@ -110,22 +110,23 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     constexpr auto fullBR{3.605327e-5};
     constexpr auto fullBRUncertainty{0.000076e-5};
 
-    // Calculate weight scale first
+    // Calculate branching ratio first
     Mustard::Executor<unsigned long long> executor{"Generation", "Sample"};
-    const auto weightScale{GeneratorAppUtility::MTMGeneratorNormalizationUI(cli, executor, generator, biased, fullBR, fullBRUncertainty)};
+    const auto [branchingRatio, _]{GeneratorAppUtility::MatrixElementBasedGeneratorNormalizationUI(
+        cli, executor, generator, biased, fullBR, fullBRUncertainty)};
 
     // Return if nothing to be generated
-    const auto nEvent{cli->get<unsigned long long>("n-event")};
-    if (nEvent == 0) {
+    if (not cli->is_used("--n-generate")) {
         return EXIT_SUCCESS;
     }
+    Mustard::MasterPrintLn("");
 
     // Generate events
-    Mustard::MasterPrintLn("");
     Mustard::File<TFile> file{cli->get("--output"), cli->get("--output-mode")};
     Mustard::Data::Output<Mustard::Data::GeneratedKinematics> writer{cli->get("--output-tree")};
-    generator.BurnIn();
-    executor(nEvent, [&, &rng = *CLHEP::HepRandom::getTheEngine()](auto) {
+    auto& rng{*CLHEP::HepRandom::getTheEngine()};
+    generator.BurnIn(rng);
+    executor(cli->get<unsigned long long>("--n-generate"), [&](auto) {
         const auto [weight, pdgID, p]{generator(rng)};
         Mustard::Data::Tuple<Mustard::Data::GeneratedKinematics> event;
         // 0: e+, 3: e-, 4: e+
@@ -134,7 +135,7 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
         Get<"px">(event) = {float(p[0].x()), float(p[3].x()), float(p[4].x())};
         Get<"py">(event) = {float(p[0].y()), float(p[3].y()), float(p[4].y())};
         Get<"pz">(event) = {float(p[0].z()), float(p[3].z()), float(p[4].z())};
-        Get<"w">(event) = weightScale * weight;
+        Get<"w">(event) = branchingRatio * weight;
         writer.Fill(event);
     });
     executor.PrintExecutionSummary();
