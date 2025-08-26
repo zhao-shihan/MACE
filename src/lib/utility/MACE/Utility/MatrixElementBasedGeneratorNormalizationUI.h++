@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Utility/MatrixElementBasedGeneratorCLI.h++"
+
 #include "Mustard/CLI/CLI.h++"
 #include "Mustard/Execution/Executor.h++"
 #include "Mustard/IO/PrettyLog.h++"
@@ -12,7 +14,7 @@
 #include <cmath>
 #include <limits>
 
-namespace MACE::GeneratorAppUtility {
+namespace MACE::inline Utility {
 
 struct BranchingRatio {
     double value;
@@ -20,11 +22,11 @@ struct BranchingRatio {
 };
 
 template<int M, int N, typename A>
-auto MatrixElementBasedGeneratorNormalizationUI(Mustard::CLI::CLI<>& cli,
+auto MatrixElementBasedGeneratorNormalizationUI(const Mustard::CLI::CLI<>& cli,
                                                 Mustard::Executor<unsigned long long>& executor,
                                                 Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator,
                                                 bool biased, double fullBR, double fullBRUncertainty) -> BranchingRatio;
 
-} // namespace MACE::GeneratorAppUtility
+} // namespace MACE::inline Utility
 
-#include "MACE/GeneratorAppUtility/MatrixElementBasedGeneratorNormalizationUI.inl"
+#include "MACE/Utility/MatrixElementBasedGeneratorNormalizationUI.inl"

@@ -2,10 +2,10 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/GenICMD/GenICMD.h++"
-#include "MACE/GeneratorAppUtility/MatrixElementBasedGeneratorNormalizationUI.h++"
+#include "MACE/Utility/MatrixElementBasedGeneratorNormalizationUI.h++"
+#include "MACE/Utility/MultipleTryMetropolisGeneratorCLI.h++"
 
 #include "Mustard/CLHEPX/Random/Xoshiro.h++"
-#include "Mustard/CLI/MonteCarloCLI.h++"
 #include "Mustard/Data/GeneratedEvent.h++"
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Env/MPIEnv.h++"
@@ -36,11 +36,7 @@ GenICMD::GenICMD() :
     Subprogram{"GenICMD", "Generate internal conversion muon decay (mu->ennee) events."} {}
 
 auto GenICMD::Main(int argc, char* argv[]) const -> int {
-    Mustard::CLI::MonteCarloCLI<> cli;
-    cli->add_argument("-d", "--mcmc-delta").help("Step size in MCMC sampling.").required().nargs(1).scan<'g', double>();
-    cli->add_argument("-x", "--mcmc-discard").help("Number of states discarded between two samples in MCMC sampling.").required().nargs(1).scan<'i', unsigned>();
-    cli->add_argument("-p", "--polarization").help("Parent particle polarization vector").required().nargs(3).scan<'g', double>();
-    cli->add_argument("-n", "--n-generate").help("Number of events to generate. Program will skip event generation if not set.").nargs(1).scan<'i', unsigned long long>();
+    MultipleTryMetropolisGeneratorCLI<> cli;
     cli->add_argument("-o", "--output").help("Output file path.").default_value("mu2ennee.root"s).required().nargs(1);
     cli->add_argument("-m", "--output-mode").help("Output file creation mode (see ROOT documentation for details).").default_value("NEW"s).required().nargs(1);
     cli->add_argument("-t", "--output-tree").help("Output tree name.").default_value("mu2ennee"s).required().nargs(1);
@@ -54,17 +50,12 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     cli->add_argument("--ep-ek-softening-factor").help("Softening factor for atomic positron kinetic energy upper bound in --ep-ek-bias or --mace-bias.").default_value(1_keV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--emiss-soft-upper-bound").help("Soft upper bound for missing energy in --emiss-bias.").default_value(0_MeV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--emiss-softening-factor").help("Softening factor for missing energy upper bound in --emiss-bias.").default_value(1_MeV).required().nargs(1).scan<'g', double>();
-    cli->add_argument("--normalization-factor").help("Pre-computed normalization factor. Program will skip normalization and use this value if set.").nargs(1).scan<'g', double>();
-    cli->add_argument("--normalization-precision-goal").help("Precision goal for normalization.").default_value(0.01).required().nargs(1).scan<'g', double>();
-    cli->add_argument("--continue-normalization").help("Integration state for continuing normalization.").nargs(6).scan<'g', long double>();
     Mustard::Env::MPIEnv env{argc, argv, cli};
-
     Mustard::UseXoshiro<256> random{cli};
 
-    const auto polarization{cli->get<std::vector<double>>("--polarization")};
-    const auto mcmcDelta{cli->get<double>("--mcmc-delta")};
-    const auto mcmcDiscard{cli->get<unsigned>("--mcmc-discard")};
-    Mustard::InternalConversionMuonDecay generator("mu+", {polarization[0], polarization[1], polarization[2]}, mcmcDelta, mcmcDiscard);
+    Mustard::InternalConversionMuonDecay generator("mu+", cli.Polarization(),
+                                                   cli->get<double>("--mcmc-delta"),
+                                                   cli->get<unsigned>("--mcmc-discard"));
 
     bool biased{};
     if (cli["--mace-bias"] == true) {
@@ -112,11 +103,11 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
 
     // Calculate branching ratio first
     Mustard::Executor<unsigned long long> executor{"Generation", "Sample"};
-    const auto [branchingRatio, _]{GeneratorAppUtility::MatrixElementBasedGeneratorNormalizationUI(
+    const auto [branchingRatio, _]{MatrixElementBasedGeneratorNormalizationUI(
         cli, executor, generator, biased, fullBR, fullBRUncertainty)};
 
     // Return if nothing to be generated
-    if (not cli->is_used("--n-generate")) {
+    if (not cli->is_used("--generate")) {
         return EXIT_SUCCESS;
     }
     Mustard::MasterPrintLn("");
@@ -126,7 +117,7 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     Mustard::Data::Output<Mustard::Data::GeneratedKinematics> writer{cli->get("--output-tree")};
     auto& rng{*CLHEP::HepRandom::getTheEngine()};
     generator.BurnIn(rng);
-    executor(cli->get<unsigned long long>("--n-generate"), [&](auto) {
+    executor(cli->get<unsigned long long>("--generate"), [&](auto) {
         const auto [weight, pdgID, p]{generator(rng)};
         Mustard::Data::Tuple<Mustard::Data::GeneratedKinematics> event;
         // 0: e+, 3: e-, 4: e+
