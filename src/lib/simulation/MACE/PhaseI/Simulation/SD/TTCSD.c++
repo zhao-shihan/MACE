@@ -2,7 +2,7 @@
 #include "MACE/PhaseI/Simulation/SD/TTCSD.h++"
 #include "MACE/PhaseI/Simulation/SD/TTCSiPMSD.h++"
 
-#include "Mustard/Utility/PrettyLog.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -36,7 +36,6 @@
 namespace MACE::PhaseI::inline Simulation::inline SD {
 
 TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fTTCSiPMSD{ttcSiPMSD},
     fEnergyDepositionThreshold{},
@@ -140,7 +139,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + triggerTimeWindow};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     triggerTimeWindow != 0) [[unlikely]] {
-                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, triggerTimeWindow));
+                    Mustard::PrintWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, triggerTimeWindow));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {

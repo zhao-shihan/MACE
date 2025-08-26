@@ -1,7 +1,6 @@
 #include "MACE/PhaseI/Detector/Definition/TTC.h++"
 #include "MACE/PhaseI/Detector/Description/TTC.h++"
 
-#include "Mustard/Math/Parity.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/VectorCast.h++"
 

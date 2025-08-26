@@ -2,8 +2,6 @@
 
 #include "MACE/PhaseI/Simulation/Hit/TTCHit.h++"
 
-#include "Mustard/Utility/NonMoveableBase.h++"
-
 #include "G4VSensitiveDetector.hh"
 
 #include <memory>
@@ -14,8 +12,7 @@ namespace MACE::PhaseI::inline Simulation::inline SD {
 
 class TTCSiPMSD;
 
-class TTCSD : public Mustard::NonMoveableBase,
-              public G4VSensitiveDetector {
+class TTCSD : public G4VSensitiveDetector {
 public:
     TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD = {});
 

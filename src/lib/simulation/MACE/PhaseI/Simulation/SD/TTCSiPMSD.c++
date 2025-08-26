@@ -16,7 +16,6 @@
 namespace MACE::PhaseI::inline Simulation::inline SD {
 
 TTCSiPMSD::TTCSiPMSD(const G4String& sdName) :
-    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fHit{},
     fHitsCollection{} {
