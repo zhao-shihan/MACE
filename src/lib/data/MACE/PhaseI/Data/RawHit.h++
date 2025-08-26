@@ -17,4 +17,9 @@ using MRPCRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<double, "t", "Hit time">,
     Mustard::Data::Value<muc::array3f, "x", "Hit position">>;
 
+using TTCRawHit = Mustard::Data::TupleModel<
+    Mustard::Data::Value<short, "TileID", "Hit detector ID">,
+    Mustard::Data::Value<double, "t", "Hit time">,
+    Mustard::Data::Value<float, "Edep", "Energy deposition">>;
+
 } // namespace MACE::PhaseI::Data

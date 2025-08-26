@@ -23,4 +23,9 @@ using MRPCHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     MRPCRawHit>;
 
+using TTCHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    TTCRawHit,
+    Mustard::Data::Value<bool, "Good", "Good flag">>;
+
 } // namespace MACE::PhaseI::Data

@@ -26,6 +26,8 @@ namespace MACE::PhaseI::inline Simulation::inline Hit {
 class MRPCHit;
 class SciFiHit;
 class SciFiSiPMRawHit;
+class TTCHit;
+class TTCSiPMHit;
 } // namespace MACE::PhaseI::inline Simulation::inline Hit
 
 namespace MACE::inline Simulation::inline Hit {
@@ -41,6 +43,8 @@ public:
 
     auto CoincidenceWithMRPC(G4bool val) -> void { fCoincidenceWithMRPC = val; }
     auto CoincidenceWithECAL(G4bool val) -> void { fCoincidenceWithECAL = val; }
+    auto SaveTTCHitData(bool val) -> void { fSaveTTCHitData = val; }
+    auto SaveTTCSiPMHitData(bool val) -> void { fSaveTTCSiPMHitData = val; }
 
     auto SubmitPrimaryVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>>& data) -> void { fPrimaryVertex = &data; }
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
@@ -49,6 +53,8 @@ public:
     auto SubmitECALPMHC(const std::vector<gsl::owner<ECALPMHit*>>& hc) -> void { fECALPMHit = &hc; }
     auto SubmitSciFiHC(const std::vector<gsl::owner<SciFiHit*>>& hc) -> void { fSciFiHit = &hc; }
     auto SubmitSciFiSiPMHC(const std::vector<gsl::owner<SciFiSiPMRawHit*>>& hc) -> void { fSciFiSiPMHit = &hc; }
+    auto SubmitTTCHC(const std::vector<gsl::owner<TTCHit*>>& hc) -> void { fTTCHit = &hc; }
+    auto SubmitTTCSiPMHC(const std::vector<gsl::owner<TTCSiPMHit*>>& hc) -> void { fTTCSiPMHit = &hc; }
 
     auto RunBeginUserAction(int runID) -> void override;
     auto EventEndUserAction() -> void override;
@@ -57,6 +63,8 @@ public:
 private:
     G4bool fCoincidenceWithMRPC;
     G4bool fCoincidenceWithECAL;
+    bool fSaveTTCHitData;
+    bool fSaveTTCSiPMHitData;
 
     std::optional<Mustard::Data::Output<MACE::Data::SimPrimaryVertex>> fPrimaryVertexOutput;
     std::optional<Mustard::Data::Output<MACE::Data::SimDecayVertex>> fDecayVertexOutput;
@@ -65,6 +73,8 @@ private:
     std::optional<Mustard::Data::Output<MACE::Data::ECALPMHit>> fECALPMHitOutput;
     std::optional<Mustard::Data::Output<MACE::PhaseI::Data::SciFiSimHit>> fSciFiHitOutput;
     std::optional<Mustard::Data::Output<MACE::PhaseI::Data::SciFiSiPMRawHit>> fSciFiSiPMHitOutput;
+    std::optional<Mustard::Data::Output<Data::TTCSimHit>> fTTCSimHitOutput;
+    std::optional<Mustard::Data::Output<Data::TTCSiPMHit>> fTTCSiPMHitOutput;
 
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>>* fPrimaryVertex;
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>>* fDecayVertex;
@@ -73,6 +83,8 @@ private:
     const std::vector<gsl::owner<ECALPMHit*>>* fECALPMHit;
     const std::vector<gsl::owner<SciFiHit*>>* fSciFiHit;
     const std::vector<gsl::owner<SciFiSiPMRawHit*>>* fSciFiSiPMHit;
+    const std::vector<gsl::owner<TTCHit*>>* fTTCHit;
+    const std::vector<gsl::owner<TTCSiPMHit*>>* fTTCSiPMHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };
