@@ -59,8 +59,7 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     cli->add_argument("--continue-normalization").help("Integration state for continuing normalization.").nargs(6).scan<'g', long double>();
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
-    Mustard::UseXoshiro<256> random;
-    cli.SeedRandomIfFlagged();
+    Mustard::UseXoshiro<256> random{cli};
 
     const auto polarization{cli->get<std::vector<double>>("--polarization")};
     const auto mcmcDelta{cli->get<double>("--mcmc-delta")};
