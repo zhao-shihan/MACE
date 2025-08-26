@@ -34,7 +34,6 @@ SmearMACE::SmearMACE() :
 auto SmearMACE::Main(int argc, char* argv[]) const -> int {
     CLI cli;
     Mustard::Env::MPIEnv env{argc, argv, cli};
-
     Mustard::UseXoshiro<256> random{cli};
     gInterpreter->ProcessLine(R"(
         const auto Gauss{
