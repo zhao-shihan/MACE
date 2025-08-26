@@ -4,10 +4,10 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include "muc/hash_map"
 #include "muc/ptrvec"
 
-#include <unordered_map>
-#include <utility>
+#include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -19,10 +19,10 @@ public:
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
-    auto NOpticalPhotonHit() const -> std::unordered_map<int, std::vector<int>>;
+    auto NOpticalPhotonHit() const -> muc::flat_hash_map<int, std::vector<int>>;
 
 protected:
-    std::unordered_map<int, muc::unique_ptrvec<TTCSiPMHit>> fHit;
+    muc::flat_hash_map<int, muc::unique_ptrvec<TTCSiPMHit>> fHit;
     TTCSiPMHitCollection* fHitsCollection;
 };
 

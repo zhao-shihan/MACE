@@ -9,11 +9,11 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include "muc/hash_map"
 #include "muc/ptrvec"
 
 #include <algorithm>
-#include <cmath>
-#include <unordered_map>
+#include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -33,7 +33,7 @@ protected:
     double fMeanDriftVelocity;
     const std::vector<Detector::Description::CDC::CellInformation>* fCellMap;
 
-    std::unordered_map<int, muc::unique_ptrvec<CDCHit>> fSplitHit;
+    muc::flat_hash_map<int, muc::unique_ptrvec<CDCHit>> fSplitHit;
     CDCHitCollection* fHitsCollection;
 
     CDCSDMessenger::Register<CDCSD> fMessengerRegister;

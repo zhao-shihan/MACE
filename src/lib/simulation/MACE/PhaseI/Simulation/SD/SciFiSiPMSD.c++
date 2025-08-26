@@ -65,8 +65,8 @@ auto SciFiSiPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
 }
 
-auto SciFiSiPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
-    std::unordered_map<int, int> nHit;
+auto SciFiSiPMSD::NOpticalPhotonHit() const -> muc::flat_hash_map<int, int> {
+    muc::flat_hash_map<int, int> nHit;
     for (auto&& [siPMID, hit] : fHit) {
         if (hit.size() > 0) {
             nHit[siPMID] = hit.size();

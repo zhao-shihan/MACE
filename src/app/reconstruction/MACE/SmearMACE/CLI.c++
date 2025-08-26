@@ -131,12 +131,12 @@ auto CLIModule::OutputFilePath() const -> std::filesystem::path {
     return input.replace_extension().concat("_smeared").replace_extension(extension);
 }
 
-auto CLIModule::ParseSmearingConfig(std::string_view arg) const -> std::unordered_map<std::string, std::string> {
+auto CLIModule::ParseSmearingConfig(std::string_view arg) const -> muc::flat_hash_map<std::string, std::string> {
     auto var{ArgParser().present<std::vector<std::string>>(arg)};
     if (not var.has_value()) {
         return {};
     }
-    std::unordered_map<std::string, std::string> config;
+    muc::flat_hash_map<std::string, std::string> config;
     assert(muc::even(var->size()));
     for (gsl::index i{}; i < ssize(*var); i += 2) {
         auto [_, inserted]{config.try_emplace(std::move(var->at(i)), std::move(var->at(i + 1)))};

@@ -5,11 +5,12 @@
 #include "Mustard/Env/CLI/Module/ModuleBase.h++"
 #include "Mustard/Env/CLI/Module/MonteCarloModule.h++"
 
+#include "muc/hash_map"
+
 #include "gsl/gsl"
 
 #include <filesystem>
 #include <string>
-#include <unordered_map>
 #include <utility>
 
 namespace MACE::SmearMACE {
@@ -45,7 +46,7 @@ public:
     auto ECALSimHitNameFormat() const -> auto { return ArgParser().present("--ecal-hit-name").value_or("G4Run{}/ECALSimHit"); }
 
 private:
-    auto ParseSmearingConfig(std::string_view arg) const -> std::unordered_map<std::string, std::string>;
+    auto ParseSmearingConfig(std::string_view arg) const -> muc::flat_hash_map<std::string, std::string>;
 };
 
 using CLI = Mustard::Env::CLI::CLI<Mustard::Env::CLI::BasicModule,

@@ -79,8 +79,8 @@ auto ECALPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
 }
 
-auto ECALPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
-    std::unordered_map<int, int> nHit;
+auto ECALPMSD::NOpticalPhotonHit() const -> muc::flat_hash_map<int, int> {
+    muc::flat_hash_map<int, int> nHit;
     for (auto&& [modID, hit] : fHit) {
         if (hit.size() > 0) {
             nHit[modID] = hit.size();
