@@ -54,7 +54,7 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     cli->add_argument("--ep-ek-softening-factor").help("Softening factor for atomic positron kinetic energy upper bound in --ep-ek-bias or --mace-bias.").default_value(1_keV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--emiss-soft-upper-bound").help("Soft upper bound for missing energy in --emiss-bias.").default_value(0_MeV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--emiss-softening-factor").help("Softening factor for missing energy upper bound in --emiss-bias.").default_value(1_MeV).required().nargs(1).scan<'g', double>();
-    cli->add_argument("-f", "--normalization-factor").help("Pre-computed normalization factor. Program will skip normalization and use this value if set.").nargs(1).scan<'g', double>();
+    cli->add_argument("--normalization-factor").help("Pre-computed normalization factor. Program will skip normalization and use this value if set.").nargs(1).scan<'g', double>();
     cli->add_argument("--normalization-precision-goal").help("Precision goal for normalization.").default_value(0.01).required().nargs(1).scan<'g', double>();
     cli->add_argument("--continue-normalization").help("Integration state for continuing normalization.").nargs(6).scan<'g', long double>();
     Mustard::Env::MPIEnv env{argc, argv, cli};

@@ -35,11 +35,12 @@ auto MTMGeneratorNormalizationUI(Mustard::Env::CLI::CLI<>& cli,
         }
         branchingRatio = factor.value * fullBR;
         branchingRatioUncertainty = std::hypot(fullBR * factor.uncertainty, factor.value * fullBRUncertainty);
-        Mustard::MasterPrintLn("You can save the normalization factor and integration state for future use "
-                               "as long as bias does not change (see option -f or --normalization-factor, "
-                               "and option --continue-normalization).");
+        Mustard::MasterPrintLn("You can save the normalization factor and integration state for future use as long as "
+                               "bias does not change (see option --normalization-factor and --continue-normalization).");
     }
-    Mustard::MasterPrintLn("Branching ratio = {} +/- {}", branchingRatio, branchingRatioUncertainty);
+    Mustard::MasterPrintLn("Branching ratio:\n"
+                           "  {} +/- {}",
+                           branchingRatio, branchingRatioUncertainty);
     const auto weightScale{branchingRatio / nEvent};
     return weightScale;
 }
