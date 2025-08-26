@@ -5,9 +5,9 @@
 #include "MACE/GeneratorAppUtility/MatrixElementBasedGeneratorNormalizationUI.h++"
 
 #include "Mustard/CLHEPX/Random/Xoshiro.h++"
+#include "Mustard/CLI/MonteCarloCLI.h++"
 #include "Mustard/Data/GeneratedEvent.h++"
 #include "Mustard/Data/Output.h++"
-#include "Mustard/Env/CLI/MonteCarloCLI.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Execution/Executor.h++"
 #include "Mustard/IO/File.h++"
@@ -36,7 +36,7 @@ GenICMD::GenICMD() :
     Subprogram{"GenICMD", "Generate internal conversion muon decay (mu->ennee) events."} {}
 
 auto GenICMD::Main(int argc, char* argv[]) const -> int {
-    Mustard::Env::CLI::MonteCarloCLI<> cli;
+    Mustard::CLI::MonteCarloCLI<> cli;
     cli->add_argument("-d", "--mcmc-delta").help("Step size in MCMC sampling.").required().nargs(1).scan<'g', double>();
     cli->add_argument("-x", "--mcmc-discard").help("Number of states discarded between two samples in MCMC sampling.").required().nargs(1).scan<'i', unsigned>();
     cli->add_argument("-p", "--polarization").help("Parent particle polarization vector").required().nargs(3).scan<'g', double>();

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Mustard/Env/CLI/CLI.h++"
-#include "Mustard/Env/CLI/Module/BasicModule.h++"
-#include "Mustard/Env/CLI/Module/ModuleBase.h++"
-#include "Mustard/Env/CLI/Module/MonteCarloModule.h++"
+#include "Mustard/CLI/CLI.h++"
+#include "Mustard/CLI/Module/BasicModule.h++"
+#include "Mustard/CLI/Module/ModuleBase.h++"
+#include "Mustard/CLI/Module/MonteCarloModule.h++"
 
 #include "muc/hash_map"
 
@@ -15,7 +15,7 @@
 
 namespace MACE::SmearMACE {
 
-class CLIModule : public Mustard::Env::CLI::ModuleBase {
+class CLIModule : public Mustard::CLI::ModuleBase {
 public:
     CLIModule(argparse::ArgumentParser& argParser);
 
@@ -49,8 +49,8 @@ private:
     auto ParseSmearingConfig(std::string_view arg) const -> muc::flat_hash_map<std::string, std::string>;
 };
 
-using CLI = Mustard::Env::CLI::CLI<Mustard::Env::CLI::BasicModule,
-                                   Mustard::Env::CLI::MonteCarloModule,
-                                   CLIModule>;
+using CLI = Mustard::CLI::CLI<Mustard::CLI::BasicModule,
+                              Mustard::CLI::MonteCarloModule,
+                              CLIModule>;
 
 } // namespace MACE::SmearMACE

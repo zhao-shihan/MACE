@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mustard/Env/CLI/CLI.h++"
+#include "Mustard/CLI/CLI.h++"
 #include "Mustard/Execution/Executor.h++"
 #include "Mustard/IO/PrettyLog.h++"
 #include "Mustard/IO/Print.h++"
@@ -20,7 +20,7 @@ struct BranchingRatio {
 };
 
 template<int M, int N, typename A>
-auto MatrixElementBasedGeneratorNormalizationUI(Mustard::Env::CLI::CLI<>& cli,
+auto MatrixElementBasedGeneratorNormalizationUI(Mustard::CLI::CLI<>& cli,
                                                 Mustard::Executor<unsigned long long>& executor,
                                                 Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator,
                                                 bool biased, double fullBR, double fullBRUncertainty) -> BranchingRatio;

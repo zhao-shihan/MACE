@@ -1,7 +1,7 @@
 namespace MACE::GeneratorAppUtility {
 
 template<int M, int N, typename A>
-auto MatrixElementBasedGeneratorNormalizationUI(Mustard::Env::CLI::CLI<>& cli,
+auto MatrixElementBasedGeneratorNormalizationUI(Mustard::CLI::CLI<>& cli,
                                                 Mustard::Executor<unsigned long long>& executor,
                                                 Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator,
                                                 bool biased, double fullBR, double fullBRUncertainty) -> BranchingRatio {
