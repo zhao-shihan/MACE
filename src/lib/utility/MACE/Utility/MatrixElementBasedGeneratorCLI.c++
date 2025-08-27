@@ -4,34 +4,29 @@
 
 namespace MACE::inline Utility {
 
-MatrixElementBasedGeneratorCLIModule::MatrixElementBasedGeneratorCLIModule(argparse::ArgumentParser& argParser) :
-    ModuleBase{argParser} {
-    ArgParser()
-        .add_argument("--normalization-factor")
+MatrixElementBasedGeneratorCLIModule::MatrixElementBasedGeneratorCLIModule(gsl::not_null<Mustard::CLI::CLI<>*> cli) :
+    ModuleBase{cli} {
+    TheCLI()
+        ->add_argument("--normalization-factor")
         .help("Pre-computed normalization factor. Program will skip normalization and use this value if set.")
         .nargs(1)
         .scan<'g', double>();
-    ArgParser()
-        .add_argument("--normalization-precision-goal")
+    TheCLI()
+        ->add_argument("--normalization-precision-goal")
         .help("Precision goal for normalization.")
         .default_value(0.01)
         .required()
         .nargs(1)
         .scan<'g', double>();
-    ArgParser()
-        .add_argument("--continue-normalization")
+    TheCLI()
+        ->add_argument("--continue-normalization")
         .help("Integration state for continuing normalization.")
         .nargs(6)
         .scan<'g', long double>();
-    ArgParser()
-        .add_argument("-g", "--generate")
-        .help("Number of events to generate. Program will skip event generation if not set.")
-        .nargs(1)
-        .scan<'i', unsigned long long>();
 }
 
 auto MatrixElementBasedGeneratorCLIModule::ContinueNormalization() const -> std::optional<std::array<Mustard::Math::MCIntegrationState, 2>> {
-    const auto cliState{ArgParser().present<std::vector<long double>>("--continue-normalization")};
+    const auto cliState{TheCLI()->present<std::vector<long double>>("--continue-normalization")};
     if (not cliState.has_value()) {
         return {};
     }

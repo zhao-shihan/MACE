@@ -2,7 +2,6 @@
 
 #include "MACE/Utility/MatrixElementBasedGeneratorCLI.h++"
 
-#include "Mustard/CLI/CLI.h++"
 #include "Mustard/CLI/Module/ModuleBase.h++"
 
 #include <optional>
@@ -11,7 +10,7 @@ namespace MACE::inline Utility {
 
 class MultipleTryMetropolisGeneratorCLIModule : public Mustard::CLI::ModuleBase {
 public:
-    MultipleTryMetropolisGeneratorCLIModule(argparse::ArgumentParser& argParser);
+    MultipleTryMetropolisGeneratorCLIModule(gsl::not_null<Mustard::CLI::CLI<>*> cli);
 
     auto MCMCDelta() const -> std::optional<double>;
     auto MCMCDiscard() const -> std::optional<unsigned>;

@@ -2,9 +2,8 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/GenICMD/GenICMD.h++"
-#include "MACE/Utility/MatrixElementBasedGeneratorNormalizationUI.h++"
+#include "MACE/Utility/InitialStateCLIModule.h++"
 #include "MACE/Utility/MultipleTryMetropolisGeneratorCLI.h++"
-#include "MACE/Utility/PolarizationCLIModule.h++"
 
 #include "Mustard/CLHEPX/Random/Xoshiro.h++"
 #include "Mustard/Data/GeneratedEvent.h++"
@@ -37,10 +36,9 @@ GenICMD::GenICMD() :
     Subprogram{"GenICMD", "Generate internal conversion muon decay (mu->ennee) events."} {}
 
 auto GenICMD::Main(int argc, char* argv[]) const -> int {
-    MultipleTryMetropolisGeneratorCLI<PolarizationCLIModule> cli;
-    cli->add_argument("-o", "--output").help("Output file path.").default_value("mu2ennee.root"s).required().nargs(1);
-    cli->add_argument("-m", "--output-mode").help("Output file creation mode (see ROOT documentation for details).").default_value("NEW"s).required().nargs(1);
-    cli->add_argument("-t", "--output-tree").help("Output tree name.").default_value("mu2ennee"s).required().nargs(1);
+    MultipleTryMetropolisGeneratorCLI<InitialStateCLIModule<"polarized", "muon">> cli;
+    cli.DefaultOutput("m2ennee0.root");
+    cli.DefaultOutputTree("m2ennee0");
     auto& biasCLI{cli->add_mutually_exclusive_group()};
     biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
     biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for atomic positron kinetic energy.").flag();
@@ -54,7 +52,7 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, cli};
     Mustard::UseXoshiro<256> random{cli};
 
-    Mustard::InternalConversionMuonDecay generator("mu+", cli.Polarization(), cli.MCMCDelta(), cli.MCMCDiscard());
+    Mustard::InternalConversionMuonDecay generator("mu+", cli.Momentum(), cli.Polarization(), cli.MCMCDelta(), cli.MCMCDiscard());
 
     bool biased{};
     if (cli["--mace-bias"] == true) {
@@ -97,17 +95,16 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     }
 
     // B(mu -> e nu nu e e) = (3.605327 +/- 0.000076) * 10^-5 (QED LO)
-    constexpr auto fullBR{3.605327e-5};
-    constexpr auto fullBRUncertainty{0.000076e-5};
+    constexpr auto fullBranchingRatio{3.605327e-5};
 
-    // Calculate branching ratio first
+    // Calculate weight scale first
     Mustard::Executor<unsigned long long> executor{"Generation", "Sample"};
-    const auto [branchingRatio, _]{MatrixElementBasedGeneratorNormalizationUI(
-        cli, executor, generator, biased, fullBR, fullBRUncertainty)};
+    const auto [weightNormalizationFactor, _]{cli.WeightNormalization(executor, generator, biased)};
+    const auto weightScale{fullBranchingRatio * weightNormalizationFactor};
 
     // Return if nothing to be generated
-    if (not cli->is_used("--generate")) {
-        Mustard::MasterPrintLn("Option --generate not set, skipping event generation.");
+    const auto nEvent{cli.GenerateOrExit()};
+    if (not nEvent.has_value()) {
         return EXIT_SUCCESS;
     }
     Mustard::MasterPrintLn("");
@@ -117,7 +114,7 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     Mustard::Data::Output<Mustard::Data::GeneratedKinematics> writer{cli->get("--output-tree")};
     auto& rng{*CLHEP::HepRandom::getTheEngine()};
     generator.BurnIn(rng);
-    executor(cli->get<unsigned long long>("--generate"), [&](auto) {
+    executor(*nEvent, [&](auto) {
         const auto [weight, pdgID, p]{generator(rng)};
         Mustard::Data::Tuple<Mustard::Data::GeneratedKinematics> event;
         // 0: e+, 3: e-, 4: e+
@@ -126,7 +123,7 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
         Get<"px">(event) = {float(p[0].x()), float(p[3].x()), float(p[4].x())};
         Get<"py">(event) = {float(p[0].y()), float(p[3].y()), float(p[4].y())};
         Get<"pz">(event) = {float(p[0].z()), float(p[3].z()), float(p[4].z())};
-        Get<"w">(event) = branchingRatio * weight;
+        Get<"w">(event) = weightScale * weight;
         writer.Fill(event);
     });
     executor.PrintExecutionSummary();
