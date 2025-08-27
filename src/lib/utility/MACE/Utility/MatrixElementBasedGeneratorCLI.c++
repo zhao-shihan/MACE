@@ -1,15 +1,11 @@
 #include "MACE/Utility/MatrixElementBasedGeneratorCLI.h++"
 
+#include <vector>
+
 namespace MACE::inline Utility {
 
 MatrixElementBasedGeneratorCLIModule::MatrixElementBasedGeneratorCLIModule(argparse::ArgumentParser& argParser) :
     ModuleBase{argParser} {
-    ArgParser()
-        .add_argument("-p", "--polarization")
-        .help("Parent particle polarization vector")
-        .required()
-        .nargs(3)
-        .scan<'g', double>();
     ArgParser()
         .add_argument("--normalization-factor")
         .help("Pre-computed normalization factor. Program will skip normalization and use this value if set.")
@@ -32,11 +28,6 @@ MatrixElementBasedGeneratorCLIModule::MatrixElementBasedGeneratorCLIModule(argpa
         .help("Number of events to generate. Program will skip event generation if not set.")
         .nargs(1)
         .scan<'i', unsigned long long>();
-}
-
-auto MatrixElementBasedGeneratorCLIModule::Polarization() const -> CLHEP::Hep3Vector {
-    const auto pol{ArgParser().get<std::vector<double>>("--polarization")};
-    return {pol[0], pol[1], pol[2]};
 }
 
 auto MatrixElementBasedGeneratorCLIModule::ContinueNormalization() const -> std::optional<std::array<Mustard::Math::MCIntegrationState, 2>> {

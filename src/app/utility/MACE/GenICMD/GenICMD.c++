@@ -4,6 +4,7 @@
 #include "MACE/GenICMD/GenICMD.h++"
 #include "MACE/Utility/MatrixElementBasedGeneratorNormalizationUI.h++"
 #include "MACE/Utility/MultipleTryMetropolisGeneratorCLI.h++"
+#include "MACE/Utility/PolarizationCLIModule.h++"
 
 #include "Mustard/CLHEPX/Random/Xoshiro.h++"
 #include "Mustard/Data/GeneratedEvent.h++"
@@ -36,7 +37,7 @@ GenICMD::GenICMD() :
     Subprogram{"GenICMD", "Generate internal conversion muon decay (mu->ennee) events."} {}
 
 auto GenICMD::Main(int argc, char* argv[]) const -> int {
-    MultipleTryMetropolisGeneratorCLI<> cli;
+    MultipleTryMetropolisGeneratorCLI<PolarizationCLIModule> cli;
     cli->add_argument("-o", "--output").help("Output file path.").default_value("mu2ennee.root"s).required().nargs(1);
     cli->add_argument("-m", "--output-mode").help("Output file creation mode (see ROOT documentation for details).").default_value("NEW"s).required().nargs(1);
     cli->add_argument("-t", "--output-tree").help("Output tree name.").default_value("mu2ennee"s).required().nargs(1);
@@ -53,9 +54,7 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, cli};
     Mustard::UseXoshiro<256> random{cli};
 
-    Mustard::InternalConversionMuonDecay generator("mu+", cli.Polarization(),
-                                                   cli->get<double>("--mcmc-delta"),
-                                                   cli->get<unsigned>("--mcmc-discard"));
+    Mustard::InternalConversionMuonDecay generator("mu+", cli.Polarization(), cli.MCMCDelta(), cli.MCMCDiscard());
 
     bool biased{};
     if (cli["--mace-bias"] == true) {
@@ -108,6 +107,7 @@ auto GenICMD::Main(int argc, char* argv[]) const -> int {
 
     // Return if nothing to be generated
     if (not cli->is_used("--generate")) {
+        Mustard::MasterPrintLn("Option --generate not set, skipping event generation.");
         return EXIT_SUCCESS;
     }
     Mustard::MasterPrintLn("");

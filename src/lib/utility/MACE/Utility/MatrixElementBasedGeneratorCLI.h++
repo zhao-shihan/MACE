@@ -3,10 +3,7 @@
 #include "Mustard/CLI/CLI.h++"
 #include "Mustard/CLI/Module/ModuleBase.h++"
 #include "Mustard/CLI/MonteCarloCLI.h++"
-#include "Mustard/Math/IntegrationResult.h++"
 #include "Mustard/Math/MCIntegrationState.h++"
-
-#include "CLHEP/Vector/ThreeVector.h"
 
 #include <array>
 #include <optional>
@@ -17,7 +14,6 @@ class MatrixElementBasedGeneratorCLIModule : public Mustard::CLI::ModuleBase {
 public:
     MatrixElementBasedGeneratorCLIModule(argparse::ArgumentParser& argParser);
 
-    auto Polarization() const -> CLHEP::Hep3Vector;
     auto ContinueNormalization() const -> std::optional<std::array<Mustard::Math::MCIntegrationState, 2>>;
 };
 
