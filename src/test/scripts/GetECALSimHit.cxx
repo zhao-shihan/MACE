@@ -32,27 +32,27 @@ auto GetECALSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
     dstFile->cd();
     dstDir->cd();
 
-    auto df{df0.Define("xx", "x[0]")
-                .Define("yy", "x[1]")
-                .Define("zz", "x[2]")
-                .Define("px", "p[0]")
-                .Define("py", "p[1]")
-                .Define("pz", "p[2]")
-                .Define("p0x", "p0[0]")
-                .Define("p0y", "p0[1]")
-                .Define("p0z", "p0[2]")};
+    auto df{df0.Define("x[0]", "x[0]")
+                .Define("x[1]", "x[1]")
+                .Define("x[2]", "x[2]")
+                .Define("p[0]", "p[0]")
+                .Define("p[1]", "p[1]")
+                .Define("p[2]", "p[2]")
+                .Define("p0[0]", "p0[0]")
+                .Define("p0[1]", "p0[1]")
+                .Define("p0[2]", "p0[2]")};
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
         {"ModID", 0.,                                                                               640.                                                                                  },
-        {"xx",    df.Min("xx"),                                                                     df.Max("xx")                                                                          },
-        {"yy",    df.Min("yy"),                                                                     df.Max("yy")                                                                          },
-        {"zz",    df.Min("zz"),                                                                     df.Max("zz")                                                                          },
-        {"px",    df.Min("px"),                                                                     df.Max("px")                                                                          }, // for SimECAL
-        {"py",    df.Min("py"),                                                                     df.Max("py")                                                                          }, // for SimECAL
-        {"pz",    df.Min("pz"),                                                                     df.Max("pz")                                                                          }, // for SimECAL
-        {"p0x",   df.Min("p0x"),                                                                    df.Max("p0x")                                                                         }, // for SimECAL
-        {"p0y",   df.Min("p0y"),                                                                    df.Max("p0y")                                                                         }, // for SimECAL
-        {"p0z",   df.Min("p0z"),                                                                    df.Max("p0z")                                                                         }, // for SimECAL
+        {"x[0]",    df.Min("x[0]"),                                                                     df.Max("x[0]")                                                                          },
+        {"x[1]",    df.Min("x[1]"),                                                                     df.Max("x[1]")                                                                          },
+        {"x[2]",    df.Min("x[2]"),                                                                     df.Max("x[2]")                                                                          },
+        {"p[0]",    df.Min("p[0]"),                                                                     df.Max("p[0]")                                                                          }, // for SimECAL
+        {"p[1]",    df.Min("p[1]"),                                                                     df.Max("p[1]")                                                                          }, // for SimECAL
+        {"p[2]",    df.Min("p[2]"),                                                                     df.Max("p[2]")                                                                          }, // for SimECAL
+        {"p0[0]",   df.Min("p0[0]"),                                                                    df.Max("p0[0]")                                                                         }, // for SimECAL
+        {"p0[1]",   df.Min("p0[1]"),                                                                    df.Max("p0[1]")                                                                         }, // for SimECAL
+        {"p0[2]",   df.Min("p0[2]"),                                                                    df.Max("p0[2]")                                                                         }, // for SimECAL
         {"t",     0.,                                                                               std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })        },
         {"t0",    0.,                                                                               std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })      },
         {"TrkID", 0.,                                                                               std::function([&]() -> double { return *df.Mean("TrkID") + 2 * *df.StdDev("TrkID"); })},
@@ -62,12 +62,12 @@ auto GetECALSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
         // {"Edep",  0.,                                                                                 std::function([&]() -> double { return *df.Mean("Edep") + 0.5 * *df.StdDev("Edep"); })},// for SimPhaseI
         // {"Ek0",   0.,                                                                                 std::function([&]() -> double { return *df.Mean("Ek0") + 0.5 * *df.StdDev("Ek0"); })  },// for SimPhaseI
         // {"Ek",    0.,                                                                                 std::function([&]() -> double { return *df.Mean("Ek") + 0.5 * *df.StdDev("Ek"); })    },// for SimPhaseI
-        // {"px",    std::function([&]() -> double { return *df.Mean("px") - 2 * *df.StdDev("px"); }),   std::function([&]() -> double { return *df.Mean("px") + 2 * *df.StdDev("px"); })      },// for SimPhaseI
-        // {"py",    std::function([&]() -> double { return *df.Mean("py") - 2 * *df.StdDev("py"); }),   std::function([&]() -> double { return *df.Mean("py") + 2 * *df.StdDev("py"); })      },// for SimPhaseI
-        // {"pz",    std::function([&]() -> double { return *df.Mean("pz") - 2 * *df.StdDev("pz"); }),   std::function([&]() -> double { return *df.Mean("pz") + 2 * *df.StdDev("pz"); })      },// for SimPhaseI
-        // {"p0x",   std::function([&]() -> double { return *df.Mean("p0x") - 2 * *df.StdDev("p0x"); }), std::function([&]() -> double { return *df.Mean("p0x") + 2 * *df.StdDev("p0x"); })    },// for SimPhaseI
-        // {"p0y",   std::function([&]() -> double { return *df.Mean("p0y") - 2 * *df.StdDev("p0y"); }), std::function([&]() -> double { return *df.Mean("p0y") + 2 * *df.StdDev("p0y"); })    },// for SimPhaseI
-        // {"p0z",   std::function([&]() -> double { return *df.Mean("p0z") - 2 * *df.StdDev("p0z"); }), std::function([&]() -> double { return *df.Mean("p0z") + 2 * *df.StdDev("p0z"); })    },// for SimPhaseI
+        // {"p[0]",    std::function([&]() -> double { return *df.Mean("p[0]") - 2 * *df.StdDev("p[0]"); }),   std::function([&]() -> double { return *df.Mean("p[0]") + 2 * *df.StdDev("p[0]"); })      },// for SimPhaseI
+        // {"p[1]",    std::function([&]() -> double { return *df.Mean("p[1]") - 2 * *df.StdDev("p[1]"); }),   std::function([&]() -> double { return *df.Mean("p[1]") + 2 * *df.StdDev("p[1]"); })      },// for SimPhaseI
+        // {"p[2]",    std::function([&]() -> double { return *df.Mean("p[2]") - 2 * *df.StdDev("p[2]"); }),   std::function([&]() -> double { return *df.Mean("p[2]") + 2 * *df.StdDev("p[2]"); })      },// for SimPhaseI
+        // {"p0[0]",   std::function([&]() -> double { return *df.Mean("p0[0]") - 2 * *df.StdDev("p0[0]"); }), std::function([&]() -> double { return *df.Mean("p0[0]") + 2 * *df.StdDev("p0[0]"); })    },// for SimPhaseI
+        // {"p0[1]",   std::function([&]() -> double { return *df.Mean("p0[1]") - 2 * *df.StdDev("p0[1]"); }), std::function([&]() -> double { return *df.Mean("p0[1]") + 2 * *df.StdDev("p0[1]"); })    },// for SimPhaseI
+        // {"p0[2]",   std::function([&]() -> double { return *df.Mean("p0[2]") - 2 * *df.StdDev("p0[2]"); }), std::function([&]() -> double { return *df.Mean("p0[2]") + 2 * *df.StdDev("p0[2]"); })    },// for SimPhaseI
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

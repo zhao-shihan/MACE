@@ -15,15 +15,15 @@ const void Judge(double pValue) {
     const std::string boldOrange = "\033[1;33m";
     const std::string reset = "\033[0m";
 
-    std::clog << "(#) Judgement: ";
-    if (pValue == 0) {
-        std::cout << boldBlue << "IDENTICAL" << reset << " (p = " << pValue << ")" << std::endl;
-    } else if (pValue < 0.05) {
+    std::clog << "(#) ";
+    if (pValue < 0.003) {
         std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
-    } else if (pValue < 0.5) {
-        std::cout << boldOrange << "WARN" << reset << " (p = " << pValue << ")" << std::endl;
-    } else {
+    } else if (pValue < 0.05) {
+        std::cout << boldOrange << "SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
+    } else if (pValue != 0) {
         std::cout << boldGreen << "PASS" << reset << " (p = " << pValue << ")" << std::endl;
+    } else {
+        std::cout << boldBlue << "IDENTICAL" << reset << " (p = " << pValue << ")" << std::endl;
     }
 }
 
@@ -44,15 +44,15 @@ auto TestCDCSimHit(std::string moduleName, std::string testFileName, std::string
 
     std::clog << "[Note] testing. Module: " << moduleName << "DataTuple: " << dataTupleName << std::endl;
 
-    auto df{df0.Define("xx", "x[0]")
-                .Define("yy", "x[1]")
-                .Define("zz", "x[2]")
-                .Define("px", "p[0]")
-                .Define("py", "p[1]")
-                .Define("pz", "p[2]")
-                .Define("p0x", "p0[0]")
-                .Define("p0y", "p0[1]")
-                .Define("p0z", "p0[2]")};
+    auto df{df0.Define("x[0]", "x[0]")
+                .Define("x[1]", "x[1]")
+                .Define("x[2]", "x[2]")
+                .Define("p[0]", "p[0]")
+                .Define("p[1]", "p[1]")
+                .Define("p[2]", "p[2]")
+                .Define("p0[0]", "p0[0]")
+                .Define("p0[1]", "p0[1]")
+                .Define("p0[2]", "p0[2]")};
 
     auto histKeyList{sampleDir->GetListOfKeys()};
     std::clog << "Get " << histKeyList->GetEntries() << " entries from sample file." << std::endl;

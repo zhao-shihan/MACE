@@ -32,38 +32,38 @@ auto GetMRPCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
     dstFile->cd();
     dstDir->cd();
 
-    auto df{df0.Define("xx", "x[0]")
-                .Define("yy", "x[1]")
-                .Define("zz", "x[2]")
-                .Define("x0x", "x0[0]")
-                .Define("x0y", "x0[1]")
-                .Define("x0z", "x0[2]")
-                .Define("px", "p[0]")
-                .Define("py", "p[1]")
-                .Define("pz", "p[2]")
-                .Define("p0x", "p0[0]")
-                .Define("p0y", "p0[1]")
-                .Define("p0z", "p0[2]")};
+    auto df{df0.Define("x[0]", "x[0]")
+                .Define("x[1]", "x[1]")
+                .Define("x[2]", "x[2]")
+                .Define("x0[0]", "x0[0]")
+                .Define("x0[1]", "x0[1]")
+                .Define("x0[2]", "x0[2]")
+                .Define("p[0]", "p[0]")
+                .Define("p[1]", "p[1]")
+                .Define("p[2]", "p[2]")
+                .Define("p0[0]", "p0[0]")
+                .Define("p0[1]", "p0[1]")
+                .Define("p0[2]", "p0[2]")};
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
         {"ModID", 0.,                                                                                 8.                                                                                  },
-        {"xx",    df.Min("xx"),                                                                       df.Max("xx")                                                                        },
-        {"yy",    df.Min("yy"),                                                                       df.Max("yy")                                                                        },
-        {"zz",    df.Min("zz"),                                                                       df.Max("zz")                                                                        },
-        {"px",    *df.Min("px"),                                                                      *df.Max("px")                                                                       },
-        {"py",    *df.Min("py"),                                                                      *df.Max("py")                                                                       },
-        {"pz",    *df.Min("pz"),                                                                      *df.Max("pz")                                                                       },
-        {"p0x",   *df.Min("p0x"),                                                                     *df.Max("p0x")                                                                      },
-        {"p0y",   *df.Min("p0y"),                                                                     *df.Max("p0y")                                                                      },
-        {"p0z",   *df.Min("p0z"),                                                                     *df.Max("p0z")                                                                      },
+        {"x[0]",    df.Min("x[0]"),                                                                       df.Max("x[0]")                                                                        },
+        {"x[1]",    df.Min("x[1]"),                                                                       df.Max("x[1]")                                                                        },
+        {"x[2]",    df.Min("x[2]"),                                                                       df.Max("x[2]")                                                                        },
+        {"p[0]",    *df.Min("p[0]"),                                                                      *df.Max("p[0]")                                                                       },
+        {"p[1]",    *df.Min("p[1]"),                                                                      *df.Max("p[1]")                                                                       },
+        {"p[2]",    *df.Min("p[2]"),                                                                      *df.Max("p[2]")                                                                       },
+        {"p0[0]",   *df.Min("p0[0]"),                                                                     *df.Max("p0[0]")                                                                      },
+        {"p0[1]",   *df.Min("p0[1]"),                                                                     *df.Max("p0[1]")                                                                      },
+        {"p0[2]",   *df.Min("p0[2]"),                                                                     *df.Max("p0[2]")                                                                      },
         {"Ek0",   *df.Min("Ek0"),                                                                     *df.Max("Ek0")                                                                      },
         {"Ek",    *df.Min("Ek"),                                                                      *df.Max("Ek")                                                                       },
         {"t",     0.,                                                                                 std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })      },
         {"Edep",  0.,                                                                                 std::function([&]() -> double { return *df.Mean("Edep") + 3 * *df.StdDev("Edep"); })},
         {"t0",    0.,                                                                                 std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })    },
-        {"x0x",   std::function([&]() -> double { return *df.Mean("x0x") - 3 * *df.StdDev("x0x"); }), std::function([&]() -> double { return *df.Mean("x0x") + 3 * *df.StdDev("x0x"); })  },
-        {"x0y",   std::function([&]() -> double { return *df.Mean("x0y") - 3 * *df.StdDev("x0y"); }), std::function([&]() -> double { return *df.Mean("x0y") + 3 * *df.StdDev("x0y"); })  },
-        {"x0z",   std::function([&]() -> double { return *df.Mean("x0z") - 3 * *df.StdDev("x0z"); }), std::function([&]() -> double { return *df.Mean("x0z") + 3 * *df.StdDev("x0z"); })  }
+        {"x0[0]",   std::function([&]() -> double { return *df.Mean("x0[0]") - 3 * *df.StdDev("x0[0]"); }), std::function([&]() -> double { return *df.Mean("x0[0]") + 3 * *df.StdDev("x0[0]"); })  },
+        {"x0[1]",   std::function([&]() -> double { return *df.Mean("x0[1]") - 3 * *df.StdDev("x0[1]"); }), std::function([&]() -> double { return *df.Mean("x0[1]") + 3 * *df.StdDev("x0[1]"); })  },
+        {"x0[2]",   std::function([&]() -> double { return *df.Mean("x0[2]") - 3 * *df.StdDev("x0[2]"); }), std::function([&]() -> double { return *df.Mean("x0[2]") + 3 * *df.StdDev("x0[2]"); })  }
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

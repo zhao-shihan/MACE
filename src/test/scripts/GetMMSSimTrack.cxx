@@ -32,14 +32,14 @@ auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int 
     dstFile->cd();
     dstDir->cd();
 
-    auto df{df0.Define("x0x", "x0[0]")
-                .Define("x0y", "x0[1]")
-                .Define("x0z", "x0[2]")
-                .Define("c0x", "c0[0]")
-                .Define("c0y", "c0[1]")
-                .Define("p0x", "p0[0]")
-                .Define("p0y", "p0[1]")
-                .Define("p0z", "p0[2]")};
+    auto df{df0.Define("x0[0]", "x0[0]")
+                .Define("x0[1]", "x0[1]")
+                .Define("x0[2]", "x0[2]")
+                .Define("c0[0]", "c0[0]")
+                .Define("c0[1]", "c0[1]")
+                .Define("p0[0]", "p0[0]")
+                .Define("p0[1]", "p0[1]")
+                .Define("p0[2]", "p0[2]")};
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
         {"phi0",   df.Min("phi0"),   df.Max("phi0")  },
@@ -49,14 +49,14 @@ auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int 
         {"Ek0",    0.,               df.Max("Ek0")   },
         {"r0",     0.,               df.Max("r0")    },
         {"t0",     0.,               df.Max("t0")    },
-        {"p0x",    df.Min("p0x"),    df.Max("p0x")   },
-        {"p0y",    df.Min("p0y"),    df.Max("p0y")   },
-        {"p0z",    df.Min("p0z"),    df.Max("p0z")   },
-        {"x0x",    df.Min("x0x"),    df.Max("x0x")   },
-        {"x0y",    df.Min("x0y"),    df.Max("x0y")   },
-        {"x0z",    df.Min("x0z"),    df.Max("x0z")   },
-        {"c0x",    df.Min("c0x"),    df.Max("c0x")   },
-        {"c0y",    df.Min("c0y"),    df.Max("c0y")   }
+        {"p0[0]",    df.Min("p0[0]"),    df.Max("p0[0]")   },
+        {"p0[1]",    df.Min("p0[1]"),    df.Max("p0[1]")   },
+        {"p0[2]",    df.Min("p0[2]"),    df.Max("p0[2]")   },
+        {"x0[0]",    df.Min("x0[0]"),    df.Max("x0[0]")   },
+        {"x0[1]",    df.Min("x0[1]"),    df.Max("x0[1]")   },
+        {"x0[2]",    df.Min("x0[2]"),    df.Max("x0[2]")   },
+        {"c0[0]",    df.Min("c0[0]"),    df.Max("c0[0]")   },
+        {"c0[1]",    df.Min("c0[1]"),    df.Max("c0[1]")   }
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

@@ -44,18 +44,18 @@ auto TestVetoSimHit(std::string moduleName, std::string testFileName, std::strin
 
     std::clog << "[Note] testing. Module: " << moduleName << "DataTuple: " << dataTupleName << std::endl;
 
-    auto df{df0.Define("xx", "x[0]")
-                .Define("yy", "x[1]")
-                .Define("zz", "x[2]")
-                .Define("px", "p[0]")
-                .Define("py", "p[1]")
-                .Define("pz", "p[2]")
-                .Define("x0x", "x0[0]")
-                .Define("x0y", "x0[1]")
-                .Define("x0z", "x0[2]")
-                .Define("p0x", "p0[0]")
-                .Define("p0y", "p0[1]")
-                .Define("p0z", "p0[2]")};
+    auto df{df0.Define("x[0]", "x[0]")
+                .Define("x[1]", "x[1]")
+                .Define("x[2]", "x[2]")
+                .Define("p[0]", "p[0]")
+                .Define("p[1]", "p[1]")
+                .Define("p[2]", "p[2]")
+                .Define("x0[0]", "x0[0]")
+                .Define("x0[1]", "x0[1]")
+                .Define("x0[2]", "x0[2]")
+                .Define("p0[0]", "p0[0]")
+                .Define("p0[1]", "p0[1]")
+                .Define("p0[2]", "p0[2]")};
 
     auto histKeyList{sampleDir->GetListOfKeys()};
     std::clog << "Get " << histKeyList->GetEntries() << " entries from sample file." << std::endl;
