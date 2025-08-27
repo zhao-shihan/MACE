@@ -32,29 +32,29 @@ auto GetTTCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
     dstFile->cd();
     dstDir->cd();
 
-    auto df{df0.Define("x[0]", "x[0]")
-                .Define("x[1]", "x[1]")
-                .Define("x[2]", "x[2]")
-                .Define("p[0]", "p[0]")
-                .Define("p[1]", "p[1]")
-                .Define("p[2]", "p[2]")
-                .Define("p0[0]", "p0[0]")
-                .Define("p0[1]", "p0[1]")
-                .Define("p0[2]", "p0[2]")};
+    auto df{df0.Define("x_0", "x[0]")
+                .Define("x_1", "x[1]")
+                .Define("x_2", "x[2]")
+                .Define("p_0", "p[0]")
+                .Define("p_1", "p[1]")
+                .Define("p_2", "p[2]")
+                .Define("p0_0", "p0[0]")
+                .Define("p0_1", "p0[1]")
+                .Define("p0_2", "p0[2]")};
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
         {"TileID",  0.,            4000.                                                                                     },
         {"Ek",      0.,            df.Max("Ek")                                                                              },
         {"Ek0",     0.,            df.Max("Ek0")                                                                             },
-        {"x[0]",      df.Min("x[0]"),  df.Max("x[0]")                                                                              },
-        {"x[1]",      df.Min("x[1]"),  df.Max("x[1]")                                                                              },
-        {"x[2]",      df.Min("x[2]"),  df.Max("x[2]")                                                                              },
-        {"p[0]",      df.Min("p[0]"),  df.Max("p[0]")                                                                              },
-        {"p[1]",      df.Min("p[1]"),  df.Max("p[1]")                                                                              },
-        {"p[2]",      df.Min("p[2]"),  df.Max("p[2]")                                                                              },
-        {"p0[0]",     df.Min("p0[0]"), df.Max("p0[0]")                                                                             },
-        {"p0[1]",     df.Min("p0[1]"), df.Max("p0[1]")                                                                             },
-        {"p0[2]",     df.Min("p0[2]"), df.Max("p0[2]")                                                                             },
+        {"x_0",      df.Min("x_0"),  df.Max("x_0")                                                                              },
+        {"x_1",      df.Min("x_1"),  df.Max("x_1")                                                                              },
+        {"x_2",      df.Min("x_2"),  df.Max("x_2")                                                                              },
+        {"p_0",      df.Min("p_0"),  df.Max("p_0")                                                                              },
+        {"p_1",      df.Min("p_1"),  df.Max("p_1")                                                                              },
+        {"p_2",      df.Min("p_2"),  df.Max("p_2")                                                                              },
+        {"p0_0",     df.Min("p0_0"), df.Max("p0_0")                                                                             },
+        {"p0_1",     df.Min("p0_1"), df.Max("p0_1")                                                                             },
+        {"p0_2",     df.Min("p0_2"), df.Max("p0_2")                                                                             },
         {"t",       0,             std::function([&]() -> double { return *df.Mean("t") + 5 * *df.StdDev("t"); })            },
         {"nOptPho", 0,             std::function([&]() -> double { return *df.Mean("nOptPho") + 5 * *df.StdDev("nOptPho"); })},
         {"Edep",    0.,            std::function([&]() -> double { return *df.Mean("Edep") + 5 * *df.StdDev("Edep"); })      }

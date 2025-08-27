@@ -44,14 +44,14 @@ auto TestMMSSimTrack(std::string moduleName, std::string testFileName, std::stri
 
     std::clog << "[Note] testing. Module: " << moduleName << "DataTuple: " << dataTupleName << std::endl;
 
-    auto df{df0.Define("x0[0]", "x0[0]")
-                .Define("x0[1]", "x0[1]")
-                .Define("x0[2]", "x0[2]")
-                .Define("c0[0]", "c0[0]")
-                .Define("c0[1]", "c0[1]")
-                .Define("p0[0]", "p0[0]")
-                .Define("p0[1]", "p0[1]")
-                .Define("p0[2]", "p0[2]")};
+    auto df{df0.Define("x0_0", "x0[0]")
+                .Define("x0_1", "x0[1]")
+                .Define("x0_2", "x0[2]")
+                .Define("c0_0", "c0[0]")
+                .Define("c0_1", "c0[1]")
+                .Define("p0_0", "p0[0]")
+                .Define("p0_1", "p0[1]")
+                .Define("p0_2", "p0[2]")};
 
     auto histKeyList{sampleDir->GetListOfKeys()};
     std::clog << "Get " << histKeyList->GetEntries() << " entries from sample file." << std::endl;

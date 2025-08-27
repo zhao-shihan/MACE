@@ -32,14 +32,14 @@ auto GetSimDecayVertex(auto moduleName, auto srcFileName, auto dstFileName) -> i
     dstFile->cd();
     dstDir->cd();
 
-    auto df{df0.Define("x[0]", "x[0]")
-                .Define("x[1]", "x[1]")
-                .Define("x[2]", "x[2]")};
+    auto df{df0.Define("x_0", "x[0]")
+                .Define("x_1", "x[1]")
+                .Define("x_2", "x[2]")};
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
         {"t",  0.,                                                                               std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })  },
-        {"x[0]", std::function([&]() -> double { return *df.Mean("x[0]") - 3 * *df.StdDev("x[0]"); }), std::function([&]() -> double { return *df.Mean("x[0]") + 3 * *df.StdDev("x[0]"); })},
-        {"x[1]", std::function([&]() -> double { return *df.Mean("x[1]") - 3 * *df.StdDev("x[1]"); }), std::function([&]() -> double { return *df.Mean("x[1]") + 3 * *df.StdDev("x[1]"); })},
-        {"x[2]", std::function([&]() -> double { return *df.Mean("x[2]") - 3 * *df.StdDev("x[2]"); }), std::function([&]() -> double { return *df.Mean("x[2]") + 3 * *df.StdDev("x[2]"); })}
+        {"x_0", std::function([&]() -> double { return *df.Mean("x_0") - 3 * *df.StdDev("x_0"); }), std::function([&]() -> double { return *df.Mean("x_0") + 3 * *df.StdDev("x_0"); })},
+        {"x_1", std::function([&]() -> double { return *df.Mean("x_1") - 3 * *df.StdDev("x_1"); }), std::function([&]() -> double { return *df.Mean("x_1") + 3 * *df.StdDev("x_1"); })},
+        {"x_2", std::function([&]() -> double { return *df.Mean("x_2") - 3 * *df.StdDev("x_2"); }), std::function([&]() -> double { return *df.Mean("x_2") + 3 * *df.StdDev("x_2"); })}
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

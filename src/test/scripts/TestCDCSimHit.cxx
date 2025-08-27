@@ -44,15 +44,15 @@ auto TestCDCSimHit(std::string moduleName, std::string testFileName, std::string
 
     std::clog << "[Note] testing. Module: " << moduleName << "DataTuple: " << dataTupleName << std::endl;
 
-    auto df{df0.Define("x[0]", "x[0]")
-                .Define("x[1]", "x[1]")
-                .Define("x[2]", "x[2]")
-                .Define("p[0]", "p[0]")
-                .Define("p[1]", "p[1]")
-                .Define("p[2]", "p[2]")
-                .Define("p0[0]", "p0[0]")
-                .Define("p0[1]", "p0[1]")
-                .Define("p0[2]", "p0[2]")};
+    auto df{df0.Define("x_0", "x[0]")
+                .Define("x_1", "x[1]")
+                .Define("x_2", "x[2]")
+                .Define("p_0", "p[0]")
+                .Define("p_1", "p[1]")
+                .Define("p_2", "p[2]")
+                .Define("p0_0", "p0[0]")
+                .Define("p0_1", "p0[1]")
+                .Define("p0_2", "p0[2]")};
 
     auto histKeyList{sampleDir->GetListOfKeys()};
     std::clog << "Get " << histKeyList->GetEntries() << " entries from sample file." << std::endl;
