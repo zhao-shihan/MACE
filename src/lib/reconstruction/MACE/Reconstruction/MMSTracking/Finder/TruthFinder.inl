@@ -30,7 +30,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
     const auto CollectGarbage{
         [&] { r.garbage.insert(r.garbage.end(), track.begin(), track.end()); }};
 
-    std::unordered_set<short> cellHit;
+    muc::flat_hash_set<short> cellHit;
     cellHit.reserve(this->MinNHit());
 
     while (track.end() != hitData.end()) {

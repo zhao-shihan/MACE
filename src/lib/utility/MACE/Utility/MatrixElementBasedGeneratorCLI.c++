@@ -1,0 +1,43 @@
+#include "MACE/Utility/MatrixElementBasedGeneratorCLI.h++"
+
+#include <vector>
+
+namespace MACE::inline Utility {
+
+MatrixElementBasedGeneratorCLIModule::MatrixElementBasedGeneratorCLIModule(gsl::not_null<Mustard::CLI::CLI<>*> cli) :
+    ModuleBase{cli} {
+    TheCLI()
+        ->add_argument("--normalization-factor")
+        .help("Pre-computed normalization factor. Program will skip normalization and use this value if set.")
+        .nargs(1)
+        .scan<'g', double>();
+    TheCLI()
+        ->add_argument("--normalization-precision-goal")
+        .help("Precision goal for normalization.")
+        .default_value(0.01)
+        .required()
+        .nargs(1)
+        .scan<'g', double>();
+    TheCLI()
+        ->add_argument("--continue-normalization")
+        .help("Integration state for continuing normalization.")
+        .nargs(6)
+        .scan<'g', long double>();
+}
+
+auto MatrixElementBasedGeneratorCLIModule::ContinueNormalization() const -> std::optional<std::array<Mustard::Math::MCIntegrationState, 2>> {
+    const auto cliState{TheCLI()->present<std::vector<long double>>("--continue-normalization")};
+    if (not cliState.has_value()) {
+        return {};
+    }
+    std::array<Mustard::Math::MCIntegrationState, 2> state;
+    state[0].sum[0] = cliState->at(0);
+    state[0].sum[1] = cliState->at(1);
+    state[0].n = cliState->at(2);
+    state[1].sum[0] = cliState->at(3);
+    state[1].sum[1] = cliState->at(4);
+    state[1].n = cliState->at(5);
+    return state;
+}
+
+} // namespace MACE::inline Utility
