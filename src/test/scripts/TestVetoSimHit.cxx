@@ -15,15 +15,15 @@ const void Judge(double pValue) {
     const std::string boldOrange = "\033[1;33m";
     const std::string reset = "\033[0m";
 
-    std::clog << "(#) Judgement: ";
-    if (pValue == 0) {
-        std::cout << boldBlue << "IDENTICAL" << reset << " (p = " << pValue << ")" << std::endl;
-    } else if (pValue < 0.05) {
+    std::clog << "(#) ";
+    if (pValue < 0.003) {
         std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
-    } else if (pValue < 0.5) {
-        std::cout << boldOrange << "WARN" << reset << " (p = " << pValue << ")" << std::endl;
-    } else {
+    } else if (pValue < 0.05) {
+        std::cout << boldOrange << "SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
+    } else if (pValue != 0) {
         std::cout << boldGreen << "PASS" << reset << " (p = " << pValue << ")" << std::endl;
+    } else {
+        std::cout << boldBlue << "IDENTICAL" << reset << " (p = " << pValue << ")" << std::endl;
     }
 }
 
