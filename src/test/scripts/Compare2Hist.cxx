@@ -1,15 +1,10 @@
 #include "ROOT/RDataFrame.hxx"
-#include "RooHist.h"
-#include "RooPlot.h"
-#include "RooRealVar.h"
 #include "TCanvas.h"
 #include "TFile.h"
 #include "TH1.h"
 #include "TPad.h"
 
-#include <string>
 void Compare2Hist() {
-    using namespace RooFit;
     // from sample file
     auto filePath1{"Sample.root"};
     auto histPath1{"SimMACEPhaseI_M2ee/MRPCSimHit/p0_0"};
@@ -86,6 +81,7 @@ void Compare2Hist() {
     pad2->cd();
     resid->Draw();
 }
+// using namespace RooFit;
 // RooRealVar x1(branchName, branchName, h1->GetXaxis()->GetXmin(), h1->GetXaxis()->GetXmax());
 // auto frame1{x1.frame(Title(branchName), Bins(100))};
 // auto rh1{new RooHist(*h1)};
