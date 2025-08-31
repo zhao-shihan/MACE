@@ -98,9 +98,10 @@ auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
     const auto width{muc::pow(2 * pi, 4) / (2 * muon_mass_c2) * phaseSpaceIntegral};
     const auto branchingRatio{width * (muon_lifetime / hbar_Planck)};
     Mustard::MasterPrint("Branching ratio:\n"
-                         "  {} +/- {}  (rel. unc.: {:.2}%)\n",
+                         "  {} +/- {}  (rel. unc.: {:.3}%, N_eff: {:.2f})\n"
+                         "\n",
                          branchingRatio.value, branchingRatio.uncertainty,
-                         branchingRatio.uncertainty / branchingRatio.value * 100);
+                         branchingRatio.uncertainty / branchingRatio.value * 100, nEff);
 
     // Return if nothing to be generated
     const auto nEvent{cli.GenerateOrExit()};
