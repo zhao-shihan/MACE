@@ -7,36 +7,33 @@ namespace MACE::inline Utility {
 MatrixElementBasedGeneratorCLIModule::MatrixElementBasedGeneratorCLIModule(gsl::not_null<Mustard::CLI::CLI<>*> cli) :
     ModuleBase{cli} {
     TheCLI()
-        ->add_argument("--normalization-factor")
-        .help("Pre-computed normalization factor. Program will skip normalization and use this value if set.")
+        ->add_argument("--phase-space-integral")
+        .help("Pre-computed phase-space integral. Program will skip integration and use this value if set.")
         .nargs(1)
         .scan<'g', double>();
     TheCLI()
-        ->add_argument("--normalization-precision-goal")
-        .help("Precision goal for normalization.")
+        ->add_argument("--integral-precision-goal")
+        .help("Precision goal for phase-space integral.")
         .default_value(0.01)
         .required()
         .nargs(1)
         .scan<'g', double>();
     TheCLI()
-        ->add_argument("--continue-normalization")
-        .help("Integration state for continuing normalization.")
-        .nargs(6)
+        ->add_argument("--continue-integration")
+        .help("Integration state for continuing phase-space integration.")
+        .nargs(3)
         .scan<'g', long double>();
 }
 
-auto MatrixElementBasedGeneratorCLIModule::ContinueNormalization() const -> std::optional<std::array<Mustard::Math::MCIntegrationState, 2>> {
-    const auto cliState{TheCLI()->present<std::vector<long double>>("--continue-normalization")};
+auto MatrixElementBasedGeneratorCLIModule::ContinueIntegration() const -> std::optional<Mustard::Math::MCIntegrationState> {
+    const auto cliState{TheCLI()->present<std::vector<long double>>("--continue-integration")};
     if (not cliState.has_value()) {
         return {};
     }
-    std::array<Mustard::Math::MCIntegrationState, 2> state;
-    state[0].sum[0] = cliState->at(0);
-    state[0].sum[1] = cliState->at(1);
-    state[0].n = cliState->at(2);
-    state[1].sum[0] = cliState->at(3);
-    state[1].sum[1] = cliState->at(4);
-    state[1].n = cliState->at(5);
+    Mustard::Math::MCIntegrationState state;
+    state.sum[0] = cliState->at(0);
+    state.sum[1] = cliState->at(1);
+    state.n = cliState->at(2);
     return state;
 }
 
