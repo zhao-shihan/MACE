@@ -1,29 +1,30 @@
 namespace MACE::inline Utility {
 
 template<int M, int N, typename A>
-auto MatrixElementBasedGeneratorCLIModule::WeightNormalization(Mustard::Executor<unsigned long long>& executor,
-                                                               Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator,
-                                                               bool biased) const -> Mustard::Math::IntegrationResult {
-    Mustard::Math::IntegrationResult factor{.value = 1, .uncertainty = 0};
-    if (not biased) {
-        Mustard::MasterPrintLn("Bias not set, no normalization required.");
-    } else if (TheCLI()->is_used("--normalization-factor")) {
-        const auto normalizationFactor{TheCLI()->get<double>("--normalization-factor")};
-        factor.value = normalizationFactor;
-        factor.uncertainty = std::numeric_limits<double>::quiet_NaN();
-        Mustard::MasterPrintLn("Using pre-computed normalization factor {}.", normalizationFactor);
+auto MatrixElementBasedGeneratorCLIModule::PhaseSpaceIntegral(Mustard::Executor<unsigned long long>& executor,
+                                                              Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator) const -> std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState> {
+    std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState> result;
+    auto& [integral, nEff, integrationState]{result};
+    if (TheCLI()->is_used("--phase-space-integral")) {
+        const auto integralFromConsole{TheCLI()->get<double>("--phase-space-integral")};
+        integral.value = integralFromConsole;
+        integral.uncertainty = std::numeric_limits<double>::quiet_NaN();
+        nEff = std::numeric_limits<double>::quiet_NaN();
+        Mustard::MasterPrintLn("Using pre-computed phase-space integral {}.", integralFromConsole);
     } else {
-        const auto precisionGoal{TheCLI()->get<double>("--normalization-precision-goal")};
-        if (const auto integrationState{ContinueNormalization()}) {
-            factor = generator.EstimateNormalizationFactor(executor, precisionGoal, *integrationState).first;
+        const auto precisionGoal{TheCLI()->get<double>("--integral-precision-goal")};
+        Mustard::Math::MCIntegrationState _;
+        if (const auto integrationState{ContinueIntegration()}) {
+            result = generator.PhaseSpaceIntegral(executor, precisionGoal, *integrationState);
         } else {
-            factor = generator.EstimateNormalizationFactor(executor, precisionGoal).first;
+            result = generator.PhaseSpaceIntegral(executor, precisionGoal);
         }
-        Mustard::MasterPrintLn("You can save the above normalization factor and integration state for future use "
-                               "as long as initial state properties and bias does not change "
-                               "(see option --normalization-factor and --continue-normalization).");
+        Mustard::MasterPrintLn("You can save the above phase-space integral and integration state for future use "
+                               "as long as initial state properties and acceptance function does not change "
+                               "(see option --phase-space-integral and --continue-integration)."
+                               "\n");
     }
-    return factor;
+    return result;
 }
 
 } // namespace MACE::inline Utility

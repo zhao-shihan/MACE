@@ -12,8 +12,9 @@
 #include "Mustard/Execution/Executor.h++"
 #include "Mustard/IO/File.h++"
 #include "Mustard/IO/Print.h++"
-#include "Mustard/Physics/Generator/InternalConversionMuonDecay.h++"
+#include "Mustard/Physics/Generator/M2ENNEEGenerator.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
 
@@ -29,6 +30,7 @@
 namespace MACE::GenM2ENNEE {
 
 using namespace Mustard::LiteralUnit::Energy;
+using namespace Mustard::MathConstant;
 using namespace Mustard::PhysicalConstant;
 using namespace std::string_literals;
 
@@ -52,20 +54,19 @@ auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, cli};
     Mustard::UseXoshiro<256> random{cli};
 
-    Mustard::InternalConversionMuonDecay generator("mu+", cli.Momentum(), cli.Polarization(), cli.MCMCDelta(), cli.MCMCDiscard());
+    Mustard::M2ENNEEGenerator generator("mu+", cli.Momentum(), cli.Polarization(), cli.MCMCDelta(), cli.MCMCDiscard());
 
-    bool biased{};
     if (cli["--mace-bias"] == true) {
         const auto& cdc{Detector::Description::CDC::Instance()};
         const auto& ttc{Detector::Description::TTC::Instance()};
         const auto mmsB{Detector::Description::MMSField::Instance().FastField()};
-        generator.Bias([inPxyCut = (cdc.GasInnerRadius() / 2) * mmsB * c_light,
-                        outPxyCut = (ttc.Radius() / 2) * mmsB * c_light,
-                        cosCut = 1 / muc::hypot(2 * cdc.GasOuterRadius() / cdc.GasOuterLength(), 1.),
-                        epEkCut = cli->get<double>("--ep-ek-soft-upper-bound"),
-                        scPxy = muc::soft_cmp{cli->get<double>("--pxy-softening-factor")},
-                        scCos = muc::soft_cmp{cli->get<double>("--cos-theta-softening-factor")},
-                        scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& momenta) {
+        generator.Acceptance([inPxyCut = (cdc.GasInnerRadius() / 2) * mmsB * c_light,
+                              outPxyCut = (ttc.Radius() / 2) * mmsB * c_light,
+                              cosCut = 1 / muc::hypot(2 * cdc.GasOuterRadius() / cdc.GasOuterLength(), 1.),
+                              epEkCut = cli->get<double>("--ep-ek-soft-upper-bound"),
+                              scPxy = muc::soft_cmp{cli->get<double>("--pxy-softening-factor")},
+                              scCos = muc::soft_cmp{cli->get<double>("--cos-theta-softening-factor")},
+                              scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& momenta) {
             // .         e+ n   n   e-  e+
             const auto& [p0, _1, _2, p3, p4]{momenta};
             const auto p3Seen{scPxy(p3.perp()) > scPxy(outPxyCut) and scCos(muc::abs(p3.cosTheta())) < scCos(cosCut)};
@@ -75,39 +76,37 @@ auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
             const auto p4Low{scEk(p4.e() - electron_mass_c2) < scEk(epEkCut)};
             return p3Seen and ((p0Miss and p4Low) or (p4Miss and p0Low));
         });
-        biased = true;
     } else if (cli["--ep-ek-bias"] == true) {
-        generator.Bias([epEkCut = cli->get<double>("--ep-ek-soft-upper-bound"),
-                        scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& p) {
+        generator.Acceptance([epEkCut = cli->get<double>("--ep-ek-soft-upper-bound"),
+                              scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& p) {
             const auto epEk{p[0].e() - electron_mass_c2};
             return scEk(epEk) < scEk(epEkCut);
         });
-        biased = true;
     } else if (cli["--emiss-bias"] == true) {
-        generator.Bias([eMissCut = cli->get<double>("--emiss-soft-upper-bound"),
-                        scEMiss = muc::soft_cmp{cli->get<double>("--emiss-softening-factor")}](auto&& momenta) {
+        generator.Acceptance([eMissCut = cli->get<double>("--emiss-soft-upper-bound"),
+                              scEMiss = muc::soft_cmp{cli->get<double>("--emiss-softening-factor")}](auto&& momenta) {
             // .         e+ n   n   e-  e+
             const auto& [p0, _1, _2, p3, p4]{momenta};
             const auto eMiss{muon_mass_c2 - (p0.e() + p3.e() + p4.e())};
             return scEMiss(eMiss) < scEMiss(eMissCut);
         });
-        biased = true;
     }
 
-    // B(mu -> e nu nu e e) = (3.605327 +/- 0.000076) * 10^-5 (QED LO)
-    constexpr auto fullBranchingRatio{3.605327e-5};
-
-    // Calculate weight scale first
+    // Integrate matrix element
     Mustard::Executor<unsigned long long> executor{"Generation", "Sample"};
-    const auto [weightNormalizationFactor, _]{cli.WeightNormalization(executor, generator, biased)};
-    const auto weightScale{fullBranchingRatio * weightNormalizationFactor};
+    const auto [phaseSpaceIntegral, nEff, integrationState]{cli.PhaseSpaceIntegral(executor, generator)};
+    const auto width{muc::pow(2 * pi, 4) / (2 * muon_mass_c2) * phaseSpaceIntegral};
+    const auto branchingRatio{width * (muon_lifetime / hbar_Planck)};
+    Mustard::MasterPrint("Branching ratio:\n"
+                         "  {} +/- {}  (rel. unc.: {:.2}%)\n",
+                         branchingRatio.value, branchingRatio.uncertainty,
+                         branchingRatio.uncertainty / branchingRatio.value * 100);
 
     // Return if nothing to be generated
     const auto nEvent{cli.GenerateOrExit()};
     if (not nEvent.has_value()) {
         return EXIT_SUCCESS;
     }
-    Mustard::MasterPrintLn("");
 
     // Generate events
     Mustard::File<TFile> file{cli->get("--output"), cli->get("--output-mode")};
@@ -123,7 +122,7 @@ auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
         Get<"px">(event) = {float(p[0].x()), float(p[3].x()), float(p[4].x())};
         Get<"py">(event) = {float(p[0].y()), float(p[3].y()), float(p[4].y())};
         Get<"pz">(event) = {float(p[0].z()), float(p[3].z()), float(p[4].z())};
-        Get<"w">(event) = weightScale * weight;
+        Get<"w">(event) = branchingRatio.value * weight;
         writer.Fill(event);
     });
     executor.PrintExecutionSummary();
