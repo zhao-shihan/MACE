@@ -17,8 +17,6 @@ auto SimECAL::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, cli};
     Mustard::UseXoshiro<512> random{cli};
 
-    // PhysicsList, DetectorConstruction, ActionInitialization are instantiated in RunManager constructor.
-    // Mutually exclusive random seeds are distributed to all processes upon each BeamOn.
     RunManager runManager;
     Mustard::Geant4X::MPIExecutive{}.StartSession(cli, defaultMacro);
 
