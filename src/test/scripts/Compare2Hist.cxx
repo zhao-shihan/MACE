@@ -71,9 +71,9 @@ void Compare2Hist() {
     pad1->Draw();
     pad2->Draw();
     h1->SetLineColor(kRed);
-    h1->SetLineWidth(3);
+    h1->SetLineWidth(1);
     h2->SetLineColor(kBlue);
-    h2->SetLineWidth(3);
+    h2->SetLineWidth(1);
 
     pad1->cd();
     h2->DrawClone();
