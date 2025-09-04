@@ -42,7 +42,7 @@ auto TestTTCSimHit(std::string moduleName, std::string testFileName, std::string
         return 1;
     }
 
-    std::clog << "[Note] testing. Module: " << moduleName << "DataTuple: " << dataTupleName << std::endl;
+    std::clog << "[Note] testing. Module: " << moduleName <<"; "<< "DataTuple: " << dataTupleName << std::endl;
 
     auto df{df0.Define("x_0", "x[0]")
                 .Define("x_1", "x[1]")

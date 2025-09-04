@@ -42,7 +42,7 @@ auto TestMMSSimTrack(std::string moduleName, std::string testFileName, std::stri
         return 1;
     }
 
-    std::clog << "[Note] testing. Module: " << moduleName << "DataTuple: " << dataTupleName << std::endl;
+    std::clog << "[Note] testing. Module: " << moduleName <<"; "<< "DataTuple: " << dataTupleName << std::endl;
 
     auto df{df0.Define("x0_0", "x0[0]")
                 .Define("x0_1", "x0[1]")
