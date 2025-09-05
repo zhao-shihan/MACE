@@ -8,9 +8,9 @@
 
 #/Mustard/Detector/Description/Ixport SimTTC/SimTTC.yaml
 
-/MACE/Physics/UseOpticalPhysics
+#/MACE/Physics/UseOpticalPhysics
 /run/initialize
-/process/optical/scintillation/setFiniteRiseTime true
+#/process/optical/scintillation/setFiniteRiseTime true
 
 
 /MACE/Generator/SwitchToGPSX
@@ -36,8 +36,8 @@
 #/run/beamOn 10000
 
 # for test benchmark
-/run/beamOn 3000
+/run/beamOn 1000000
 # for test
-#/run/beamOn 300
+#/run/beamOn 100000
 
 /Mustard/Run/PrintRunSummary

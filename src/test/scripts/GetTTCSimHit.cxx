@@ -59,7 +59,7 @@ auto GetTTCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
         // {"p0_1",     df.Min("p0_1"), df.Max("p0_1")                                                                             },
         // {"p0_2",     df.Min("p0_2"), df.Max("p0_2")                                                                             },
         {"t",       0,             std::function([&]() -> double { return *df.Mean("t") + 5 * *df.StdDev("t"); })            },
-        {"nOptPho", 0,             std::function([&]() -> double { return *df.Mean("nOptPho") + 5 * *df.StdDev("nOptPho"); })},
+        // {"nOptPho", 0,             std::function([&]() -> double { return *df.Mean("nOptPho") + 5 * *df.StdDev("nOptPho"); })},
         {"Edep",    0.,            std::function([&]() -> double { return *df.Mean("Edep") + 5 * *df.StdDev("Edep"); })      }
     };
 
