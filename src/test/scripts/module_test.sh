@@ -1,9 +1,6 @@
-# build
-mkdir build && cd build && cmake .. && make
-
 mkdir "Test_$(date "+%Y%m%d-%H:%M")" && cd "$_"
 
-source data/mace_offline_data.sh 
+source ../../data/mace_offline_data.sh 
 
 # modules
 # ../MACE GenMuonICDecay -d 1 -s 2 -o "test_mu2eeevv.root" 1000
@@ -16,10 +13,10 @@ source data/mace_offline_data.sh
 
 # modules=("SimDose" "SimECAL" "SimMACE" "SimMMS" "SimPTS" "SimTTC" "SimTarget" "SimVeto")
 
-../../MACE SimMMS ../../SimMMS/run_em_flat.mac -o "SimMMS_em_flat_test.root"
-../../MACE SimVeto ../../SimVeto/run_hit_partial.mac -o "SimVeto_hit_partial_test.root"
-../../MACE SimTTC ../../SimTTC/run_em_flat.mac -o "SimTTC_em_flat_test.root"
-../../MACE SimMACE ../../SimMACE/run_signal.mac -o "SimMACE_signal_test.root"
+../../MACE SimMMS ../../SimMMS/run_em_flat.mac 
+../../MACE SimVeto ../../SimVeto/run_hit_partial.mac 
+../../MACE SimTTC ../../SimTTC/run_em_flat.mac 
+../../MACE SimMACE ../../SimMACE/run_signal.mac 
 
 root -l -q '../TestCDCSimHit.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","../Sample.root")'
 root -l -q '../TestMMSSimTrack.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","../Sample.root")'

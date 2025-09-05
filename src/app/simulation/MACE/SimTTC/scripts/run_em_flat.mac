@@ -31,7 +31,7 @@
 # Run
 #############################################################################
 
-/Mustard/Analysis/FilePath SimTTC_em_flat
+/Mustard/Analysis/FilePath SimTTC_em_flat_test
 /Mustard/Analysis/FileMode NEW
 #/run/beamOn 10000
 
