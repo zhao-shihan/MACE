@@ -35,9 +35,7 @@
 /Mustard/Analysis/FileMode NEW
 #/run/beamOn 10000
 
-# for test benchmark
-/run/beamOn 1000000
-# for test
-#/run/beamOn 100000
+# for benchmark run 10n events
+/run/beamOn 50000
 
 /Mustard/Run/PrintRunSummary

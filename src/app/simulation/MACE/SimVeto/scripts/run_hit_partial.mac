@@ -17,7 +17,7 @@
 /MACE/Analysis/FilePath SimVeto_hit_partial
 /MACE/Analysis/FileMode RECREATE
 
-
+# for benchmark run 10n events
 /run/beamOn 10000
 
 /Mustard/run/PrintRunSummary
