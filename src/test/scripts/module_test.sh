@@ -33,7 +33,7 @@ echo "Start data test..."
     root -l -q '../TestTTCSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","../Sample.root")'
     root -l -q '../TestCDCSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","../Sample.root")'
     root -l -q '../TestMMSSimTrack.cxx("SimMACE_signal","SimMACE_signal_test.root","../Sample.root")'
-} >> output.log 2>&1
+} 2>&1 | tee -a output.log
 
 end_time=$(date +%s)
 total_time=$((end_time - start_time))
