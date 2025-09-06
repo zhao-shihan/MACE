@@ -46,11 +46,11 @@ echo "=============================================="
 echo "Test complete!"
 echo "Start time: $(date -d @$start_time "+%Y-%m-%d %H:%M:%S")"
 echo "End time: $(date -d @$end_time "+%Y-%m-%d %H:%M:%S")"
-echo "Total running time: ${hours}小时 ${minutes}分钟 ${seconds}秒"
-echo "Details: output.log"
+echo "Total running time: ${hours}h ${minutes}m ${seconds}s"
+echo "Details see output.log"
 echo "=============================================="
 
 echo "Start time: $(date -d @$start_time "+%Y-%m-%d %H:%M:%S")" >> output.log
 echo "End time: $(date -d @$end_time "+%Y-%m-%d %H:%M:%S")" >> output.log
-echo "Total running time: ${hours}小时 ${minutes}分钟 ${seconds}秒" >> output.log
-echo "Total running time(秒): ${total_time}秒" >> output.log
+echo "Total running time: ${hours}h ${minutes}m ${seconds}s" >> output.log
+echo "Total running time(s): ${total_time}s" >> output.log
