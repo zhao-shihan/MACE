@@ -3,7 +3,8 @@
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/GenM2ENNEE/GenM2ENNEE.h++"
 #include "MACE/Utility/InitialStateCLIModule.h++"
-#include "MACE/Utility/MultipleTryMetropolisGeneratorCLI.h++"
+#include "MACE/Utility/MCMCGeneratorCLI.h++"
+#include "MACE/Utility/WriteAutocorrelationFunction.h++"
 
 #include "Mustard/CLHEPX/Random/Xoshiro.h++"
 #include "Mustard/Data/GeneratedEvent.h++"
@@ -38,7 +39,7 @@ GenM2ENNEE::GenM2ENNEE() :
     Subprogram{"GenM2ENNEE", "Generate internal conversion muon decay (mu -> e nu nu e e)."} {}
 
 auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
-    MultipleTryMetropolisGeneratorCLI<InitialStateCLIModule<"polarized", "muon">> cli;
+    MCMCGeneratorCLI<InitialStateCLIModule<"polarized", "muon">> cli;
     cli.DefaultOutput("m2ennee.root");
     cli.DefaultOutputTree("m2ennee");
     auto& biasCLI{cli->add_mutually_exclusive_group()};
@@ -54,7 +55,8 @@ auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, cli};
     Mustard::UseXoshiro<256> random{cli};
 
-    Mustard::M2ENNEEGenerator generator("mu+", cli.Momentum(), cli.Polarization(), cli.MCMCDelta(), cli.MCMCDiscard());
+    Mustard::M2ENNEEGenerator generator("mu+", cli.Momentum(), cli.Polarization(),
+                                        cli->present<double>("--thinning-ratio"), cli->present<unsigned>("--acf-sample-size"));
 
     if (cli["--mace-bias"] == true) {
         const auto& cdc{Detector::Description::CDC::Instance()};
@@ -103,6 +105,12 @@ auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
                          branchingRatio.value, branchingRatio.uncertainty,
                          branchingRatio.uncertainty / branchingRatio.value * 100, nEff);
 
+    // Initialize generator and write ACF
+    Mustard::File<TFile> file{cli->get("--output"), cli->get("--output-mode")};
+    auto& rng{*CLHEP::HepRandom::getTheEngine()};
+    const auto autocorrelationFunction{generator.MCMCInitialize(rng)};
+    WriteAutocorrelationFunction(autocorrelationFunction);
+
     // Return if nothing to be generated
     const auto nEvent{cli.GenerateOrExit()};
     if (not nEvent.has_value()) {
@@ -110,10 +118,7 @@ auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
     }
 
     // Generate events
-    Mustard::File<TFile> file{cli->get("--output"), cli->get("--output-mode")};
     Mustard::Data::Output<Mustard::Data::GeneratedKinematics> writer{cli->get("--output-tree")};
-    auto& rng{*CLHEP::HepRandom::getTheEngine()};
-    generator.BurnIn(rng);
     executor(*nEvent, [&](auto) {
         const auto [weight, pdgID, p]{generator(rng)};
         Mustard::Data::Tuple<Mustard::Data::GeneratedKinematics> event;

@@ -2,7 +2,7 @@ namespace MACE::inline Utility {
 
 template<int M, int N, typename A>
 auto MatrixElementBasedGeneratorCLIModule::PhaseSpaceIntegral(Mustard::Executor<unsigned long long>& executor,
-                                                              Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator) const -> std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState> {
+                                                              Mustard::MatrixElementBasedGenerator<M, N, A>& generator) const -> std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState> {
     std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState> result;
     auto& [integral, nEff, integrationState]{result};
     if (TheCLI()->is_used("--phase-space-integral")) {
