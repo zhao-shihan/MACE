@@ -13,10 +13,10 @@ source ../../data/mace_offline_data.sh
 
 # modules=("SimDose" "SimECAL" "SimMACE" "SimMMS" "SimPTS" "SimTTC" "SimTarget" "SimVeto")
 
-../../MACE SimMMS ../../SimMMS/run_em_flat.mac 
-../../MACE SimVeto ../../SimVeto/run_hit_partial.mac 
-../../MACE SimTTC ../../SimTTC/run_em_flat.mac 
-../../MACE SimMACE ../../SimMACE/run_signal.mac 
+../../MACE SimMMS ../../SimMMS/run_em_flat.mac >output.log 2>&1
+../../MACE SimVeto ../../SimVeto/run_hit_partial.mac >output.log 2>&1
+../../MACE SimTTC ../../SimTTC/run_em_flat.mac >output.log 2>&1
+../../MACE SimMACE ../../SimMACE/run_signal.mac >output.log 2>&1
 
 root -l -q '../TestCDCSimHit.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","../Sample.root")'
 root -l -q '../TestMMSSimTrack.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","../Sample.root")'
