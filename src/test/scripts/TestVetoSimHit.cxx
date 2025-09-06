@@ -16,12 +16,14 @@ const void Judge(double pValue) {
     const std::string reset = "\033[0m";
 
     std::clog << "(#) ";
-    if (pValue < 0.003) {
-        std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
-    } else if (pValue < 0.05) {
-        std::cout << boldOrange << "SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
-    } else if (pValue != 0) {
-        std::cout << boldGreen << "PASS" << reset << " (p = " << pValue << ")" << std::endl;
+    if (pValue != 0) {
+        if (pValue < 0.003) {
+            std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
+        } else if (pValue < 0.05) {
+            std::cout << boldOrange << "SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
+        } else if (pValue != 0) {
+            std::cout << boldGreen << "PASS" << reset << " (p = " << pValue << ")" << std::endl;
+        }
     } else {
         std::cout << boldBlue << "IDENTICAL" << reset << " (p = " << pValue << ")" << std::endl;
     }

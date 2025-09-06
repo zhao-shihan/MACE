@@ -16,12 +16,14 @@ const void Judge(double pValue) {
     const std::string reset = "\033[0m";
 
     std::clog << "(#) ";
-    if (pValue < 0.003) {
-        std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
-    } else if (pValue < 0.05) {
-        std::cout << boldOrange << "SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
-    } else if (pValue != 0) {
-        std::cout << boldGreen << "PASS" << reset << " (p = " << pValue << ")" << std::endl;
+    if (pValue != 0) {
+        if (pValue < 0.003) {
+            std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
+        } else if (pValue < 0.05) {
+            std::cout << boldOrange << "SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
+        } else if (pValue != 0) {
+            std::cout << boldGreen << "PASS" << reset << " (p = " << pValue << ")" << std::endl;
+        }
     } else {
         std::cout << boldBlue << "IDENTICAL" << reset << " (p = " << pValue << ")" << std::endl;
     }
@@ -42,7 +44,7 @@ auto TestMMSSimTrack(std::string moduleName, std::string testFileName, std::stri
         return 1;
     }
 
-    std::clog << "[Note] testing. Module: " << moduleName <<"; "<< "DataTuple: " << dataTupleName << std::endl;
+    std::clog << "[Note] testing. Module: " << moduleName << "; " << "DataTuple: " << dataTupleName << std::endl;
 
     auto df{df0.Define("x0_0", "x0[0]")
                 .Define("x0_1", "x0[1]")
