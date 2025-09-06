@@ -18,6 +18,6 @@
 /MACE/Analysis/FileMode RECREATE
 
 # for benchmark run 10n events
-/run/beamOn 10000
+/run/beamOn 30000
 
 /Mustard/run/PrintRunSummary
