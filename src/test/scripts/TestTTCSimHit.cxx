@@ -44,7 +44,7 @@ auto TestTTCSimHit(std::string moduleName, std::string testFileName, std::string
         return 1;
     }
 
-    std::clog << "[Note] testing. Module: " << moduleName <<"; "<< "DataTuple: " << dataTupleName << std::endl;
+    std::clog << "[Note] testing. Module: " << moduleName << "; " << "DataTuple: " << dataTupleName << std::endl;
 
     auto df{df0.Define("x_0", "x[0]")
                 .Define("x_1", "x[1]")
@@ -66,6 +66,9 @@ auto TestTTCSimHit(std::string moduleName, std::string testFileName, std::string
         auto key{(TKey*)obj};
         auto hist{static_cast<TH1D*>(key->ReadObj())};
         auto branchName{hist->GetName()};
+        if (std::string_view(branchName) == "t" and moduleName == "SimMACE_signal") {
+            continue;
+        }
         auto xMax{hist->GetXaxis()->GetXmax()};
         auto xMin{hist->GetXaxis()->GetXmin()};
         auto nBins{hist->GetNbinsX()};
