@@ -5,10 +5,6 @@
 
 #include "CLHEP/Vector/Rotation.h"
 
-#include "G4Material.hh"
-#include "G4MaterialPropertiesTable.hh"
-#include "G4NistManager.hh"
-
 #include "muc/utility"
 
 #include <string>
@@ -28,201 +24,31 @@ Target::Target() :
     fSilicaAerogelDensity{27_mg_cm3},
     fEffectiveTemperature{400_K},
     fFormationProbability{0.655},
-    fMeanFreePath{200_nm} {}
+    fMeanFreePath{200_nm},
+    fMaterialName{"SilicaAerogel"} {}
 
-auto Target::Material() const -> G4Material* {
-    constexpr auto materialName{"SilicaAerogel"};
-    const auto nist{G4NistManager::Instance()};
-
-    auto silicaAerogel{nist->FindMaterial(materialName)};
-    if (silicaAerogel) {
-        return silicaAerogel;
+auto Target::ShapeTypeString() const -> std::string_view {
+    switch (fShapeType) {
+    case TargetShapeType::Cuboid:
+        return "Cuboid";
+    case TargetShapeType::MultiLayer:
+        return "MultiLayer";
+    case TargetShapeType::Cylinder:
+        return "Cylinder";
     }
-
-    silicaAerogel = new G4Material{materialName, fSilicaAerogelDensity, 3, kStateSolid, fEffectiveTemperature};
-    silicaAerogel->AddMaterial(nist->FindOrBuildMaterial("G4_SILICON_DIOXIDE"), 0.625);
-    silicaAerogel->AddMaterial(nist->FindOrBuildMaterial("G4_WATER"), 0.374);
-    silicaAerogel->AddElement(nist->FindOrBuildElement("C"), 0.001);
-
-    const auto mpt{new G4MaterialPropertiesTable};
-    mpt->AddConstProperty("MUONIUM_MFP", fMeanFreePath, true);
-    mpt->AddConstProperty("MUONIUM_FORM_PROB", fFormationProbability, true);
-    silicaAerogel->SetMaterialPropertiesTable(mpt);
-
-    return silicaAerogel;
+    muc::unreachable();
 }
 
-auto Target::ImportAllValue(const YAML::Node& node) -> void {
-    ImportValue<std::string>(
-        node, [this](auto&& shape) {
-            if (shape == "Cuboid") {
-                fShapeType = TargetShapeType::Cuboid;
-            } else if (shape == "MultiLayer") {
-                fShapeType = TargetShapeType::MultiLayer;
-            } else if (shape == "Cylinder") {
-                fShapeType = TargetShapeType::Cylinder;
-            } else {
-                Mustard::PrintError(fmt::format("Unknown target shape '{}', skipping", shape));
-            }
-        },
-        "ShapeType");
-    {
-        ImportValue<double>(
-            node, [this](auto value) { fCuboid.Width(value); },
-            "Cuboid", "Width");
-        ImportValue<double>(
-            node, [this](auto value) { fCuboid.Thickness(value); },
-            "Cuboid", "Thickness");
-        ImportValue<std::string>(
-            node, [this](auto&& detail) {
-                if (detail == "Flat") {
-                    fCuboid.DetailType(CuboidTarget::ShapeDetailType::Flat);
-                } else if (detail == "Perforated") {
-                    fCuboid.DetailType(CuboidTarget::ShapeDetailType::Perforated);
-                } else {
-                    Mustard::PrintError(fmt::format("Unknown cuboid target detail '{}', skipping", detail));
-                }
-            },
-            "Cuboid", "DetailType");
-        {
-            ImportValue<double>(
-                node, [this](auto value) { fCuboid.Perforated().Extent(value); },
-                "Cuboid", "Perforated", "Extent");
-            ImportValue<double>(
-                node, [this](auto value) { fCuboid.Perforated().Spacing(value); },
-                "Cuboid", "Perforated", "Spacing");
-            ImportValue<double>(
-                node, [this](auto value) { fCuboid.Perforated().Diameter(value); },
-                "Cuboid", "Perforated", "Diameter");
-            ImportValue<double>(
-                node, [this](auto value) { fCuboid.Perforated().Depth(value); },
-                "Cuboid", "Perforated", "Depth");
-        }
+auto Target::ShapeType(std::string_view val) -> void {
+    if (val == "Cuboid") {
+        fShapeType = TargetShapeType::Cuboid;
+    } else if (val == "MultiLayer") {
+        fShapeType = TargetShapeType::MultiLayer;
+    } else if (val == "Cylinder") {
+        fShapeType = TargetShapeType::Cylinder;
+    } else {
+        Mustard::PrintWarning(fmt::format("Unknown target shape '{}', ignoring it", val));
     }
-    {
-        ImportValue<double>(
-            node, [this](auto value) { fMultiLayer.Width(value); },
-            "MultiLayer", "Width");
-        ImportValue<double>(
-            node, [this](auto value) { fMultiLayer.Height(value); },
-            "MultiLayer", "Height");
-        ImportValue<double>(
-            node, [this](auto value) { fMultiLayer.Thickness(value); },
-            "MultiLayer", "Thickness");
-        ImportValue<double>(
-            node, [this](auto value) { fMultiLayer.Spacing(value); },
-            "MultiLayer", "Spacing");
-        ImportValue<int>(
-            node, [this](auto value) { fMultiLayer.Count(value); },
-            "MultiLayer", "Count");
-        ImportValue<std::string>(
-            node, [this](auto&& detail) {
-                if (detail == "Flat") {
-                    fMultiLayer.DetailType(MultiLayerTarget::ShapeDetailType::Flat);
-                } else if (detail == "Perforated") {
-                    fMultiLayer.DetailType(MultiLayerTarget::ShapeDetailType::Perforated);
-                } else {
-                    Mustard::PrintError(fmt::format("Unknown MultiLayer target detail '{}', skipping", detail));
-                }
-            },
-            "MultiLayer", "DetailType");
-        {
-            ImportValue<double>(
-                node, [this](auto value) { fMultiLayer.Perforated().ExtentZ(value); },
-                "MultiLayer", "Perforated", "ExtentZ");
-            ImportValue<double>(
-                node, [this](auto value) { fMultiLayer.Perforated().ExtentY(value); },
-                "MultiLayer", "Perforated", "ExtentY");
-            ImportValue<double>(
-                node, [this](auto value) { fMultiLayer.Perforated().Spacing(value); },
-                "MultiLayer", "Perforated", "Spacing");
-            ImportValue<double>(
-                node, [this](auto value) { fMultiLayer.Perforated().Diameter(value); },
-                "MultiLayer", "Perforated", "Diameter");
-        }
-    }
-    {
-        ImportValue<double>(
-            node, [this](auto value) { fCylinder.Radius(value); },
-            "Cylinder", "Radius");
-        ImportValue<double>(
-            node, [this](auto value) { fCylinder.Thickness(value); },
-            "Cylinder", "Thickness");
-    }
-    ImportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
-    ImportValue(node, fEffectiveTemperature, "EffectiveTemperature");
-    ImportValue(node, fFormationProbability, "FormationProbability");
-    ImportValue(node, fMeanFreePath, "MeanFreePath");
-}
-
-auto Target::ExportAllValue(YAML::Node& node) const -> void {
-    using namespace std::string_literals;
-    ExportValue(
-        node, [this] {
-            switch (fShapeType) {
-            case TargetShapeType::Cuboid:
-                return "Cuboid"s;
-            case TargetShapeType::MultiLayer:
-                return "MultiLayer"s;
-            case TargetShapeType::Cylinder:
-                return "Cylinder"s;
-            }
-            muc::unreachable();
-        }(),
-        "ShapeType");
-    {
-        ExportValue(node, fCuboid.Width(), "Cuboid", "Width");
-        ExportValue(node, fCuboid.Thickness(), "Cuboid", "Thickness");
-        ExportValue(
-            node, [this] {
-                switch (fCuboid.DetailType()) {
-                case CuboidTarget::ShapeDetailType::Flat:
-                    return "Flat"s;
-                case CuboidTarget::ShapeDetailType::Perforated:
-                    return "Perforated"s;
-                }
-                muc::unreachable();
-            }(),
-            "Cuboid", "DetailType");
-        {
-            ExportValue(node, fCuboid.Perforated().Extent(), "Cuboid", "Perforated", "Extent");
-            ExportValue(node, fCuboid.Perforated().Spacing(), "Cuboid", "Perforated", "Spacing");
-            ExportValue(node, fCuboid.Perforated().Diameter(), "Cuboid", "Perforated", "Diameter");
-            ExportValue(node, fCuboid.Perforated().Depth(), "Cuboid", "Perforated", "Depth");
-        }
-    }
-    {
-        ExportValue(node, fMultiLayer.Width(), "MultiLayer", "Width");
-        ExportValue(node, fMultiLayer.Height(), "MultiLayer", "Height");
-        ExportValue(node, fMultiLayer.Thickness(), "MultiLayer", "Thickness");
-        ExportValue(node, fMultiLayer.Spacing(), "MultiLayer", "Spacing");
-        ExportValue(node, fMultiLayer.Count(), "MultiLayer", "Count");
-        ExportValue(
-            node, [this] {
-                switch (fMultiLayer.DetailType()) {
-                case MultiLayerTarget::ShapeDetailType::Flat:
-                    return "Flat"s;
-                case MultiLayerTarget::ShapeDetailType::Perforated:
-                    return "Perforated"s;
-                }
-                muc::unreachable();
-            }(),
-            "MultiLayer", "DetailType");
-        {
-            ExportValue(node, fMultiLayer.Perforated().ExtentZ(), "MultiLayer", "Perforated", "ExtentZ");
-            ExportValue(node, fMultiLayer.Perforated().ExtentY(), "MultiLayer", "Perforated", "ExtentY");
-            ExportValue(node, fMultiLayer.Perforated().Spacing(), "MultiLayer", "Perforated", "Spacing");
-            ExportValue(node, fMultiLayer.Perforated().Diameter(), "MultiLayer", "Perforated", "Diameter");
-        }
-    }
-    {
-        ExportValue(node, fCylinder.Radius(), "Cylinder", "Radius");
-        ExportValue(node, fCylinder.Thickness(), "Cylinder", "Thickness");
-    }
-    ExportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
-    ExportValue(node, fEffectiveTemperature, "EffectiveTemperature");
-    ExportValue(node, fFormationProbability, "FormationProbability");
-    ExportValue(node, fMeanFreePath, "MeanFreePath");
 }
 
 Target::CuboidTarget::CuboidTarget() :
@@ -231,6 +57,26 @@ Target::CuboidTarget::CuboidTarget() :
     fThickness{1_cm},
     fDetailType{ShapeDetailType::Perforated},
     fPerforated{} {}
+
+auto Target::CuboidTarget::DetailTypeString() const -> std::string_view {
+    switch (fDetailType) {
+    case ShapeDetailType::Flat:
+        return "Flat";
+    case ShapeDetailType::Perforated:
+        return "Perforated";
+    }
+    muc::unreachable();
+}
+
+auto Target::CuboidTarget::DetailType(std::string_view val) -> void {
+    if (val == "Flat") {
+        fDetailType = ShapeDetailType::Flat;
+    } else if (val == "Perforated") {
+        fDetailType = ShapeDetailType::Perforated;
+    } else {
+        Mustard::PrintWarning(fmt::format("Unknown multiLayer target detail '{}', ignoring it", val));
+    }
+}
 
 Target::CuboidTarget::PerforatedCuboid::PerforatedCuboid() :
     DetailBase{this},
@@ -249,6 +95,26 @@ Target::MultiLayerTarget::MultiLayerTarget() :
     fDetailType{ShapeDetailType::Perforated},
     fPerforated{} {}
 
+auto Target::MultiLayerTarget::DetailTypeString() const -> std::string_view {
+    switch (fDetailType) {
+    case ShapeDetailType::Flat:
+        return "Flat";
+    case ShapeDetailType::Perforated:
+        return "Perforated";
+    }
+    muc::unreachable();
+}
+
+auto Target::MultiLayerTarget::DetailType(std::string_view val) -> void {
+    if (val == "Flat") {
+        fDetailType = ShapeDetailType::Flat;
+    } else if (val == "Perforated") {
+        fDetailType = ShapeDetailType::Perforated;
+    } else {
+        Mustard::PrintWarning(fmt::format("Unknown multiLayer target detail '{}', ignoring it", val));
+    }
+}
+
 Target::MultiLayerTarget::PerforatedMultiLayer::PerforatedMultiLayer() :
     DetailBase{this},
     fHalfExtentZ{5_cm / 2},
@@ -260,5 +126,79 @@ Target::CylinderTarget::CylinderTarget() :
     ShapeBase{this},
     fRadius{30_mm},
     fThickness{60_mm} {}
+
+auto Target::ImportAllValue(const YAML::Node& node) -> void {
+    ImportValue<std::string>(node, [this](auto&& value) { ShapeType(value); }, "ShapeType");
+    {
+        ImportValue<double>(node, [this](auto value) { fCuboid.Width(value); }, "Cuboid", "Width");
+        ImportValue<double>(node, [this](auto value) { fCuboid.Thickness(value); }, "Cuboid", "Thickness");
+        ImportValue<std::string>(node, [this](auto&& value) { fCuboid.DetailType(value); }, "Cuboid", "DetailType");
+        {
+            ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().Extent(value); }, "Cuboid", "Perforated", "Extent");
+            ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().Spacing(value); }, "Cuboid", "Perforated", "Spacing");
+            ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().Diameter(value); }, "Cuboid", "Perforated", "Diameter");
+            ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().Depth(value); }, "Cuboid", "Perforated", "Depth");
+        }
+    }
+    {
+        ImportValue<double>(node, [this](auto value) { fMultiLayer.Width(value); }, "MultiLayer", "Width");
+        ImportValue<double>(node, [this](auto value) { fMultiLayer.Height(value); }, "MultiLayer", "Height");
+        ImportValue<double>(node, [this](auto value) { fMultiLayer.Thickness(value); }, "MultiLayer", "Thickness");
+        ImportValue<double>(node, [this](auto value) { fMultiLayer.Spacing(value); }, "MultiLayer", "Spacing");
+        ImportValue<int>(node, [this](auto value) { fMultiLayer.Count(value); }, "MultiLayer", "Count");
+        ImportValue<std::string>(node, [this](auto&& value) { fMultiLayer.DetailType(value); }, "MultiLayer", "DetailType");
+        {
+            ImportValue<double>(node, [this](auto value) { fMultiLayer.Perforated().ExtentZ(value); }, "MultiLayer", "Perforated", "ExtentZ");
+            ImportValue<double>(node, [this](auto value) { fMultiLayer.Perforated().ExtentY(value); }, "MultiLayer", "Perforated", "ExtentY");
+            ImportValue<double>(node, [this](auto value) { fMultiLayer.Perforated().Spacing(value); }, "MultiLayer", "Perforated", "Spacing");
+            ImportValue<double>(node, [this](auto value) { fMultiLayer.Perforated().Diameter(value); }, "MultiLayer", "Perforated", "Diameter");
+        }
+    }
+    {
+        ImportValue<double>(node, [this](auto value) { fCylinder.Radius(value); }, "Cylinder", "Radius");
+        ImportValue<double>(node, [this](auto value) { fCylinder.Thickness(value); }, "Cylinder", "Thickness");
+    }
+    ImportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
+    ImportValue(node, fEffectiveTemperature, "EffectiveTemperature");
+    ImportValue(node, fFormationProbability, "FormationProbability");
+    ImportValue(node, fMeanFreePath, "MeanFreePath");
+}
+
+auto Target::ExportAllValue(YAML::Node& node) const -> void {
+    ExportValue(node, ShapeTypeString(), "ShapeType");
+    {
+        ExportValue(node, fCuboid.Width(), "Cuboid", "Width");
+        ExportValue(node, fCuboid.Thickness(), "Cuboid", "Thickness");
+        ExportValue(node, fCuboid.DetailTypeString(), "Cuboid", "DetailType");
+        {
+            ExportValue(node, fCuboid.Perforated().Extent(), "Cuboid", "Perforated", "Extent");
+            ExportValue(node, fCuboid.Perforated().Spacing(), "Cuboid", "Perforated", "Spacing");
+            ExportValue(node, fCuboid.Perforated().Diameter(), "Cuboid", "Perforated", "Diameter");
+            ExportValue(node, fCuboid.Perforated().Depth(), "Cuboid", "Perforated", "Depth");
+        }
+    }
+    {
+        ExportValue(node, fMultiLayer.Width(), "MultiLayer", "Width");
+        ExportValue(node, fMultiLayer.Height(), "MultiLayer", "Height");
+        ExportValue(node, fMultiLayer.Thickness(), "MultiLayer", "Thickness");
+        ExportValue(node, fMultiLayer.Spacing(), "MultiLayer", "Spacing");
+        ExportValue(node, fMultiLayer.Count(), "MultiLayer", "Count");
+        ExportValue(node, fMultiLayer.DetailTypeString(), "MultiLayer", "DetailType");
+        {
+            ExportValue(node, fMultiLayer.Perforated().ExtentZ(), "MultiLayer", "Perforated", "ExtentZ");
+            ExportValue(node, fMultiLayer.Perforated().ExtentY(), "MultiLayer", "Perforated", "ExtentY");
+            ExportValue(node, fMultiLayer.Perforated().Spacing(), "MultiLayer", "Perforated", "Spacing");
+            ExportValue(node, fMultiLayer.Perforated().Diameter(), "MultiLayer", "Perforated", "Diameter");
+        }
+    }
+    {
+        ExportValue(node, fCylinder.Radius(), "Cylinder", "Radius");
+        ExportValue(node, fCylinder.Thickness(), "Cylinder", "Thickness");
+    }
+    ExportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
+    ExportValue(node, fEffectiveTemperature, "EffectiveTemperature");
+    ExportValue(node, fFormationProbability, "FormationProbability");
+    ExportValue(node, fMeanFreePath, "MeanFreePath");
+}
 
 } // namespace MACE::Detector::Description

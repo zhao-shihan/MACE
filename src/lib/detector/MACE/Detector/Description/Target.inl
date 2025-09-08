@@ -1,41 +1,5 @@
 namespace MACE::Detector::Description {
 
-auto Target::VolumeContain(const Mustard::Concept::InputVector3D auto& x) const -> bool {
-    switch (fShapeType) {
-    case TargetShapeType::Cuboid:
-        return fCuboid.VolumeContain(x);
-    case TargetShapeType::MultiLayer:
-        return fMultiLayer.VolumeContain(x);
-    case TargetShapeType::Cylinder:
-        return fCylinder.VolumeContain(x);
-    }
-    muc::unreachable();
-}
-
-auto Target::Contain(const Mustard::Concept::InputVector3D auto& x, bool insideVolume) const -> bool {
-    switch (fShapeType) {
-    case TargetShapeType::Cuboid:
-        return fCuboid.Contain(x, insideVolume);
-    case TargetShapeType::MultiLayer:
-        return fMultiLayer.Contain(x, insideVolume);
-    case TargetShapeType::Cylinder:
-        return fCylinder.Contain(x, insideVolume);
-    }
-    muc::unreachable();
-}
-
-auto Target::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -> bool {
-    switch (fShapeType) {
-    case TargetShapeType::Cuboid:
-        return fCuboid.DetectableAt(x);
-    case TargetShapeType::MultiLayer:
-        return fMultiLayer.DetectableAt(x);
-    case TargetShapeType::Cylinder:
-        return fCylinder.DetectableAt(x);
-    }
-    muc::unreachable();
-}
-
 template<typename ADerivedShape>
 Target::ShapeBase<ADerivedShape>::ShapeBase(ADerivedShape* derived) :
     Mustard::Env::Memory::WeakSingleton<ADerivedShape>{derived} {
@@ -190,6 +154,42 @@ auto Target::CylinderTarget::VolumeContain(const Mustard::Concept::InputVector3D
 auto Target::CylinderTarget::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -> bool {
     return x[2] > fThickness / 2 or
            muc::hypot_sq(x[0], x[1]) > muc::pow(fRadius, 2);
+}
+
+auto Target::VolumeContain(const Mustard::Concept::InputVector3D auto& x) const -> bool {
+    switch (fShapeType) {
+    case TargetShapeType::Cuboid:
+        return fCuboid.VolumeContain(x);
+    case TargetShapeType::MultiLayer:
+        return fMultiLayer.VolumeContain(x);
+    case TargetShapeType::Cylinder:
+        return fCylinder.VolumeContain(x);
+    }
+    muc::unreachable();
+}
+
+auto Target::Contain(const Mustard::Concept::InputVector3D auto& x, bool insideVolume) const -> bool {
+    switch (fShapeType) {
+    case TargetShapeType::Cuboid:
+        return fCuboid.Contain(x, insideVolume);
+    case TargetShapeType::MultiLayer:
+        return fMultiLayer.Contain(x, insideVolume);
+    case TargetShapeType::Cylinder:
+        return fCylinder.Contain(x, insideVolume);
+    }
+    muc::unreachable();
+}
+
+auto Target::DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -> bool {
+    switch (fShapeType) {
+    case TargetShapeType::Cuboid:
+        return fCuboid.DetectableAt(x);
+    case TargetShapeType::MultiLayer:
+        return fMultiLayer.DetectableAt(x);
+    case TargetShapeType::Cylinder:
+        return fCylinder.DetectableAt(x);
+    }
+    muc::unreachable();
 }
 
 } // namespace MACE::Detector::Description

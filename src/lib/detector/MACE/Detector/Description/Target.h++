@@ -26,6 +26,17 @@ public:
         Cylinder
     };
 
+private:
+    Target();
+    ~Target() = default;
+
+public:
+    auto ShapeType() const -> auto { return fShapeType; }
+    auto ShapeTypeString() const -> std::string_view;
+    auto ShapeType(TargetShapeType val) -> void { fShapeType = val; }
+    auto ShapeType(std::string_view val) -> void;
+
+public:
     template<typename ADerivedShape>
     class ShapeBase : public Mustard::Env::Memory::WeakSingleton<ADerivedShape> {
     protected:
@@ -58,7 +69,9 @@ public:
         auto Thickness(double val) -> void { fThickness = val; }
 
         auto DetailType() const -> auto { return fDetailType; }
+        auto DetailTypeString() const -> std::string_view;
         auto DetailType(ShapeDetailType val) -> void { fDetailType = val; }
+        auto DetailType(std::string_view val) -> void;
 
         auto Perforated() const -> const auto& { return fPerforated; }
         auto Perforated() -> auto& { return fPerforated; }
@@ -72,13 +85,13 @@ public:
         public:
             PerforatedCuboid();
 
-            auto HalfExtent() const { return fHalfExtent; }
-            auto Extent() const { return 2 * fHalfExtent; }
-            auto Spacing() const { return fSpacing; }
-            auto Radius() const { return fRadius; }
-            auto Diameter() const { return 2 * fRadius; }
-            auto Depth() const { return fDepth; }
-            auto Pitch() const { return fSpacing + Diameter(); }
+            auto HalfExtent() const -> auto { return fHalfExtent; }
+            auto Extent() const -> auto { return 2 * fHalfExtent; }
+            auto Spacing() const -> auto { return fSpacing; }
+            auto Radius() const -> auto { return fRadius; }
+            auto Diameter() const -> auto { return 2 * fRadius; }
+            auto Depth() const -> auto { return fDepth; }
+            auto Pitch() const -> auto { return fSpacing + Diameter(); }
 
             auto Extent(double ex) -> void { fHalfExtent = std::max(0., ex / 2); }
             auto Spacing(double spacing) -> void { fSpacing = std::max(0., spacing); }
@@ -126,7 +139,9 @@ public:
         auto Count(int val) -> void { fCount = std::max(2, val); }
 
         auto DetailType() const -> auto { return fDetailType; }
+        auto DetailTypeString() const -> std::string_view;
         auto DetailType(ShapeDetailType val) -> void { fDetailType = val; }
+        auto DetailType(std::string_view val) -> void;
 
         auto Perforated() const -> const auto& { return fPerforated; }
         auto Perforated() -> auto& { return fPerforated; }
@@ -140,14 +155,14 @@ public:
         public:
             PerforatedMultiLayer();
 
-            auto HalfExtentZ() const { return fHalfExtentZ; }
-            auto ExtentZ() const { return 2 * fHalfExtentZ; }
-            auto HalfExtentY() const { return fHalfExtentY; }
-            auto ExtentY() const { return 2 * fHalfExtentY; }
-            auto Spacing() const { return fSpacing; }
-            auto Radius() const { return fRadius; }
-            auto Diameter() const { return 2 * fRadius; }
-            auto Pitch() const { return fSpacing + Diameter(); }
+            auto HalfExtentZ() const -> auto { return fHalfExtentZ; }
+            auto ExtentZ() const -> auto { return 2 * fHalfExtentZ; }
+            auto HalfExtentY() const -> auto { return fHalfExtentY; }
+            auto ExtentY() const -> auto { return 2 * fHalfExtentY; }
+            auto Spacing() const -> auto { return fSpacing; }
+            auto Radius() const -> auto { return fRadius; }
+            auto Diameter() const -> auto { return 2 * fRadius; }
+            auto Pitch() const -> auto { return fSpacing + Diameter(); }
 
             auto ExtentZ(double ex) -> void { fHalfExtentZ = std::max(0., ex / 2); }
             auto ExtentY(double ex) -> void { fHalfExtentY = std::max(0., ex / 2); }
@@ -194,14 +209,7 @@ public:
         double fThickness;
     };
 
-private:
-    Target();
-    ~Target() = default;
-
 public:
-    auto ShapeType() const -> auto { return fShapeType; }
-    auto ShapeType(TargetShapeType val) -> void { fShapeType = val; }
-
     auto Cuboid() const -> const auto& { return fCuboid; }
     auto Cuboid() -> auto& { return fCuboid; }
     auto MultiLayer() const -> const auto& { return fMultiLayer; }
@@ -213,13 +221,13 @@ public:
     auto EffectiveTemperature() const -> auto { return fEffectiveTemperature; }
     auto FormationProbability() const -> auto { return fFormationProbability; }
     auto MeanFreePath() const -> auto { return fMeanFreePath; }
+    auto MaterialName() const -> const auto& { return fMaterialName; }
 
     auto SilicaAerogelDensity(double val) -> void { fSilicaAerogelDensity = val; }
     auto EffectiveTemperature(double val) -> void { fEffectiveTemperature = val; }
     auto FormationProbability(double val) -> void { fFormationProbability = val; }
     auto MeanFreePath(double val) -> void { fMeanFreePath = val; }
-
-    auto Material() const -> G4Material*;
+    auto MaterialName(std::string val) -> void { fMaterialName = std::move(val); }
 
     /// @brief Return true if inside the target volume (include boundary (closed region), don't consider fine structure).
     auto VolumeContain(const Mustard::Concept::InputVector3D auto& x) const -> bool;
@@ -243,6 +251,7 @@ private:
     double fEffectiveTemperature;
     double fFormationProbability;
     double fMeanFreePath;
+    std::string fMaterialName;
 };
 
 } // namespace MACE::Detector::Description
