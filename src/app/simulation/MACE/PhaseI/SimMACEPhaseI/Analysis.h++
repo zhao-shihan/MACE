@@ -28,13 +28,13 @@ namespace MACE::PhaseI::inline Simulation::inline Hit {
 class MRPCHit;
 class SciFiHit;
 class SciFiSiPMRawHit;
-class TTCHit;
-class TTCSiPMHit;
 } // namespace MACE::PhaseI::inline Simulation::inline Hit
 
 namespace MACE::inline Simulation::inline Hit {
 class ECALHit;
 class ECALPMHit;
+class TTCHit;
+class TTCSiPMHit;
 } // namespace MACE::inline Simulation::inline Hit
 
 namespace MACE::PhaseI::SimMACEPhaseI {
@@ -75,8 +75,8 @@ private:
     std::optional<Mustard::Data::Output<MACE::Data::ECALPMHit>> fECALPMHitOutput;
     std::optional<Mustard::Data::Output<MACE::PhaseI::Data::SciFiSimHit>> fSciFiHitOutput;
     std::optional<Mustard::Data::Output<MACE::PhaseI::Data::SciFiSiPMRawHit>> fSciFiSiPMHitOutput;
-    std::optional<Mustard::Data::Output<Data::TTCSimHit>> fTTCSimHitOutput;
-    std::optional<Mustard::Data::Output<Data::TTCSiPMHit>> fTTCSiPMHitOutput;
+    std::optional<Mustard::Data::Output<MACE::Data::TTCSimHit>> fTTCSimHitOutput;
+    std::optional<Mustard::Data::Output<MACE::Data::TTCSiPMHit>> fTTCSiPMHitOutput;
 
     const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>* fPrimaryVertex;
     const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>* fDecayVertex;

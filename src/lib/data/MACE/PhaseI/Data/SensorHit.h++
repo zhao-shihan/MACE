@@ -24,8 +24,4 @@ using SiPMHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<int, "SiPMID", "SiPM ID">,
     Mustard::Data::Value<double, "t", "Time over threshold">>;
 
-using TTCSiPMHit = Mustard::Data::TupleModel<
-    internal::HitEventIDHitID,
-    TTCSiPMRawHit>;
-
 } // namespace MACE::PhaseI::Data

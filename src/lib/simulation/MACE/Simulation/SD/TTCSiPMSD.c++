@@ -43,6 +43,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     step.GetTrack()->SetTrackStatus(fStopAndKill);
 
     const auto postStepPoint{*step.GetPostStepPoint()};
+    const auto preStepPoint{*step.GetPreStepPoint()};
     const auto tileID{postStepPoint.GetTouchable()->GetReplicaNumber(2)};
     const auto siPMLocalID{postStepPoint.GetTouchable()->GetReplicaNumber(1)};
     // new a hit
@@ -54,6 +55,8 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
     // Get<"TTCHitID">(*hit) = -1; // to be determined
     fHit[tileID].emplace_back(std::move(hit));
+    Get<"x">(*hit) = preStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformPoint(postStepPoint.GetPosition());
+    Get<"K">(*hit) = preStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformAxis(preStepPoint.GetMomentumDirection());
 
     return true;
 }

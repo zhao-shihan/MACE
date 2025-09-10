@@ -11,9 +11,4 @@ using SciFiSiPMRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<short, "SiPMID", "Hit SiPM ID">,
     Mustard::Data::Value<double, "t", "Optical photon hit time">>;
 
-using TTCSiPMRawHit = Mustard::Data::TupleModel<
-    Mustard::Data::Value<short, "TileID", "Hit detector ID">,
-    Mustard::Data::Value<short, "SiPMID", "Hit Silicone ID">,
-    Mustard::Data::Value<double, "t", "Optical photon hit time">>;
-
 } // namespace MACE::PhaseI::Data

@@ -4,8 +4,8 @@
 #include "MACE/PhaseI/Simulation/Hit/MRPCHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiSiPMRawHit.h++"
-#include "MACE/PhaseI/Simulation/Hit/TTCHit.h++"
-#include "MACE/PhaseI/Simulation/Hit/TTCSiPMHit.h++"
+#include "MACE/Simulation/Hit/TTCHit.h++"
+#include "MACE/Simulation/Hit/TTCSiPMHit.h++"
 #include "MACE/Simulation/Hit/ECALHit.h++"
 #include "MACE/Simulation/Hit/ECALPMHit.h++"
 

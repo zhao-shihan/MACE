@@ -4,7 +4,7 @@
 namespace MACE::PhaseI::SimMACEPhaseI::inline SD {
 
 auto TTCSiPMSD::EndOfEvent(G4HCofThisEvent* hc) -> void {
-    Simulation::TTCSiPMSD::EndOfEvent(hc);
+    MACE::Simulation::TTCSiPMSD::EndOfEvent(hc);
     Analysis::Instance().SubmitTTCSiPMHC(*fHitsCollection->GetVector());
 }
 

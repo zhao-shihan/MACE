@@ -11,15 +11,19 @@
 /MACE/Generator/SwitchToGPSX
 
 /gps/particle e+
-/gps/ene/mono 53.085 MeV
 /gps/pos/centre 0. 0. 0. cm
 /gps/ang/type iso
+/gps/ene/type                         Lin
+/gps/ene/gradient                     0
+/gps/ene/intercept                    1
+/gps/ene/min                          1 keV
+/gps/ene/max                          52.83 MeV
 
 /MACE/Analysis/CoincidenceWithMRPC    no
 /MACE/Analysis/CoincidenceWithECAL    no
 
-/MACE/Analysis/FilePath SimMACEPhaseI_e+
+/MACE/Analysis/FilePath SimMACEPhaseI_ep_flat
 /MACE/Analysis/FileMode RECREATE
 
-/run/beamOn 1000000
+/run/beamOn 5000000
 /Mustard/Run/PrintRunSummary
