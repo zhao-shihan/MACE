@@ -9,6 +9,7 @@
 #include "G4MaterialPropertiesTable.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
+#include "G4Transform3D.hh"
 #include "G4Tubs.hh"
 
 namespace MACE::Detector::Definition {
@@ -41,14 +42,16 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
         const auto solid{Make<G4Box>(
             target.Name(),
             cuboid.Width() / 2,
-            cuboid.Width() / 2,
+            cuboid.Height() / 2,
             cuboid.Thickness() / 2)};
         const auto logic{Make<G4LogicalVolume>(
             solid,
             silicaAerogel,
             target.Name())};
-        Make<G4PVPlacement>( // clang-format off
-            G4Transform3D{{}, {0, 0, z0 - cuboid.Thickness() / 2}}, // clang-format on
+        Make<G4PVPlacement>(
+            G4TranslateZ3D{z0} *
+                G4RotateY3D{-cuboid.TiltAngle()} *
+                G4TranslateZ3D{-cuboid.Thickness() / 2},
             logic,
             target.Name(),
             Mother().LogicalVolume(),

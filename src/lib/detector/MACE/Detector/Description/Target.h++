@@ -4,8 +4,11 @@
 #include "Mustard/Detector/Description/DescriptionBase.h++"
 #include "Mustard/Env/Memory/WeakSingleton.h++"
 
+#include "muc/array"
 #include "muc/math"
 #include "muc/utility"
+
+#include "gsl/gsl"
 
 #include <algorithm>
 #include <cmath>
@@ -63,10 +66,17 @@ public:
         CuboidTarget();
 
         auto Width() const -> auto { return fWidth; }
+        auto Height() const -> auto { return fHeight; }
         auto Thickness() const -> auto { return fThickness; }
+        auto TiltAngle() const -> auto { return fTiltAngle; }
+        auto CosTiltAngle() const -> auto { return fCosTiltAngle; }
+        auto SinTiltAngle() const -> auto { return fSinTiltAngle; }
+        auto EffectiveThickness() const -> auto { return fThickness / fCosTiltAngle; }
 
         auto Width(double val) -> void { fWidth = val; }
+        auto Height(double val) -> void { fHeight = val; }
         auto Thickness(double val) -> void { fThickness = val; }
+        auto TiltAngle(double val) -> void;
 
         auto DetailType() const -> auto { return fDetailType; }
         auto DetailTypeString() const -> std::string_view;
@@ -81,36 +91,44 @@ public:
         auto DetectableAt(const Mustard::Concept::InputVector3D auto& x) const -> bool;
 
     private:
+        auto RotateBack(const Mustard::Concept::InputVector3D auto& x) const -> muc::array3d;
+
+    private:
         class PerforatedCuboid final : public DetailBase<PerforatedCuboid> {
         public:
-            PerforatedCuboid();
+            PerforatedCuboid(gsl::not_null<const CuboidTarget*> cuboid);
 
-            auto HalfExtent() const -> auto { return fHalfExtent; }
-            auto Extent() const -> auto { return 2 * fHalfExtent; }
+            auto WidthExtent() const -> auto { return fWidthExtent; }
+            auto HeightExtent() const -> auto { return fHeightExtent; }
             auto Spacing() const -> auto { return fSpacing; }
-            auto Radius() const -> auto { return fRadius; }
-            auto Diameter() const -> auto { return 2 * fRadius; }
+            auto Diameter() const -> auto { return fDiameter; }
             auto Depth() const -> auto { return fDepth; }
-            auto Pitch() const -> auto { return fSpacing + Diameter(); }
 
-            auto Extent(double ex) -> void { fHalfExtent = std::max(0., ex / 2); }
-            auto Spacing(double spacing) -> void { fSpacing = std::max(0., spacing); }
-            auto Diameter(double diameter) -> void { fRadius = std::max(0., diameter / 2); }
+            auto WidthExtent(double val) -> void { fWidthExtent = val; }
+            auto HeightExtent(double val) -> void { fHeightExtent = val; }
+            auto Spacing(double val) -> void { fSpacing = val; }
+            auto Diameter(double val) -> void { fDiameter = val; }
             auto Depth(double d) -> void { fDepth = d; }
 
             auto DetailContain(const Mustard::Concept::InputVector3D auto& x) const -> bool;
             auto DetailDetectable(const Mustard::Concept::InputVector3D auto&) const -> bool { return false; }
 
         private:
-            double fHalfExtent;
+            const CuboidTarget* fCuboid;
+            double fWidthExtent;
+            double fHeightExtent;
             double fSpacing;
-            double fRadius;
+            double fDiameter;
             double fDepth;
         };
 
     private:
         double fWidth;
+        double fHeight;
         double fThickness;
+        double fTiltAngle;
+        double fCosTiltAngle;
+        double fSinTiltAngle;
 
         ShapeDetailType fDetailType;
         PerforatedCuboid fPerforated;

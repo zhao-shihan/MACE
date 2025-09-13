@@ -11,13 +11,11 @@
 
 namespace MACE::Detector::Description {
 
-using namespace Mustard::LiteralUnit::Length;
-using namespace Mustard::LiteralUnit::Density;
-using namespace Mustard::LiteralUnit::Temperature;
+using namespace Mustard::LiteralUnit;
 
 Target::Target() :
     DescriptionBase{"Target"},
-    fShapeType{TargetShapeType::MultiLayer},
+    fShapeType{TargetShapeType::Cuboid},
     fCuboid{},
     fMultiLayer{},
     fCylinder{},
@@ -53,10 +51,20 @@ auto Target::ShapeType(std::string_view val) -> void {
 
 Target::CuboidTarget::CuboidTarget() :
     ShapeBase{this},
-    fWidth{6_cm},
-    fThickness{1_cm},
+    fWidth{12_cm},
+    fHeight{6_cm},
+    fThickness{5_mm},
+    fTiltAngle{60_deg},
+    fCosTiltAngle{std::cos(fTiltAngle)},
+    fSinTiltAngle{std::sin(fTiltAngle)},
     fDetailType{ShapeDetailType::Perforated},
-    fPerforated{} {}
+    fPerforated{this} {}
+
+auto Target::CuboidTarget::TiltAngle(double val) -> void {
+    fTiltAngle = val;
+    fCosTiltAngle = std::cos(val);
+    fSinTiltAngle = std::sin(val);
+}
 
 auto Target::CuboidTarget::DetailTypeString() const -> std::string_view {
     switch (fDetailType) {
@@ -78,12 +86,14 @@ auto Target::CuboidTarget::DetailType(std::string_view val) -> void {
     }
 }
 
-Target::CuboidTarget::PerforatedCuboid::PerforatedCuboid() :
+Target::CuboidTarget::PerforatedCuboid::PerforatedCuboid(gsl::not_null<const CuboidTarget*> cuboid) :
     DetailBase{this},
-    fHalfExtent{4_cm / 2},
+    fCuboid{cuboid},
+    fWidthExtent{10_cm},
+    fHeightExtent{5_cm},
     fSpacing{55_um},
-    fRadius{184_um / 2},
-    fDepth{2_mm} {}
+    fDiameter{184_um},
+    fDepth{5_mm} {}
 
 Target::MultiLayerTarget::MultiLayerTarget() :
     ShapeBase{this},
@@ -131,10 +141,13 @@ auto Target::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue<std::string>(node, [this](auto&& value) { ShapeType(value); }, "ShapeType");
     {
         ImportValue<double>(node, [this](auto value) { fCuboid.Width(value); }, "Cuboid", "Width");
+        ImportValue<double>(node, [this](auto value) { fCuboid.Height(value); }, "Cuboid", "Height");
         ImportValue<double>(node, [this](auto value) { fCuboid.Thickness(value); }, "Cuboid", "Thickness");
+        ImportValue<double>(node, [this](auto value) { fCuboid.TiltAngle(value); }, "Cuboid", "TiltAngle");
         ImportValue<std::string>(node, [this](auto&& value) { fCuboid.DetailType(value); }, "Cuboid", "DetailType");
         {
-            ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().Extent(value); }, "Cuboid", "Perforated", "Extent");
+            ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().WidthExtent(value); }, "Cuboid", "Perforated", "WidthExtent");
+            ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().HeightExtent(value); }, "Cuboid", "Perforated", "HeightExtent");
             ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().Spacing(value); }, "Cuboid", "Perforated", "Spacing");
             ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().Diameter(value); }, "Cuboid", "Perforated", "Diameter");
             ImportValue<double>(node, [this](auto value) { fCuboid.Perforated().Depth(value); }, "Cuboid", "Perforated", "Depth");
@@ -171,7 +184,8 @@ auto Target::ExportAllValue(YAML::Node& node) const -> void {
         ExportValue(node, fCuboid.Thickness(), "Cuboid", "Thickness");
         ExportValue(node, fCuboid.DetailTypeString(), "Cuboid", "DetailType");
         {
-            ExportValue(node, fCuboid.Perforated().Extent(), "Cuboid", "Perforated", "Extent");
+            ExportValue(node, fCuboid.Perforated().WidthExtent(), "Cuboid", "Perforated", "WidthExtent");
+            ExportValue(node, fCuboid.Perforated().HeightExtent(), "Cuboid", "Perforated", "HeightExtent");
             ExportValue(node, fCuboid.Perforated().Spacing(), "Cuboid", "Perforated", "Spacing");
             ExportValue(node, fCuboid.Perforated().Diameter(), "Cuboid", "Perforated", "Diameter");
             ExportValue(node, fCuboid.Perforated().Depth(), "Cuboid", "Perforated", "Depth");
