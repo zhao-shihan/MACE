@@ -47,7 +47,7 @@ auto GetVetoSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
         {"HitID",   0.,                                                                                   10.                                                                                 },
-        {"StripID", 0.,                                                                                   200.                                                                                },
+        // {"StripID", 0.,                                                                                   200.                                                                                },
         // {"x0_0",     -2100.,                                                                               2100.                                                                               },
         // {"x0_1",     -2100.,                                                                               2100.                                                                               },
         // {"x0_2",     -2100.,                                                                               2100.                                                                               },
