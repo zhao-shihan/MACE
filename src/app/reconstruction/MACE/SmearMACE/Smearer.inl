@@ -1,7 +1,7 @@
 namespace MACE::SmearMACE {
 
 template<Mustard::Data::TupleModelizable... Ts>
-auto Smearer::Smear(std::string_view treeName, const std::unordered_map<std::string, std::string>& smearingConfig) const -> void {
+auto Smearer::Smear(std::string_view treeName, const muc::flat_hash_map<std::string, std::string>& smearingConfig) const -> void {
     Mustard::Data::Output<Ts...> output{std::string{treeName}};
 
     std::vector<std::pair<std::string_view, TF1>> smearAction;

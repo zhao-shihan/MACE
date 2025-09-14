@@ -4,10 +4,10 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include "muc/hash_map"
 #include "muc/ptrvec"
 
-#include <unordered_map>
-#include <utility>
+#include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -23,7 +23,7 @@ public:
     auto SipmHit() const -> std::unordered_map<int, std::vector<std::vector<std::vector<double>>>>;
 
 protected:
-    std::unordered_map<int, muc::unique_ptrvec<TTCSiPMHit>> fHit;
+    muc::flat_hash_map<int, muc::unique_ptrvec<TTCSiPMHit>> fHit;
     TTCSiPMHitCollection* fHitsCollection;
 };
 

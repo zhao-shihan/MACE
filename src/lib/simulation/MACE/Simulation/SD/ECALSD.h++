@@ -4,9 +4,8 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include "muc/hash_map"
 #include "muc/ptrvec"
-
-#include <unordered_map>
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -25,7 +24,7 @@ protected:
 
     double fEnergyDepositionThreshold;
 
-    std::unordered_map<int, muc::unique_ptrvec<ECALHit>> fSplitHit;
+    muc::flat_hash_map<int, muc::unique_ptrvec<ECALHit>> fSplitHit;
     ECALHitCollection* fHitsCollection;
 };
 

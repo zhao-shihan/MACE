@@ -5,10 +5,10 @@
 #include "MACE/PhaseI/Data/Track.h++"
 #include "MACE/PhaseI/Detector/Description/SciFiTracker.h++"
 
+#include "Mustard/CLI/BasicCLI.h++"
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/Tuple.h++"
-#include "Mustard/Env/CLI/BasicCLI.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Parallel/ProcessSpecificPath.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
@@ -58,7 +58,7 @@ ReconSciFi::ReconSciFi() :
     Subprogram{"ReconSciFi", "Scintilating Fiber Tracker (SciFi Tracker) event reconstruction."} {}
 
 auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
-    Mustard::Env::CLI::BasicCLI<> cli;
+    Mustard::CLI::BasicCLI<> cli;
     cli->add_argument("input").help("Input file path(s).").nargs(argparse::nargs_pattern::at_least_one);
     cli->add_argument("-t", "--input-tree").help("Input tree name.").default_value("data"s).required().nargs(1);
     cli->add_argument("-o", "--output").help("Output file path.").required().nargs(1);
