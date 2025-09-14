@@ -105,6 +105,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"x0">(*hit) = track.GetVertexPosition();
     Get<"Ek0">(*hit) = vertexEk;
     Get<"p0">(*hit) = vertexMomentum;
+    Get<"SiPMHit">(*hit) = {};
     *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
 
     return true;
@@ -184,7 +185,13 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
             Get<"nOptPho">(*hit) = nHit[Get<"TileID">(*hit)];
         }
+        auto sipmHit{fTTCSiPMSD->SipmHit()};
+        for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
+            Get<"SiPMHit">(*hit) = sipmHit[Get<"TileID">(*hit)];
+        }
     }
+
+
 }
 
 } // namespace MACE::inline Simulation::inline SD

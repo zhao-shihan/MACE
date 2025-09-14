@@ -85,4 +85,21 @@ auto TTCSiPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, std::vector
     return nHit;
 }
 
+auto TTCSiPMSD::SipmHit() const -> std::unordered_map<int, std::vector<std::vector<std::vector<double>>>>{
+    std::unordered_map<int, std::vector<std::vector<std::vector<double>>>> sipmHit;
+    const auto& ttc{MACE::Detector::Description::TTC::Instance()};
+    for (auto&& [tileID, hitofDetector] : fHit) {
+        if (hitofDetector.size() > 0) {
+            std::vector<std::vector<std::vector<double>>> sipmData(ttc.NSiPM()); // up and down SiPM
+            for (auto&& hit : hitofDetector) {
+                auto SipmId = Get<"SiPMID">(*hit);
+                auto SipmIndex = SipmId % 2;
+                sipmData[SipmId].emplace_back(std::vector<double>{Get<"t">(*hit), Get<"x">(*hit)[0], Get<"x">(*hit)[1], Get<"x">(*hit)[2]});
+            }
+            sipmHit[tileID] = sipmData;
+        }
+    }
+    return sipmHit;
+}
+
 } // namespace MACE::inline Simulation::inline SD
