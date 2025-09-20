@@ -11,13 +11,13 @@ source ../../data/mace_offline_data.sh
 echo "Start simulation..."
 {
     echo "Running SimMMS..."
-    ../../MACE SimMMS ../../SimMMS/run_em_flat.mac
+    mpirun ../../MACE SimMMS ../../SimMMS/run_em_flat.mac
     
     echo "Running SimVeto..."
-    ../../MACE SimVeto ../../SimVeto/run_hit_partial.mac
+    mpirun ../../MACE SimVeto ../../SimVeto/run_hit_partial.mac
     
     echo "Running SimTTC..."
-    ../../MACE SimTTC ../../SimTTC/run_em_flat.mac
+    mpirun ../../MACE SimTTC ../../SimTTC/run_em_flat.mac
     
     echo "Running SimMACE..."
     ../../MACE SimMACE ../../SimMACE/run_signal.mac
@@ -28,7 +28,7 @@ echo "Start data test..."
     root -l -q '../TestCDCSimHit.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","../Sample.root")'
     root -l -q '../TestMMSSimTrack.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","../Sample.root")'
     root -l -q '../TestVetoSimHit.cxx("SimVeto_hit_partial","SimVeto_hit_partial_test.root","../Sample.root")'
-    root -l -q '../TestTTCSimHit.cxx("SimTTC_em_flat","TTC_em_flat_test.root","../Sample.root")'
+    root -l -q '../TestTTCSimHit.cxx("SimTTC_em_flat","SimTTC_em_flat_test.root","../Sample.root")'
     root -l -q '../TestMCPSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","../Sample.root")'
     root -l -q '../TestTTCSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","../Sample.root")'
     root -l -q '../TestCDCSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","../Sample.root")'
