@@ -15,7 +15,6 @@ const void Judge(double pValue) {
     const std::string boldOrange = "\033[1;33m";
     const std::string reset = "\033[0m";
 
-    std::clog << "(#) ";
     if (pValue != 0) {
         if (pValue < 0.003) {
             std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
@@ -74,7 +73,7 @@ auto TestTTCSimHit(std::string moduleName, std::string testFileName, std::string
         auto nBins{hist->GetNbinsX()};
 
         auto testHist{df.Histo1D({"", "", nBins, xMin, xMax}, branchName)};
-        std::clog << "[" << ++idx << "] " << " Column " << branchName << std::endl;
+        std::cout<< "\n" << "(#" << ++idx << ") " << " Column " << branchName<< std::endl;
         auto pValue{hist->Chi2Test(testHist.GetPtr(), "P")};
         Judge(pValue);
         std::cout << "\n";
