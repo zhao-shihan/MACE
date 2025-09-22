@@ -6,6 +6,7 @@
 
 #include "muc/hash_map"
 #include "muc/ptrvec"
+#include "muc/array"
 
 #include <vector>
 
@@ -20,7 +21,7 @@ public:
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
     auto NOpticalPhotonHit() const ->  muc::flat_hash_map<int, std::vector<int>>;
-    auto SipmHit() const -> std::unordered_map<int, std::vector<std::vector<std::vector<double>>>>;
+    auto SiPMHit() const -> muc::flat_hash_map<int, std::vector<std::vector<std::vector<double>>>>;
 
 protected:
     muc::flat_hash_map<int, muc::unique_ptrvec<TTCSiPMHit>> fHit;
