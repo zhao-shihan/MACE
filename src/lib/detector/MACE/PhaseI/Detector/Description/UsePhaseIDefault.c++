@@ -24,7 +24,7 @@ auto UsePhaseIDefault() -> void {
         auto& ecal{MACE::ECAL::Instance()};
         ecal.UpstreamWindowRadius(104_mm);
         ecal.DownstreamWindowRadius(104_mm);
-        ecal.InnerRadius(26_mm);
+        ecal.InnerRadius(260_mm);
     }
 }
 
