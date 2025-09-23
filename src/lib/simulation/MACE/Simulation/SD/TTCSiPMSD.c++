@@ -88,15 +88,23 @@ auto TTCSiPMSD::NOpticalPhotonHit() const -> muc::flat_hash_map<int, std::vector
 auto TTCSiPMSD::SiPMHit() const -> muc::flat_hash_map<int, std::vector<std::vector<std::vector<double>>>>{
     muc::flat_hash_map<int, std::vector<std::vector<std::vector<double>>>> sipmHit;
     const auto& ttc{MACE::Detector::Description::TTC::Instance()};
+    size_t nSiPM = ttc.NSiPM();
     for (auto&& [tileID, hitofDetector] : fHit) {
+        auto& tileHit = sipmHit[tileID];
+        if (tileHit.empty()) {
+            tileHit.resize(4); 
+            for (auto& channel : tileHit) {
+                channel.resize(nSiPM); 
+            }
+        }
         if (hitofDetector.size() > 0) {
             for (auto&& hit : hitofDetector) {
                 auto SipmId = Get<"SiPMID">(*hit);
                 auto SipmIndex = SipmId % ttc.NSiPM();
-                sipmHit[tileID][0][SipmIndex].emplace_back(Get<"t">(*hit));
-                sipmHit[tileID][1][SipmIndex].emplace_back(Get<"x">(*hit)[0]);
-                sipmHit[tileID][2][SipmIndex].emplace_back(Get<"x">(*hit)[1]);
-                sipmHit[tileID][3][SipmIndex].emplace_back(Get<"x">(*hit)[2]);
+                tileHit[0][SipmIndex].emplace_back(Get<"t">(*hit));
+                tileHit[1][SipmIndex].emplace_back(Get<"x">(*hit)[0]);
+                tileHit[2][SipmIndex].emplace_back(Get<"x">(*hit)[1]);
+                tileHit[3][SipmIndex].emplace_back(Get<"x">(*hit)[2]);
             }
         }
     }
