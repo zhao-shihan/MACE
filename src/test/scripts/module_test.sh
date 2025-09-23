@@ -20,8 +20,13 @@ echo "Start simulation..."
     mpirun ../../MACE SimTTC ../../SimTTC/run_em_flat.mac
     
     echo "Running SimMACE..."
-    ../../MACE SimMACE ../../SimMACE/run_signal.mac
+    mpirun ../../MACE SimMACE ../../SimMACE/run_signal.mac
 } > output.log 2>&1
+
+hadd -ff SimMMS_em_flat_test/* SimMMS_em_flat_test.root
+hadd -ff SimTTC_em_flat_test/* SimTTC_em_flat_test.root
+hadd -ff SimVeto_hit_partial_test/* SimVeto_hit_partial_test.root
+hadd -ff SimMACE_signal_test/* SimMACE_signal_test.root
 
 echo "Start data test..."
 {
