@@ -2,7 +2,7 @@ namespace MACE::inline Utility {
 
 template<int M, int N, typename A>
 auto MatrixElementBasedGeneratorCLIModule::PhaseSpaceIntegral(Mustard::Executor<unsigned long long>& executor,
-                                                              Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator) const -> std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState> {
+                                                              Mustard::MatrixElementBasedGenerator<M, N, A>& generator) const -> std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState> {
     std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState> result;
     auto& [integral, nEff, integrationState]{result};
     if (TheCLI()->is_used("--phase-space-integral")) {
@@ -21,7 +21,7 @@ auto MatrixElementBasedGeneratorCLIModule::PhaseSpaceIntegral(Mustard::Executor<
         }
         Mustard::MasterPrintLn("You can save the above phase-space integral and integration state for future use "
                                "as long as initial state properties and acceptance function does not change "
-                               "(see option --phase-space-integral and --continue-integration)."
+                               "(see option -i or --phase-space-integral and --continue-integration)."
                                "\n");
     }
     return result;
