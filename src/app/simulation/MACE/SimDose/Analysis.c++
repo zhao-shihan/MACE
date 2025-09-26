@@ -5,6 +5,7 @@
 #include "Mustard/IO/PrettyLog.h++"
 
 #include "TH3F.h"
+#include "TDirectory.h"
 
 #include "G4ParticleDefinition.hh"
 #include "G4StepPoint.hh"
