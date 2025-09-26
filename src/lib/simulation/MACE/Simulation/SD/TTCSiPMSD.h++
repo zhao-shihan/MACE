@@ -20,9 +20,8 @@ public:
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
-    auto NOpticalPhotonHit() const ->  muc::flat_hash_map<int, std::vector<int>>;
-    auto SiPMHit() const -> muc::flat_hash_map<int, std::vector<std::vector<std::vector<double>>>>;
-
+    auto NOpticalPhotonHit() const -> muc::flat_hash_map<int, std::vector<int>>;
+    
 protected:
     muc::flat_hash_map<int, muc::unique_ptrvec<TTCSiPMHit>> fHit;
     TTCSiPMHitCollection* fHitsCollection;

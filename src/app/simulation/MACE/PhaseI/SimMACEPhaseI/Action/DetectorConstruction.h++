@@ -38,12 +38,11 @@ public:
 
 public:
     using ProminentDescription = std::tuple<MACE::Detector::Description::ECAL,
-                                        PhaseI::Detector::Description::MRPC,
-                                        PhaseI::Detector::Description::CentralBeamPipe,
-                                        MACE::Detector::Description::Target,
-                                        PhaseI::Detector::Description::SciFiTracker,
-                                        PhaseI::Detector::Description::TTC,
-                                        PhaseI::Detector::Description::World>;
+                                            PhaseI::Detector::Description::CentralBeamPipe,
+                                            MACE::Detector::Description::Target,
+                                            PhaseI::Detector::Description::SciFiTracker,
+                                            PhaseI::Detector::Description::TTC,
+                                            PhaseI::Detector::Description::World>;
 
 private:
     G4bool fCheckOverlap;

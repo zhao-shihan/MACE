@@ -74,7 +74,7 @@ TTC::TTC() : // clang-format off
     fWindowCarbonElement{this, 0.7362},
     fWindowHydrogenElement{this, 0.0675},
     fWindowOxygenElement{this, 0.1963},
-    fWindowRIndex{this, {1.55, 1.55}},
+    fWindowRefractiveIndex{this, {1.55, 1.55}},
 
     fSiPMEnergyBin{this, {}},
     fSiPMEfficiency{this, {}}, // S13360-3050VE
@@ -177,7 +177,7 @@ auto TTC::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fWindowCarbonElement, "WindowCarbonElement");
     ImportValue(node, fWindowHydrogenElement, "WindowHydrogenElement");
     ImportValue(node, fWindowOxygenElement, "WindowOxygenElement");
-    ImportValue(node, fWindowRIndex, "WindowRIndex");
+    ImportValue(node, fWindowRefractiveIndex, "WindowRefractiveIndex");
     ImportValue(node, fSiPMEnergyBin, "SiPMEnergyBin");
     ImportValue(node, fSiPMEfficiency, "SiPMEfficiency");
     ImportValue(node, fReflectorReflectivity, "ReflectorReflectivity");
@@ -232,7 +232,7 @@ auto TTC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fWindowCarbonElement, "WindowCarbonElement");
     ExportValue(node, fWindowHydrogenElement, "WindowHydrogenElement");
     ExportValue(node, fWindowOxygenElement, "WindowOxygenElement");
-    ExportValue(node, fWindowRIndex, "WindowRIndex");
+    ExportValue(node, fWindowRefractiveIndex, "WindowRefractiveIndex");
     ExportValue(node, fSiPMEnergyBin, "SiPMEnergyBin");
     ExportValue(node, fSiPMEfficiency, "SiPMEfficiency");
     ExportValue(node, fReflectorReflectivity, "ReflectorReflectivity");

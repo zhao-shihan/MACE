@@ -35,10 +35,6 @@ using CDCSimHit = Mustard::Data::TupleModel<
 using TTCSimHit = Mustard::Data::TupleModel<
     TTCHit,
     Mustard::Data::Value<std::vector<int>, "nOptPho", "Number of optical photon hits on SiPM (MC truth)">,
-    Mustard::Data::Value<std::vector<std::vector<double>>, "SiPMHitTime", "Hit time and position (MC truth)">,
-    Mustard::Data::Value<std::vector<std::vector<double>>, "SiPMHitPositionX", "Hit position X (MC truth)">,
-    Mustard::Data::Value<std::vector<std::vector<double>>, "SiPMHitPositionY", "Hit position Y (MC truth)">,
-    Mustard::Data::Value<std::vector<std::vector<double>>, "SiPMHitPositionZ", "Hit position Z (MC truth)">,
     Mustard::Data::Value<std::vector<float>, "SiPMHitEk", "Hit kinetic energy (MC truth)">,
     Mustard::Data::Value<muc::array3f, "x", "Hit position (MC truth)">,
     Mustard::Data::Value<float, "Ek", "Hit kinetic energy (MC truth)">,

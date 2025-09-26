@@ -90,7 +90,7 @@ public:
     auto WindowCarbonElement() const -> auto { return *fWindowCarbonElement; }
     auto WindowHydrogenElement() const -> auto { return *fWindowHydrogenElement; }
     auto WindowOxygenElement() const -> auto { return *fWindowOxygenElement; }
-    auto WindowRIndex() const -> const auto& { return *fWindowRIndex; }
+    auto WindowRefractiveIndex() const -> const auto& { return *fWindowRefractiveIndex; }
     auto SiPMEnergyBin() const -> const auto& { return *fSiPMEnergyBin; }
     auto SiPMEfficiency() const -> const auto& { return *fSiPMEfficiency; }
     auto ReflectorReflectivity() const -> const auto& { return *fReflectorReflectivity; }
@@ -120,7 +120,7 @@ public:
     auto WindowCarbonElement(double val) -> void { fWindowCarbonElement = val; }
     auto WindowHydrogenElement(double val) -> void { fWindowHydrogenElement = val; }
     auto WindowOxygenElement(double val) -> void { fWindowOxygenElement = val; }
-    auto WindowRIndex(std::vector<double> val) -> void { fWindowRIndex = std::move(val); }
+    auto WindowRefractiveIndex(std::vector<double> val) -> void { fWindowRefractiveIndex = std::move(val); }
     auto SiPMEnergyBin(std::vector<double> val) -> void { fSiPMEnergyBin = std::move(val); }
     auto SiPMEfficiency(std::vector<double> val) -> void { fSiPMEfficiency = std::move(val); }
     auto ReflectorReflectivity(std::vector<double> val) -> void { fReflectorReflectivity = std::move(val); }
@@ -186,7 +186,7 @@ private:
     Simple<double> fWindowCarbonElement;
     Simple<double> fWindowHydrogenElement;
     Simple<double> fWindowOxygenElement;
-    Simple<std::vector<double>> fWindowRIndex;
+    Simple<std::vector<double>> fWindowRefractiveIndex;
     Simple<std::vector<double>> fSiPMEnergyBin;
     Simple<std::vector<double>> fSiPMEfficiency;
     Simple<std::vector<double>> fReflectorReflectivity;

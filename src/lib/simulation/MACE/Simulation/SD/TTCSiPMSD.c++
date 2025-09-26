@@ -56,7 +56,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     // Get<"TTCHitID">(*hit) = -1; // to be determined
     fHit[tileID].emplace_back(std::move(hit));
     Get<"x">(*hit) = postStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformPoint(postStepPoint.GetPosition());
-    // Get<"K">(*hit) = preStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformAxis(preStepPoint.GetMomentumDirection());
+    Get<"k">(*hit) = preStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformAxis(preStepPoint.GetMomentumDirection());
 
     return true;
 }
@@ -83,32 +83,6 @@ auto TTCSiPMSD::NOpticalPhotonHit() const -> muc::flat_hash_map<int, std::vector
         }
     }
     return nHit;
-}
-
-auto TTCSiPMSD::SiPMHit() const -> muc::flat_hash_map<int, std::vector<std::vector<std::vector<double>>>>{
-    muc::flat_hash_map<int, std::vector<std::vector<std::vector<double>>>> sipmHit;
-    const auto& ttc{MACE::Detector::Description::TTC::Instance()};
-    size_t nSiPM = ttc.NSiPM();
-    for (auto&& [tileID, hitofDetector] : fHit) {
-        auto& tileHit = sipmHit[tileID];
-        if (tileHit.empty()) {
-            tileHit.resize(4); 
-            for (auto& channel : tileHit) {
-                channel.resize(nSiPM); 
-            }
-        }
-        if (hitofDetector.size() > 0) {
-            for (auto&& hit : hitofDetector) {
-                auto SipmId = Get<"SiPMID">(*hit);
-                auto SipmIndex = SipmId % ttc.NSiPM();
-                tileHit[0][SipmIndex].emplace_back(Get<"t">(*hit));
-                tileHit[1][SipmIndex].emplace_back(Get<"x">(*hit)[0]);
-                tileHit[2][SipmIndex].emplace_back(Get<"x">(*hit)[1]);
-                tileHit[3][SipmIndex].emplace_back(Get<"x">(*hit)[2]);
-            }
-        }
-    }
-    return sipmHit;
 }
 
 } // namespace MACE::inline Simulation::inline SD

@@ -67,7 +67,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     lightCoupler->SetMaterialPropertiesTable(lightCouplerPropertiesTable);
 
     const auto windowPropertiesTable{new G4MaterialPropertiesTable};
-    windowPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, ttc.WindowRIndex());
+    windowPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, ttc.WindowRefractiveIndex());
     window->SetMaterialPropertiesTable(windowPropertiesTable);
 
     const auto reflectorSurfacePropertiesTable{new G4MaterialPropertiesTable};
