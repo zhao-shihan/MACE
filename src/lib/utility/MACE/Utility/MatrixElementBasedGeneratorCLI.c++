@@ -1,5 +1,7 @@
 #include "MACE/Utility/MatrixElementBasedGeneratorCLI.h++"
 
+#include "Mustard/IO/PrettyLog.h++"
+
 #include <vector>
 
 namespace MACE::inline Utility {
@@ -7,7 +9,7 @@ namespace MACE::inline Utility {
 MatrixElementBasedGeneratorCLIModule::MatrixElementBasedGeneratorCLIModule(gsl::not_null<Mustard::CLI::CLI<>*> cli) :
     ModuleBase{cli} {
     TheCLI()
-        ->add_argument("--phase-space-integral")
+        ->add_argument("-i", "--phase-space-integral")
         .help("Pre-computed phase-space integral. Program will skip integration and use this value if set.")
         .nargs(1)
         .scan<'g', double>();
@@ -29,6 +31,10 @@ auto MatrixElementBasedGeneratorCLIModule::ContinueIntegration() const -> std::o
     const auto cliState{TheCLI()->present<std::vector<long double>>("--continue-integration")};
     if (not cliState.has_value()) {
         return {};
+    }
+    if (not TheCLI()->is_used("--seed")) {
+        Mustard::MasterPrintWarning("Option --continue-integration set but --seed not set! You are probably using the previous seed, "
+                                    "and it will generate the same event series. Try set exclusive seeds for each run, or simply --seed 0");
     }
     Mustard::Math::MCIntegrationState state;
     state.sum[0] = cliState->at(0);

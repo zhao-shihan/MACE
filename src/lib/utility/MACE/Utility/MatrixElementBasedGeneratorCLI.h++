@@ -9,7 +9,7 @@
 #include "Mustard/IO/Print.h++"
 #include "Mustard/Math/Estimate.h++"
 #include "Mustard/Math/MCIntegrationUtility.h++"
-#include "Mustard/Physics/Generator/MultipleTryMetropolisGenerator.h++"
+#include "Mustard/Physics/Generator/MatrixElementBasedGenerator.h++"
 
 #include "muc/array"
 
@@ -28,7 +28,7 @@ public:
 
     template<int M, int N, typename A>
     auto PhaseSpaceIntegral(Mustard::Executor<unsigned long long>& executor,
-                            Mustard::MultipleTryMetropolisGenerator<M, N, A>& generator) const -> std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState>;
+                            Mustard::MatrixElementBasedGenerator<M, N, A>& generator) const -> std::tuple<Mustard::Math::Estimate, double, Mustard::Math::MCIntegrationState>;
 
 private:
     auto ContinueIntegration() const -> std::optional<Mustard::Math::MCIntegrationState>;

@@ -45,6 +45,8 @@ auto EventGeneratorCLIModule::GenerateOrExit() const -> std::optional<unsigned l
     const auto nGenerate{TheCLI()->present<unsigned long long>("--generate")};
     if (not nGenerate) {
         Mustard::MasterPrintLn("Option -g or --generate not set, skipping event generation.");
+    } else {
+        Mustard::MasterPrintLn("Generating {} events...", *nGenerate);
     }
     return nGenerate;
 }
