@@ -3,7 +3,7 @@
 #include "MACE/Simulation/SD/VetoSD.h++"
 
 #include "Mustard/Data/Tuple.h++"
-#include "Mustard/Utility/PrettyLog.h++"
+#include "Mustard/IO/PrettyLog.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -152,7 +152,7 @@ auto VetoSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1));
+                    Mustard::MasterPrintWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {

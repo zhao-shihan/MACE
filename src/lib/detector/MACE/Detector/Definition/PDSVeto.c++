@@ -3,9 +3,9 @@
 #include "MACE/Detector/Description/PDSVeto.h++"
 
 #include "Mustard/Env/BasicEnv.h++"
+#include "Mustard/IO/PrettyLog.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
-#include "Mustard/Utility/PrettyLog.h++"
 #include "Mustard/Utility/VectorCast.h++"
 
 #include "G4Box.hh"
@@ -223,7 +223,7 @@ auto PDSVeto::Construct(bool checkOverlaps) -> void {
     transparentSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1., 1.});
 
     if (veto.SelectedCategory() < -1 or veto.SelectedCategory() > 3) {
-        Mustard::Utility::PrintWarning(fmt::format("\n no such category: category_{}\n"
+        Mustard::PrintWarning(fmt::format("\n no such category: category_{}\n"
                                                    "available category selection:\n"
                                                    "category_3 (Cap2)\n"
                                                    "category_2 (Cap1)\n"

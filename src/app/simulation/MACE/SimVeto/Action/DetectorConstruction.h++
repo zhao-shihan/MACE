@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/Detector/Description/PDSVeto.h++"
-
 #include "MACE/SimVeto/SD/VetoPMSD.h++"
 #include "MACE/SimVeto/SD/VetoSD.h++"
 
@@ -30,7 +29,7 @@ public:
     auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
 public:
-    using DescriptionInUse = std::tuple<MACE::Detector::Description::PDSVeto>;
+    using ProminentDescription = std::tuple<MACE::Detector::Description::PDSVeto>;
 
 private:
     G4bool fCheckOverlap;
