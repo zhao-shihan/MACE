@@ -5,52 +5,35 @@
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Geant4X/Utility/ConvertGeometry.h++"
-#include "Mustard/IO/PrettyLog.h++"
 #include "Mustard/Parallel/ProcessSpecificPath.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
 
-#include "mplr/mplr.hpp"
-
 #include "fmt/core.h"
 
 #include <algorithm>
+#include <optional>
 #include <stdexcept>
 namespace MACE::SimVeto {
 Analysis::Analysis() :
-    PassiveSingleton{this},
-    fFilePath{"SimVeto_untiled"},
-    fFileMode{"NEW"},
+    AnalysisBase{this},
+    // fFilePath{"SimVeto_untiled"},
+    // fFileMode{"NEW"},
     fCoincidenceWithVeto{true},
-    fLastUsedFullFilePath{},
-    fFile{},
+    // fLastUsedFullFilePath{},
+    // fFile{},
     fPrimaryVertexOutput{},
-    fDecayVertexOutput{},
+    // fDecayVertexOutput{},
     fVetoSimHitOutput{},
     fVetoPMHitOutput{},
     fPrimaryVertex{},
-    fDecayVertex{},
+    // fDecayVertex{},
     fVetoHit{},
     fVetoPMHit{},
     fMessengerRegister{this} {}
 
-auto Analysis::RunBegin(G4int runID) -> void {
-    // open ROOT file
-    auto fullFilePath{Mustard::Parallel::ProcessSpecificPath(fFilePath).replace_extension(".root").generic_string()};
-    const auto filePathChanged{fullFilePath != fLastUsedFullFilePath};
-    fFile = TFile::Open(fullFilePath.c_str(), filePathChanged ? fFileMode.c_str() : "UPDATE",
-                        "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
-    if (fFile == nullptr) {
-        Mustard::Throw<std::runtime_error>(fmt::format("Cannot open file '{}' with mode '{}'",
-                                                       fullFilePath, fFileMode));
-    }
-    fLastUsedFullFilePath = std::move(fullFilePath);
-    // save geometry
-    if (filePathChanged and mplr::comm_world().rank() == 0) {
-        Mustard::Geant4X::ConvertGeometryToTMacro("SimVeto_gdml", "SimVeto.gdml")->Write();
-    }
-    // initialize outputs
+auto Analysis::RunBeginUserAction(int runID) -> void {
     if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) {
         fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID));
     }
@@ -59,15 +42,15 @@ auto Analysis::RunBegin(G4int runID) -> void {
     fVetoPMHitOutput.emplace(fmt::format("G4Run{}/VetoPMHit", runID));
 }
 
-auto Analysis::EventEnd() -> void {
+auto Analysis::EventEndUserAction() -> void {
     const auto vetoPassed{not fCoincidenceWithVeto or fVetoHit == nullptr or fVetoHit->size() > 0};
     if (vetoPassed) {
         if (fPrimaryVertex and fPrimaryVertexOutput) {
             fPrimaryVertexOutput->Fill(*fPrimaryVertex);
         }
-        if (fDecayVertex and fDecayVertexOutput) {
-            fDecayVertexOutput->Fill(*fDecayVertex);
-        }
+        // if (fDecayVertex and fDecayVertexOutput) {
+        //     fDecayVertexOutput->Fill(*fDecayVertex);
+        // }
         if (fVetoHit) {
             fVetoSimHitOutput->Fill(*fVetoHit);
         }
@@ -76,19 +59,19 @@ auto Analysis::EventEnd() -> void {
         }
     }
     fPrimaryVertex = {};
-    fDecayVertex = {};
+    // fDecayVertex = {};
     fVetoHit = {};
     fVetoPMHit = {};
 }
 
-auto Analysis::RunEnd(Option_t* option) -> void {
+auto Analysis::RunEndUserAction(int) -> void {
     // write data
     if (fPrimaryVertexOutput) {
         fPrimaryVertexOutput->Write();
     }
-    if (fDecayVertexOutput) {
-        fDecayVertexOutput->Write();
-    }
+    // if (fDecayVertexOutput) {
+    //     fDecayVertexOutput->Write();
+    // }
     if (fVetoSimHitOutput) {
         fVetoSimHitOutput->Write();
     }
@@ -97,13 +80,9 @@ auto Analysis::RunEnd(Option_t* option) -> void {
     }
     // reset output
     fPrimaryVertexOutput.reset();
-    fDecayVertexOutput.reset();
+    // fDecayVertexOutput.reset();
     fVetoSimHitOutput.reset();
     fVetoPMHitOutput.reset();
-
-    // close file
-    fFile->Close(option);
-    delete fFile;
 }
 
 } // namespace MACE::SimVeto

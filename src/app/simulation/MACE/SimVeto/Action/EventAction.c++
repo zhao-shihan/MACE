@@ -24,7 +24,7 @@ auto EventAction::EndOfEventAction(const G4Event*) -> void {
     //     trackingAction.SaveDecayVertexData()) {
     //     analysis.SubmitDecayVertexData(trackingAction.DecayVertexData());
     // }
-    analysis.EventEnd();
+    analysis.EventEndAction();
 }
 
 } // namespace MACE::SimVeto::inline Action

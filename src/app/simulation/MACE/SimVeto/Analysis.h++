@@ -6,15 +6,14 @@
 #include "MACE/SimVeto/Messenger/AnalysisMessenger.h++"
 
 #include "Mustard/Data/Output.h++"
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
+#include "Mustard/Data/Tuple.h++"
+#include "Mustard/Simulation/AnalysisBase.h++"
 
-#include "G4Types.hh"
+#include "muc/ptrvec"
 
 #include "gsl/gsl"
 
 #include <filesystem>
-#include <memory>
-#include <optional>
 #include <utility>
 #include <vector>
 
@@ -27,47 +26,42 @@ class VetoPMHit;
 
 namespace MACE::SimVeto {
 
-class Analysis final : public Mustard::Env::Memory::PassiveSingleton<Analysis> {
+class Analysis final : public Mustard::Simulation::AnalysisBase<Analysis, "SimVeto"> {
 public:
     Analysis();
 
-    auto FilePath(std::filesystem::path path) -> void { fFilePath = std::move(path); }
-    auto FileMode(std::string mode) -> void { fFileMode = std::move(mode); }
-    // auto CoincidenceWithECAL(G4bool val) -> void { fCoincidenceWithECAL = val; }
-    // auto CoincidenceWithMCP(G4bool val) -> void { fCoincidenceWithMCP = val; }
-
-    auto RunBegin(G4int runID) -> void;
+    // auto FilePath(std::filesystem::path path) -> void { fFilePath = std::move(path); }
+    // auto FileMode(std::string mode) -> void { fFileMode = std::move(mode); }
 
     auto SubmitPrimaryVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>& data) -> void { fPrimaryVertex = &data; }
-    auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
+    // auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
     auto SubmitVetoHC(const std::vector<gsl::owner<VetoHit*>>& hc) -> void { fVetoHit = &hc; }
-    auto SubmitVetoPMHC(const std::vector<gsl::owner<VetoPMHit*>>& hc) -> void {fVetoPMHit = &hc;}
-    auto CoincidenceWithVeto(const G4bool& var) -> void {fCoincidenceWithVeto = var;}
-    auto EventEnd() -> void;
+    auto SubmitVetoPMHC(const std::vector<gsl::owner<VetoPMHit*>>& hc) -> void { fVetoPMHit = &hc; }
+    auto CoincidenceWithVeto(bool var) -> void { fCoincidenceWithVeto = var; }
 
-    auto RunEnd(Option_t* option = {}) -> void;
+    auto RunBeginUserAction(int runID) -> void override;
+    auto EventEndUserAction() -> void override;
+    auto RunEndUserAction(int) -> void override;
 
 private:
-    std::filesystem::path fFilePath;
-    std::string fFileMode;
-    G4bool fCoincidenceWithVeto;
-    // G4bool fCoincidenceWithECAL;
-    // G4bool fCoincidenceWithMCP;
+    // std::filesystem::path fFilePath;
+    // std::string fFileMode;
+    bool fCoincidenceWithVeto;
 
-    std::filesystem::path fLastUsedFullFilePath;
+    // std::filesystem::path fLastUsedFullFilePath;
 
-    gsl::owner<TFile*> fFile;
+    // gsl::owner<TFile*> fFile;
     std::optional<Mustard::Data::Output<Data::SimPrimaryVertex>> fPrimaryVertexOutput;
-    std::optional<Mustard::Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
+    // std::optional<Mustard::Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
     std::optional<Mustard::Data::Output<Data::VetoSimHit>> fVetoSimHitOutput;
     std::optional<Mustard::Data::Output<Data::VetoPMHit>> fVetoPMHitOutput;
 
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>* fPrimaryVertex;
-    const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
+    // const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
     const std::vector<gsl::owner<VetoHit*>>* fVetoHit;
     const std::vector<gsl::owner<VetoPMHit*>>* fVetoPMHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };
 
-} // namespace MACE::SimECAL
+} // namespace MACE::SimVeto
