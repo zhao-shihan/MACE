@@ -48,8 +48,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     ////////////////////////////////////////////////////////////////
 
     const auto& ttcName{Detector::Description::TTC::Instance().Name()};
-    const auto ttcSiPM(new SD::TTCSiPMSD{ttcName + "SiPM"});
-    mmsTTC.RegisterSD(ttcName + "Scintillator", new SD::TTCSD{ttcName, ttcSiPM});
+    const auto ttcSiPM(new SD::TTCSiPMSD{ttcName + "SiPM", DetectorSiPMType::TTCSiPM});
+    mmsTTC.RegisterSD(ttcName + "Scintillator", new SD::TTCSD{ttcName, DetectorType::TTC, ttcSiPM});
     mmsTTC.RegisterSD(ttcName + "Silicone", ttcSiPM);
 
     ////////////////////////////////////////////////////////////////

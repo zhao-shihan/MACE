@@ -11,4 +11,4 @@ public:
     auto EndOfEvent(G4HCofThisEvent* hc) -> void override;
 };
 
-} 
+} // namespace MACE::PhaseI::SimMACEPhaseI::inline SD

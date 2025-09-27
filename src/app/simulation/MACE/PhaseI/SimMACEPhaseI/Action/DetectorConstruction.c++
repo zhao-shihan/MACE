@@ -73,8 +73,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     const auto sciFiSiPMSD{new SD::SciFiSiPMSD{scifiName + "SiPM"}};
     sciFiTracker.RegisterSD(scifiName + "SiPM", sciFiSiPMSD);
 
-    const auto ttcSiPM(new SD::TTCSiPMSD{MACE::PhaseI::Detector::Description::TTC::Instance().Name() + "SiPM"});
-    ttc.RegisterSD("TTCScintillator", new SD::TTCSD{MACE::PhaseI::Detector::Description::TTC::Instance().Name(), ttcSiPM});
+    const auto ttcSiPM(new SD::TTCSiPMSD{MACE::PhaseI::Detector::Description::TTC::Instance().Name() + "SiPM", DetectorSiPMType::PhaseITTCSiPM});
+    ttc.RegisterSD("TTCScintillator", new SD::TTCSD{MACE::PhaseI::Detector::Description::TTC::Instance().Name(),DetectorType::PhaseITTC, ttcSiPM});
     ttc.RegisterSD("TTCSilicone", ttcSiPM);
 
     return fWorld->PhysicalVolume();

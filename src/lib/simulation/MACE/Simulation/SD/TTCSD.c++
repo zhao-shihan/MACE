@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/TTC.h++"
+#include "MACE/PhaseI/Detector/Description/TTC.h++"
 #include "MACE/Simulation/SD/TTCSD.h++"
 #include "MACE/Simulation/SD/TTCSiPMSD.h++"
 
@@ -31,31 +32,43 @@
 #include <string_view>
 #include <tuple>
 #include <utility>
+#include <variant>
 #include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
-TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
+TTCSD::TTCSD(const G4String& sdName, const DetectorType type, const TTCSiPMSD* ttcSiPMSD) :
     G4VSensitiveDetector{sdName},
+    detectorType{type},
     fTTCSiPMSD{ttcSiPMSD},
     fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
 
-    const auto& ttc{Detector::Description::TTC::Instance()};
-    assert(ttc.ScintillationComponent1EnergyBin().size() == ttc.ScintillationComponent1().size());
-    std::vector<double> dE(ttc.ScintillationComponent1EnergyBin().size());
-    muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), dE.begin());
-    std::vector<double> spectrum(ttc.ScintillationComponent1().size());
-    muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), spectrum.begin(), muc::midpoint<double>);
-    const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
-    std::vector<double> meanE(ttc.ScintillationComponent1EnergyBin().size());
-    muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), meanE.begin(), muc::midpoint<double>);
-    std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
-    fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
+    const auto& EnergyThreshold{
+        [](auto& ttc) {
+            assert(ttc.ScintillationComponent1EnergyBin().size() == ttc.ScintillationComponent1().size());
+            std::vector<double> dE(ttc.ScintillationComponent1EnergyBin().size());
+            muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), dE.begin());
+            std::vector<double> spectrum(ttc.ScintillationComponent1().size());
+            muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), spectrum.begin(), muc::midpoint<double>);
+            const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
+            std::vector<double> meanE(ttc.ScintillationComponent1EnergyBin().size());
+            muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), meanE.begin(), muc::midpoint<double>);
+            std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
+            return std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
+        }};
 
-    fSplitHit.reserve(ttc.NAlongPhi() * ttc.Width().size());
+    if (detectorType == DetectorType::TTC) {
+        const auto& ttc{Detector::Description::TTC::Instance()};
+        fEnergyDepositionThreshold = EnergyThreshold(ttc);
+        fSplitHit.reserve(ttc.NAlongPhi() * ttc.Width().size());
+    } else {
+        const auto& ttc{PhaseI::Detector::Description::TTC::Instance()};
+        fEnergyDepositionThreshold = EnergyThreshold(ttc);
+        fSplitHit.reserve(std::accumulate(ttc.NAlongPhi().begin(), ttc.NAlongPhi().end(), 0));
+    }
 }
 
 auto TTCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
@@ -96,6 +109,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"Edep">(*hit) = eDep;
     Get<"Good">(*hit) = false; // to be determined
     Get<"nOptPho">(*hit) = {}; // to be determined
+    Get<"SiPMVoltage">(*hit) = {}; // to be determined
     Get<"x">(*hit) = preStepPoint.GetPosition();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
@@ -182,9 +196,8 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     if (fTTCSiPMSD) {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            if (not nHit[Get<"TileID">(*hit)].empty()) {
-                Get<"nOptPho">(*hit) = nHit[Get<"TileID">(*hit)];
-            }
+            Get<"nOptPho">(*hit) = nHit[Get<"TileID">(*hit)];
+            Get<"SiPMVoltage">(*hit) = nHit[Get<"TileID">(*hit)];
         }
     }
 }

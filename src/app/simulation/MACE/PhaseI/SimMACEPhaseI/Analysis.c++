@@ -44,7 +44,6 @@ Analysis::Analysis() :
     fTTCSiPMHitOutput{},
     fTTCHit{},
     fTTCSiPMHit{},
-
     fMessengerRegister{this} {}
 
 auto Analysis::RunBeginUserAction(int runID) -> void {
