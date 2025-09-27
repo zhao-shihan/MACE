@@ -197,7 +197,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
             Get<"nOptPho">(*hit) = nHit[Get<"TileID">(*hit)];
-            Get<"SiPMVoltage">(*hit) = nHit[Get<"TileID">(*hit)];
+            Get<"SiPMVoltage">(*hit) = {nHit[Get<"TileID">(*hit)].begin(), nHit[Get<"TileID">(*hit)].end()};
         }
     }
 }
