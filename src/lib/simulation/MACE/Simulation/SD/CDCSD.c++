@@ -1,8 +1,8 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
 
+#include "Mustard/IO/PrettyLog.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
-#include "Mustard/Utility/PrettyLog.h++"
 #include "Mustard/Utility/VectorArithmeticOperator.h++"
 #include "Mustard/Utility/VectorCast.h++"
 
@@ -154,7 +154,7 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + timeResolutionFWHM};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     timeResolutionFWHM != 0) [[unlikely]] {
-                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
+                    Mustard::PrintWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {

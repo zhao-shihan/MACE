@@ -2,8 +2,8 @@
 #include "MACE/PhaseI/SimMACEPhaseI/Analysis.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/MRPCSD.h++"
 
+#include "Mustard/IO/PrettyLog.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
-#include "Mustard/Utility/PrettyLog.h++"
 
 #include "G4DataInterpolation.hh"
 #include "G4Event.hh"
@@ -127,7 +127,7 @@ auto MRPCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + timeResolutionFWHM};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     timeResolutionFWHM != 0) [[unlikely]] {
-                    Mustard::PrettyWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
+                    Mustard::PrintWarning(fmt::format("A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM));
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {

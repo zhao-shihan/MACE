@@ -7,9 +7,9 @@
 #include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
-#include "Mustard/Utility/MakeTextTMacro.h++"
-#include "Mustard/Utility/PrettyLog.h++"
+#include "Mustard/IO/PrettyLog.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
+#include "Mustard/ROOTX/MakeTextTMacro.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
 
 #include "TFile.h"
@@ -34,8 +34,7 @@ SmearMACE::SmearMACE() :
 auto SmearMACE::Main(int argc, char* argv[]) const -> int {
     CLI cli;
     Mustard::Env::MPIEnv env{argc, argv, cli};
-
-    Mustard::UseXoshiro<256> random;
+    Mustard::UseXoshiro<256> random{cli};
     gInterpreter->ProcessLine(R"(
         const auto Gauss{
             [](auto mu, auto sigma) {
@@ -43,7 +42,7 @@ auto SmearMACE::Main(int argc, char* argv[]) const -> int {
             }};
     )");
 
-    const auto outputPath{Mustard::MPIX::ParallelizePath(cli.OutputFilePath()).replace_extension(".root").generic_string()};
+    const auto outputPath{Mustard::Parallel::ProcessSpecificPath(cli.OutputFilePath()).replace_extension(".root").generic_string()};
     TFile file{outputPath.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
     if (not file.IsOpen()) {
         Mustard::Throw<std::runtime_error>(fmt::format("Cannot open file '{}' with mode '{}'", outputPath, cli.OutputFileMode()));
@@ -70,7 +69,7 @@ auto SmearMACE::Main(int argc, char* argv[]) const -> int {
         AppendConfigText("MMSSimTrack", cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
         AppendConfigText("MCPSimHit", cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
         AppendConfigText("ECALSimHit", cli.ECALSimHitSmearingConfig(), cli.ECALSimHitIdentity());
-        Mustard::MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
+        Mustard::ROOTX::MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
     } while (false);
     {
         Mustard::Data::Processor<> processor;

@@ -1,7 +1,6 @@
 # MACE
 
 - [MACE](#mace)
-  - [Pre-built binaries](#pre-built-binaries)
   - [Dependencies](#dependencies)
     - [Toolchain](#toolchain)
     - [Libraries](#libraries)
@@ -9,11 +8,11 @@
 
 ![MACE](document/picture/MACE_logo_v2.svg)
 
-## Pre-built binaries
+<!-- ## Pre-built binaries
 
 Pre-built, optimized binaries are available through [Apptainer](https://apptainer.org/) (formerly known as Singularity).
 
-For more information, please check out [the image repository homepage](https://github.com/zhao-shihan/MACE-apptainer).
+For more information, please check out [the image repository homepage](https://github.com/zhao-shihan/MACE-apptainer). -->
 
 ## Dependencies
 
@@ -28,7 +27,7 @@ For more information, please check out [the image repository homepage](https://g
 
 Required:
 
-1. [Mustard (A modern, distributed offline software framework for HEP experiments)](https://github.com/zhao-shihan/Mustard) (≥ 0.25.725, built-in if not found)
+1. [Mustard (A modern, distributed offline software framework for HEP experiments)](https://github.com/zhao-shihan/Mustard) (≥ 0.25.918, built-in if not found)
 
 Required, built-in if not found (network or pre-downloaded source is required):
 
@@ -38,5 +37,7 @@ Required, built-in if not found (network or pre-downloaded source is required):
 
 ## Cite
 
-1. [A.-Y. Bai et al. (MACE working group), Snowmass2021 Whitepaper: Muonium to antimuonium conversion, in 2022 Snowmass Summer Study (2022), arXiv:2203.11406.](https://arxiv.org/abs/2203.11406)
-2. [Shihan Zhao and Jian Tang, Optimization of muonium yield in perforated silica aerogel, arXiv:2401.00222.](https://arxiv.org/abs/2401.00222)
+1. [A.-Y. Bai et al. (MACE working group), Conceptual Design of the Muonium-to-Antimuonium Conversion Experiment (MACE), arXiv:1410.18817.](https://arxiv.org/abs/2410.18817)
+2. [Siyuan Chen, Shihan Zhao, Weizhi Xiong et al., Design of a CsI(Tl) calorimeter for muonium-to-antimuonium conversion experiment, Front.Phys. 20 (2025) 035202](https://doi.org/10.15302/frontphys.2025.035202)
+3. [Shihan Zhao and Jian Tang, Optimization of muonium yield in perforated silica aerogel, Phys.Rev.D 109 (2024) 7, 072012.](https://doi.org/10.1103/PhysRevD.109.072012)
+4. [A.-Y. Bai et al. (MACE working group), Snowmass2021 Whitepaper: Muonium to antimuonium conversion, in 2022 Snowmass Summer Study (2022), arXiv:2203.11406.](https://arxiv.org/abs/2203.11406)

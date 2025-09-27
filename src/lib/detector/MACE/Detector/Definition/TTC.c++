@@ -1,7 +1,6 @@
 #include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Description/TTC.h++"
 
-#include "Mustard/Math/Parity.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/VectorCast.h++"
@@ -13,6 +12,8 @@
 #include "G4OpticalSurface.hh"
 #include "G4PVPlacement.hh"
 #include "G4Transform3D.hh"
+
+#include "muc/math"
 
 #include "gsl/gsl"
 
@@ -149,7 +150,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
             ttcScintillatorMaterial,
             "TTCScintillator")};
         // set the position of air mother box
-        const auto transform{G4RotateZ3D{Mustard::Math::IsEven(i) ? 0 : deltaPhi / 2} *
+        const auto transform{G4RotateZ3D{muc::even(i) ? 0 : deltaPhi / 2} *
                              G4Translate3D{Mustard::VectorCast<G4ThreeVector>(ttc.Position()[i])} *
                              G4RotateZ3D{ttc.SlantAngle()}};
         for (int j{}; j < ttc.NAlongPhi(); ++j, ++tileID) {

@@ -18,7 +18,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
 
     if (not this->GoodHitData(hitData) or
         ssize(hitData) < this->MinNHit() or
-        GetAs<"x0", CLHEP::Hep3Vector>(*hitData.front()).perp2() > muc::pow<2>(fMaxVertexRxy)) {
+        GetAs<"x0", CLHEP::Hep3Vector>(*hitData.front()).perp2() > muc::pow(fMaxVertexRxy, 2)) {
         return {.good = {}, .garbage = hitData};
     }
 
@@ -30,7 +30,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
     const auto CollectGarbage{
         [&] { r.garbage.insert(r.garbage.end(), track.begin(), track.end()); }};
 
-    std::unordered_set<short> cellHit;
+    muc::flat_hash_set<short> cellHit;
     cellHit.reserve(this->MinNHit());
 
     while (track.end() != hitData.end()) {

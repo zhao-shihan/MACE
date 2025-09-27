@@ -3,6 +3,7 @@
 #include "MACE/Simulation/Analysis/MMSTruthTracker.h++"
 
 #include "muc/algorithm"
+#include "muc/hash_set"
 
 #include <cassert>
 #include <utility>
@@ -42,7 +43,7 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
     const auto trackCDCHitFirst{std::ranges::lower_bound(cdcHitHC, ttcHitHC.front(), ByTrackID)};
     std::ranges::subrange trackCDCHit{trackCDCHitFirst, trackCDCHitFirst};
 
-    std::unordered_set<short> tileHit;
+    muc::flat_hash_set<short> tileHit;
     tileHit.reserve(2 * fMinNTTCHitForQualifiedTrack);
 
     while (trackTTCHit.end() != ttcHitHC.cend() and
@@ -52,7 +53,7 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
 
         if (std::ranges::ssize(trackTTCHit) < fMinNTTCHitForQualifiedTrack or
             std::ranges::ssize(trackCDCHit) < fTrackFinder.MinNHit() or
-            GetAs<"x0", G4ThreeVector>(**trackCDCHit.begin()).perp2() > muc::pow<2>(fTrackFinder.MaxVertexRxy())) {
+            GetAs<"x0", G4ThreeVector>(**trackCDCHit.begin()).perp2() > muc::pow(fTrackFinder.MaxVertexRxy(), 2)) {
             continue;
         }
 

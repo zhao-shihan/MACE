@@ -1,0 +1,45 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+# Set some default verbose
+/control/verbose 0
+/run/verbose 0
+
+# I/O & Analysis
+/MACE/Analysis/FilePath                        scan_degrader_thickness_result
+/MACE/Analysis/FileMode                        RECREATE
+/MACE/Analysis/EnableYieldAnalysis             yes
+
+# Geometry
+/Mustard/Detector/Description/Import           scan_degrader_thickness.yaml
+
+# Initialize kernel
+/run/initialize
+
+# Muon beam properties
+/gps/particle             mu+
+/gps/direction            0 0 1
+/gps/pos/centre           0 0 -10 cm
+/gps/pos/type             Beam
+/gps/pos/shape            Circle
+/gps/pos/radius           20 mm
+/gps/ene/type             Gauss
+# CiADS full-solenoid focusing beam, 0.5-mA-proton beam on C target
+/gps/ene/mono             3.346 MeV    # momentum 26.8 MeV
+/gps/ene/sigma            0.393 MeV    # momentum spreading 1.6 MeV
+## CiADS solenoid + QM focusing beam, 0.5-mA-proton beam on C target
+#/gps/ene/mono             3.248 MeV    # momentum 26.4 MeV
+#/gps/ene/sigma            0.339 MeV    # momentum spreading 1.4 MeV
+
+# Set physics
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
+
+# kill secondaries
+/MACE/Action/KillIrrelevance    yes
+
+#############################################################################
+# Run
+#############################################################################
+
+/run/beamOn 100000

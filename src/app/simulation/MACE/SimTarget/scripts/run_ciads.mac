@@ -1,10 +1,4 @@
 #############################################################################
-#
-# Macro file demo for SimTarget in batch session
-#
-#############################################################################
-
-#############################################################################
 # Initialization settings
 #############################################################################
 
@@ -25,7 +19,7 @@
 
 # Muon beam properties
 /MACE/Generator/SwitchToFromDataPrimaryGenerator
-/Mustard/Generator/FromDataPrimaryGenerator/EventData R_line.root R_line
+/Mustard/Generator/DataReaderPrimaryGenerator/EventData R_line.root R_line
 
 # Set physics
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0

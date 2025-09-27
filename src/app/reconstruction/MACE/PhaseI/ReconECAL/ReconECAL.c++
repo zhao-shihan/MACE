@@ -3,14 +3,13 @@
 #include "MACE/PhaseI/Detector/Description/UsePhaseIDefault.h++"
 #include "MACE/PhaseI/ReconECAL/ReconECAL.h++"
 
+#include "Mustard/CLI/BasicCLI.h++"
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Detector/Description/DescriptionIO.h++"
-#include "Mustard/Env/CLI/BasicCLI.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/MPIX/DataType.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
@@ -47,7 +46,7 @@ using namespace Mustard::PhysicalConstant;
 using namespace std::literals;
 
 auto ReconECAL::Main(int argc, char* argv[]) const -> int {
-    Mustard::Env::CLI::BasicCLI<> cli;
+    Mustard::CLI::BasicCLI<> cli;
     cli->add_argument("input").help("Input file path(s).").nargs(argparse::nargs_pattern::at_least_one);
     cli->add_argument("-t", "--input-tree").help("Input tree name.").default_value("data"s).required().nargs(1);
     cli->add_argument("-o", "--output").help("Output file path.").required().nargs(1);
@@ -72,7 +71,7 @@ auto ReconECAL::Main(int argc, char* argv[]) const -> int {
         i++;
     }
 
-    TFile outputFile{Mustard::MPIX::ParallelizePath(cli->get("--output").c_str()).generic_string().c_str(), cli->get("--output-mode").c_str()};
+    TFile outputFile{Mustard::Parallel::ProcessSpecificPath(cli->get("--output").c_str()).generic_string().c_str(), cli->get("--output-mode").c_str()};
     using ECALEnergy = Mustard::Data::TupleModel<Mustard::Data::Value<float, "Edep", "Energy deposition">,
                                                  Mustard::Data::Value<float, "Edep1", "Energy deposition 1">,
                                                  Mustard::Data::Value<float, "Edep2", "Energy deposition 2">,

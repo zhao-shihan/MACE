@@ -5,9 +5,10 @@
 
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
-#include "Mustard/Utility/PrettyLog.h++"
+#include "Mustard/Geant4X/Utility/ConvertGeometry.h++"
+#include "Mustard/IO/PrettyLog.h++"
+#include "Mustard/Parallel/ProcessSpecificPath.h++"
+#include "Mustard/Utility/FormatToLocalTime.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -19,6 +20,7 @@
 #include "fmt/format.h"
 
 #include <algorithm>
+#include <chrono>
 #include <functional>
 #include <stdexcept>
 
@@ -77,12 +79,12 @@ auto Analysis::Close() -> void {
 }
 
 auto Analysis::OpenResultFile() -> void {
-    const auto fullFilePath{Mustard::MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
+    const auto fullFilePath{Mustard::Parallel::ProcessSpecificPath(fFilePath).replace_extension(".root").generic_string()};
     fResultFile = TFile::Open(fullFilePath.c_str(), fFileMode.c_str(),
                               "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fResultFile == nullptr) {
-        throw std::runtime_error{Mustard::PrettyException(fmt::format("Cannot open file '{}' with mode '{}'",
-                                                                      fullFilePath, fFileMode))};
+        Mustard::Throw<std::runtime_error>(fmt::format("Cannot open file '{}' with mode '{}'",
+                                                       fullFilePath, fFileMode));
     }
     if (mplr::comm_world().rank() == 0) {
         Mustard::Geant4X::ConvertGeometryToTMacro("SimTarget_gdml", "SimTarget.gdml")->Write();
@@ -105,8 +107,15 @@ auto Analysis::CloseResultFile() -> void {
 
 auto Analysis::OpenYieldFile() -> void {
     if (mplr::comm_world().rank() == 0) {
-        fYieldFile = std::fopen(std::string{fFilePath}.append("_yield.csv").c_str(), "w");
-        fmt::println(fYieldFile, "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay");
+        const auto yieldFilePath{fFilePath.generic_string().append("_yield.csv")};
+        fYieldFile = std::fopen(yieldFilePath.c_str(), "wx");
+        if (fYieldFile) {
+            fmt::println(fYieldFile, "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay");
+        } else {
+            fYieldFile = std::fopen(yieldFilePath.c_str(), "a");
+            const auto now{std::chrono::system_clock::now()};
+            fmt::println(fYieldFile, "# [{}] Continued from here", Mustard::FormatToLocalTime(now));
+        }
     }
 }
 
