@@ -14,7 +14,7 @@
 /Mustard/EcoMug/Size/HSphere/Radius 2 m
 
 
-/MACE/Analysis/FilePath SimVeto_hit_partial_test
+/MACE/Analysis/FilePath SimVeto_hit_partial_test.root
 /MACE/Analysis/FileMode RECREATE
 
 # for benchmark run 10n events

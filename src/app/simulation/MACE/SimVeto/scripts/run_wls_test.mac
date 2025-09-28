@@ -29,7 +29,7 @@
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
 
-/MACE/Analysis/FilePath SimVeto_wsl_test
+/MACE/Analysis/FilePath SimVeto_wsl_test.root
 /MACE/Analysis/FileMode RECREATE
 
 /run/beamOn 10000

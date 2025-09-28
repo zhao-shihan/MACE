@@ -26,7 +26,7 @@
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
 
-/MACE/Analysis/FilePath SimVeto_untitled
+/MACE/Analysis/FilePath SimVeto_untitled.root
 /MACE/Analysis/FileMode RECREATE
 
 /geometry/test/run

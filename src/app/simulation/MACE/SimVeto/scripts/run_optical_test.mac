@@ -24,7 +24,7 @@
 /gps/direction            1 -1.1 0
 /gps/ene/mono             120 GeV
 
-/MACE/Analysis/FilePath SimVeto_optical_test
+/MACE/Analysis/FilePath SimVeto_optical_test.root
 /MACE/Analysis/FileMode RECREATE
 
 /run/beamOn 1000

@@ -26,7 +26,7 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimVeto_strip_LY_1
+/MACE/Analysis/FilePath SimVeto_strip_LY_1.root
 /MACE/Analysis/FileMode RECREATE
 /run/beamOn 20000000
 /Mustard/Run/PrintRunSummary
