@@ -7,7 +7,7 @@
 /run/verbose 0
 
 # I/O & Analysis
-/MACE/Analysis/FilePath                        scan_degrader_thickness_result
+/MACE/Analysis/FilePath                        scan_degrader_thickness_result.root
 /MACE/Analysis/FileMode                        RECREATE
 /MACE/Analysis/EnableYieldAnalysis             yes
 
