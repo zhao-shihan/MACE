@@ -2,6 +2,8 @@
 #include "MACE/PhaseI/Detector/Description/TTC.h++"
 #include "MACE/Simulation/SD/TTCSiPMSD.h++"
 
+#include "Mustard/Utility/PhysicalConstant.h++"
+
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -14,15 +16,13 @@
 
 #include <cassert>
 
-#include "Mustard/Utility/PhysicalConstant.h++"
-
 using namespace Mustard::PhysicalConstant;
 
 namespace MACE::inline Simulation::inline SD {
 
-TTCSiPMSD::TTCSiPMSD(const G4String& sdName, const DetectorSiPMType type) :
+TTCSiPMSD::TTCSiPMSD(const G4String& sdName, const Type type) :
     G4VSensitiveDetector{sdName},
-    detectorSiPMType{type},
+    type{type},
     fHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
@@ -40,9 +40,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
-    const auto& nSiPM{(detectorSiPMType == DetectorSiPMType::TTCSiPM) 
-        ? MACE::Detector::Description::TTC::Instance().NSiPM() 
-        : MACE::PhaseI::Detector::Description::TTC::Instance().NSiPM()};
+    const auto& nSiPM{(type == TTCSiPMSD::Type::MACE) ? MACE::Detector::Description::TTC::Instance().NSiPM() : MACE::PhaseI::Detector::Description::TTC::Instance().NSiPM()};
 
     if (&particle != G4OpticalPhoton::Definition()) {
         return false;
@@ -65,7 +63,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"x">(*hit) = postStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformPoint(postStepPoint.GetPosition());
     Get<"k">(*hit) = preStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformAxis(preStepPoint.GetMomentumDirection()) / CLHEP::hbar_Planck;
     fHit[tileID].emplace_back(std::move(hit));
-    
+
     return true;
 }
 

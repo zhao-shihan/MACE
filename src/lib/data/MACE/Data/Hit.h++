@@ -24,7 +24,8 @@ using CDCHit = Mustard::Data::TupleModel<
 using TTCHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     TTCRawHit,
-    Mustard::Data::Value<bool, "Good", "Good flag">>;
+    Mustard::Data::Value<bool, "Good", "Good flag">,
+    Mustard::Data::Value<std::vector<float>, "SiPMAmp", "SiPM readout amplitude">>;
 
 using MCPHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,

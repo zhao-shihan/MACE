@@ -32,14 +32,13 @@
 #include <string_view>
 #include <tuple>
 #include <utility>
-#include <variant>
 #include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
-TTCSD::TTCSD(const G4String& sdName, const DetectorType type, const TTCSiPMSD* ttcSiPMSD) :
+TTCSD::TTCSD(const G4String& sdName, const Type type, const TTCSiPMSD* ttcSiPMSD) :
     G4VSensitiveDetector{sdName},
-    detectorType{type},
+    type{type},
     fTTCSiPMSD{ttcSiPMSD},
     fEnergyDepositionThreshold{},
     fSplitHit{},
@@ -60,14 +59,14 @@ TTCSD::TTCSD(const G4String& sdName, const DetectorType type, const TTCSiPMSD* t
             return std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
         }};
 
-    if (detectorType == DetectorType::TTC) {
+    if (type == TTCSD::Type::MACE) {
         const auto& ttc{Detector::Description::TTC::Instance()};
         fEnergyDepositionThreshold = EnergyThreshold(ttc);
         fSplitHit.reserve(ttc.NAlongPhi() * ttc.Width().size());
     } else {
         const auto& ttc{PhaseI::Detector::Description::TTC::Instance()};
         fEnergyDepositionThreshold = EnergyThreshold(ttc);
-        fSplitHit.reserve(std::accumulate(ttc.NAlongPhi().begin(), ttc.NAlongPhi().end(), 0));
+        fSplitHit.reserve(muc::ranges::reduce(ttc.NAlongPhi()));
     }
 }
 
@@ -108,8 +107,8 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"Good">(*hit) = false; // to be determined
+    Get<"SiPMAmp">(*hit) = {}; // to be determined
     Get<"nOptPho">(*hit) = {}; // to be determined
-    Get<"SiPMVoltage">(*hit) = {}; // to be determined
     Get<"x">(*hit) = preStepPoint.GetPosition();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
@@ -197,7 +196,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
             Get<"nOptPho">(*hit) = nHit[Get<"TileID">(*hit)];
-            Get<"SiPMVoltage">(*hit) = {nHit[Get<"TileID">(*hit)].begin(), nHit[Get<"TileID">(*hit)].end()};
+            Get<"SiPMAmp">(*hit) = {nHit[Get<"TileID">(*hit)].begin(), nHit[Get<"TileID">(*hit)].end()};
         }
     }
 }
