@@ -1,3 +1,5 @@
+#!/bin/bash
+
 SAMPLING_DIR="Sampling_$(date "+%Y%m%d-%H:%M")"
 mkdir "$SAMPLING_DIR" && cd $_
 
