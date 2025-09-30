@@ -21,7 +21,7 @@ constexpr auto defaultMacro = {
     "/run/verbose 2",
     "",
     "# I/O & Analysis",
-    "/MACE/Analysis/FilePath                        SimTarget_vis",
+    "/MACE/Analysis/FilePath                        SimTarget_vis.root",
     "/MACE/Analysis/FileMode                        RECREATE",
     "/MACE/Analysis/EnableYieldAnalysis             true",
     "",

@@ -18,7 +18,7 @@
 /MACE/Analysis/CoincidenceWithMRPC    no
 /MACE/Analysis/CoincidenceWithECAL    no
 
-/MACE/Analysis/FilePath SimMACEPhaseI_ep_mono
+/MACE/Analysis/FilePath SimMACEPhaseI_ep_mono.root
 /MACE/Analysis/FileMode RECREATE
 
 /run/beamOn 1000000

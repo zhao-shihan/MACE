@@ -78,7 +78,7 @@ auto GenM2ENNGG::Main(int argc, char* argv[]) const -> int {
     }
 
     // Initialize generator and write ACF
-    Mustard::File<TFile> file{cli->get("--output"), cli->get("--output-mode")};
+    Mustard::ProcessSpecificFile<TFile> file{cli->get("--output"), cli->get("--output-mode")};
     auto& rng{*CLHEP::HepRandom::getTheEngine()};
     const auto autocorrelationFunction{generator.MCMCInitialize(rng)};
     WriteAutocorrelationFunction(autocorrelationFunction);
