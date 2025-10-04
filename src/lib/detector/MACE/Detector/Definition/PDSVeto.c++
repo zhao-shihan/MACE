@@ -223,13 +223,13 @@ auto PDSVeto::Construct(bool checkOverlaps) -> void {
     transparentSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1., 1.});
 
     if (veto.SelectedCategory() < -1 or veto.SelectedCategory() > 3) {
-        Mustard::PrintWarning(fmt::format("\n no such category: category[{}]\n"
+        Mustard::PrintWarning(fmt::format("\n no such category: category_{}\n"
                                                    "available category selection:\n"
-                                                   "category[-1] (All)\n",
-                                                   "category[0] (Top)\n"
-                                                   "category[1] (Side)\n"
-                                                   "category[2] (Cap1)\n"
-                                                   "category[3] (Cap2)\n"
+                                                   "category_3 (Cap2)\n"
+                                                   "category_2 (Cap1)\n"
+                                                   "category_1 (Side)\n"
+                                                   "category_0 (Top)\n"
+                                                   "category_-1 (All)\n",
                                                    veto.SelectedCategory()));
     }
     for (auto aCategoryConfiguration : veto.CategoryConfiguration()) {
