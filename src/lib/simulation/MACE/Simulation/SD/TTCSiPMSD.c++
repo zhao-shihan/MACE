@@ -16,9 +16,9 @@
 
 #include <cassert>
 
-using namespace Mustard::PhysicalConstant;
-
 namespace MACE::inline Simulation::inline SD {
+
+using namespace Mustard::PhysicalConstant;
 
 TTCSiPMSD::TTCSiPMSD(const G4String& sdName, const Type type) :
     G4VSensitiveDetector{sdName},
@@ -52,7 +52,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto preStepPoint{*step.GetPreStepPoint()};
     const auto tileID{postStepPoint.GetTouchable()->GetReplicaNumber(2)};
     const auto siPMLocalID{postStepPoint.GetTouchable()->GetReplicaNumber(1)};
-    const auto position = postStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformPoint(postStepPoint.GetPosition());
+    const auto position{postStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformPoint(postStepPoint.GetPosition())};
     // new a hit
     auto hit{std::make_unique_for_overwrite<TTCSiPMHit>()};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
@@ -62,7 +62,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
     // Get<"TTCHitID">(*hit) = -1; // to be determined
     Get<"x">(*hit) = {position.x(), position.z()};
-    Get<"k">(*hit) = preStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformAxis(preStepPoint.GetMomentumDirection()) / CLHEP::hbar_Planck;
+    Get<"k">(*hit) = preStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformAxis(preStepPoint.GetMomentumDirection()) / hbar_Planck;
     fHit[tileID].emplace_back(std::move(hit));
 
     return true;

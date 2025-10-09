@@ -107,7 +107,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"Good">(*hit) = false; // to be determined
-    Get<"SiPMAmp">(*hit) = {}; // to be determined
+    Get<"ADC">(*hit) = {}; // to be determined
     Get<"nOptPho">(*hit) = {}; // to be determined
     Get<"x">(*hit) = preStepPoint.GetPosition();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
@@ -196,7 +196,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
             Get<"nOptPho">(*hit) = nHit[Get<"TileID">(*hit)];
-            Get<"SiPMAmp">(*hit) = {nHit[Get<"TileID">(*hit)].begin(), nHit[Get<"TileID">(*hit)].end()};
+            Get<"ADC">(*hit) = {nHit[Get<"TileID">(*hit)].begin(), nHit[Get<"TileID">(*hit)].end()};
         }
     }
 }
