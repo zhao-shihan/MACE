@@ -2,9 +2,9 @@
 # Initialization settings
 #############################################################################
 
-/control/verbose 2
+/control/verbose 0
 #/control/saveHistory
-/run/verbose 2
+/run/verbose 0
 
 #/Mustard/Detector/Description/Ixport SimVeto_geom.yaml
 
@@ -20,4 +20,4 @@
 # for benchmark run 10n events
 /run/beamOn 30000
 
-/Mustard/run/PrintRunSummary
+/Mustard/Run/PrintRunSummary
