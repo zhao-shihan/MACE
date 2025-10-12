@@ -44,7 +44,7 @@ public:
     auto PMTEnergyBin() const -> const auto& { return *fPMTEnergyBin; }
     auto PMTQuantumEfficiency() const -> const auto& { return *fPMTQuantumEfficiency; }
 
-    auto MPPCNPixelRows() const -> const auto& { return *fMPPCNPixelRows; }
+    auto MPPCNPixelRow() const -> const auto& { return *fMPPCNPixelRow; }
     auto MPPCPixelSizeSet() const -> const auto& { return *fMPPCPixelSizeSet; }
     auto MPPCPitch() const -> const auto { return *fMPPCPitch; }
     auto MPPCThickness() const -> const auto { return *fMPPCThickness; }
@@ -63,7 +63,7 @@ public:
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     auto NSubdivision(int val) -> void { fNSubdivision = val; }
-//     // auto InnerRadius(double val) -> void { fInnerRadius = val; }
+    auto InnerRadius(double val) -> void { fInnerRadius = val; }
     auto CrystalHypotenuse(double val) -> void { fCrystalHypotenuse = val; }
     auto CrystalPackageThickness(double val) -> void { fCrystalPackageThickness = val; }
     auto UpstreamWindowRadius(double val) -> void { fUpstreamWindowRadius = val; }
@@ -83,7 +83,7 @@ public:
     auto PMTEnergyBin(std::vector<double> val) -> void { fPMTEnergyBin = std::move(val); }
     auto PMTQuantumEfficiency(std::vector<double> val) -> void { fPMTQuantumEfficiency = std::move(val); }
 
-    auto MPPCNPixelRows(std::vector<int> val) -> void { fMPPCNPixelRows = std::move(val); }
+    auto MPPCNPixelRow(std::vector<int> val) -> void { fMPPCNPixelRow = std::move(val); }
     auto MPPCPixelSizeSet(std::vector<double> val) -> void { fMPPCPixelSizeSet = std::move(val); }
     auto MPPCPitch(double val) -> void { fMPPCPitch = val; }
     auto MPPCThickness(double val) -> void { fMPPCThickness = val; }
@@ -148,7 +148,7 @@ private:
     Simple<std::vector<double>> fPMTEnergyBin;
     Simple<std::vector<double>> fPMTQuantumEfficiency;
 
-    Simple<std::vector<int>> fMPPCNPixelRows;
+    Simple<std::vector<int>> fMPPCNPixelRow;
     Simple<std::vector<double>> fMPPCPixelSizeSet;
     Simple<double> fMPPCPitch;
     Simple<double> fMPPCThickness;

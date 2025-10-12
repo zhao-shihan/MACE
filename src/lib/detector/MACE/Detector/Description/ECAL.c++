@@ -178,7 +178,7 @@ ECAL::ECAL() :
     fPMTCathodeThickness{this, 20_nm},
     fPMTEnergyBin{this, {}},
     fPMTQuantumEfficiency{this, {}},
-    fMPPCNPixelRows{this, {}},
+    fMPPCNPixelRow{this, {}},
     fMPPCPixelSizeSet{this, {}},
     fMPPCPitch{this, 0.2_mm},     // gap between pixels
     fMPPCThickness{this, 0.1_mm}, // cathode
@@ -243,7 +243,7 @@ ECAL::ECAL() :
                              0.18987, 0.19886, 0.2083, 0.21794, 0.228, 0.23806, 0.24644, 0.25312, 0.25713, 0.25932, 0.25835, 0.25279,
                              0.24266, 0.23367, 0.22357, 0.2143, 0.20344, 0.19319, 0.18363, 0.17294, 0.16265, 0.15232, 0.14053, 0.12759,
                              0.11486, 0.10345, 0.09229, 0.08193, 0.07198, 0.06108, 0.05136, 0.04241, 0.0337, 0.02403, 0.01447, 0.00466};
-    fMPPCNPixelRows = {4, 4, 8, 8, 8, 8, 8, 8, 8, 8};
+    fMPPCNPixelRow = {4, 4, 8, 8, 8, 8, 8, 8, 8, 8};
     fMPPCPixelSizeSet = {3_mm, 3_mm, 3_mm, 3_mm, 3_mm, 3_mm, 3_mm, 3_mm, 3_mm, 3_mm};
     fMPPCEnergyBin = {1.391655126_eV, 1.413303953_eV, 1.436778788_eV, 1.461046623_eV, 1.486148332_eV, 1.512127645_eV, 1.533451437_eV,
                       1.553243676_eV, 1.579239384_eV, 1.601331725_eV, 1.618380329_eV, 1.644070091_eV, 1.668575932_eV, 1.695332333_eV,
@@ -471,7 +471,7 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
     ImportValue(node, fPMTEnergyBin, "PMTEnergyBin");
     ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    ImportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
+    ImportValue(node, fMPPCNPixelRow, "MPPCNPixelRow");
     ImportValue(node, fMPPCPixelSizeSet, "MPPCPixelSizeSet");
     ImportValue(node, fMPPCPitch, "MPPCPitch");
     ImportValue(node, fMPPCThickness, "MPPCThickness");
@@ -504,7 +504,7 @@ auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
     ExportValue(node, fPMTEnergyBin, "PMTEnergyBin");
     ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    ExportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
+    ExportValue(node, fMPPCNPixelRow, "MPPCNPixelRow");
     ExportValue(node, fMPPCPixelSizeSet, "MPPCPixelSizeSet");
     ExportValue(node, fMPPCPitch, "MPPCPitch");
     ExportValue(node, fMPPCThickness, "MPPCThickness");
