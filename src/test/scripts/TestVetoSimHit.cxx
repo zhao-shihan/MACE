@@ -1,13 +1,16 @@
 #include "ROOT/RDataFrame.hxx"
+#include "TCanvas.h"
 #include "TFile.h"
 #include "TH1.h"
 #include "TKey.h"
+#include "TPad.h"
 #include "TSystem.h"
 
 #include <iostream>
 #include <string>
 
 const std::string dataTupleName{"VetoSimHit"};
+
 const void Judge(double pValue) {
     const std::string boldBlue = "\033[1;34m";
     const std::string boldGreen = "\033[1;32m";
@@ -30,7 +33,62 @@ const void Judge(double pValue) {
 
 // int main()
 auto TestVetoSimHit(std::string moduleName, std::string testFileName, std::string sampleFileName) {
+    gROOT->SetBatch(kTRUE);
+
+    auto SaveRegressionResult{
+        [&](TH1D* h1, TH1D* h2, std::string histName) {
+            auto i1{h1->Integral()};
+            auto i2{h2->Integral()};
+            h1->Scale(1 / i1);
+            h2->Scale(1 / i2);
+
+            // pull
+
+            auto nBins{h1->GetNbinsX()};
+            auto totalBins{nBins + 2};
+            auto xLow{h1->GetXaxis()->GetXmin()};
+            auto xUp{h1->GetXaxis()->GetXmax()};
+            auto pull{new TH1D("pull", "pull", nBins, xLow, xUp)};
+            pull->SetMarkerStyle(kPlus);
+
+            for (int i = 0; i < totalBins; i++) {
+                auto diff{h1->GetBinContent(i) - h2->GetBinContent(i)};
+                auto err1{h1->GetBinError(i)};
+                auto err2{h2->GetBinError(i)};
+                auto err{TMath::Sqrt(err1 * err1 + err2 * err2)};
+                pull->SetBinContent(i, diff / err);
+                pull->SetBinError(i, 1);
+            }
+            // draw
+            auto canvasName{"c_" + moduleName + "_" + histName};
+            auto pad1Name{"hist"};
+            auto pad2Name{"pull"};
+            TCanvas* c1 = new TCanvas(canvasName.data(), canvasName.data(), 800, 600);
+            TPad* pad1 = new TPad(pad1Name, pad1Name, 0, 0.4, 1, 1.0);
+            TPad* pad2 = new TPad(pad2Name, pad2Name, 0, 0.0, 1, 0.4);
+
+            pad1->SetBottomMargin(0.06);
+            pad2->SetTopMargin(0.06);
+            pad2->SetBottomMargin(0.2);
+
+            pad1->Draw();
+            pad2->Draw();
+            h1->SetLineColor(kRed);
+            h1->SetLineWidth(1);
+            h2->SetLineColor(kBlue);
+            h2->SetLineWidth(1);
+
+            pad1->cd();
+            h2->DrawClone();
+            h1->DrawClone("SAME");
+            pad2->cd();
+            pull->Draw();
+            auto file{TFile(("Regression_" + dataTupleName + ".root").data(), "update")};
+            c1->Write();
+        }};
+
     gErrorIgnoreLevel = kError;
+
     ROOT::RDataFrame df0("G4Run0/" + dataTupleName, testFileName);
     auto sampleFile{new TFile(sampleFileName.data(), "READ")};
     if (!sampleFile) {
@@ -43,7 +101,7 @@ auto TestVetoSimHit(std::string moduleName, std::string testFileName, std::strin
         return 1;
     }
 
-    std::clog << "[Note] testing. Module: " << moduleName <<"; "<< "DataTuple: " << dataTupleName << std::endl;
+    std::clog << "[Note] testing. Module: " << moduleName << "; " << "DataTuple: " << dataTupleName << std::endl;
 
     auto df{df0.Define("x_0", "x[0]")
                 .Define("x_1", "x[1]")
@@ -70,9 +128,11 @@ auto TestVetoSimHit(std::string moduleName, std::string testFileName, std::strin
         auto nBins{hist->GetNbinsX()};
 
         auto testHist{df.Histo1D({"", "", nBins, xMin, xMax}, branchName)};
-        std::cout<< "\n" << "(#" << ++idx << ") " << " Column " << branchName<< std::endl;
+        std::cout << "\n"
+                  << "(#" << ++idx << ") " << " Column " << branchName << std::endl;
         auto pValue{hist->Chi2Test(testHist.GetPtr(), "P")};
         Judge(pValue);
+        SaveRegressionResult(hist, testHist.GetPtr(), branchName);
         std::cout << "\n";
     }
     std::clog << "Test " << moduleName << " " << dataTupleName << " end." << std::endl;

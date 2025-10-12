@@ -6,7 +6,7 @@
 
 void Compare2Hist() {
     // from sample file
-    auto filePath1{"mace_test_sample.root"};
+    auto filePath1{"mace_regression_data.root"};
     auto histPath1{"SimMACEPhaseI_M2ee/MRPCSimHit/p0_0"};
 
     auto file1{new TFile(filePath1, "READ")};
@@ -37,25 +37,25 @@ void Compare2Hist() {
     h1->Scale(1 / i1);
     h2->Scale(1 / i2);
 
-    // adjusted residual
-    TH1D* resid = (TH1D*)h1->Clone("r");
-    resid->SetTitle("Adjusted residual");
-    resid->Reset();
+    // adjusted pullual
+    TH1D* pull = (TH1D*)h1->Clone("r");
+    pull->SetTitle("Adjusted pullual");
+    pull->Reset();
 
     int nBins = h1->GetNbinsX();
     int totalBins = nBins + 2;
 
     double* array1 = h1->GetArray();
     double* array2 = h2->GetArray();
-    double* residArray = resid->GetArray();
+    double* pullArray = pull->GetArray();
 
     for (int i = 0; i < totalBins; i++) {
         double s = array1[i] + array2[i];
         double d = array1[i] - array2[i];
         if (s == 0.) {
-            residArray[i] = 0.;
+            pullArray[i] = 0.;
         } else {
-            residArray[i] = (d) / sqrt(s * (1 - s / 2));
+            pullArray[i] = (d) / sqrt(s * (1 - s / 2));
         }
     }
 
@@ -79,7 +79,7 @@ void Compare2Hist() {
     h2->DrawClone();
     h1->DrawClone("SAME");
     pad2->cd();
-    resid->Draw();
+    pull->Draw();
 }
 // using namespace RooFit;
 // RooRealVar x1(branchName, branchName, h1->GetXaxis()->GetXmin(), h1->GetXaxis()->GetXmax());
