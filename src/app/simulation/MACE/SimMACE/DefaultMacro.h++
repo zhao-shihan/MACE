@@ -13,7 +13,7 @@ constexpr auto defaultMacro = {
     "#/control/saveHistory",
     "/run/verbose 2",
     "",
-    "/Mustard/Detector/Description/Ixport SimMACE/SimMACE.yaml",
+    "#/Mustard/Detector/Description/Ixport SimMACE/SimMACE.yaml",
     "",
     "/run/initialize",
     "",

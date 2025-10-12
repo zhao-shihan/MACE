@@ -10,7 +10,7 @@
 /Mustard/Detector/Description/Import SimVeto_geom.yaml
 #/Mustard/Detector/Description/Ixport SimVeto_geom.yaml
 
-/MACE/Physics/UseOpticalPhysics
+#/MACE/Physics/UseOpticalPhysics
 
 
 /run/initialize

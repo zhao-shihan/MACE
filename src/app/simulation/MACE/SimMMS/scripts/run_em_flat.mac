@@ -7,11 +7,10 @@
 
 #/Mustard/Detector/Description/Ixport mms_geom.yaml
 
-/MACE/Physics/UseOpticalPhysics
+#/MACE/Physics/UseOpticalPhysics
 
 /run/initialize
-
-/process/optical/scintillation/setFiniteRiseTime true
+ #/process/optical/scintillation/setFiniteRiseTime true
 
 /MACE/Generator/SwitchToGPSX
 /gps/particle                         e-
@@ -37,6 +36,6 @@
 #/run/beamOn 10000
 
 # for benchmark run 10n events
-/run/beamOn 300
+/run/beamOn 3000
 
 /Mustard/Run/PrintRunSummary
