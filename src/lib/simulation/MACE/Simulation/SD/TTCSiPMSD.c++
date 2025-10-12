@@ -60,7 +60,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"TileID">(*hit) = tileID;
     Get<"SiPMID">(*hit) = tileID * nSiPM - siPMLocalID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
-    Get<"x">(*hit) = {position.x(), position.z()};
+    Get<"x">(*hit) = {static_cast<float>(position.x()), static_cast<float>(position.z())};
     Get<"k">(*hit) = preStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformAxis(preStepPoint.GetMomentumDirection()) / hbar_Planck;
     fHit[tileID].emplace_back(std::move(hit));
 
