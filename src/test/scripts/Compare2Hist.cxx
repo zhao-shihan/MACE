@@ -6,7 +6,7 @@
 
 void Compare2Hist() {
     // from sample file
-    auto filePath1{"Sample.root"};
+    auto filePath1{"mace_test_sample.root"};
     auto histPath1{"SimMACEPhaseI_M2ee/MRPCSimHit/p0_0"};
 
     auto file1{new TFile(filePath1, "READ")};

@@ -42,14 +42,14 @@ run_command "Merge SimVeto" hadd -ff SimVeto_hit_partial_test.root SimVeto_hit_p
 run_command "Merge SimMACE" hadd -ff SimMACE_signal_test.root SimMACE_signal_test/*
 
 echo "Start data test..."
-run_command "TestCDCSimHit for SimMMS" root -l -q '$script_dir/TestCDCSimHit.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","$script_dir/Sample.root")'
-run_command "TestMMSSimTrack for SimMMS" root -l -q '$script_dir/TestMMSSimTrack.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","$script_dir/Sample.root")'
-run_command "TestVetoSimHit for SimVeto" root -l -q '$script_dir/TestVetoSimHit.cxx("SimVeto_hit_partial","SimVeto_hit_partial_test.root","$script_dir/Sample.root")'
-run_command "TestTTCSimHit for SimTTC" root -l -q '$script_dir/TestTTCSimHit.cxx("SimTTC_em_flat","SimTTC_em_flat_test.root","$script_dir/Sample.root")'
-run_command "TestMCPSimHit for SimMACE" root -l -q '$script_dir/TestMCPSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","$script_dir/Sample.root")'
-run_command "TestTTCSimHit for SimMACE" root -l -q '$script_dir/TestTTCSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","$script_dir/Sample.root")'
-run_command "TestCDCSimHit for SimMACE" root -l -q '$script_dir/TestCDCSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","$script_dir/Sample.root")'
-run_command "TestMMSSimTrack for SimMACE" root -l -q '$script_dir/TestMMSSimTrack.cxx("SimMACE_signal","SimMACE_signal_test.root","$script_dir/Sample.root")'
+run_command "TestCDCSimHit for SimMMS" root -l -q '$script_dir/TestCDCSimHit.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","$script_dir/mace_test_sample.root")'
+run_command "TestMMSSimTrack for SimMMS" root -l -q '$script_dir/TestMMSSimTrack.cxx("SimMMS_em_flat","SimMMS_em_flat_test.root","$script_dir/mace_test_sample.root")'
+run_command "TestVetoSimHit for SimVeto" root -l -q '$script_dir/TestVetoSimHit.cxx("SimVeto_hit_partial","SimVeto_hit_partial_test.root","$script_dir/mace_test_sample.root")'
+run_command "TestTTCSimHit for SimTTC" root -l -q '$script_dir/TestTTCSimHit.cxx("SimTTC_em_flat","SimTTC_em_flat_test.root","$script_dir/mace_test_sample.root")'
+run_command "TestMCPSimHit for SimMACE" root -l -q '$script_dir/TestMCPSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","$script_dir/mace_test_sample.root")'
+run_command "TestTTCSimHit for SimMACE" root -l -q '$script_dir/TestTTCSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","$script_dir/mace_test_sample.root")'
+run_command "TestCDCSimHit for SimMACE" root -l -q '$script_dir/TestCDCSimHit.cxx("SimMACE_signal","SimMACE_signal_test.root","$script_dir/mace_test_sample.root")'
+run_command "TestMMSSimTrack for SimMACE" root -l -q '$script_dir/TestMMSSimTrack.cxx("SimMACE_signal","SimMACE_signal_test.root","$script_dir/mace_test_sample.root")'
 
 end_time=$(date +%s)
 total_time=$((end_time - start_time))
