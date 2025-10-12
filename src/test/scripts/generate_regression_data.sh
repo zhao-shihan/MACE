@@ -42,8 +42,14 @@ run_command hadd -ff SimVeto_hit_partial_sample.root SimVeto_hit_partial_test/*
 run_command hadd -ff SimMACE_signal_sample.root SimMACE_signal_test/*
 
 # in case file already exists
-if "mkdir $script_dir/old-regression-data/";then
-    mv $script_dir/mace_regression_data.root $script_dir/old/mace_regression_data_$(date "+%Y%m%d-%H:%M").root
+# 创建目录（如果不存在），然后移动文件
+if [ -f "$script_dir/mace_regression_data.root" ]; then
+    # 创建目录，如果已存在也不会报错
+    mkdir -p "$script_dir/old-regression-data/"
+    
+    # 移动文件并重命名
+    mv "$script_dir/mace_regression_data.root" "$script_dir/old-regression-data/mace_regression_data_$(date "+%Y%m%d-%H:%M").root"
+    
     echo "==>NOTICE: old version of mace_regression_data.root moved to $script_dir/old-regression-data/"
 fi
 
