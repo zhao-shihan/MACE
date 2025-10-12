@@ -241,7 +241,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         const auto& ttcName{Detector::Description::TTC::Instance().Name()};
         mms.Get<Detector::Definition::TTC>().RegisterSD(ttcName + "Scintillator", new SD::TTCSD{ttcName, TTCSD::Type::MACE});
         const auto& mcpName{Detector::Description::MCP::Instance().Name()};
-        mcp.RegisterSD(mcpName + "Anode", new SD::MCPSD{mcpName});
+        mcp.RegisterSD(mcpName, new SD::MCPSD{mcpName});
         ecalCrystal.RegisterSD(new SD::ECALSD{Detector::Description::ECAL::Instance().Name()});
     }
 
