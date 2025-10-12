@@ -3,6 +3,7 @@
 #include "MACE/SimVeto/Analysis.h++"
 
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Env/BasicEnv.h++"
 
 #include "G4Event.hh"
 #include "G4PrimaryVertex.hh"
@@ -20,11 +21,15 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fPrimaryGeneratorActionMessengerRegister{this} {
     fAvailableGenerator.ecoMug.UseHSphere();
     fAvailableGenerator.ecoMug.HSphereRadius(2_m);
-    std::cout << "=====>estimated time of 10000000 CR muon: " << fAvailableGenerator.ecoMug.EstimatedTime(10000000) << " ns" << std::endl;
+    if (Mustard::Env::VerboseLevelReach<'V'>()) {
+        std::cout << "=====>estimated time of 10000000 CR muon: " << fAvailableGenerator.ecoMug.EstimatedTime(10000000) << " ns" << std::endl;
+    }
 }
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
     fGenerator->GeneratePrimaryVertex(event);
-    if (fSavePrimaryVertexData) { UpdatePrimaryVertexData(*event); }
+    if (fSavePrimaryVertexData) {
+        UpdatePrimaryVertexData(*event);
+    }
 }
 
 auto PrimaryGeneratorAction::UpdatePrimaryVertexData(const G4Event& event) -> void {
