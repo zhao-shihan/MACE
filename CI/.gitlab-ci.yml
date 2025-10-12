@@ -24,13 +24,13 @@ pull-image:
     - apptainer pull rgb.sif oras://ghcr.io/zhao-shihan/rgb:openmpi
     - chmod +x rgb.sif
 
-build-mace:
+build-with-gcc:
   stage: build
   tags:
     - debian
   script:
     - cd build
-    - ./rgb.sif cmake -G Ninja -DCMAKE_C_FLAGS='-march=native' -DCMAKE_CXX_FLAGS='-march=native' ..
+    - ./rgb.sif cmake -G Ninja -DCMAKE_C_FLAGS='-Werror -march=native' -DCMAKE_CXX_FLAGS='-Werror -march=native' ..
     - ./rgb.sif ninja
 
 test-mace:
@@ -39,5 +39,3 @@ test-mace:
     - debian
   script:
     - bash build/test/module_test.sh
-
-
