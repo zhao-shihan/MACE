@@ -1,0 +1,63 @@
+stages:
+  - setup-environment
+  - build-with-gcc
+  - test-with-gcc
+  - build-with-clang
+  - test-with-clang
+
+variables:
+  APPTAINER_VERSION: 1.4.3
+
+setup-environment:
+  stage: setup-environment
+  tags:
+    - debian
+  script:
+    - apt -y update
+    - apt -y full-upgrade
+    - apt -y install wget
+    - wget --tries=15 https://github.com/apptainer/apptainer/releases/download/v${APPTAINER_VERSION}/apptainer_{APPTAINER_VERSION}-trixie+_amd64.deb -O apptainer.deb
+    - apt -y install ./apptainer.deb
+    - rm ./apptainer.deb
+    - mkdir ci-work-dir
+    - cd ci-work-dir
+    - apptainer pull rgb.sif oras://ghcr.io/zhao-shihan/rgb:mpich
+    - chmod +x rgb.sif
+
+build-with-gcc:
+  stage: build-with-gcc
+  tags:
+    - debian
+  script:
+    - cd ci-work-dir
+    - mkdir build-with-gcc
+    - cd build-with-gcc
+    - ../rgb.sif cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastgcc -DCMAKE_C_COMPILER=fastg++ -DCMAKE_C_FLAGS='-Werror -Wno-array-bound -march=native' -DCMAKE_CXX_FLAGS='-Werror -Wno-array-bound -march=native'
+    - ../rgb.sif ninja
+
+build-with-clang:
+  stage: build-with-clang
+  tags:
+    - debian
+  script:
+    - cd ci-work-dir
+    - mkdir build-with-clang
+    - cd build-with-clang
+    - ../rgb.sif cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastclang -DCMAKE_C_COMPILER=fastclang++ -DCMAKE_C_FLAGS='-Werror -march=native' -DCMAKE_CXX_FLAGS='-Werror -march=native'
+    - ../rgb.sif ninja
+
+test-with-gcc:
+  stage: test
+  tags:
+    - debian
+  script:
+    - cd ci-work-dir/build-with-gcc
+    - ../rgb.sif bash test/module_test.sh
+
+test-with-clang:
+  stage: test
+  tags:
+    - debian
+  script:
+    - cd ci-work-dir/build-with-clang
+    - ../rgb.sif bash test/module_test.sh
