@@ -56,6 +56,8 @@ public:
     auto SubmitSciFiHC(const std::vector<gsl::owner<SciFiSimHit*>>& hc) -> void { fSciFiSimHit = &hc; }
     auto SubmitSciFiSiPMHC(const std::vector<gsl::owner<SciFiSiPMHit*>>& hc) -> void { fSciFiSiPMHit = &hc; }
 
+    auto SubmitTTCHC(const std::vector<gsl::owner<TTCHit*>>& hc) -> void { fTTCHit = &hc; }
+    auto SubmitTTCSiPMHC(const std::vector<gsl::owner<TTCSiPMHit*>>& hc) -> void { fTTCSiPMHit = &hc; }
     auto RunBeginUserAction(int runID) -> void override;
     auto EventEndUserAction() -> void override;
     auto RunEndUserAction(int) -> void override;
@@ -73,6 +75,8 @@ private:
     std::optional<Mustard::Data::Output<MACE::Data::ECALPMHit>> fECALPMHitOutput;
     std::optional<Mustard::Data::Output<MACE::PhaseI::Data::SciFiSimHit>> fSciFiSimHitOutput;
     std::optional<Mustard::Data::Output<MACE::PhaseI::Data::SciFiSiPMHit>> fSciFiSiPMHitOutput;
+    std::optional<Mustard::Data::Output<MACE::Data::TTCSimHit>> fTTCSimHitOutput;
+    std::optional<Mustard::Data::Output<MACE::Data::TTCSiPMHit>> fTTCSiPMHitOutput;
 
     const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>* fPrimaryVertex;
     const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>* fDecayVertex;
@@ -81,6 +85,8 @@ private:
     const std::vector<gsl::owner<ECALPMHit*>>* fECALPMHit;
     const std::vector<gsl::owner<SciFiSimHit*>>* fSciFiSimHit;
     const std::vector<gsl::owner<SciFiSiPMHit*>>* fSciFiSiPMHit;
+    const std::vector<gsl::owner<TTCHit*>>* fTTCHit;
+    const std::vector<gsl::owner<TTCSiPMHit*>>* fTTCSiPMHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };
