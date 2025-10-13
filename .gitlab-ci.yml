@@ -16,7 +16,7 @@ setup-environment:
     - apt -y update
     - apt -y full-upgrade
     - apt -y install wget
-    - wget --tries=15 https://github.com/apptainer/apptainer/releases/download/v${APPTAINER_VERSION}/apptainer_{APPTAINER_VERSION}-trixie+_amd64.deb -O apptainer.deb
+    - wget --tries=15 https://github.com/apptainer/apptainer/releases/download/v${APPTAINER_VERSION}/apptainer_${APPTAINER_VERSION}-trixie+_amd64.deb -O apptainer.deb
     - apt -y install ./apptainer.deb
     - rm ./apptainer.deb
     - mkdir ci-work-dir
