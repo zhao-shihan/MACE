@@ -12,8 +12,8 @@ get-apptainer:
     - apt -y full-upgrade
     - apt -y install wget
     - wget https://github.com/apptainer/apptainer/releases/download/v1.4.3/apptainer_1.4.3-trixie+_amd64.deb -O apptainer.deb
-    - apt -y install ./$_
-    - rm $_
+    - apt -y install ./apptainer.deb
+    - rm ./apptainer.deb
     
 pull-image:
   stage: pre
@@ -38,4 +38,6 @@ test-mace:
   tags:
     - debian
   script:
+  # Delete this line when 'mace_regression_data.root' is already download from cmake.
+    - bash build/test/generate_regression_data.sh
     - bash build/test/module_test.sh
