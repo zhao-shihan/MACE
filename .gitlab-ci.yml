@@ -47,7 +47,7 @@ build-with-clang:
     - ../rgb.sif ninja
 
 test-with-gcc:
-  stage: test
+  stage: test-with-gcc
   tags:
     - debian
   script:
@@ -55,7 +55,7 @@ test-with-gcc:
     - ../rgb.sif bash test/module_test.sh
 
 test-with-clang:
-  stage: test
+  stage: test-with-clang
   tags:
     - debian
   script:
