@@ -44,12 +44,12 @@ auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
     cli.DefaultOutputTree("m2ennee");
     auto& biasCLI{cli->add_mutually_exclusive_group()};
     biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
-    biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for atomic positron kinetic energy.").flag();
+    biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for positron kinetic energy.").flag();
     biasCLI.add_argument("--emiss-bias").help("Apply soft upper bound for missing energy.").flag();
     cli->add_argument("--pxy-softening-factor").help("Softening factor for transverse momentum soft cut in --mace-bias.").default_value(0.25_MeV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--cos-theta-softening-factor").help("Softening factor for momentum cosine soft cut in --mace-bias.").default_value(0.025).required().nargs(1).scan<'g', double>();
-    cli->add_argument("--ep-ek-soft-upper-bound").help("Soft upper bound for atomic positron kinetic energy in --ep-ek-bias or --mace-bias.").default_value(0_eV).required().nargs(1).scan<'g', double>();
-    cli->add_argument("--ep-ek-softening-factor").help("Softening factor for atomic positron kinetic energy upper bound in --ep-ek-bias or --mace-bias.").default_value(1_keV).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--ep-ek-soft-upper-bound").help("Soft upper bound for positron kinetic energy in --ep-ek-bias or --mace-bias.").default_value(0_eV).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--ep-ek-softening-factor").help("Softening factor for positron kinetic energy upper bound in --ep-ek-bias or --mace-bias.").default_value(1_keV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--emiss-soft-upper-bound").help("Soft upper bound for missing energy in --emiss-bias.").default_value(0_MeV).required().nargs(1).scan<'g', double>();
     cli->add_argument("--emiss-softening-factor").help("Softening factor for missing energy upper bound in --emiss-bias.").default_value(1_MeV).required().nargs(1).scan<'g', double>();
     Mustard::Env::MPIEnv env{argc, argv, cli};
