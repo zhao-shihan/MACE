@@ -1,18 +1,17 @@
 stages:
-  - setup-environment
-  - build-with-gcc
-  - test-with-gcc
-  - build-with-clang
-  - test-with-clang
+  - test
 
 variables:
   APPTAINER_VERSION: 1.4.3
 
-setup-environment:
-  stage: setup-environment
+regression-test-on-debian:
+  stage: test 
   tags:
     - debian
   script:
+    #################################
+    #        setup-environment      #
+    #################################
     - apt -y update
     - apt -y full-upgrade
     - apt -y install wget
@@ -23,41 +22,34 @@ setup-environment:
     - cd ci-work-dir
     - apptainer pull rgb.sif oras://ghcr.io/zhao-shihan/rgb:mpich
     - chmod +x rgb.sif
-
-build-with-gcc:
-  stage: build-with-gcc
-  tags:
-    - debian
-  script:
+    #################################
+    #        build-with-gcc         #
+    #################################
     - cd ci-work-dir
     - mkdir build-with-gcc
     - cd build-with-gcc
-    - ../rgb.sif cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastgcc -DCMAKE_C_COMPILER=fastg++ -DCMAKE_C_FLAGS='-Werror -Wno-array-bound -march=native' -DCMAKE_CXX_FLAGS='-Werror -Wno-array-bound -march=native'
+    - ../rgb.sif cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastgcc -DCMAKE_CXX_COMPILER=fastg++ -DCMAKE_C_FLAGS='-march=native' -DCMAKE_CXX_FLAGS='-march=native'
     - ../rgb.sif ninja
-
-build-with-clang:
-  stage: build-with-clang
-  tags:
-    - debian
-  script:
+    #################################
+    #        build-with-clang       #
+    #################################
     - cd ci-work-dir
     - mkdir build-with-clang
     - cd build-with-clang
-    - ../rgb.sif cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastclang -DCMAKE_C_COMPILER=fastclang++ -DCMAKE_C_FLAGS='-Werror -march=native' -DCMAKE_CXX_FLAGS='-Werror -march=native'
+    - ../rgb.sif cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastclang -DCMAKE_CXX_COMPILER=fastclang++ -DCMAKE_C_FLAGS='-Werror -march=native' -DCMAKE_CXX_FLAGS='-Werror -march=native'
     - ../rgb.sif ninja
-
-test-with-gcc:
-  stage: test-with-gcc
-  tags:
-    - debian
-  script:
+    #################################
+    #        test-with-gcc          #
+    #################################
     - cd ci-work-dir/build-with-gcc
     - ../rgb.sif bash test/module_test.sh
-
-test-with-clang:
-  stage: test-with-clang
-  tags:
-    - debian
-  script:
+    #################################
+    #        test-with-clang        #
+    #################################
     - cd ci-work-dir/build-with-clang
     - ../rgb.sif bash test/module_test.sh
+  artifacts:
+    paths: 
+      - ci-work-dir/build-with-gcc/test
+      - ci-work-dir/build-with-clang/test
+    expire_in: "30 days"
