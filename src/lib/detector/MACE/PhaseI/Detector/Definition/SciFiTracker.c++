@@ -488,7 +488,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             }
         }};
 
-    for (int i{}; i < sciFiTracker.NLayer(); i++) {
+    for (int i{}; i < sciFiTracker.LayerNumber(); i++) {
         if (layerConfig[i].fiber.layerType == "LHelical") {
             auto logicalLHelicalFiber{logicalHelicalFiber(
                 layerConfig[i].fiber.radius,
@@ -505,7 +505,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             HelicalPlacement(layerConfig[i].fiber.radius,
                              logicalLHelicalFiber,
                              logicalLHelicalLightGuide,
-                             layerConfig[i].totalNumber,
+                             layerConfig[i].fiberNumber,
                              layerConfig[i].fiber.pitch);
         } else if (layerConfig[i].fiber.layerType == "RHelical") {
             auto logicalRHelicalFiber{logicalHelicalFiber(
@@ -523,7 +523,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             HelicalPlacement(layerConfig[i].fiber.radius,
                              logicalRHelicalFiber,
                              logicalRHelicalLightGuide,
-                             layerConfig[i].totalNumber,
+                             layerConfig[i].fiberNumber,
                              layerConfig[i].fiber.pitch);
         } else if (layerConfig[i].fiber.layerType == "Transverse") {
             auto logicalTFiber{logicalTransverseFiber(
@@ -539,7 +539,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             TransversePlacement(layerConfig[i].fiber.radius,
                                 logicalTFiber,
                                 logicalTLightGuide,
-                                layerConfig[i].totalNumber);
+                                layerConfig[i].fiberNumber);
         }
     }
 

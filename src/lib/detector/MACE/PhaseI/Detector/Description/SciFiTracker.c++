@@ -30,7 +30,7 @@ SciFiTracker::SciFiTracker() : // clang-format off
     fLayerNumber{this, 16},
     fLayerType{this, {"Transverse", "Transverse", "LHelical", "LHelical", "Transverse", "Transverse", "RHelical", "RHelical", "Transverse", "Transverse", "LHelical", "LHelical", "Transverse", "Transverse", "RHelical", "RHelical" /**/}},
     fLayerRadius{this, {45_mm, 46.8_mm, 48.6_mm, 50.4_mm, 52.2_mm, 54_mm, 55.8_mm, 57.6_mm, 59.4_mm, 61.2_mm, 63_mm, 64.8_mm, 66.6_mm, 68.4_mm, 70.2_mm, 72_mm /**/}},
-    fFiberNumber{this, {140, 140, 120, 120, 160, 160, 120, 120, 180, 180, 140, 140, 180, 180, 140, 140 /**/}},
+    fFiberNumberALayer{this, {140, 140, 120, 120, 160, 160, 120, 120, 180, 180, 140, 140, 180, 180, 140, 140 /**/}},
     fLayerFiberIDRange{this, [this] { return CalculateLayerFiberIDRange(); }},
     fLayerPitch{this, [this] { return CalculateLayerPitch(); }},
     fLayerConfiguration{this, [this] { return CalculateLayerConfiguration(); }},
@@ -86,15 +86,14 @@ SciFiTracker::SciFiTracker() : // clang-format off
                            0.217013978, 0.206721701, 0.200096265, 0.191250653, 0.181575856, 0.168947005, 0.159534377, 0.149674853, 0.139503115,
                            0.129670093, 0.120230653, 0.108280609, 0.091831406, 0.098424138, 0.083937488, 0.073056832, 0.060399447, 0.047887957,
                            0.034501313}, // S13360
-    // simulation
+    // reconstruction
     fSiPMOptPhoThresholdNumber{2},
     fClusterLength{3},
     fThresholdTime{10},
     fTimeWindow{10},
     fSiPMDeadTime{10},
     fCentroidThetaThreshold{0.02 * std::numbers::pi},
-    fCentroidZThreshold{25_mm},
-    fOnePhotonDarkCountRate{1000000} {}
+    fCentroidZThreshold{25_mm} {}
 auto SciFiTracker::CalculateLayerPitch() const -> std::vector<double> {
     std::vector<double> Pitch;
     for (int i{}; i < fLayerNumber; i++) {
@@ -116,7 +115,7 @@ auto SciFiTracker::CalculateLayerConfiguration() const -> std::vector<LayerConfi
         auto& layer{layerConfig.emplace_back()};
         layer.firstID = fLayerFiberIDRange->at(i).first;
         layer.lastID = fLayerFiberIDRange->at(i).second;
-        layer.totalNumber = fFiberNumber->at(i);
+        layer.fiberNumber = fFiberNumberALayer->at(i);
         layer.fiber.layerType = fLayerType->at(i);
         layer.fiber.pitch = fLayerPitch->at(i);
         layer.fiber.radius = fLayerRadius->at(i);
@@ -127,14 +126,14 @@ auto SciFiTracker::CalculateLayerConfiguration() const -> std::vector<LayerConfi
 auto SciFiTracker::CalculateFiberInformation() const -> std::vector<FiberInformation> {
     std::vector<FiberInformation> fiberMap;
     for (int i{}; i < fLayerNumber; i++) {
-        for (int j{}; j < fFiberNumber->at(i); j++) {
+        for (int j{}; j < fFiberNumberALayer->at(i); j++) {
             FiberInformation fiber{};
             fiber.layerID = i;
             fiber.localID = j;
             fiber.layerType = fLayerType->at(i);
             fiber.radius = fLayerRadius->at(i);
             fiber.pitch = fLayerPitch->at(i);
-            fiber.rotationAngle = (j + i % 2 * 0.5) / fFiberNumber->at(i) * 2_pi;
+            fiber.rotationAngle = (j + i % 2 * 0.5) / fFiberNumberALayer->at(i) * 2_pi;
             fiberMap.push_back(fiber);
         }
     }
@@ -146,7 +145,7 @@ auto SciFiTracker::CalculateLayerFiberIDRange() const -> std::vector<std::pair<i
     int currentID{0};
     for (int i{}; i < fLayerNumber; i++) {
         int firstID = currentID;
-        currentID += fFiberNumber->at(i);
+        currentID += fFiberNumberALayer->at(i);
         int lastID = currentID - 1;
         layerFiberIDRange.emplace_back(firstID, lastID);
     }
@@ -155,6 +154,9 @@ auto SciFiTracker::CalculateLayerFiberIDRange() const -> std::vector<std::pair<i
 
 auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
+    ImportValue(node, fBracketInnerRadius, "BracketInnerRadius");
+    ImportValue(node, fBracketOuterRadius, "BracketOuterRadius");
+    ImportValue(node, fSiliconeOilThickness, "SiliconeOilThickness");
     ImportValue(node, fEpoxyThickness, "EpoxyThickness");
     ImportValue(node, fSiPMLength, "SiPMLength");
     ImportValue(node, fSiPMWidth, "SiPMWidth");
@@ -166,10 +168,13 @@ auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fLayerNumber, "LayerNumber");
     ImportValue(node, fLayerType, "LayerType");
     ImportValue(node, fLayerRadius, "LayerRadius");
-    ImportValue(node, fFiberNumber, "NFiberInALayer");
+    ImportValue(node, fFiberNumberALayer, "FiberNumberALayer");
+
     // Optical properties
     ImportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
     ImportValue(node, fScintillationComponent1, "ScintillationComponent1");
+    ImportValue(node, fSiPMEnergyBin, "SiPMEnergyBin");
+    ImportValue(node, fSiPMQuantumEfficiency, "SiPMQuantumEfficiency");
     ImportValue(node, fScintillationYield, "ScintillationYield");
     ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     // Reconstruction
@@ -178,10 +183,15 @@ auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fThresholdTime, "SiPMOptPhoThresholdTime");
     ImportValue(node, fTimeWindow, "SiPMTimeWindow");
     ImportValue(node, fSiPMDeadTime, "SiPMDeadTime");
+    ImportValue(node, fCentroidThetaThreshold, "CentroidThetaThreshold");
+    ImportValue(node, fCentroidZThreshold, "CentroidZThreshold");
 }
 
 auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
+    ExportValue(node, fBracketInnerRadius, "BracketInnerRadius");
+    ExportValue(node, fBracketOuterRadius, "BracketOuterRadius");
+    ExportValue(node, fSiliconeOilThickness, "SiliconeOilThickness");
     ExportValue(node, fEpoxyThickness, "EpoxyThickness");
     ExportValue(node, fSiPMLength, "SiPMLength");
     ExportValue(node, fSiPMWidth, "SiPMWidth");
@@ -193,10 +203,13 @@ auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fLayerNumber, "LayerNumber");
     ExportValue(node, fLayerType, "LayerType");
     ExportValue(node, fLayerRadius, "LayerRadius");
-    ExportValue(node, fFiberNumber, "NFiberInALayer");
+    ExportValue(node, fFiberNumberALayer, "FiberNumberALayer");
+
     // Optical properties
     ExportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
     ExportValue(node, fScintillationComponent1, "ScintillationComponent1");
+    ExportValue(node, fSiPMEnergyBin, "SiPMEnergyBin");
+    ExportValue(node, fSiPMQuantumEfficiency, "SiPMQuantumEfficiency");
     ExportValue(node, fScintillationYield, "ScintillationYield");
     ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     // Reconstruction
@@ -205,6 +218,8 @@ auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fThresholdTime, "SiPMOptPhoThresholdTime");
     ExportValue(node, fTimeWindow, "SiPMTimeWindow");
     ExportValue(node, fSiPMDeadTime, "SiPMDeadTime");
+    ExportValue(node, fCentroidThetaThreshold, "CentroidThetaThreshold");
+    ExportValue(node, fCentroidZThreshold, "CentroidZThreshold");
 }
 
 } // namespace MACE::PhaseI::Detector::Description

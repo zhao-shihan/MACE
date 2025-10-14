@@ -31,11 +31,11 @@ public:
     auto TransverseLightGuideLength() const -> auto { return fTransverseLightGuideLength; }
     auto DetectorLayerConfiguration() const -> const auto& { return *fLayerConfiguration; }
     auto DetectorFiberInformation() const -> const auto& { return *fFiberMap; }
-    auto NLayer() const -> auto { return *fLayerNumber; }
+    auto LayerNumber() const -> auto { return *fLayerNumber; }
     auto LayerType() const -> auto& { return fLayerType; }
-    auto RLayer() const -> const auto& { return fLayerRadius; }
+    auto LayerRadius() const -> const auto& { return fLayerRadius; }
     auto LayerFiberIDRange() const -> const auto& { return fLayerFiberIDRange; }
-    auto NFiber() const -> const auto& { return fFiberNumber; }
+    auto FiberNumberALayer() const -> const auto& { return fFiberNumberALayer; }
     // Optical properties
     auto ScintillationTimeConstant1() const -> auto { return fScintillationTimeConstant1; }
     auto ScintillationWaveLengthBin() const -> const auto& { return fScintillationWavelengthBin; }
@@ -50,7 +50,6 @@ public:
     auto SiPMDeadTime() const -> const auto { return fSiPMDeadTime; }
     auto CentroidThetaThreshold() const -> const auto { return fCentroidThetaThreshold; }
     auto CentroidZThreshold() const -> const auto { return fCentroidZThreshold; }
-    auto OnePhotonDarkCountRate() const -> const auto { return fOnePhotonDarkCountRate; }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -66,10 +65,10 @@ public:
     auto FiberLength(double val) -> void { fFiberLength = val; }
     auto TransverseLightGuideLength(double val) -> void { fTransverseLightGuideLength = val; }
     auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
-    auto NLayer(int val) -> void { fLayerNumber = val; }
+    auto LayerNumber(int val) -> void { fLayerNumber = val; }
     auto LayerType(std::vector<std::string> val) -> void { fLayerType = std::move(val); }
-    auto RLayer(std::vector<double> val) -> void { fLayerRadius = std::move(val); }
-    auto NFiberOfLayer(std::vector<int> val) -> void { fFiberNumber = std::move(val); }
+    auto LayerRadius(std::vector<double> val) -> void { fLayerRadius = std::move(val); }
+    auto FiberNumberALayer(std::vector<int> val) -> void { fFiberNumberALayer = std::move(val); }
 
     auto ScintillationWaveLengthBin(std::vector<double> val) -> void { fScintillationWavelengthBin = std::move(val); }
     auto ScintillationComponent1(std::vector<double> val) -> void { fScintillationComponent1 = std::move(val); }
@@ -83,7 +82,6 @@ public:
     auto SiPMDeadTime(double val) -> void { fSiPMDeadTime = val; }
     auto CentroidThetaThreshold(double val) -> void { fCentroidThetaThreshold = val; }
     auto CentroidZThreshold(double val) -> void { fCentroidZThreshold = val; }
-    auto OnePhotonDarkCountRate(double val) -> void { fOnePhotonDarkCountRate = val; }
 
 public:
     struct LayerConfiguration {
@@ -94,7 +92,7 @@ public:
         };
         int firstID;
         int lastID;
-        int totalNumber;
+        int fiberNumber;
         FiberConfiguration fiber;
     };
 
@@ -135,7 +133,7 @@ private:
     Simple<std::vector<std::string>> fLayerType;
     Simple<std::vector<double>> fLayerRadius;
 
-    Simple<std::vector<int>> fFiberNumber;
+    Simple<std::vector<int>> fFiberNumberALayer;
     Cached<std::vector<std::pair<int, int>>> fLayerFiberIDRange;
 
     Cached<std::vector<double>> fLayerPitch;
@@ -157,7 +155,6 @@ private:
     double fSiPMDeadTime;
     double fCentroidThetaThreshold;
     double fCentroidZThreshold;
-    double fOnePhotonDarkCountRate;
 };
 
 } // namespace MACE::PhaseI::Detector::Description
