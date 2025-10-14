@@ -82,7 +82,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
 
     // Construct Detector
     int tileID{};
-    const auto nCircle{ttc.NAlongPhi().size()};
+    const auto nCircle{static_cast<int>(ttc.NAlongPhi().size())};
 
     // set up the PCB
     const auto ttcPCBSolid{Make<G4Box>(
@@ -135,7 +135,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         ttcVirtualBoxSolid,
         ttcVirtualBoxMaterial,
         "TTCVirtualBox")};
-    for (gsl::index i{}; i < nCircle; ++i) {
+    for (int i{}; i < nCircle; ++i) {
         auto deltaPhi{2 * pi / ttc.NAlongPhi()[i]};
         // set the position of air mother box
         const auto transform{/*G4RotateZ3D{Mustard::Math::IsEven(i) ? 0 : deltaPhi / 2} **/

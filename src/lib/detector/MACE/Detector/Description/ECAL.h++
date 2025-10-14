@@ -23,42 +23,42 @@ private:
     ~ECAL() = default;
 
 public:
-    auto NSubdivision() const -> const auto { return *fNSubdivision; }
-    auto InnerRadius() const -> const auto { return *fInnerRadius; }
-    auto CrystalHypotenuse() const -> const auto { return *fCrystalHypotenuse; }
-    auto CrystalPackageThickness() const -> const auto { return *fCrystalPackageThickness; }
-    auto UpstreamWindowRadius() const -> const auto { return *fUpstreamWindowRadius; }
-    auto DownstreamWindowRadius() const -> const auto { return *fDownstreamWindowRadius; }
-    auto ScintillationEnergyBin() const -> const auto& { return *fScintillationEnergyBin; }
-    auto ScintillationComponent1() const -> const auto& { return *fScintillationComponent1; }
-    auto ScintillationYield() const -> const auto { return *fScintillationYield; }
-    auto ScintillationTimeConstant1() const -> const auto { return *fScintillationTimeConstant1; }
-    auto ResolutionScale() const -> const auto { return *fResolutionScale; }
+    auto NSubdivision() const -> auto { return *fNSubdivision; }
+    auto InnerRadius() const -> auto { return *fInnerRadius; }
+    auto CrystalHypotenuse() const -> auto { return *fCrystalHypotenuse; }
+    auto CrystalPackageThickness() const -> auto { return *fCrystalPackageThickness; }
+    auto UpstreamWindowRadius() const -> auto { return *fUpstreamWindowRadius; }
+    auto DownstreamWindowRadius() const -> auto { return *fDownstreamWindowRadius; }
+    auto ScintillationEnergyBin() const -> auto& { return *fScintillationEnergyBin; }
+    auto ScintillationComponent1() const -> auto& { return *fScintillationComponent1; }
+    auto ScintillationYield() const -> auto { return *fScintillationYield; }
+    auto ScintillationTimeConstant1() const -> auto { return *fScintillationTimeConstant1; }
+    auto ResolutionScale() const -> auto { return *fResolutionScale; }
 
-    auto UseMPPC() const -> const auto { return *fUseMPPC; }
+    auto UseMPPC() const -> auto { return *fUseMPPC; }
 
     auto PMTDimensions() const -> const auto& { return *fPMTDimensions; }
-    auto PMTCouplerThickness() const -> const auto { return *fPMTCouplerThickness; }
-    auto PMTWindowThickness() const -> const auto { return *fPMTWindowThickness; }
-    auto PMTCathodeThickness() const -> const auto { return *fPMTCathodeThickness; }
+    auto PMTCouplerThickness() const -> auto { return *fPMTCouplerThickness; }
+    auto PMTWindowThickness() const -> auto { return *fPMTWindowThickness; }
+    auto PMTCathodeThickness() const -> auto { return *fPMTCathodeThickness; }
     auto PMTEnergyBin() const -> const auto& { return *fPMTEnergyBin; }
     auto PMTQuantumEfficiency() const -> const auto& { return *fPMTQuantumEfficiency; }
 
     auto MPPCNPixelRow() const -> const auto& { return *fMPPCNPixelRow; }
     auto MPPCPixelSizeSet() const -> const auto& { return *fMPPCPixelSizeSet; }
-    auto MPPCPitch() const -> const auto { return *fMPPCPitch; }
-    auto MPPCThickness() const -> const auto { return *fMPPCThickness; }
-    auto MPPCCouplerThickness() const -> const auto { return *fMPPCCouplerThickness; }
-    auto MPPCWindowThickness() const -> const auto { return *fMPPCWindowThickness; }
+    auto MPPCPitch() const -> auto { return *fMPPCPitch; }
+    auto MPPCThickness() const -> auto { return *fMPPCThickness; }
+    auto MPPCCouplerThickness() const -> auto { return *fMPPCCouplerThickness; }
+    auto MPPCWindowThickness() const -> auto { return *fMPPCWindowThickness; }
     auto MPPCEnergyBin() const -> const auto& { return *fMPPCEnergyBin; }
     auto MPPCEfficiency() const -> const auto& { return *fMPPCEfficiency; }
 
     auto Mesh() const -> const auto& { return *fMesh; }
-    auto NUnit() const -> const auto { return Mesh().faceList.size(); }
+    auto NUnit() const -> auto { return Mesh().faceList.size(); }
     auto ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D;
 
     auto ModuleSelection() const -> const auto& { return *fModuleSelection; }
-    auto WaveformIntegralTime() const -> const auto { return *fWaveformIntegralTime; }
+    auto WaveformIntegralTime() const -> auto { return *fWaveformIntegralTime; }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 

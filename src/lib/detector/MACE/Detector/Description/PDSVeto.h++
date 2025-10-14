@@ -21,34 +21,26 @@ public:
     auto NLayerPerModuleOfACategory() const -> const auto& { return *fNLayerPerModuleOfACategory; }
     auto NStripPerLayerOfACategory() const -> const auto& { return *fNStripPerLayerOfACategory; }
     auto StripLengthOfACategory() const -> const auto& { return *fStripLengthOfACategory; }
-    auto ReflectiveFilmThickness() const -> const auto& { return *fReflectiveFilmThickness; }
-    auto InterPSGap() const -> const auto& { return *fInterPSGap; }
-    auto PerpendicularModuleGap() const -> const auto& { return *fPerpendicularModuleGap; }
-    auto ParallelModuleGap() const -> const auto& { return *fParallelModuleGap; }
-    auto ModuleOffset() const -> const auto& { return *fModuleOffset; }
-    auto AlAbsorberThickness() const -> const auto& { return *fAlAbsorberThickness; }
-    auto FiberNum() const -> const auto& { return *fFiberNum; }
-    auto SelectedCategory() const -> const auto& { return *fSelectedCategory; }
 
-    auto PSScintillationEnergyBin() const -> const auto& { return *fPSScintillationEnergyBin; }
-    auto PSScintillationComponent1() const -> const auto& { return *fPSScintillationComponent1; }
-    auto PSScintillationYield() const -> const auto& { return *fPSScintillationYield; }
-    auto PSScintillationTimeConstant1() const -> const auto& { return *fPSScintillationTimeConstant1; }
-    auto PSResolutionScale() const -> const auto& { return *fPSResolutionScale; }
-
-    auto PSWidth() const -> const auto& { return *fPSWidth; }
+    auto PSWidth() const -> auto { return *fPSWidth; }
     auto PSThickness() const -> const auto& { return *fPSThickness; }
-    auto SiPMThickness() const -> const auto& { return *fSiPMThickness; }
-    auto SiPMCathodeThickness() const -> const auto& { return *fSiPMCathodeThickness; }
-    auto SiPMCouplerThickness() const -> const auto& { return *fSiPMCouplerThickness; }
-    auto SiPMSize() const -> const auto& { return *fSiPMSize; }
+    auto PSScintillationEnergyBin() const -> const auto& { return *fPSScintillationEnergyBin; }
+    auto PSScintillationComponent1() const -> auto { return *fPSScintillationComponent1; }
+    auto PSScintillationYield() const -> auto { return *fPSScintillationYield; }
+    auto PSScintillationTimeConstant1() const -> auto { return *fPSScintillationTimeConstant1; }
+    auto PSResolutionScale() const -> auto { return *fPSResolutionScale; }
+
+    auto SiPMThickness() const -> auto{ return *fSiPMThickness; }
+    auto SiPMCathodeThickness() const -> auto { return *fSiPMCathodeThickness; }
+    auto SiPMCouplerThickness() const -> auto { return *fSiPMCouplerThickness; }
+    auto SiPMSize() const -> auto { return *fSiPMSize; }
     auto SiPMEnergyBin() const -> const auto& { return *fSiPMEnergyBin; }
     auto SiPMEfficiency() const -> const auto& { return *fSiPMEfficiency; }
 
-    auto FiberHoleRadius() const -> const auto& { return *fFiberHoleRadius; }
-    auto FiberRadius() const -> const auto& { return *fFiberRadius; }
-    auto FiberInnerRadiusRatio() const -> const auto& { return *fFiberInnerRadiusRatio; }
-    auto FiberCoreRadiusRatio() const -> const auto& { return *fFiberCoreRadiusRatio; }
+    auto FiberHoleRadius() const -> auto { return *fFiberHoleRadius; }
+    auto FiberRadius() const -> auto { return *fFiberRadius; }
+    auto FiberInnerRadiusRatio() const -> auto { return *fFiberInnerRadiusRatio; }
+    auto FiberCoreRadiusRatio() const -> auto { return *fFiberCoreRadiusRatio; }
     auto FPRIndexEnergy() const -> const auto& { return *fFPRIndexEnergy; }
     auto FPRIndex() const -> const auto& { return *fFPRIndex; }
     auto FPAbsEnergy() const -> const auto& { return *fFPAbsEnergy; }
@@ -66,10 +58,19 @@ public:
     auto WLSEmissionEnergy() const -> const auto& { return *fWLSEmissionEnergy; }
     auto WLSEmissionAmplitude() const -> const auto& { return *fWLSEmissionAmplitude; }
 
+    auto InterPSGap() const -> auto { return *fInterPSGap; }
+    auto PerpendicularModuleGap() const -> auto { return *fPerpendicularModuleGap; }
+    auto ParallelModuleGap() const -> auto { return *fParallelModuleGap; }
+    auto ModuleOffset() const -> auto { return *fModuleOffset; }
+    auto ReflectiveFilmThickness() const -> auto { return *fReflectiveFilmThickness; }
+    auto AlAbsorberThickness() const -> auto { return *fAlAbsorberThickness; }
+    auto FiberNum() const -> auto { return *fFiberNum; }
+    auto SelectedCategory() const -> auto { return *fSelectedCategory; }
+    
     auto CategoryConfiguration() const -> const auto& { return *fCategoryConfiguration; }
     auto StripInformation() const -> const auto& { return *fStripInformation; }
     auto StartingStripIDOfAModule() const -> const auto& { return *fStartingStripIDOfAModule; }
-    auto NStrip() const -> const int& { return *fNStrip; }
+    auto NStrip() const -> auto { return *fNStrip; }
 
 public:
     struct CategoryConfigurationType {

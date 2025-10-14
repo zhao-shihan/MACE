@@ -354,7 +354,7 @@ auto PDSVeto::CalculateCategoryConfiguration() const -> std::vector<CategoryConf
 }
 
 auto PDSVeto::CalculateStripInformation() const -> std::vector<StripInformationType> {
-    std::vector<StripInformationType> stripInformationS{};
+    std::vector<StripInformationType> stripInformation{};
     int moduleID{};
     int layerID{};
     int stripID{};
@@ -362,21 +362,17 @@ auto PDSVeto::CalculateStripInformation() const -> std::vector<StripInformationT
         int categoryID{};
         for (int moduleLocalID{}; moduleLocalID < nModule; ++moduleLocalID) {
             for (int layerLocalID{}; layerLocalID < (*fNLayerPerModuleOfACategory)[categoryID]; ++layerLocalID) {
-                for (int stripLocalID; stripLocalID < (*fNStripPerLayerOfACategory)[categoryID]; ++stripLocalID) {
-                    double x{((categoryID == 1) && (categoryID == 4)) ? 1. : 0.},
+                for (int stripLocalID{}; stripLocalID < (*fNStripPerLayerOfACategory)[categoryID]; ++stripLocalID) {
+                    double x{((categoryID == 1) or (categoryID == 4)) ? 1. : 0.},
                         y{(categoryID == 3) ? 1. : 0.},
                         z{(categoryID == 2) ? 1. : 0.};
                     muc::array3d readDirection{x, y, z};
-                    stripInformationS.emplace_back(StripInformationType{stripID, stripLocalID, layerID, layerLocalID, moduleID, moduleLocalID, categoryID, (*fStripLengthOfACategory)[categoryID], readDirection});
-                    ++stripLocalID;
+                    stripInformation.emplace_back(StripInformationType{stripID, stripLocalID, layerID, layerLocalID, moduleID, moduleLocalID, categoryID, (*fStripLengthOfACategory)[categoryID], readDirection});
                 }
-                ++layerID;
             }
-            ++moduleID;
         }
-        ++categoryID;
     }
-    return stripInformationS;
+    return stripInformation;
 }
 
 auto PDSVeto::CalculateStartingStripIDOfAModule() const -> std::vector<short> {

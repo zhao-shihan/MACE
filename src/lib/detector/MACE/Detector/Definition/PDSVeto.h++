@@ -18,7 +18,7 @@ private:
     G4Material* fSilicon;
     G4Material* fAl;
     G4Material* fWlsPS;
-    G4Material* fFP;
+    // G4Material* fFP;
     G4Material* fPMMA;
 };
 
