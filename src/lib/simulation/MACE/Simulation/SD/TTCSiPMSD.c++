@@ -22,7 +22,7 @@ using namespace Mustard::PhysicalConstant;
 
 TTCSiPMSD::TTCSiPMSD(const G4String& sdName, const Type type) :
     G4VSensitiveDetector{sdName},
-    type{type},
+    fType{type},
     fHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
@@ -40,7 +40,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
-    const auto& nSiPM{(type == TTCSiPMSD::Type::MACE) ? MACE::Detector::Description::TTC::Instance().NSiPM() : MACE::PhaseI::Detector::Description::TTC::Instance().NSiPM()};
+    const auto& nSiPM{(fType == TTCSiPMSD::Type::MACE) ? MACE::Detector::Description::TTC::Instance().NSiPM() : MACE::PhaseI::Detector::Description::TTC::Instance().NSiPM()};
 
     if (&particle != G4OpticalPhoton::Definition()) {
         return false;

@@ -28,7 +28,7 @@ public:
 protected:
     const TTCSiPMSD* const fTTCSiPMSD;
 
-    Type type;
+    Type fType;
 
     double fEnergyDepositionThreshold;
 
