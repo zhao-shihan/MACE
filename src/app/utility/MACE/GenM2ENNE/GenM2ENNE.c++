@@ -36,12 +36,13 @@ using namespace Mustard::PhysicalConstant;
 using namespace std::string_literals;
 
 GenM2ENNE::GenM2ENNE() :
-    Subprogram{"GenM2ENNE", "Generate muonium decay (M -> e nu nu e)."} {}
+    Subprogram{"GenM2ENNE", "Generate muonium decay (M -> e+ nu nu e-)."} {}
 
 auto GenM2ENNE::Main(int argc, char* argv[]) const -> int {
     MCMCGeneratorCLI<InitialStateCLIModule<"unpolarized", "muonium">> cli;
     cli.DefaultOutput("m2enne.root");
     cli.DefaultOutputTree("m2enne");
+    cli->add_argument("--ir-cut").help("IR cut for final-state electron.").default_value(electron_mass_c2).required().nargs(1).scan<'g', double>();
     auto& biasCLI{cli->add_mutually_exclusive_group()};
     biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
     biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for positron kinetic energy.").flag();
@@ -52,7 +53,7 @@ auto GenM2ENNE::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, cli};
     Mustard::UseXoshiro<256> random{cli};
 
-    Mustard::M2ENNEGenerator generator("muonium", cli.Momentum(),
+    Mustard::M2ENNEGenerator generator("muonium", cli.Momentum(), cli->get<double>("--ir-cut"),
                                        cli->present<double>("--thinning-ratio"), cli->present<unsigned>("--acf-sample-size"));
 
     if (cli["--mace-bias"] == true) {
