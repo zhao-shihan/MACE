@@ -30,10 +30,8 @@ SciFiTracker::SciFiTracker() : // clang-format off
     fNLayer{this, 16},
     fTypeOfLayer{this, {"Transverse", "Transverse", "LHelical", "LHelical", "Transverse", "Transverse", "RHelical", "RHelical", "Transverse", "Transverse", "LHelical", "LHelical", "Transverse", "Transverse", "RHelical", "RHelical" /**/}},
     fRLayer{this, {45_mm, 46.8_mm, 48.6_mm, 50.4_mm, 52.2_mm, 54_mm, 55.8_mm, 57.6_mm, 59.4_mm, 61.2_mm, 63_mm, 64.8_mm, 66.6_mm, 68.4_mm, 70.2_mm, 72_mm /**/}},
-    fIsSecond{this, {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 /**/}},
     fNFiber{this, {140, 140, 120, 120, 160, 160, 120, 120, 180, 180, 140, 140, 180, 180, 140, 140 /**/}},
-    fFirstIDOfLayer{this, [this] { return CalculateFirstIDOfLayer(); }},
-    fLastIDOfLayer{this, [this] { return CalculateLastIDOfLayer(); }},
+    fLayerFiberIDRange{this, [this] { return CalculateLayerFiberIDRange(); }},
     fCombinationOfLayer{this, {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15} /**/}},
     fPitchOfLayer{this, [this] { return CalculateLayerPitch(); }},
     fLayerConfiguration{this, [this] { return CalculateLayerConfiguration(); }},
@@ -94,7 +92,7 @@ SciFiTracker::SciFiTracker() : // clang-format off
     fClusterLength{3},
     fThresholdTime{10},
     fTimeWindow{10},
-    fDeadTime{10},
+    fSiPMDeadTime{10},
     fCentroidThetaThreshold{0.02 * std::numbers::pi},
     fCentroidZThreshold{25_mm},
     fOnePhotonDarkCountRate{1000000} {}
@@ -117,9 +115,9 @@ auto SciFiTracker::CalculateLayerConfiguration() const -> std::vector<LayerConfi
     layerConfig.reserve(fNLayer);
     for (int i{}; i < fNLayer; i++) {
         auto& layer{layerConfig.emplace_back()};
-        layer.firstID = fFirstIDOfLayer->at(i);
-        layer.lastID = fLastIDOfLayer->at(i);
-        layer.isSecond = fIsSecond->at(i);
+        layer.firstID = fLayerFiberIDRange->at(i).first;
+        layer.lastID = fLayerFiberIDRange->at(i).second;
+        layer.totalNumber = fNFiber->at(i);
         layer.fiber.layerType = fTypeOfLayer->at(i);
         layer.fiber.pitch = fPitchOfLayer->at(i);
         layer.fiber.radius = fRLayer->at(i);
@@ -137,32 +135,23 @@ auto SciFiTracker::CalculateFiberInformation() const -> std::vector<FiberInforma
             fiber.layerType = fTypeOfLayer->at(i);
             fiber.radius = fRLayer->at(i);
             fiber.pitch = fPitchOfLayer->at(i);
-            fiber.rotationAngle = (j + fIsSecond->at(i) * 0.5) / fNFiber->at(i) * 2_pi;
+            fiber.rotationAngle = (j + i % 2 * 0.5) / fNFiber->at(i) * 2_pi;
             fiberMap.push_back(fiber);
         }
     }
     return fiberMap;
 }
 
-auto SciFiTracker::CalculateFirstIDOfLayer() const -> std::vector<int> {
-    std::vector<int> firstID;
-    int id{0};
-    firstID.push_back(0);
-    for (int i{}; i < (fNLayer - 1); i++) {
-        id += fNFiber->at(i);
-        firstID.push_back(id);
-    }
-    return firstID;
-}
-
-auto SciFiTracker::CalculateLastIDOfLayer() const -> std::vector<int> {
-    std::vector<int> lastID;
-    int id{-1};
+auto SciFiTracker::CalculateLayerFiberIDRange() const -> std::vector<std::pair<int, int>> {
+    std::vector<std::pair<int, int>> layerFiberIDRange;
+    int currentID{0};
     for (int i{}; i < fNLayer; i++) {
-        id += fNFiber->at(i);
-        lastID.push_back(id);
+        int firstID = currentID;
+        currentID += fNFiber->at(i);
+        int lastID = currentID - 1;
+        layerFiberIDRange.emplace_back(firstID, lastID);
     }
-    return lastID;
+    return layerFiberIDRange;
 }
 
 auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
@@ -178,8 +167,7 @@ auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fNLayer, "NumberOfFiber");
     ImportValue(node, fTypeOfLayer, "TypeOfLayer");
     ImportValue(node, fRLayer, "RadiusOfLayer");
-    ImportValue(node, fIsSecond, "IfThisLayerNumberIsEven");
-    ImportValue(node, fNFiber, "NFiberOfFiberInALayer");
+    ImportValue(node, fNFiber, "NFiberInALayer");
     ImportValue(node, fCombinationOfLayer, "TheseLayersWillReconstructOneHitPoint");
     // Optical properties
     ImportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
@@ -192,7 +180,7 @@ auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fClusterLength, "LengthOfCluster");
     ImportValue(node, fThresholdTime, "OptPhoThresholdTimeOfSiPM");
     ImportValue(node, fTimeWindow, "TimeWindowOfSiPM");
-    ImportValue(node, fDeadTime, "DeadTimeOfSiPM");
+    ImportValue(node, fSiPMDeadTime, "DeadTimeOfSiPM");
 }
 
 auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
@@ -208,7 +196,6 @@ auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fNLayer, "NumberOfFiber");
     ExportValue(node, fTypeOfLayer, "TypeOfLayer");
     ExportValue(node, fRLayer, "RadiusOfLayer");
-    ExportValue(node, fIsSecond, "IfThisLayerNumberIsEven");
     ExportValue(node, fNFiber, "NFiberOfFiberInALayer");
     ExportValue(node, fCombinationOfLayer, "TheseLayersWillReconstructOneHitPoint");
     // Optical properties
@@ -222,7 +209,7 @@ auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fClusterLength, "LengthOfCluster");
     ExportValue(node, fThresholdTime, "OptPhoThresholdTimeOfSiPM");
     ExportValue(node, fTimeWindow, "TimeWindowOfSiPM");
-    ExportValue(node, fDeadTime, "DeadTimeOfSiPM");
+    ExportValue(node, fSiPMDeadTime, "DeadTimeOfSiPM");
 }
 
 } // namespace MACE::PhaseI::Detector::Description

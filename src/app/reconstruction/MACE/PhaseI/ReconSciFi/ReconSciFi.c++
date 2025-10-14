@@ -122,7 +122,7 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                             *Get<"nOptPho">(*siPMHitData.back()) = count;
                             count = 0;
                             if (j < std::ssize(siPMHitRange)) {
-                                initialTime = endTime + sciFiTracker.DeadTime();
+                                initialTime = endTime + sciFiTracker.SiPMDeadTime();
                                 endTime = initialTime + sciFiTracker.ThresholdTime();
                             }
                         }
