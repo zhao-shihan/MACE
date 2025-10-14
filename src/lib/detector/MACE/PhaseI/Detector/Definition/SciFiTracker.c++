@@ -432,7 +432,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 Make<G4PVPlacement>(
                     G4RotateZ3D{fiberInformation[fiberNumber].rotationAngle} *
                         G4Transform3D{{},
-                                      G4ThreeVector(radius, 0, sciFiTracker.FiberLength() / 2 + sciFiTracker.TLightGuideLength() / 2)},
+                                      G4ThreeVector(radius, 0, sciFiTracker.FiberLength() / 2 + sciFiTracker.TransverseLightGuideLength() / 2)},
                     logicalLightGuide,
                     scifiName + "TransverseLightGuide",
                     Mother().LogicalVolume(),
@@ -442,7 +442,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
 
                 Make<G4PVPlacement>(
                     G4RotateZ3D{fiberInformation[fiberNumber].rotationAngle} *
-                        G4Transform3D({}, G4ThreeVector(radius, 0, -(sciFiTracker.FiberLength() / 2 + sciFiTracker.TLightGuideLength() / 2))),
+                        G4Transform3D({}, G4ThreeVector(radius, 0, -(sciFiTracker.FiberLength() / 2 + sciFiTracker.TransverseLightGuideLength() / 2))),
                     logicalLightGuide,
                     scifiName + "TransverseLightGuide",
                     Mother().LogicalVolume(),
@@ -459,7 +459,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                                                     (sciFiTracker.SiPMThickness() + sciFiTracker.SiliconeOilThickness() +
                                                      sciFiTracker.EpoxyThickness() + // clang-format off
                                                      sciFiTracker.FiberLength()) / 2 + 
-                                                     sciFiTracker.TLightGuideLength())}, // clang-format on
+                                                     sciFiTracker.TransverseLightGuideLength())}, // clang-format on
                     logicalSiPM,
                     scifiName + "SiPM",
                     Mother().LogicalVolume(),
@@ -477,7 +477,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                                             sciFiTracker.SiliconeOilThickness() +
                                             sciFiTracker.EpoxyThickness() + // clang-format off
                                             sciFiTracker.FiberLength()) / 2 - 
-                                            sciFiTracker.TLightGuideLength())}, // clang-format on
+                                            sciFiTracker.TransverseLightGuideLength())}, // clang-format on
                     logicalAbsorbLayer,
                     scifiName + "AbsorbLayer",
                     Mother().LogicalVolume(),
@@ -534,7 +534,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             auto logicalTLightGuide{logicalTransverseLightGuide(
                 sciFiTracker.FiberCladdingWidth(),
                 sciFiTracker.FiberCoreWidth(),
-                sciFiTracker.TLightGuideLength())};
+                sciFiTracker.TransverseLightGuideLength())};
 
             TransversePlacement(layerConfig[i].fiber.radius,
                                 logicalTFiber,

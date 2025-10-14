@@ -94,7 +94,7 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                     if (*Get<"t">(*siPMHitRange[j]) >= initialTime && *Get<"t">(*siPMHitRange[j]) < endTime) {
                         initialTime = *Get<"t">(*siPMHitRange[j]);
                         count++;
-                        if (count == sciFiTracker.Threshold()) {
+                        if (count == sciFiTracker.SiPMOptPhoThresholdNumber()) {
                             endTime = initialTime + sciFiTracker.TimeWindow();
                             if (*Get<"EvtID">(**siPMHitRange.begin()) != 8) {
                                 continue;

@@ -28,15 +28,14 @@ public:
     auto FiberCoreWidth() const -> auto { return fFiberCoreWidth; }
     auto FiberCladdingWidth() const -> auto { return fFiberCladdingWidth; }
     auto FiberLength() const -> auto { return fFiberLength; }
-    auto TLightGuideLength() const -> auto { return fTLightGuideLength; }
+    auto TransverseLightGuideLength() const -> auto { return fTransverseLightGuideLength; }
     auto DetectorLayerConfiguration() const -> const auto& { return *fLayerConfiguration; }
     auto DetectorFiberInformation() const -> const auto& { return *fFiberMap; }
-    auto NLayer() const -> auto { return *fNLayer; }
-    auto TypeOfLayer() const -> auto& { return fTypeOfLayer; }
-    auto RLayer() const -> const auto& { return fRLayer; }
+    auto NLayer() const -> auto { return *fLayerNumber; }
+    auto LayerType() const -> auto& { return fLayerType; }
+    auto RLayer() const -> const auto& { return fLayerRadius; }
     auto LayerFiberIDRange() const -> const auto& { return fLayerFiberIDRange; }
-    auto NFiber() const -> const auto& { return fNFiber; }
-    auto CombinationOfLayer() const -> auto& { return fCombinationOfLayer; }
+    auto NFiber() const -> const auto& { return fFiberNumber; }
     // Optical properties
     auto ScintillationTimeConstant1() const -> auto { return fScintillationTimeConstant1; }
     auto ScintillationWaveLengthBin() const -> const auto& { return fScintillationWavelengthBin; }
@@ -44,7 +43,7 @@ public:
     auto SiPMEnergyBin() const -> const auto& { return fSiPMEnergyBin; }
     auto SiPMQuantumEfficiency() const -> const auto& { return fSiPMQuantumEfficiency; }
     // Reconstruction
-    auto Threshold() const -> const auto { return fThreshold; }
+    auto SiPMOptPhoThresholdNumber() const -> const auto { return fSiPMOptPhoThresholdNumber; }
     auto ClusterLength() const -> const auto { return fClusterLength; }
     auto ThresholdTime() const -> const auto { return fThresholdTime; }
     auto TimeWindow() const -> const auto { return fTimeWindow; }
@@ -65,20 +64,19 @@ public:
     auto FiberCoreRadius(double val) -> void { fFiberCoreWidth = val; }
     auto FiberCladdingRadius(double val) -> void { fFiberCladdingWidth = val; }
     auto FiberLength(double val) -> void { fFiberLength = val; }
-    auto TLightGuideLength(double val) -> void { fTLightGuideLength = val; }
+    auto TransverseLightGuideLength(double val) -> void { fTransverseLightGuideLength = val; }
     auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
-    auto NLayer(int val) -> void { fNLayer = val; }
-    auto TypeOfLayer(std::vector<std::string> val) -> void { fTypeOfLayer = std::move(val); }
-    auto RLayer(std::vector<double> val) -> void { fRLayer = std::move(val); }
-    auto NFiberOfLayer(std::vector<int> val) -> void { fNFiber = std::move(val); }
-    auto CombinationOfLayer(std::vector<std::vector<int>> val) -> void { fCombinationOfLayer = std::move(val); }
+    auto NLayer(int val) -> void { fLayerNumber = val; }
+    auto LayerType(std::vector<std::string> val) -> void { fLayerType = std::move(val); }
+    auto RLayer(std::vector<double> val) -> void { fLayerRadius = std::move(val); }
+    auto NFiberOfLayer(std::vector<int> val) -> void { fFiberNumber = std::move(val); }
 
     auto ScintillationWaveLengthBin(std::vector<double> val) -> void { fScintillationWavelengthBin = std::move(val); }
     auto ScintillationComponent1(std::vector<double> val) -> void { fScintillationComponent1 = std::move(val); }
     auto SiPMEnergyBin(std::vector<double> val) -> void { fSiPMEnergyBin = std::move(val); }
     auto SiPMQuantumEfficiency(std::vector<double> val) -> void { fSiPMQuantumEfficiency = std::move(val); }
 
-    auto Threshold(int val) -> void { fThreshold = val; }
+    auto SiPMOptPhoThresholdNumber(int val) -> void { fSiPMOptPhoThresholdNumber = val; }
     auto ClusterLength(int val) -> void { fClusterLength = val; }
     auto ThresholdTime(double val) -> void { fThresholdTime = val; }
     auto TimeWindow(double val) -> void { fTimeWindow = val; }
@@ -97,7 +95,6 @@ public:
         int firstID;
         int lastID;
         int totalNumber;
-        std::string name;
         FiberConfiguration fiber;
     };
 
@@ -124,7 +121,7 @@ private:
     double fSiPMLength;
     double fSiPMWidth;
     double fSiPMThickness;
-    double fTLightGuideLength;
+    double fTransverseLightGuideLength;
     double fEpoxyThickness;
 
 private:
@@ -134,28 +131,26 @@ private:
     auto CalculateLayerPitch() const -> std::vector<double>;
     auto CalculateLayerFiberIDRange() const -> std::vector<std::pair<int, int>>;
 
-    Simple<int> fNLayer;
-    Simple<std::vector<std::string>> fTypeOfLayer;
-    Simple<std::vector<double>> fRLayer;
+    Simple<int> fLayerNumber;
+    Simple<std::vector<std::string>> fLayerType;
+    Simple<std::vector<double>> fLayerRadius;
 
-    Simple<std::vector<int>> fNFiber;
+    Simple<std::vector<int>> fFiberNumber;
     Cached<std::vector<std::pair<int, int>>> fLayerFiberIDRange;
 
-    Simple<std::vector<std::vector<int>>> fCombinationOfLayer;
-    Cached<std::vector<double>> fPitchOfLayer;
+    Cached<std::vector<double>> fLayerPitch;
     Cached<std::vector<LayerConfiguration>> fLayerConfiguration;
     Cached<std::vector<FiberInformation>> fFiberMap;
 
     double fScintillationYield;
     double fScintillationTimeConstant1;
-    double fResolutionScale;
 
     std::vector<double> fScintillationWavelengthBin;
     std::vector<double> fScintillationComponent1;
     std::vector<double> fSiPMEnergyBin;
     std::vector<double> fSiPMQuantumEfficiency;
 
-    int fThreshold;
+    int fSiPMOptPhoThresholdNumber;
     int fClusterLength;
     double fThresholdTime;
     double fTimeWindow;
