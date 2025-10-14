@@ -36,7 +36,7 @@ using namespace Mustard::PhysicalConstant;
 using namespace std::string_literals;
 
 GenM2ENNEE::GenM2ENNEE() :
-    Subprogram{"GenM2ENNEE", "Generate internal conversion muon decay (mu -> e nu nu e e)."} {}
+    Subprogram{"GenM2ENNEE", "Generate internal conversion muon decay (mu+ -> e+ nu nu e- e+)."} {}
 
 auto GenM2ENNEE::Main(int argc, char* argv[]) const -> int {
     MCMCGeneratorCLI<InitialStateCLIModule<"polarized", "muon">> cli;
