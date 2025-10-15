@@ -43,7 +43,7 @@ public:
     auto SiPMEnergyBin() const -> const auto& { return fSiPMEnergyBin; }
     auto SiPMQuantumEfficiency() const -> const auto& { return fSiPMQuantumEfficiency; }
     // Reconstruction
-    auto SiPMOptPhoThresholdNumber() const -> const auto { return fSiPMOptPhoThresholdNumber; }
+    auto SiPMOpticalPhotonCountThreshold() const -> const auto { return fSiPMOpticalPhotonCountThreshold; }
     auto ClusterLength() const -> const auto { return fClusterLength; }
     auto ThresholdTime() const -> const auto { return fThresholdTime; }
     auto TimeWindow() const -> const auto { return fTimeWindow; }
@@ -75,7 +75,7 @@ public:
     auto SiPMEnergyBin(std::vector<double> val) -> void { fSiPMEnergyBin = std::move(val); }
     auto SiPMQuantumEfficiency(std::vector<double> val) -> void { fSiPMQuantumEfficiency = std::move(val); }
 
-    auto SiPMOptPhoThresholdNumber(int val) -> void { fSiPMOptPhoThresholdNumber = val; }
+    auto SiPMOpticalPhotonCountThreshold(int val) -> void { fSiPMOpticalPhotonCountThreshold = val; }
     auto ClusterLength(int val) -> void { fClusterLength = val; }
     auto ThresholdTime(double val) -> void { fThresholdTime = val; }
     auto TimeWindow(double val) -> void { fTimeWindow = val; }
@@ -148,7 +148,7 @@ private:
     std::vector<double> fSiPMEnergyBin;
     std::vector<double> fSiPMQuantumEfficiency;
 
-    int fSiPMOptPhoThresholdNumber;
+    int fSiPMOpticalPhotonCountThreshold;
     int fClusterLength;
     double fThresholdTime;
     double fTimeWindow;

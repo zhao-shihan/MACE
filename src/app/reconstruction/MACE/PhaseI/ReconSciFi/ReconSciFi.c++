@@ -67,7 +67,7 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
     const auto& sciFiTracker{MACE::PhaseI::Detector::Description::SciFiTracker::Instance()};
     std::string fileName{argv[1]};
     TFile file{Mustard::Parallel::ProcessSpecificPath("output.root").generic_string().c_str(), "RECREATE"};
-    Mustard::Data::Output<PhaseI::Data::Track> reconTrack{"G4Run0/ReconTrack"};
+    Mustard::Data::Output<PhaseI::Data::Track> trackOutput{"G4Run0/Track"};
     Mustard::Data::Processor processor;
 
     processor.Process<PhaseI::Data::SciFiSiPMHit>(
@@ -94,16 +94,11 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                     if (*Get<"t">(*siPMHitRange[j]) >= initialTime && *Get<"t">(*siPMHitRange[j]) < endTime) {
                         initialTime = *Get<"t">(*siPMHitRange[j]);
                         count++;
-                        if (count == sciFiTracker.SiPMOptPhoThresholdNumber()) {
+                        if (count == sciFiTracker.SiPMOpticalPhotonCountThreshold()) {
                             endTime = initialTime + sciFiTracker.TimeWindow();
                             if (*Get<"EvtID">(**siPMHitRange.begin()) != 8) {
                                 continue;
                             }
-                            // if (std::find(trueIDs[*Get<"EvtID">(**siPMHitRange.begin())].begin(),
-                            //               trueIDs[*Get<"EvtID">(**siPMHitRange.begin())].end(),
-                            //               *Get<"SiPMID">(*siPMHitRange[j])) == trueIDs[*Get<"EvtID">(**siPMHitRange.begin())].end()) {
-                            //     continue;
-                            // }
                             siPMHitData.emplace_back(std::make_shared<Mustard::Data::Tuple<MACE::PhaseI::Data::SciFiSimHit>>());
                             *Get<"t">(*siPMHitData.back()) = *Get<"t">(*siPMHitRange[j]);
                             *Get<"EvtID">(*siPMHitData.back()) = *Get<"EvtID">(*siPMHitRange[j]);
@@ -151,7 +146,7 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                 }
             }
         });
-    reconTrack.Write();
+    trackOutput.Write();
     return EXIT_SUCCESS;
 }
 } // namespace MACE::PhaseI::ReconSciFi
