@@ -22,7 +22,7 @@ regression-test-on-debian:
     - mkdir ci-work-dir
     - cd ci-work-dir
     - apptainer pull rgb.sif oras://ghcr.io/zhao-shihan/rgb:mpich
-    - chmod +x rgb.sif
+    - chmod +ux rgb.sif
     #################################
     #        build-with-gcc         #
     #################################
