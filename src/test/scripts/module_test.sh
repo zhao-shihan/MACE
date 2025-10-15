@@ -1,5 +1,5 @@
 #!/bin/bash
-n_physical_core=`echo "$(nproc --all) / $(lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc`
+n_physical_core=$(echo "$(nproc --all) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 build_dir=$script_dir/..
@@ -15,16 +15,12 @@ source $build_dir/data/mace_offline_data.sh
 final_exit_code=0
 
 run_command() {
-    local description="$1"
-    shift
     local command=("$@")
-    
-    echo "Executing: $description"
     if "${command[@]}"; then
-        echo "✓ $description completed"
+        echo "✓ $command completed"
     else
         local exit_code=$?
-        echo "✗ $description failed with exit code $exit_code"
+        echo "✗ $command failed with exit code $exit_code"
         final_exit_code=1
     fi
     echo "----------------------------------------------"
