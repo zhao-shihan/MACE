@@ -5,51 +5,39 @@ variables:
   APPTAINER_VERSION: 1.4.3
 
 regression-test-on-debian:
-  stage: test 
+  stage: test
+  image: ghcr.io/zhao-shihan/rgb-docker:mpich
   tags:
     - debian
   script:
-    #################################
-    #        setup-environment      #
-    #################################
-    - apt -y update
-    - apt -y full-upgrade
-    - apt -y install wget
-    - wget --tries=15 https://github.com/apptainer/apptainer/releases/download/v${APPTAINER_VERSION}/apptainer_${APPTAINER_VERSION}-trixie+_amd64.deb -O apptainer.deb
-    - apt -y install ./apptainer.deb
-    - chmod u+s /usr/bin/apptainer
-    - rm ./apptainer.deb
-    - mkdir ci-work-dir
-    - cd ci-work-dir
-    - apptainer pull rgb.sif oras://ghcr.io/zhao-shihan/rgb:mpich
-    - chmod +ux rgb.sif
+    - . /enviroment
     #################################
     #        build-with-gcc         #
     #################################
     - mkdir build-with-gcc
     - cd build-with-gcc
-    - ../rgb.sif cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastgcc -DCMAKE_CXX_COMPILER=fastg++ -DCMAKE_C_FLAGS='-Werror -march=x86-64-v2' -DCMAKE_CXX_FLAGS='-Werror -march=x86-64-v2'
-    - ../rgb.sif ninja
+    - cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastgcc -DCMAKE_CXX_COMPILER=fastg++ -DCMAKE_C_FLAGS='-Werror -march=x86-64-v2' -DCMAKE_CXX_FLAGS='-Werror -march=x86-64-v2'
+    - ninja
     - cd ..
     #################################
     #        build-with-clang       #
     #################################
     - mkdir build-with-clang
     - cd build-with-clang
-    - ../rgb.sif cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastclang -DCMAKE_CXX_COMPILER=fastclang++ -DCMAKE_C_FLAGS='-Werror -march=native' -DCMAKE_CXX_FLAGS='-Werror -march=native' -DMACE_FULL_UNITY_BUILD=ON
-    - ../rgb.sif ninja
+    - cmake -G Ninja ../.. -DCMAKE_C_COMPILER=fastclang -DCMAKE_CXX_COMPILER=fastclang++ -DCMAKE_C_FLAGS='-Werror -march=native' -DCMAKE_CXX_FLAGS='-Werror -march=native' -DMACE_FULL_UNITY_BUILD=ON
+    - ninja
     - cd ..
     #################################
     #        test-with-gcc          #
     #################################
     - cd build-with-gcc
-    - ../rgb.sif bash test/module_test.sh
+    - bash test/module_test.sh
     - cd ..
     #################################
     #        test-with-clang        #
     #################################
     - cd build-with-clang
-    - ../rgb.sif bash test/module_test.sh
+    - bash test/module_test.sh
     - cd ..
   artifacts:
     paths: 
