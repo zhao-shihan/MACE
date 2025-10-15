@@ -2,11 +2,11 @@ stages:
   - test
 
 variables:
-  APPTAINER_VERSION: 1.4.3
+  IMAGE_VERSION: 25.10.14
 
 regression-test-on-debian:
   stage: test
-  image: ghcr.io/zhao-shihan/rgb-docker:mpich
+  image: ghcr.io/zhao-shihan/rgb-docker:${IMAGE_VERSION}-mpich
   tags:
     - debian
   script:
