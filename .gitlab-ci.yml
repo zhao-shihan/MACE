@@ -17,6 +17,7 @@ regression-test-on-debian:
     - apt -y install wget
     - wget --tries=15 https://github.com/apptainer/apptainer/releases/download/v${APPTAINER_VERSION}/apptainer_${APPTAINER_VERSION}-trixie+_amd64.deb -O apptainer.deb
     - apt -y install ./apptainer.deb
+    - chmod u+s /usr/bin/apptainer
     - rm ./apptainer.deb
     - mkdir ci-work-dir
     - cd ci-work-dir
