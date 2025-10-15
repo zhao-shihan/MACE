@@ -27,10 +27,10 @@ SciFiTracker::SciFiTracker() : // clang-format off
     fSiPMThickness{0.055_mm},
     fTransverseLightGuideLength{10_mm},
     fEpoxyThickness{0.105_mm},
-    fLayerNumber{this, 16},
+    fNLayer{this, 16},
     fLayerType{this, {"Transverse", "Transverse", "LHelical", "LHelical", "Transverse", "Transverse", "RHelical", "RHelical", "Transverse", "Transverse", "LHelical", "LHelical", "Transverse", "Transverse", "RHelical", "RHelical" /**/}},
     fLayerRadius{this, {45_mm, 46.8_mm, 48.6_mm, 50.4_mm, 52.2_mm, 54_mm, 55.8_mm, 57.6_mm, 59.4_mm, 61.2_mm, 63_mm, 64.8_mm, 66.6_mm, 68.4_mm, 70.2_mm, 72_mm /**/}},
-    fFiberNumberALayer{this, {140, 140, 120, 120, 160, 160, 120, 120, 180, 180, 140, 140, 180, 180, 140, 140 /**/}},
+    fNFiberALayer{this, {140, 140, 120, 120, 160, 160, 120, 120, 180, 180, 140, 140, 180, 180, 140, 140 /**/}},
     fLayerFiberIDRange{this, [this] { return CalculateLayerFiberIDRange(); }},
     fLayerPitch{this, [this] { return CalculateLayerPitch(); }},
     fLayerConfiguration{this, [this] { return CalculateLayerConfiguration(); }},
@@ -96,7 +96,7 @@ SciFiTracker::SciFiTracker() : // clang-format off
     fCentroidZThreshold{25_mm} {}
 auto SciFiTracker::CalculateLayerPitch() const -> std::vector<double> {
     std::vector<double> Pitch;
-    for (int i{}; i < fLayerNumber; i++) {
+    for (int i{}; i < fNLayer; i++) {
         if (fLayerType->at(i) == "LHelical") {
             Pitch.push_back(std::atan(fFiberLength / (2_pi * fLayerRadius->at(i))));
         } else if (fLayerType->at(i) == "RHelical") {
@@ -110,12 +110,12 @@ auto SciFiTracker::CalculateLayerPitch() const -> std::vector<double> {
 
 auto SciFiTracker::CalculateLayerConfiguration() const -> std::vector<LayerConfiguration> {
     std::vector<LayerConfiguration> layerConfig;
-    layerConfig.reserve(fLayerNumber);
-    for (int i{}; i < fLayerNumber; i++) {
+    layerConfig.reserve(fNLayer);
+    for (int i{}; i < fNLayer; i++) {
         auto& layer{layerConfig.emplace_back()};
         layer.firstID = fLayerFiberIDRange->at(i).first;
         layer.lastID = fLayerFiberIDRange->at(i).second;
-        layer.fiberNumber = fFiberNumberALayer->at(i);
+        layer.fiberNumber = fNFiberALayer->at(i);
         layer.fiber.layerType = fLayerType->at(i);
         layer.fiber.pitch = fLayerPitch->at(i);
         layer.fiber.radius = fLayerRadius->at(i);
@@ -125,15 +125,15 @@ auto SciFiTracker::CalculateLayerConfiguration() const -> std::vector<LayerConfi
 
 auto SciFiTracker::CalculateFiberInformation() const -> std::vector<FiberInformation> {
     std::vector<FiberInformation> fiberMap;
-    for (int i{}; i < fLayerNumber; i++) {
-        for (int j{}; j < fFiberNumberALayer->at(i); j++) {
+    for (int i{}; i < fNLayer; i++) {
+        for (int j{}; j < fNFiberALayer->at(i); j++) {
             FiberInformation fiber{};
             fiber.layerID = i;
             fiber.localID = j;
             fiber.layerType = fLayerType->at(i);
             fiber.radius = fLayerRadius->at(i);
             fiber.pitch = fLayerPitch->at(i);
-            fiber.rotationAngle = (j + i % 2 * 0.5) / fFiberNumberALayer->at(i) * 2_pi;
+            fiber.rotationAngle = (j + i % 2 * 0.5) / fNFiberALayer->at(i) * 2_pi;
             fiberMap.push_back(fiber);
         }
     }
@@ -143,9 +143,9 @@ auto SciFiTracker::CalculateFiberInformation() const -> std::vector<FiberInforma
 auto SciFiTracker::CalculateLayerFiberIDRange() const -> std::vector<std::pair<int, int>> {
     std::vector<std::pair<int, int>> layerFiberIDRange;
     int currentID{0};
-    for (int i{}; i < fLayerNumber; i++) {
+    for (int i{}; i < fNLayer; i++) {
         int firstID = currentID;
-        currentID += fFiberNumberALayer->at(i);
+        currentID += fNFiberALayer->at(i);
         int lastID = currentID - 1;
         layerFiberIDRange.emplace_back(firstID, lastID);
     }
@@ -165,10 +165,10 @@ auto SciFiTracker::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fFiberCladdingWidth, "CladdingWidth");
     ImportValue(node, fFiberLength, "FiberLength");
     ImportValue(node, fTransverseLightGuideLength, "TransverseLightGuideLength");
-    ImportValue(node, fLayerNumber, "LayerNumber");
+    ImportValue(node, fNLayer, "LayerNumber");
     ImportValue(node, fLayerType, "LayerType");
     ImportValue(node, fLayerRadius, "LayerRadius");
-    ImportValue(node, fFiberNumberALayer, "FiberNumberALayer");
+    ImportValue(node, fNFiberALayer, "FiberNumberALayer");
 
     // Optical properties
     ImportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
@@ -200,10 +200,10 @@ auto SciFiTracker::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fFiberCladdingWidth, "CladdingWidth");
     ExportValue(node, fFiberLength, "FiberLength");
     ExportValue(node, fTransverseLightGuideLength, "TransverseLightGuideLength");
-    ExportValue(node, fLayerNumber, "LayerNumber");
+    ExportValue(node, fNLayer, "NLayer");
     ExportValue(node, fLayerType, "LayerType");
     ExportValue(node, fLayerRadius, "LayerRadius");
-    ExportValue(node, fFiberNumberALayer, "FiberNumberALayer");
+    ExportValue(node, fNFiberALayer, "FiberNumberALayer");
 
     // Optical properties
     ExportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");

@@ -31,11 +31,11 @@ public:
     auto TransverseLightGuideLength() const -> auto { return fTransverseLightGuideLength; }
     auto DetectorLayerConfiguration() const -> const auto& { return *fLayerConfiguration; }
     auto DetectorFiberInformation() const -> const auto& { return *fFiberMap; }
-    auto LayerNumber() const -> auto { return *fLayerNumber; }
+    auto NLayer() const -> auto { return *fNLayer; }
     auto LayerType() const -> auto& { return fLayerType; }
     auto LayerRadius() const -> const auto& { return fLayerRadius; }
     auto LayerFiberIDRange() const -> const auto& { return fLayerFiberIDRange; }
-    auto FiberNumberALayer() const -> const auto& { return fFiberNumberALayer; }
+    auto NFiberALayer() const -> const auto& { return fNFiberALayer; }
     // Optical properties
     auto ScintillationTimeConstant1() const -> auto { return fScintillationTimeConstant1; }
     auto ScintillationWaveLengthBin() const -> const auto& { return fScintillationWavelengthBin; }
@@ -65,10 +65,10 @@ public:
     auto FiberLength(double val) -> void { fFiberLength = val; }
     auto TransverseLightGuideLength(double val) -> void { fTransverseLightGuideLength = val; }
     auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
-    auto LayerNumber(int val) -> void { fLayerNumber = val; }
+    auto NLayer(int val) -> void { fNLayer = val; }
     auto LayerType(std::vector<std::string> val) -> void { fLayerType = std::move(val); }
     auto LayerRadius(std::vector<double> val) -> void { fLayerRadius = std::move(val); }
-    auto FiberNumberALayer(std::vector<int> val) -> void { fFiberNumberALayer = std::move(val); }
+    auto NFiberALayer(std::vector<int> val) -> void { fNFiberALayer = std::move(val); }
 
     auto ScintillationWaveLengthBin(std::vector<double> val) -> void { fScintillationWavelengthBin = std::move(val); }
     auto ScintillationComponent1(std::vector<double> val) -> void { fScintillationComponent1 = std::move(val); }
@@ -129,11 +129,11 @@ private:
     auto CalculateLayerPitch() const -> std::vector<double>;
     auto CalculateLayerFiberIDRange() const -> std::vector<std::pair<int, int>>;
 
-    Simple<int> fLayerNumber;
+    Simple<int> fNLayer;
     Simple<std::vector<std::string>> fLayerType;
     Simple<std::vector<double>> fLayerRadius;
 
-    Simple<std::vector<int>> fFiberNumberALayer;
+    Simple<std::vector<int>> fNFiberALayer;
     Cached<std::vector<std::pair<int, int>>> fLayerFiberIDRange;
 
     Cached<std::vector<double>> fLayerPitch;

@@ -488,7 +488,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             }
         }};
 
-    for (int i{}; i < sciFiTracker.LayerNumber(); i++) {
+    for (int i{}; i < sciFiTracker.NLayer(); i++) {
         if (layerConfig[i].fiber.layerType == "LHelical") {
             auto logicalLHelicalFiber{logicalHelicalFiber(
                 layerConfig[i].fiber.radius,
