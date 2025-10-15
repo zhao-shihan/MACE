@@ -10,7 +10,7 @@ regression-test-on-debian:
   tags:
     - debian
   script:
-    - . /enviroment
+    - . /environment
     #################################
     #        build-with-gcc         #
     #################################
