@@ -2,7 +2,7 @@ stages:
   - test
 
 variables:
-  IMAGE_VERSION: 25.10.14
+  IMAGE_VERSION: 25.10.16
 
 regression-test-on-debian:
   stage: test
