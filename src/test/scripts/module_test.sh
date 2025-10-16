@@ -27,10 +27,10 @@ run_command() {
 }
 
 echo "Start simulation..."
-run_command mpiexec -n $n_physical_core -bind-to-core $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
-run_command mpiexec -n $n_physical_core -bind-to-core $build_dir/MACE SimVeto $build_dir/SimVeto/run_hit_partial.mac
-run_command mpiexec -n $n_physical_core -bind-to-core $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac
-run_command mpiexec -n $n_physical_core -bind-to-core $build_dir/MACE SimMACE $build_dir/SimMACE/run_signal.mac
+run_command mpiexec -n $n_physical_core -bind-to core $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
+run_command mpiexec -n $n_physical_core -bind-to core $build_dir/MACE SimVeto $build_dir/SimVeto/run_hit_partial.mac
+run_command mpiexec -n $n_physical_core -bind-to core $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac
+run_command mpiexec -n $n_physical_core -bind-to core $build_dir/MACE SimMACE $build_dir/SimMACE/run_signal.mac
 
 echo "Merging results..."
 run_command hadd -ff SimMMS_em_flat_test.root SimMMS_em_flat_test/*
