@@ -1,5 +1,15 @@
 # MACE
 
+[![GitHub License](https://img.shields.io/github/license/zhao-shihan/MACE?color=red)](COPYING)
+![GitHub Created At](https://img.shields.io/github/created-at/zhao-shihan/MACE?color=green)
+![GitHub top language](https://img.shields.io/github/languages/top/zhao-shihan/MACE?color=f34b7d)
+[![GitHub activity](https://img.shields.io/github/commit-activity/m/zhao-shihan/MACE)](https://github.com/zhao-shihan/MACE/pulse)
+![GitHub last commit](https://img.shields.io/github/last-commit/zhao-shihan/MACE)
+![GitHub repo size](https://img.shields.io/github/repo-size/zhao-shihan/MACE)
+
+[![Regression test (AMD64 GNU/Linux GCC)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-gcc.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-gcc.yml)
+[![Regression test (AMD64 GNU/Linux Clang, unity build)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-clang.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-clang.yml)
+
 - [MACE](#mace)
   - [Dependencies](#dependencies)
     - [Toolchain](#toolchain)
