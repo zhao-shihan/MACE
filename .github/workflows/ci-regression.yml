@@ -1,4 +1,4 @@
-name: CI
+name: CI regression
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
 jobs:
   test-with-gcc:
     name: Test with GCC
+    timeout-minutes: 180
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -48,6 +49,7 @@ jobs:
   test-with-clang:
     name: Test with Clang
     runs-on: ubuntu-latest
+    timeout-minutes: 180
     strategy:
       matrix:
         image:
