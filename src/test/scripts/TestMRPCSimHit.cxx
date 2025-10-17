@@ -60,7 +60,7 @@ auto TestMRPCSimHit(std::string moduleName, std::string testFileName, std::strin
                 pull->SetBinError(i, 1);
             }
             // draw
-            auto canvasName{"c_" + moduleName + "_" + histName};
+            auto canvasName{moduleName + "_MRPCSimHit_" + histName};
             auto pad1Name{"hist"};
             auto pad2Name{"pull"};
             TCanvas* c1 = new TCanvas(canvasName.data(), canvasName.data(), 800, 600);
@@ -77,14 +77,15 @@ auto TestMRPCSimHit(std::string moduleName, std::string testFileName, std::strin
             h1->SetLineWidth(1);
             h2->SetLineColor(kBlue);
             h2->SetLineWidth(1);
-
+            
+            c1->cd();
             pad1->cd();
             h2->DrawClone();
             h1->DrawClone("SAME");
             pad2->cd();
             pull->SetStats(false);
             pull->Draw();
-            auto file{TFile(("Regression_" + dataTupleName + ".root").data(), "update")};
+            auto file{TFile("regression_report.data", "update")};
             c1->Write();
         }};
 
