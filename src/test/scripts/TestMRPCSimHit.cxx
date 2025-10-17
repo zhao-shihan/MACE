@@ -85,7 +85,7 @@ auto TestMRPCSimHit(std::string moduleName, std::string testFileName, std::strin
             pad2->cd();
             pull->SetStats(false);
             pull->Draw();
-            auto file{TFile("regression_report.data", "update")};
+            auto file{TFile("regression_report.root", "update")};
             c1->Write();
         }};
 

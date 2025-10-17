@@ -84,7 +84,7 @@ auto TestCDCSimHit(std::string moduleName, std::string testFileName, std::string
             h1->DrawClone("SAME");
             pad2->cd();
             pull->Draw();
-            auto file{TFile("regression_report.data", "update")};
+            auto file{TFile("regression_report.root", "update")};
             c1->Write();
         }};
 
