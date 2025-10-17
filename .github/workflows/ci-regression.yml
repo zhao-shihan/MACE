@@ -21,6 +21,9 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Build
         run: |
           . /environment
@@ -32,9 +35,7 @@ jobs:
 
       - name: Run regression test
         run: |
-          pwd && ls
           . /environment
-          pwd && ls
           bash build/test/module_test.sh
 
       - name: Restore regression report
@@ -59,6 +60,9 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Build
         run: |
           . /environment
