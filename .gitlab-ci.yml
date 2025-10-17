@@ -54,6 +54,6 @@ regression-test-on-debian:
     - cd ..
   artifacts:
     paths: 
-      - build-with-gcc/test
-      - build-with-clang/test
+      - build-with-gcc/test/Test*/Regression_*.root
+      - build-with-clang/test/Test*/Regression_*.root
     expire_in: "100 days"
