@@ -44,13 +44,13 @@ regression-test-on-debian:
     #        test-with-gcc          #
     #################################
     - cd build-with-gcc
-    - bash test/module_test.sh
+    - bash test/regression_test.bash
     - cd ..
     #################################
     #        test-with-clang        #
     #################################
     - cd build-with-clang
-    - bash test/module_test.sh
+    - bash test/regression_test.bash
     - cd ..
   artifacts:
     paths: 

@@ -40,7 +40,7 @@ jobs:
       - name: Run regression test
         run: |
           . /environment
-          bash build/test/module_test.sh
+          bash build/test/regression_test.bash
 
       - name: Restore regression report
         uses: actions/upload-artifact@v4

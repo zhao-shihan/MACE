@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 build_dir=$script_dir/..
@@ -14,23 +14,28 @@ source $build_dir/data/mace_offline_data.sh
 final_exit_code=0
 
 run_command() {
-    local command=("$@")
-    if "${command[@]}"; then
-        echo "✓ $command completed"
+    local command=("$*")
+    echo "################################################################################"
+    echo "# Executing \"$command\""
+    echo "################################################################################"
+    if "$@"; then
+        echo "################################################################################"
+        echo "# ✅ \"$command\" successfully completed"
+        echo "################################################################################"
     else
         local exit_code=$?
-        echo "✗ $command failed with exit code $exit_code"
+        echo "################################################################################"
+        echo "# ❌ \"$command\" failed with exit code $exit_code"
+        echo "################################################################################"
         final_exit_code=1
     fi
-    echo "----------------------------------------------"
 }
 
 parexec() {
     if [[ -n "$(echo $(mpiexec --version 2>/dev/null) | grep "Open MPI")" ]]; then
-        mpiexec --allow-run-as-root $@
+        mpiexec --allow-run-as-root --use-hwthread-cpus $@
     else
-        n_physical_core=$(echo "$(nproc --all) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
-        mpiexec -n $n_physical_core $@
+        mpiexec -n $(nproc) $@
     fi
 }
 
@@ -46,7 +51,7 @@ run_command hadd -ff SimTTC_em_flat_test.root SimTTC_em_flat_test/*
 run_command hadd -ff SimVeto_hit_partial_test.root SimVeto_hit_partial_test/*
 run_command hadd -ff SimMACE_signal_test.root SimMACE_signal_test/*
 
-echo "Start data test..."
+echo "Generating regression report..."
 run_command root -l -q "$script_dir/TestCDCSimHit.cxx(\"SimMMS_em_flat\",\"SimMMS_em_flat_test.root\",\"$script_dir/mace_regression_data.root\")"
 run_command root -l -q "$script_dir/TestMMSSimTrack.cxx(\"SimMMS_em_flat\",\"SimMMS_em_flat_test.root\",\"$script_dir/mace_regression_data.root\")"
 run_command root -l -q "$script_dir/TestVetoSimHit.cxx(\"SimVeto_hit_partial\",\"SimVeto_hit_partial_test.root\",\"$script_dir/mace_regression_data.root\")"
@@ -63,7 +68,7 @@ hours=$((total_time / 3600))
 minutes=$(( (total_time % 3600) / 60 ))
 seconds=$((total_time % 60))
 
-echo "=============================================="
+echo "################################################################################"
 echo "Start at: $(date -d @$start_time "+%Y-%m-%d %H:%M:%S")"
 echo "End at: $(date -d @$end_time "+%Y-%m-%d %H:%M:%S")"
 echo "Total running time: ${hours}h ${minutes}m ${seconds}s"
@@ -73,6 +78,6 @@ else
     echo "❌ Some commands failed!"
 fi
 echo "Details in $test_dir"
-echo "=============================================="
+echo "################################################################################"
 
 exit $final_exit_code
