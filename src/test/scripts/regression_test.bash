@@ -2,7 +2,7 @@
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 build_dir=$script_dir/..
-test_dir=$script_dir/test_$(date "+%Y%m%d-%H:%M")
+test_dir=$script_dir/test_$(date "+%Y%m%d-%H%M")
 
 mkdir "$test_dir" && cd "$test_dir"
 echo "Working directory: $(pwd)"
