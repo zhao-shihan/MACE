@@ -16,12 +16,13 @@ regression-test-on-debian:
     #################################
     - mkdir build-with-gcc
     - cd build-with-gcc
-    - cmake -G Ninja .. \
-    -   -DCMAKE_BUILD_TYPE=Release \
-    -   -DCMAKE_C_COMPILER=gcc \
-    -   -DCMAKE_CXX_COMPILER=g++ \
-    -   -DCMAKE_C_FLAGS='-Werror -march=x86-64-v2' \
-    -   -DCMAKE_CXX_FLAGS='-Werror -march=x86-64-v2'
+    - |
+      cmake -G Ninja .. \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_C_COMPILER=gcc \
+        -DCMAKE_CXX_COMPILER=g++ \
+        -DCMAKE_C_FLAGS='-Werror -march=x86-64-v2' \
+        -DCMAKE_CXX_FLAGS='-Werror -march=x86-64-v2'
     - ninja
     - cd ..
     #################################
@@ -29,13 +30,14 @@ regression-test-on-debian:
     #################################
     - mkdir build-with-clang
     - cd build-with-clang
-    - cmake -G Ninja .. \
-    -   -DCMAKE_BUILD_TYPE=Release \
-    -   -DCMAKE_C_COMPILER=clang \
-    -   -DCMAKE_CXX_COMPILER=clang++ \
-    -   -DCMAKE_C_FLAGS='-Werror -march=native' \
-    -   -DCMAKE_CXX_FLAGS='-Werror -march=native' \
-    -   -DMACE_FULL_UNITY_BUILD=ON
+    - |
+      cmake -G Ninja .. \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_C_COMPILER=clang \
+        -DCMAKE_CXX_COMPILER=clang++ \
+        -DCMAKE_C_FLAGS='-Werror -march=native' \
+        -DCMAKE_CXX_FLAGS='-Werror -march=native' \
+        -DMACE_FULL_UNITY_BUILD=ON
     - ninja
     - cd ..
     #################################
