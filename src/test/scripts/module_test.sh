@@ -1,9 +1,8 @@
 #!/bin/bash
-n_physical_core=$(echo "$(nproc --all) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 build_dir=$script_dir/..
-test_dir=$script_dir/Test_$(date "+%Y%m%d-%H:%M")
+test_dir=$script_dir/test_$(date "+%Y%m%d-%H:%M")
 
 mkdir "$test_dir" && cd "$test_dir"
 echo "Working directory: $(pwd)"
@@ -26,11 +25,20 @@ run_command() {
     echo "----------------------------------------------"
 }
 
+parexec() {
+    if [[ -n "$(echo $(mpiexec --version 2>/dev/null) | grep "Open MPI")" ]]; then
+        mpiexec --allow-run-as-root $@
+    else
+        n_physical_core=$(echo "$(nproc --all) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
+        mpiexec -n $n_physical_core $@
+    fi
+}
+
 echo "Start simulation..."
-run_command mpiexec -n $n_physical_core $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
-run_command mpiexec -n $n_physical_core $build_dir/MACE SimVeto $build_dir/SimVeto/run_hit_partial.mac
-run_command mpiexec -n $n_physical_core $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac
-run_command mpiexec -n $n_physical_core $build_dir/MACE SimMACE $build_dir/SimMACE/run_signal.mac
+run_command parexec $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
+run_command parexec $build_dir/MACE SimVeto $build_dir/SimVeto/run_hit_partial.mac
+run_command parexec $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac
+run_command parexec $build_dir/MACE SimMACE $build_dir/SimMACE/run_signal.mac
 
 echo "Merging results..."
 run_command hadd -ff SimMMS_em_flat_test.root SimMMS_em_flat_test/*
