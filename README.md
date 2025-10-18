@@ -1,17 +1,17 @@
 # MACE offline software system
 
-[![GitHub License](https://img.shields.io/github/license/zhao-shihan/MACE?color=red)](COPYING)
-![GitHub Created At](https://img.shields.io/github/created-at/zhao-shihan/MACE?color=green)
-![GitHub top language](https://img.shields.io/github/languages/top/zhao-shihan/MACE?color=f34b7d)
-[![GitHub activity](https://img.shields.io/github/commit-activity/m/zhao-shihan/MACE)](https://github.com/zhao-shihan/MACE/pulse)
-![GitHub last commit](https://img.shields.io/github/last-commit/zhao-shihan/MACE)
-![GitHub repo size](https://img.shields.io/github/repo-size/zhao-shihan/MACE)
+[![GitHub License](https://img.shields.io/github/license/zhao-shihan/MACESW?color=red)](COPYING)
+![GitHub Created At](https://img.shields.io/github/created-at/zhao-shihan/MACESW?color=green)
+![GitHub top language](https://img.shields.io/github/languages/top/zhao-shihan/MACESW?color=f34b7d)
+[![GitHub activity](https://img.shields.io/github/commit-activity/m/zhao-shihan/MACESW)](https://github.com/zhao-shihan/MACESW/pulse)
+![GitHub last commit](https://img.shields.io/github/last-commit/zhao-shihan/MACESW)
+![GitHub repo size](https://img.shields.io/github/repo-size/zhao-shihan/MACESW)
 
-[![Build (AMD64 GNU/Linux GCC)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-gcc.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-gcc.yml)
-[![Build (AMD64 GNU/Linux Clang, unity build)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-clang.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-clang.yml)
+[![Build (AMD64 GNU/Linux GCC)](https://github.com/zhao-shihan/MACESW/actions/workflows/build-with-gcc.yml/badge.svg)](https://github.com/zhao-shihan/MACESW/actions/workflows/build-with-gcc.yml)
+[![Build (AMD64 GNU/Linux Clang, unity build)](https://github.com/zhao-shihan/MACESW/actions/workflows/build-with-clang.yml/badge.svg)](https://github.com/zhao-shihan/MACESW/actions/workflows/build-with-clang.yml)
 
-[![Regression test (AMD64 GNU/Linux GCC)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-gcc.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-gcc.yml)
-[![Regression test (AMD64 GNU/Linux Clang, unity build)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-clang.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-clang.yml)
+[![Regression test (AMD64 GNU/Linux GCC)](https://github.com/zhao-shihan/MACESW/actions/workflows/regression-test-with-gcc.yml/badge.svg)](https://github.com/zhao-shihan/MACESW/actions/workflows/regression-test-with-gcc.yml)
+[![Regression test (AMD64 GNU/Linux Clang, unity build)](https://github.com/zhao-shihan/MACESW/actions/workflows/regression-test-with-clang.yml/badge.svg)](https://github.com/zhao-shihan/MACESW/actions/workflows/regression-test-with-clang.yml)
 
 - [MACE offline software system](#mace-offline-software-system)
   - [Introduction](#introduction)
@@ -72,7 +72,7 @@ apptainer shell ./rgb.sif
 
 Then, in the container shell, clone and build MACESW:
 ```bash
-git clone https://github.com/zhao-shihan/MACE.git
+git clone https://github.com/zhao-shihan/MACESW.git
 cd MACE
 mkdir build && cd build
 cmake ..
