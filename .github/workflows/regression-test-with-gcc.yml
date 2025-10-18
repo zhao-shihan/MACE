@@ -15,9 +15,9 @@ jobs:
       matrix:
         image:
           - url: ghcr.io/zhao-shihan/rgb-docker:mpich
-            name: rgb-docker-mpich
+            artifact-name: Regression test report (AMD64 GNU-Linux GCC, MPICH)
           - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
-            name: rgb-docker-openmpi
+            artifact-name: Regression test report (AMD64 GNU-Linux GCC,OpenMPI)
     container: ${{ matrix.image.url }}
     defaults:
       run:

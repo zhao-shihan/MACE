@@ -2,9 +2,9 @@ name: Regression test (AMD64 GNU/Linux Clang, unity build)
 
 on:
   push:
-    branches: [main]
+    branches: [main, rc]
   pull_request:
-    branches: [main]
+    branches: [main, rc]
 
 jobs:
   test-with-clang:
@@ -15,9 +15,9 @@ jobs:
       matrix:
         image:
           - url: ghcr.io/zhao-shihan/rgb-docker:mpich
-            name: rgb-docker-mpich
+            artifact-name: Regression test report (AMD64 GNU-Linux Clang, unity build, MPICH) 
           - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
-            name: rgb-docker-openmpi
+            artifact-name: Regression test report (AMD64 GNU-Linux Clang, unity build, OpenMPI) 
     container: ${{ matrix.image.url }}
     defaults:
       run:
