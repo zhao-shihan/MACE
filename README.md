@@ -73,7 +73,7 @@ apptainer shell ./rgb.sif
 Then, in the container shell, clone and build MACESW:
 ```bash
 git clone https://github.com/zhao-shihan/MACESW.git
-cd MACE
+cd MACESW
 mkdir build && cd build
 cmake ..
 make -j8
