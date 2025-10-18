@@ -7,8 +7,8 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/zhao-shihan/MACE)
 ![GitHub repo size](https://img.shields.io/github/repo-size/zhao-shihan/MACE)
 
-[![Build (AMD64 GNU/Linux Clang, unity build)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-clang.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-clang.yml)
 [![Build (AMD64 GNU/Linux GCC)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-gcc.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-gcc.yml)
+[![Build (AMD64 GNU/Linux Clang, unity build)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-clang.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/build-with-clang.yml)
 
 [![Regression test (AMD64 GNU/Linux GCC)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-gcc.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-gcc.yml)
 [![Regression test (AMD64 GNU/Linux Clang, unity build)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-clang.yml/badge.svg)](https://github.com/zhao-shihan/MACE/actions/workflows/regression-test-with-clang.yml)
