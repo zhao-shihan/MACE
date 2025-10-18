@@ -1,6 +1,9 @@
 ---
+name: "Bug report"
+title: "[BUG] "
 about: "Create an issue to report a bug or unexpected behavior in MACESW"
 labels: ["bug", "needs triage"]
+assignees: []
 ---
 
 ## Summary
