@@ -28,7 +28,7 @@ public:
     auto NOpticalPhotonHit() const -> muc::flat_hash_map<int, std::vector<int>>;
 
 protected:
-    Type type;
+    Type fType;
     muc::flat_hash_map<int, muc::unique_ptrvec<TTCSiPMHit>> fHit;
     TTCSiPMHitCollection* fHitsCollection;
 };

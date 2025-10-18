@@ -23,4 +23,7 @@ using ECALPMHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     ECALPMRawHit>;
 
+using VetoPMHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    VetoPMRawHit>;
 } // namespace MACE::Data

@@ -14,7 +14,7 @@ constexpr auto defaultMacro = {
     "/run/verbose 2",
     "",
     "/MACE/Physics/UseRadioactiveDecayPhysics",
-    "/MACE/Physics/UseOpticalPhysics",
+    "#/MACE/Physics/UseOpticalPhysics",
     "",
     "/run/initialize",
     "",
