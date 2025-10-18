@@ -1,0 +1,37 @@
+---
+about: "Create an issue to report a bug or unexpected behavior in MACESW"
+labels: ["bug", "needs triage"]
+---
+
+## Summary
+A concise description of the bug.
+
+## Environment
+- OS & version: e.g. Ubuntu 22.04
+- Compiler & version: e.g. GCC 12.2 / Clang 16
+- CMake version: e.g. 3.25
+- MACE commit or tag: commit sha or tag
+- Build type: Debug/Release
+- Any special flags/options used:
+
+## Steps to reproduce
+Steps to reproduce the behavior (include minimal reproducer or commands):
+1. Checkout commit / tag: `...`
+2. Build with: e.g. `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j`
+3. Run: e.g. `./build/path/to/executable arg1 arg2`
+4. Observe: `...`
+
+## Expected behavior
+What you expected to happen.
+
+## Actual behavior
+What actually happened (include error messages, stack traces).
+
+## Relevant logs / output
+Paste logs, stderr, or attach files. Use fenced code blocks where helpful.
+
+## Reproducer / test case
+If possible, include a minimal reproducer (source or steps).
+
+## Additional context
+Any other information that may help (recent changes, related issues).
