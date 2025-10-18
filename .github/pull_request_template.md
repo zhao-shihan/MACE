@@ -4,12 +4,13 @@ Provide a short description of the change and the motivation.
 Fixes: #<issue-number> (if applicable)
 
 ## Type of change
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing behavior to change)
-- [ ] Documentation update
-- [ ] CI / tooling
-- [ ] Other: describe
+(Select one or more and delete other options from below)
+- Bug fix (non-breaking change which fixes an issue)
+- New feature (non-breaking change which adds functionality)
+- Breaking change (fix or feature that would cause existing behavior to change)
+- Documentation update
+- CI / tooling
+- Other: describe
 
 ## How was this tested?
 Describe the testing performed:
