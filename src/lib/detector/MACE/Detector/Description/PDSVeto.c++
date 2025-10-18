@@ -358,8 +358,8 @@ auto PDSVeto::CalculateStripInformation() const -> std::vector<StripInformationT
     int moduleID{};
     int layerID{};
     int stripID{};
+    int categoryID{};
     for (auto nModule : *fNModuleOfACategory) {
-        int categoryID{};
         for (int moduleLocalID{}; moduleLocalID < nModule; ++moduleLocalID) {
             for (int layerLocalID{}; layerLocalID < (*fNLayerPerModuleOfACategory)[categoryID]; ++layerLocalID) {
                 for (int stripLocalID{}; stripLocalID < (*fNStripPerLayerOfACategory)[categoryID]; ++stripLocalID) {
@@ -368,9 +368,13 @@ auto PDSVeto::CalculateStripInformation() const -> std::vector<StripInformationT
                         z{(categoryID == 2) ? 1. : 0.};
                     muc::array3d readDirection{x, y, z};
                     stripInformation.emplace_back(StripInformationType{stripID, stripLocalID, layerID, layerLocalID, moduleID, moduleLocalID, categoryID, (*fStripLengthOfACategory)[categoryID], readDirection});
+                    ++stripID;
                 }
+                ++layerID;
             }
+            ++moduleID;
         }
+        ++categoryID;
     }
     return stripInformation;
 }
@@ -379,10 +383,18 @@ auto PDSVeto::CalculateStartingStripIDOfAModule() const -> std::vector<short> {
     const auto totalNModules{std::accumulate(fNModuleOfACategory->begin(), fNModuleOfACategory->end(), 0)};
     auto nStripOfAModule{[this](short aModuleID) {
         auto categoryIDOfAModule{[](short aModuleID) {
-            if (aModuleID == 0) { return 0; }
-            if (aModuleID == 1 or aModuleID == 2) { return 1; }
-            if (aModuleID == 3 or aModuleID == 4 or aModuleID == 5 or aModuleID == 6) { return 2; }
-            if (aModuleID == 7 or aModuleID == 8 or aModuleID == 9 or aModuleID == 10) { return 3; }
+            if (aModuleID == 0) {
+                return 0;
+            }
+            if (aModuleID == 1 or aModuleID == 2) {
+                return 1;
+            }
+            if (aModuleID == 3 or aModuleID == 4 or aModuleID == 5 or aModuleID == 6) {
+                return 2;
+            }
+            if (aModuleID == 7 or aModuleID == 8 or aModuleID == 9 or aModuleID == 10) {
+                return 3;
+            }
             muc::unreachable();
         }};
         return (*fNLayerPerModuleOfACategory)[categoryIDOfAModule(aModuleID)] * (*fNStripPerLayerOfACategory)[categoryIDOfAModule(aModuleID)];
