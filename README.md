@@ -67,7 +67,7 @@ Start an interactive shell within the RGB image:
 ```bash
 apptainer shell ./rgb.sif
 ```
-(Note that open a shell is not necessary, you can also run something with the image by `./rgb.sif <command>`, but here we work inside container shell for simplicity)
+(Note that opening a shell is not necessary, you can also run something with the image by `./rgb.sif <command>`, but here we work inside the container shell for simplicity)
 
 Then, in the container shell, clone and build MACESW:
 ```bash
