@@ -1,4 +1,4 @@
-name: Build (AMD64 GNU/Linux GCC)
+name: Build (AMD64 GNU/Linux Clang, unity build)
 
 on:
   push:
@@ -15,9 +15,7 @@ jobs:
       matrix:
         image:
           - url: ghcr.io/zhao-shihan/rgb-docker:mpich
-            artifact-name: Regression test report (AMD64 GNU-Linux Clang, unity build, MPICH)
           - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
-            artifact-name: Regression test report (AMD64 GNU-Linux Clang, unity build, OpenMPI)
     container: ${{ matrix.image.url }}
     defaults:
       run:
