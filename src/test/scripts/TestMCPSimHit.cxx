@@ -12,18 +12,22 @@
 const std::string dataTupleName{"MCPSimHit"};
 
 const void Judge(double pValue) {
-    const std::string boldBlue = "\033[1;34m";
-    const std::string boldGreen = "\033[1;32m";
-    const std::string boldRed = "\033[1;31m";
-    const std::string boldOrange = "\033[1;33m";
-    const std::string reset = "\033[0m";
+    const std::string boldRed{"\033[1;31m"};
+    const std::string boldOrange{"\033[0;33m"};
+    const std::string boldYellow{"\033[1;33m"};
+    const std::string boldGreen{"\033[1;32m"};
+    const std::string boldBlue{"\033[1;34m"};
+    const std::string reset{"\033[0m"};
 
     if (pValue != 0) {
-        if (pValue < 0.003) {
+        auto normQuantile2End{TMath::NormQuantile(1 - pValue / 2)};
+        if (normQuantile2End > 5) {
             std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
-        } else if (pValue < 0.05) {
-            std::cout << boldOrange << "SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
-        } else if (pValue != 0) {
+        } else if (normQuantile2End > 3) {
+            std::cout << boldOrange << "VERY SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
+        } else if (normQuantile2End > 2) {
+            std::cout << boldYellow << "SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
+        } else if (normQuantile2End != 0) {
             std::cout << boldGreen << "PASS" << reset << " (p = " << pValue << ")" << std::endl;
         }
     } else {
@@ -55,8 +59,12 @@ auto TestMCPSimHit(std::string moduleName, std::string testFileName, std::string
                 auto diff{h1->GetBinContent(i) - h2->GetBinContent(i)};
                 auto err1{h1->GetBinError(i)};
                 auto err2{h2->GetBinError(i)};
-                auto err{TMath::Sqrt(err1 * err1 + err2 * err2)};
-                pull->SetBinContent(i, diff / err);
+                auto err{std::hypot(err1, err2)};
+                if (err == 0) {
+                    pull->SetBinContent(i, 0);
+                } else {
+                    pull->SetBinContent(i, diff / err);
+                }
                 pull->SetBinError(i, 1);
             }
             // draw
@@ -77,6 +85,8 @@ auto TestMCPSimHit(std::string moduleName, std::string testFileName, std::string
             h1->SetLineWidth(1);
             h2->SetLineColor(kBlue);
             h2->SetLineWidth(1);
+            h1->SetStats(false);
+            h2->SetStats(false);
 
             c1->cd();
             pad1->cd();
