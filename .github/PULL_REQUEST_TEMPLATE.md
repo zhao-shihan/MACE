@@ -1,6 +1,5 @@
 ---
 about: "Template for pull requests to MACESW"
-labels: ["needs triage"]
 ---
 
 ## Summary
