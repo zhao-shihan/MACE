@@ -125,6 +125,6 @@ Optional built-in dependencies (automatically downloaded if not found):
 - AN FengPeng, BAI Dong, CHEN Siyuan, et al. High-Precision Physics Experiments at Huizhou Large-Scale Scientific Facilities [DB/OL]. arXiv preprint, 2025: 2504.21050 [hep-ph]. https://arxiv.org/abs/2504.21050.
 - BAI Ai-Yu, CAI Hanjie, CHEN Chang-Lin, et al. Conceptual Design of the Muonium-to-Antimuonium Conversion Experiment (MACE) [DB/OL]. arXiv preprint, 2024: 2410.18817 [hep-ex]. https://arxiv.org/abs/2410.18817.
 - CHEN Siyuan, ZHAO Shihan, XIONG Weizhi, et al. Design of a CsI(Tl) calorimeter for muonium-to-antimuonium conversion experiment [J]. Front. Phys., 2025, 20: 035202. DOI: 10.15302/frontphys.2025.035202. arXiv: 2408.17114 [physics.ins-det]. https://doi.org/10.15302/frontphys.2025.035202.
-- ZHAO Shihan, TANG Jian. Progress of muonium-to-antimuonium conversion experiment [J]. Nucl. Part. Phys. Proc., 2024, 345: 24-28. DOI: 10.1016/j.nuclphysbps.2024.05.005. https://doi.org/10.1016/j.nuclphysbps.
+- ZHAO Shihan, TANG Jian. Progress of muonium-to-antimuonium conversion experiment [J]. Nucl. Part. Phys. Proc., 2024, 345: 24-28. DOI: 10.1016/j.nuclphysbps.2024.05.005. https://doi.org/10.1016/j.nuclphysbps.2024.05.005.
 - CORRODI S., OKSUZIAN Y., EDMONDS A., et al. Workshop on a future muon program at FNAL [C]. arXiv preprint, 2023: 2309.05933 [hep-ex]. https://arxiv.org/abs/2309.05933.
 - BAI Ai-Yu, CHEN Yu, CHEN Yukai, et al. Snowmass2021 Whitepaper: Muonium to Antimuonium Conversion [DB/OL]. arXiv preprint, 2022: 2203.11406 [hep-ph]. https://arxiv.org/abs/2203.11406.
