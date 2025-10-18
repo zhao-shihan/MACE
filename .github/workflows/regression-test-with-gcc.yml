@@ -14,9 +14,11 @@ jobs:
     strategy:
       matrix:
         image:
-          - ghcr.io/zhao-shihan/rgb-docker:mpich
-          - ghcr.io/zhao-shihan/rgb-docker:openmpi
-    container: ${{ matrix.image }}
+          - url: ghcr.io/zhao-shihan/rgb-docker:mpich
+            name: rgb-docker-mpich
+          - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
+            name: rgb-docker-openmpi
+    container: ${{ matrix.image.url }}
     defaults:
       run:
         shell: bash
@@ -44,7 +46,7 @@ jobs:
       - name: Restore regression report
         uses: actions/upload-artifact@v4
         with:
-          name: test report of ${{ matrix.image }}
+          name: test report of ${{ matrix.image.name }}
           path: |
             build/test/test_*/regression_report.root
           retention-days: 90
