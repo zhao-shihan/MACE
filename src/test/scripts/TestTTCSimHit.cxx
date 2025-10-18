@@ -43,9 +43,16 @@ auto TestTTCSimHit(std::string moduleName, std::string testFileName, std::string
         [&](TH1D* h1, TH1D* h2, std::string histName) {
             auto i1{h1->Integral()};
             auto i2{h2->Integral()};
-            h1->Scale(1 / i1);
-            h2->Scale(1 / i2);
-
+           if (i1 != 0) {
+                h1->Scale(1 / i1);
+            } else {
+                std::cerr << "Warning: Histogram h1 has zero integral, skipping scaling." << std::endl;
+            }
+            if (i2 != 0) {
+                h2->Scale(1 / i2);
+            } else {
+                std::cerr << "Warning: Histogram h2 has zero integral, skipping scaling." << std::endl;
+            }
             // pull
 
             auto nBins{h1->GetNbinsX()};
@@ -102,8 +109,8 @@ auto TestTTCSimHit(std::string moduleName, std::string testFileName, std::string
 
     ROOT::RDataFrame df0("G4Run0/" + dataTupleName, testFileName);
     auto sampleFile{new TFile(sampleFileName.data(), "READ")};
-    if (!sampleFile) {
-        std::cerr << "Err: Sample file not found: " << sampleFileName << std::endl;
+    if (!sampleFile->IsOpen()) {
+        std::cerr << "Err: Sample file not found or could not be opened: " << sampleFileName << std::endl;
         return 1;
     }
     auto sampleDir{static_cast<TDirectory*>(sampleFile->Get((moduleName + "/" + dataTupleName).data()))};

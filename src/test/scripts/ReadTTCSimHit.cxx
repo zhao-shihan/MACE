@@ -8,11 +8,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <any>
 
 const auto nBinsValueType{100};
-auto DataTupleName{"MMSSimTrack"};
+auto DataTupleName{"TTCSimHit"};
 
-auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int {
+auto ReadTTCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
     ROOT::RDataFrame df0{Form("G4Run0/%s", DataTupleName), srcFileName};
     const auto dstFile{new TFile(dstFileName, "UPDATE")};
     auto moduleDir{static_cast<TDirectory*>(dstFile->Get(moduleName))};
@@ -32,31 +33,35 @@ auto GetMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int 
     dstFile->cd();
     dstDir->cd();
 
-    auto df{df0.Define("x0_0", "x0[0]")
+    auto df{df0.Define("x_0", "x[0]")
+                .Define("x_1", "x[1]")
+                .Define("x_2", "x[2]")
+                .Define("p_0", "p[0]")
+                .Define("p_1", "p[1]")
+                .Define("p_2", "p[2]")
+                .Define("x0_0", "x0[0]")
                 .Define("x0_1", "x0[1]")
                 .Define("x0_2", "x0[2]")
-                .Define("c0_0", "c0[0]")
-                .Define("c0_1", "c0[1]")
                 .Define("p0_0", "p0[0]")
                 .Define("p0_1", "p0[1]")
                 .Define("p0_2", "p0[2]")};
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
-        {"phi0",   df.Min("phi0"),   df.Max("phi0")  },
-        {"z0",     df.Min("z0"),     df.Max("z0")    },
-        {"theta0", df.Min("theta0"), df.Max("theta0")},
-        {"chi2",   0.,               df.Max("chi2")  },
-        {"Ek0",    0.,               df.Max("Ek0")   },
-        {"r0",     0.,               df.Max("r0")    },
-        {"t0",     0.,               df.Max("t0")    },
-        {"p0_0",    df.Min("p0_0"),    df.Max("p0_0")   },
-        {"p0_1",    df.Min("p0_1"),    df.Max("p0_1")   },
-        {"p0_2",    df.Min("p0_2"),    df.Max("p0_2")   },
-        {"x0_0",    df.Min("x0_0"),    df.Max("x0_0")   },
-        {"x0_1",    df.Min("x0_1"),    df.Max("x0_1")   },
-        {"x0_2",    df.Min("x0_2"),    df.Max("x0_2")   },
-        {"c0_0",    df.Min("c0_0"),    df.Max("c0_0")   },
-        {"c0_1",    df.Min("c0_1"),    df.Max("c0_1")   }
+        // {"TileID",  0.,            4000.                                                                                     },
+        {"Ek",      0.,            df.Max("Ek")                                                                              },
+        // {"Ek0",     0.,            df.Max("Ek0")                                                                             },
+        // {"x_0",      df.Min("x_0"),  df.Max("x_0")                                                                              },
+        // {"x_1",      df.Min("x_1"),  df.Max("x_1")                                                                              },
+        // {"x_2",      df.Min("x_2"),  df.Max("x_2")                                                                              },
+        // {"p_0",      df.Min("p_0"),  df.Max("p_0")                                                                              },
+        // {"p_1",      df.Min("p_1"),  df.Max("p_1")                                                                              },
+        // {"p_2",      df.Min("p_2"),  df.Max("p_2")                                                                              },
+        // {"p0_0",     df.Min("p0_0"), df.Max("p0_0")                                                                             },
+        // {"p0_1",     df.Min("p0_1"), df.Max("p0_1")                                                                             },
+        // {"p0_2",     df.Min("p0_2"), df.Max("p0_2")                                                                             },
+        // {"t",       0,             std::function([&]() -> double { return *df.Mean("t") + 5 * *df.StdDev("t"); })            },
+        // {"nOptPho", 0,             std::function([&]() -> double { return *df.Mean("nOptPho") + 5 * *df.StdDev("nOptPho"); })},
+        {"Edep",    0.,            std::function([&]() -> double { return *df.Mean("Edep") + 5 * *df.StdDev("Edep"); })      }
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

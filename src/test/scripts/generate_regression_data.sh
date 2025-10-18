@@ -52,14 +52,14 @@ if [ -f "$script_dir/mace_regression_data.root" ]; then
 fi
 
 echo "Draw & save regression histograms..."
-run_command root -l -q "$script_dir/GetCDCSimHit.cxx(\"SimMMS_em_flat\",\"SimMMS_em_flat_sample.root\",\"$script_dir/mace_regression_data.root\")"
-run_command root -l -q "$script_dir/GetMMSSimTrack.cxx(\"SimMMS_em_flat\",\"SimMMS_em_flat_sample.root\",\"$script_dir/mace_regression_data.root\")"
-run_command root -l -q "$script_dir/GetVetoSimHit.cxx(\"SimVeto_hit_partial\",\"SimVeto_hit_partial_sample.root\",\"$script_dir/mace_regression_data.root\")"
-run_command root -l -q "$script_dir/GetTTCSimHit.cxx(\"SimTTC_em_flat\",\"SimTTC_em_flat_sample.root\",\"$script_dir/mace_regression_data.root\")"
-run_command root -l -q "$script_dir/GetMCPSimHit.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
-run_command root -l -q "$script_dir/GetTTCSimHit.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
-run_command root -l -q "$script_dir/GetCDCSimHit.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
-run_command root -l -q "$script_dir/GetMMSSimTrack.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
+run_command root -l -q "$script_dir/ReadCDCSimHit.cxx(\"SimMMS_em_flat\",\"SimMMS_em_flat_sample.root\",\"$script_dir/mace_regression_data.root\")"
+run_command root -l -q "$script_dir/ReadMMSSimTrack.cxx(\"SimMMS_em_flat\",\"SimMMS_em_flat_sample.root\",\"$script_dir/mace_regression_data.root\")"
+run_command root -l -q "$script_dir/ReadVetoSimHit.cxx(\"SimVeto_hit_partial\",\"SimVeto_hit_partial_sample.root\",\"$script_dir/mace_regression_data.root\")"
+run_command root -l -q "$script_dir/ReadTTCSimHit.cxx(\"SimTTC_em_flat\",\"SimTTC_em_flat_sample.root\",\"$script_dir/mace_regression_data.root\")"
+run_command root -l -q "$script_dir/ReadMCPSimHit.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
+run_command root -l -q "$script_dir/ReadTTCSimHit.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
+run_command root -l -q "$script_dir/ReadCDCSimHit.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
+run_command root -l -q "$script_dir/ReadMMSSimTrack.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
 
 end_time=$(date +%s)
 total_time=$((end_time - start_time))

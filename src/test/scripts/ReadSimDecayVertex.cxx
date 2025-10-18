@@ -8,12 +8,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <any>
 
 const auto nBinsValueType{100};
-auto DataTupleName{"CDCSimHit"};
+auto DataTupleName{"SimDecayVertex"};
 
-auto GetCDCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
-    ROOT::RDataFrame df{Form("G4Run0/%s", DataTupleName), srcFileName};
+auto ReadSimDecayVertex(auto moduleName, auto srcFileName, auto dstFileName) -> int {
+    ROOT::RDataFrame df0{Form("G4Run0/%s", DataTupleName), srcFileName};
     const auto dstFile{new TFile(dstFileName, "UPDATE")};
     auto moduleDir{static_cast<TDirectory*>(dstFile->Get(moduleName))};
     if (!moduleDir) {
@@ -32,10 +33,14 @@ auto GetCDCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
     dstFile->cd();
     dstDir->cd();
 
-
+    auto df{df0.Define("x_0", "x[0]")
+                .Define("x_1", "x[1]")
+                .Define("x_2", "x[2]")};
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
-        {"d",      0.,            df.Max("d")                                                                         },
-        {"Edep",   0.,            std::function([&]() -> double { return *df.Mean("Edep") + 5 * *df.StdDev("Edep"); })},
+        {"t",  0.,                                                                               std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })  },
+        {"x_0", std::function([&]() -> double { return *df.Mean("x_0") - 3 * *df.StdDev("x_0"); }), std::function([&]() -> double { return *df.Mean("x_0") + 3 * *df.StdDev("x_0"); })},
+        {"x_1", std::function([&]() -> double { return *df.Mean("x_1") - 3 * *df.StdDev("x_1"); }), std::function([&]() -> double { return *df.Mean("x_1") + 3 * *df.StdDev("x_1"); })},
+        {"x_2", std::function([&]() -> double { return *df.Mean("x_2") - 3 * *df.StdDev("x_2"); }), std::function([&]() -> double { return *df.Mean("x_2") + 3 * *df.StdDev("x_2"); })}
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;
