@@ -96,9 +96,6 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                         count++;
                         if (count == sciFiTracker.SiPMOpticalPhotonCountThreshold()) {
                             endTime = initialTime + sciFiTracker.TimeWindow();
-                            if (*Get<"EvtID">(**siPMHitRange.begin()) != 8) {
-                                continue;
-                            }
                             siPMHitData.emplace_back(std::make_shared<Mustard::Data::Tuple<MACE::PhaseI::Data::SciFiSimHit>>());
                             *Get<"t">(*siPMHitData.back()) = *Get<"t">(*siPMHitRange[j]);
                             *Get<"EvtID">(*siPMHitData.back()) = *Get<"EvtID">(*siPMHitRange[j]);
