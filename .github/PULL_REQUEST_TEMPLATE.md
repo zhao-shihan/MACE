@@ -9,7 +9,7 @@ Provide a short description of the change and the motivation.
 Fixes: #<issue-number> (if applicable)
 
 ## Type of change
-[ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing behavior to change)
 - [ ] Documentation update
@@ -25,10 +25,9 @@ Describe the testing performed:
 
 ## Checklist before requesting review
 - [ ] My code follows the project coding style and linting rules.
-- [ ] I ran the full test-suite locally (if available) and all tests pass.
+- [ ] I ran the full test-suite locally and all tests pass.
 - [ ] I added/updated unit tests where applicable.
 - [ ] I updated relevant documentation (README, Doxygen, or design docs).
-- [ ] I updated CHANGELOG or release notes (if required).
 - [ ] I linked related issues and provided context in the PR description.
 
 ## Implementation details (optional)

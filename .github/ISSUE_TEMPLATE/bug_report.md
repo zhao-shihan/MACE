@@ -7,9 +7,9 @@ labels: ["bug", "needs triage"]
 A concise description of the bug.
 
 ## Environment
-- OS & version: e.g. Ubuntu 22.04
-- Compiler & version: e.g. GCC 12.2 / Clang 16
-- CMake version: e.g. 3.25
+- OS & version: e.g. Debian 14
+- Compiler & version: e.g. GCC 17.2 / Clang 24
+- CMake version: e.g. 4.2
 - MACE commit or tag: commit sha or tag
 - Build type: Debug/Release
 - Any special flags/options used:
