@@ -45,10 +45,11 @@ VetoSD::VetoSD(const G4String& sdName, const VetoPMSD* vetoPMSD) :
     fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
+    assert(vetoPMSD != nullptr && "vetoPMSD must not be null");
     vetoPMSD->NOpticalPhotonHit();
     collectionName.insert(sdName + "HC");
 
-    const auto& veto{Detector::Description::PDSVeto::Instance()};
+    const auto& veto{MACE::Detector::Description::PDSVeto::Instance()};
     assert(veto.PSScintillationEnergyBin().size() == veto.PSScintillationComponent1().size());
     std::vector<double> dE(veto.PSScintillationEnergyBin().size());
     muc::ranges::adjacent_difference(veto.PSScintillationEnergyBin(), dE.begin());
