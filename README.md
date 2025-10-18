@@ -49,7 +49,8 @@ The recommended approach for basic user to build MACESW is using the RGB Apptain
 
 Download and install Apptainer from the [official releases](https://github.com/apptainer/apptainer/releases). For Debian-based systems:
 ```bash
-wget https://github.com/apptainer/apptainer/releases/download/v1.4.3/apptainer_<version>.deb -O apptainer.deb
+# Replace the version as needed; see the Apptainer releases page for the latest version and links
+wget https://github.com/apptainer/apptainer/releases/download/v1.4.3/apptainer_1.4.3_amd64.deb -O apptainer.deb
 sudo apt install ./apptainer.deb
 ```
 
