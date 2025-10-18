@@ -1,6 +1,9 @@
 ---
+name: "Feature request"
+title: "[FEATURE] "
 about: "Suggest an improvement or new feature for MACESW"
 labels: ["enhancement", "needs triage"]
+assignees: []
 ---
 
 ## Summary
