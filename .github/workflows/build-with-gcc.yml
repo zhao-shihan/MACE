@@ -1,0 +1,39 @@
+name: Build (AMD64 GNU/Linux GCC)
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  build-with-gcc:
+    name: Build with GCC
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - url: ghcr.io/zhao-shihan/rgb-docker:mpich
+            artifact-name: Regression test report (AMD64 GNU-Linux GCC, MPICH)
+          - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
+            artifact-name: Regression test report (AMD64 GNU-Linux GCC,OpenMPI)
+    container: ${{ matrix.image.url }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          . /environment
+          mkdir build && cd build
+          cmake -G Ninja .. \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=gcc \
+            -DCMAKE_CXX_COMPILER=g++ \
+            -DCMAKE_C_FLAGS='-Werror -march=x86-64-v2' \
+            -DCMAKE_CXX_FLAGS='-Werror -march=x86-64-v2'
+          ninja
