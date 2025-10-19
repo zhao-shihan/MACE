@@ -1,4 +1,4 @@
-name: Regression test (AMD64 GNU/Linux Clang, unity build)
+name: Regression test (AMD64 GNU/Linux Clang)
 
 on:
   push:
@@ -8,16 +8,16 @@ on:
 
 jobs:
   test-with-clang:
-    name: Test with Clang (unity build)
+    name: Test with Clang
     runs-on: ubuntu-latest
     timeout-minutes: 180
     strategy:
       matrix:
         image:
           - url: ghcr.io/zhao-shihan/rgb-docker:mpich
-            artifact-name: Regression test report (AMD64 GNU-Linux Clang, unity build, MPICH) 
+            artifact-name: Regression test report (AMD64 GNU-Linux Clang, MPICH) 
           - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
-            artifact-name: Regression test report (AMD64 GNU-Linux Clang, unity build, OpenMPI) 
+            artifact-name: Regression test report (AMD64 GNU-Linux Clang, OpenMPI) 
     container: ${{ matrix.image.url }}
     defaults:
       run:
