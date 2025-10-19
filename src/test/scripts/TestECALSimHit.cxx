@@ -12,26 +12,24 @@
 const std::string dataTupleName{"ECALSimHit"};
 
 const void Judge(double pValue) {
-    const std::string boldRed{"\033[1;31m"};
-    const std::string boldOrange{"\033[0;33m"};
-    const std::string boldYellow{"\033[1;33m"};
-    const std::string boldGreen{"\033[1;32m"};
-    const std::string boldBlue{"\033[1;34m"};
-    const std::string reset{"\033[0m"};
+    const std::string boldRed{"\e[1;31m"};
+    const std::string boldOrange{"\e[0;33m"};
+    const std::string boldYellow{"\e[1m\e[38;5;226m"};
+    const std::string boldGreen{"\e[1;32m"};
+    const std::string boldBlue{"\e[1;34m"};
+    const std::string reset{"\e[0m"};
 
-    if (pValue != 0) {
-        auto normQuantile2End{TMath::NormQuantile(1 - pValue / 2)};
-        if (normQuantile2End > 5) {
-            std::cout << boldRed << "FAIL" << reset << " (p = " << pValue << ")" << std::endl;
-        } else if (normQuantile2End > 3) {
-            std::cout << boldOrange << "VERY SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
-        } else if (normQuantile2End > 2) {
-            std::cout << boldYellow << "SUSPICIOUS" << reset << " (p = " << pValue << ")" << std::endl;
-        } else if (normQuantile2End != 0) {
-            std::cout << boldGreen << "PASS" << reset << " (p = " << pValue << ")" << std::endl;
-        }
+    auto normQuantile2End{TMath::NormQuantile(1 - pValue / 2)};
+    if (normQuantile2End > 5) {
+        std::cout << boldRed << "FAIL" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
+    } else if (normQuantile2End > 3) {
+        std::cout << boldOrange << "VERY SUSPICIOUS" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
+    } else if (normQuantile2End > 2) {
+        std::cout << boldYellow << "SUSPICIOUS" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
+    } else if (normQuantile2End > 0) {
+        std::cout << boldGreen << "PASS" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
     } else {
-        std::cout << boldBlue << "IDENTICAL" << reset << " (p = " << pValue << ")" << std::endl;
+        std::cout << boldBlue << "IDENTICAL" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
     }
 }
 
@@ -43,7 +41,7 @@ auto TestECALSimHit(std::string moduleName, std::string testFileName, std::strin
         [&](TH1D* h1, TH1D* h2, std::string histName) {
             auto i1{h1->Integral()};
             auto i2{h2->Integral()};
-           if (i1 != 0) {
+            if (i1 != 0) {
                 h1->Scale(1 / i1);
             } else {
                 std::cerr << "Warning: Histogram h1 has zero integral, skipping scaling." << std::endl;
