@@ -68,7 +68,7 @@ Before requesting review, ensure:
 - If you are unsure about something, ask maintainers or contributors before implementing a large change.
 
 ## Getting help
-- If you need assistance getting started, open an issue prefixed with `Help:` and maintainers or developer will try to help.
+- If you need assistance getting started, open an issue prefixed with `Help:` and maintainers or developers will try to help.
 
 ## Maintainer
 @zhao-shihan
