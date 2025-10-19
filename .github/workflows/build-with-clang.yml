@@ -7,8 +7,8 @@ on:
     branches: ["*"]
 
 jobs:
-  build-with-gcc:
-    name: Build with GCC
+  build-with-clang:
+    name: Build with Clang
     timeout-minutes: 30
     runs-on: ubuntu-latest
     strategy:
