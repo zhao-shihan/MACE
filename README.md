@@ -1,4 +1,4 @@
-# MACE offline software system
+# MACE offline software (MACESW)
 
 [![GitHub License](https://img.shields.io/github/license/zhao-shihan/MACESW?color=red)](COPYING)
 ![GitHub Created At](https://img.shields.io/github/created-at/zhao-shihan/MACESW?color=green)
@@ -13,7 +13,7 @@
 [![Regression test (AMD64 GNU/Linux GCC)](https://github.com/zhao-shihan/MACESW/actions/workflows/regression-test-with-gcc.yml/badge.svg)](https://github.com/zhao-shihan/MACESW/actions/workflows/regression-test-with-gcc.yml)
 [![Regression test (AMD64 GNU/Linux Clang, unity build)](https://github.com/zhao-shihan/MACESW/actions/workflows/regression-test-with-clang.yml/badge.svg)](https://github.com/zhao-shihan/MACESW/actions/workflows/regression-test-with-clang.yml)
 
-- [MACE offline software system](#mace-offline-software-system)
+- [MACE offline software (MACESW)](#mace-offline-software-macesw)
   - [Introduction](#introduction)
   - [How to build](#how-to-build)
     - [For basic users: Build with RGB image](#for-basic-users-build-with-rgb-image)
@@ -39,7 +39,7 @@
 
 The **Muonium-to-Antimuonium Conversion Experiment (MACE)** is a next-generation particle physics experiment designed to search for the spontaneous conversion of muonium ($\mathrm{M}$, a bound state of $\mu^+$ and $e^-$) to antimuonium ($\overline{\mathrm{M}}$, a bound state of $\mu^-$ and $e^+$)—a charged lepton flavor violation (cLFV) process. Observing this rare conversion would provide clear evidence of new physics beyond the Standard Model, with implications for understanding neutrino masses, matter-antimatter asymmetry, and other fundamental phenomena.
 
-The MACE offline software system (MACESW) provides comprehensive support for the experiment's full lifecycle—from simulation and reconstruction to data analysis—enabling high-precision studies of muonium-to-antimuonium conversion and related physics researches.
+The MACE offline software (MACESW) provides comprehensive support for the experiment's full lifecycle—from simulation and reconstruction to data analysis—enabling high-precision studies of muonium-to-antimuonium conversion, rare muon processes, and other relevant physics.
 
 MACESW is developed based on the [Mustard framework](https://github.com/zhao-shihan/Mustard).
 
