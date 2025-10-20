@@ -21,15 +21,15 @@ const void Judge(double pValue) {
 
     auto normQuantile2End{TMath::NormQuantile(1 - pValue / 2)};
     if (normQuantile2End > 5) {
-        std::cout << boldRed << "FAIL" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
+        std::cout << boldRed << "FAIL" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     } else if (normQuantile2End > 3) {
-        std::cout << boldOrange << "VERY SUSPICIOUS" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
+        std::cout << boldOrange << "VERY SUSPICIOUS" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     } else if (normQuantile2End > 2) {
-        std::cout << boldYellow << "SUSPICIOUS" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
+        std::cout << boldYellow << "SUSPICIOUS" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     } else if (normQuantile2End > 0) {
-        std::cout << boldGreen << "PASS" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
+        std::cout << boldGreen << "PASS" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     } else {
-        std::cout << boldBlue << "IDENTICAL" << reset << " (Confidence boundary of null hypothesis = " << normQuantile2End << ")" << std::endl;
+        std::cout << boldBlue << "IDENTICAL" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     }
 }
 
