@@ -38,8 +38,7 @@ MACESW is developed based on the [**Mustard**](https://github.com/zhao-shihan/Mu
       - [Dependencies](#dependencies)
       - [Optional Dependencies](#optional-dependencies)
   - [Citation](#citation)
-    - [Major citations](#major-citations)
-    - [Literatures list (sort by disclosure date)](#literatures-list-sort-by-disclosure-date)
+  - [Literatures list (sort by disclosure date)](#literatures-list-sort-by-disclosure-date)
 
 ## How to build
 
@@ -113,8 +112,6 @@ The following dependencies are optional. If they are not found on your system du
 
 ## Citation
 
-### Major citations
-
 If you use MACESW in your research, please cite the following papers:
 
 **BAI Ai-Yu, CAI Hanjie, CHEN Chang-Lin, et al (MACE working group).**  
@@ -122,7 +119,7 @@ If you use MACESW in your research, please cite the following papers:
 *arXiv preprint*, 2024: 2410.18817 [hep-ex].  
 https://arxiv.org/abs/2410.18817.
 
-### Literatures list (sort by disclosure date)
+## Literatures list (sort by disclosure date)
 
 **LU Guihao, ZHAO Shihan, CHEN Siyuan, et al.**  
 **Positron Transport System for Muonium-to-Antimuonium Conversion Experiment** [DB/OL].  
