@@ -105,10 +105,12 @@ For advanced users or developers building from source or contributing to MACESW:
 
 The following dependencies are optional. If they are not found on your system during configuration, CMake will automatically download and build them.
 
-1. [Mustard](https://github.com/zhao-shihan/Mustard) ≥ 0.25.1015
-2. [zhao-shihan/GenFit](https://github.com/zhao-shihan/GenFit)
-3. [PMP Library](https://www.pmp-library.org/) ≥ 3.0.0
-4. [MACE Offline Data](https://code.ihep.ac.cn/zhaoshh7/mace_offline_data)
+| Library                                                                     | Min version | Description                                                               |
+| :-------------------------------------------------------------------------- | :---------- | :------------------------------------------------------------------------ |
+| [**Mustard**](https://github.com/zhao-shihan/Mustard)                       | 0.25.1015   | A modern, high-performance offline software framework for HEP experiments |
+| [**zhao-shihan/GenFit**](https://github.com/zhao-shihan/GenFit)             | main        | A generic track-fitting toolkit                                           |
+| [**PMP Library**](https://www.pmp-library.org/)                             | 3.0.0       | The Polygon Mesh Processing Library                                       |
+| [**mace_offline_data**](https://code.ihep.ac.cn/zhaoshh7/mace_offline_data) | main        | MACE Offline Data                                                         |
 
 ## Citation
 
