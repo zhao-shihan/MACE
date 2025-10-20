@@ -12,24 +12,21 @@
 const std::string dataTupleName{"MRPCSimHit"};
 
 const void Judge(double pValue) {
-    const std::string boldRed{"\e[1;31m"};
-    const std::string boldOrange{"\e[0;33m"};
-    const std::string boldYellow{"\e[1m\e[38;5;226m"};
-    const std::string boldGreen{"\e[1;32m"};
-    const std::string boldBlue{"\e[1;34m"};
-    const std::string reset{"\e[0m"};
+    const std::string boldInvert{"\x1B[1m\x1B[7m"};
+    const std::string boldRedInvert{boldInvert+"\x1B[38;5;9m"};
+    const std::string boldYellowInvert{boldInvert+"\x1B[38;5;11m"};
+    const std::string boldGreenInvert{boldInvert+"\x1B[38;5;10m"};
+    const std::string reset{"\x1B[0m"};
 
     auto normQuantile2End{TMath::NormQuantile(1 - pValue / 2)};
     if (normQuantile2End > 5) {
-        std::cout << boldRed << "FAIL" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
+        std::cout << boldRedInvert << "FAILED" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     } else if (normQuantile2End > 3) {
-        std::cout << boldOrange << "VERY SUSPICIOUS" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
-    } else if (normQuantile2End > 2) {
-        std::cout << boldYellow << "SUSPICIOUS" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
-    } else if (normQuantile2End > 0) {
-        std::cout << boldGreen << "PASS" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
+        std::cout << boldYellowInvert << "SUSPICIOUS" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
+    }  else if (normQuantile2End > 0) {
+        std::cout << boldGreenInvert << "PASSED" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     } else {
-        std::cout << boldBlue << "IDENTICAL" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
+        std::cout << boldGreenInvert << "IDENTICAL" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     }
 }
 
