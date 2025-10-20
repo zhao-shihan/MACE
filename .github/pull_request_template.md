@@ -34,4 +34,4 @@ Describe important implementation details, design decisions, and trade-offs.
 - Suggested reviewers or teams
 
 ## Additional information
-Anything else the maintainers should know (e.g., performance impact, data migrations).
+Anything else the maintainers should know (e.g., performance impact, code migrations).
