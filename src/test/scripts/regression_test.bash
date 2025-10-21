@@ -22,12 +22,28 @@ run_command() {
         echo "################################################################################"
         echo "# ✅ \"$command\" successfully completed"
         echo "################################################################################"
+        return 0
     else
         local exit_code=$?
         echo "################################################################################"
         echo "# ❌ \"$command\" failed with exit code $exit_code"
         echo "################################################################################"
-        final_exit_code=1
+        
+        end_time=$(date +%s)
+        total_time=$((end_time - start_time))
+        hours=$((total_time / 3600))
+        minutes=$(( (total_time % 3600) / 60 ))
+        seconds=$((total_time % 60))
+        
+        echo "################################################################################"
+        echo "Start at: $(date -d @$start_time "+%Y-%m-%d %H:%M:%S")"
+        echo "End at: $(date -d @$end_time "+%Y-%m-%d %H:%M:%S")"
+        echo "Total running time: ${hours}h ${minutes}m ${seconds}s"
+        echo "❌ Command failed! Stopping execution."
+        echo "Details in $test_dir"
+        echo "################################################################################"
+        
+        exit $exit_code
     fi
 }
 
@@ -40,7 +56,7 @@ parexec() {
 }
 
 echo "Start simulation..."
-run_command parexec $build_dir/MACE SimMMS --seed 0 $build_dir/SimMMS/run_em_flat.mac
+run_command parexec $build_dir/MACE SimMMS --seed 0 $build_dir/run_em_flat.mac
 run_command parexec $build_dir/MACE SimVeto --seed 0 $build_dir/SimVeto/run_hit_partial.mac
 run_command parexec $build_dir/MACE SimTTC --seed 0 $build_dir/SimTTC/run_em_flat.mac
 run_command parexec $build_dir/MACE SimMACE --seed 0 $build_dir/SimMACE/run_signal.mac
@@ -72,12 +88,8 @@ echo "##########################################################################
 echo "Start at: $(date -d @$start_time "+%Y-%m-%d %H:%M:%S")"
 echo "End at: $(date -d @$end_time "+%Y-%m-%d %H:%M:%S")"
 echo "Total running time: ${hours}h ${minutes}m ${seconds}s"
-if [ $final_exit_code -eq 0 ]; then
-    echo "✅ All commands completed successfully!"
-else
-    echo "❌ Some commands failed!"
-fi
+echo "✅ All commands completed successfully!"
 echo "Details in $test_dir"
 echo "################################################################################"
 
-exit $final_exit_code
+exit 0
