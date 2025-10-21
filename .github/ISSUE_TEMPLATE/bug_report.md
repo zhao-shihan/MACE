@@ -1,6 +1,6 @@
 ---
 name: "Bug report"
-title: "[BUG] "
+title: "[BUG] <short summary>"
 about: "Create an issue to report a bug or unexpected behavior in MACESW"
 labels: ["bug", "needs triage"]
 assignees: []
@@ -13,9 +13,9 @@ A concise description of the bug.
 - OS & version: e.g. Debian 14
 - Compiler & version: e.g. GCC 17.2 / Clang 24
 - CMake version: e.g. 4.2
-- MACESW commit or tag: commit sha or tag
+- Tag / commit SHA:
 - Build type: Debug/Release
-- Any special flags/options used:
+- Any relevant hardware or special configuration:
 
 ## Steps to reproduce
 Steps to reproduce the behavior (include minimal reproducer or commands):
