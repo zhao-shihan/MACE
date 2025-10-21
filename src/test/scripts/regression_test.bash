@@ -56,7 +56,7 @@ parexec() {
 }
 
 echo "Start simulation..."
-run_command parexec $build_dir/MACE SimMMS --seed 0 $build_dir/run_em_flat.mac
+run_command parexec $build_dir/MACE SimMMS --seed 0 $build_dir/SimMMS/run_em_flat.mac
 run_command parexec $build_dir/MACE SimVeto --seed 0 $build_dir/SimVeto/run_hit_partial.mac
 run_command parexec $build_dir/MACE SimTTC --seed 0 $build_dir/SimTTC/run_em_flat.mac
 run_command parexec $build_dir/MACE SimMACE --seed 0 $build_dir/SimMACE/run_signal.mac
