@@ -143,7 +143,7 @@ All files must begin with a standard copyright header:
 ```cpp
 // -*- C++ -*-
 //
-// Copyright (C) 2020-2025  MACE offline software developers
+// Copyright (C) 2020-2025  MACESW developers
 //
 // This file is part of MACESW, Muonium-to-Antimuonium Conversion
 // Experiment (MACE) offline software.
