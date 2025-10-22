@@ -696,7 +696,7 @@ enum struct Status3 : unsigned char {
 };
 
 // × Bad
-struct Status1 {
+enum Status1 {
     Ok,
     Error,
     Pending
@@ -1094,7 +1094,7 @@ if (std::ranges::size(sample) > std::ranges::size(weight)) {
 ```
 
 ### Assertions
-- Use GSL `Excepts(...)` for precondition and `Ensures(...)` for postcondition
+- Use GSL `Expects(...)` for precondition and `Ensures(...)` for postcondition
 - Reduce the use of `assert`
 ```cpp
 auto Calculate(double x) {
