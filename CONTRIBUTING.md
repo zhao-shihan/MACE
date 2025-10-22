@@ -36,7 +36,7 @@ This document explains how to report issues, propose changes, and prepare contri
   - How you tested the change and instructions to reproduce the test.
 
 ## Code style and tests
-- Follow the project's [coding style guide](STYLE_GUIDE.md). If the repository contains a linter or style guide, run it before submitting.
+- Follow the project's [coding style guide](STYLE_GUIDE.md). If the repository contains a linter, run it before submitting.
 - Add unit or integration tests for new features and bug fixes where applicable.
 - If the project uses a code formatter (black, clang-format, etc.), run it before committing.
 - Ensure all tests pass locally.
