@@ -18,7 +18,7 @@
   GitHub strips inline styles from README.md. This is the only way to right-align
   the image in GitHub READMEs. Do not replace with inline styles.
 -->
-<img src="document/picture/MACE_logo_v2.svg" alt="MACE logo" align="right" width=300/>
+<img src="docs/picture/MACE_logo_v2.svg" alt="MACE logo" align="right" width=300/>
 
 The **Muonium-to-Antimuonium Conversion Experiment (MACE)** is a next-generation particle physics experiment designed to search for the spontaneous conversion of muonium ($\mathrm{M}$, a bound state of $\mu^+$ and $e^-$) to antimuonium ($\overline{\mathrm{M}}$, a bound state of $\mu^-$ and $e^+$)—a charged lepton flavor violation (cLFV) process. Observing this rare conversion would provide clear evidence of new physics beyond the Standard Model, with implications for understanding neutrino masses, matter-antimatter asymmetry, and other fundamental phenomena.
 
