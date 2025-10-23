@@ -134,12 +134,12 @@ auto TestMRPCSimHit(std::string moduleName, std::string testFileName, std::strin
     std::clog << "Get " << histKeyList->GetEntries() << " entries from sample file." << std::endl;
     int idx{};
     for (auto&& obj : *histKeyList) {
-        auto key{(TKey*)obj};
-        auto hist{static_cast<TH1D*>(key->ReadObj())};
-        auto branchName{hist->GetName()};
-        auto xMax{hist->GetXaxis()->GetXmax()};
-        auto xMin{hist->GetXaxis()->GetXmin()};
-        auto nBins{hist->GetNbinsX()};
+        const auto key{static_cast<TKey*>(obj)};
+        const auto hist{static_cast<TH1D*>(key->ReadObj())};
+        const auto branchName{hist->GetName()};
+        const auto xMax{hist->GetXaxis()->GetXmax()};
+        const auto xMin{hist->GetXaxis()->GetXmin()};
+        const auto nBins{hist->GetNbinsX()};
 
         auto testHist{df.Histo1D({"", "", nBins, xMin, xMax}, branchName)};
         std::cout << "\n"

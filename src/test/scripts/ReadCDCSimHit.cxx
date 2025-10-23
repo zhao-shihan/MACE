@@ -54,9 +54,9 @@ auto ReadCDCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
                                    return 0;
                                }};
                                std::clog << "Hist: " << expression << std::endl;
-                               auto xMin{Cast(xLow)};
-                               auto xMax{Cast(xUp)};
-                               auto margin{(xMax - xMin) / nBinsValueType};
+                               const auto xMin{Cast(xLow)};
+                               const auto xMax{Cast(xUp)};
+                               const auto margin{(xMax - xMin) / nBinsValueType};
                                return df.Histo1D({expression.data(), expression.data(), nBinsValueType, xMin - margin, xMax + margin}, expression);
                            });
 
