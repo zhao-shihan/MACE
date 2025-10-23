@@ -42,7 +42,7 @@ auto GenM2ENNE::Main(int argc, char* argv[]) const -> int {
     MCMCGeneratorCLI<InitialStateCLIModule<"unpolarized", "muonium">> cli;
     cli.DefaultOutput("m2enne.root");
     cli.DefaultOutputTree("m2enne");
-    cli->add_argument("--ir-cut").help("IR cut for final-state electron.").default_value(electron_mass_c2).required().nargs(1).scan<'g', double>();
+    cli->add_argument("--ir-cut").help("IR cut for final-state electron.").default_value(10 * electron_mass_c2).required().nargs(1).scan<'g', double>();
     auto& biasCLI{cli->add_mutually_exclusive_group()};
     biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
     biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for positron kinetic energy.").flag();
