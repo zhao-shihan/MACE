@@ -109,7 +109,8 @@ include(${MACE_PROJECT_CMAKE_DIR}/MACECompileConfig.cmake)
 add_subdirectory(${PROJECT_SOURCE_DIR})
 # main program
 add_executable(MACE MACE.c++)
-target_link_libraries(MACE AppMACEPhaseI
+target_link_libraries(MACE AppMACEGenerator
+                           AppMACEPhaseI
                            AppMACEReconstruction
                            AppMACESimulation
                            AppMACEUtility
