@@ -118,11 +118,10 @@ This guide focuses on aspects that `.clang-format` doesn't or cannot handle, inc
   - [Maintainer](#maintainer)
 
 ## Important Notice
-- **Not Comprehensive**: This document captures most of — but not all coding styles and conventions, and should not be considered complete. Based on the written guidelines, we hope all developers can be aware of and abide by the principles implied by these rules.
-- **Reality Over Rules**: Practical considerations and technical constraints may override style guidelines.
-- **Human Judgment**: Always prioritize readability, maintainability, and team consensus over rigid adherence.
+- **Not Comprehensive**: This document captures most of — but not all coding styles and conventions, and should not be considered complete. This is not a technical specification. Even if a code fully complies with this guideline, its quality may still be poor. The hope of this written guidelines is that all developers are aware of, and adhere to the principles implied by these rules.
+- **Reality Over Rules**: Practical considerations and technical constraints may override style guidelines. Always prioritize readability, maintainability, and team consensus over rigid adherence.
 - **Living Document**: This guide evolves with the codebase — expect exceptions and context-dependent variations.
-- **Contribute to It:**: We encourage developers to contribute to this document.
+- **Contribute to It**: We encourage developers to contribute to this document.
 
 ## Common Principles
 - Follow the principle of least surprise.
@@ -145,8 +144,8 @@ All files must begin with a standard copyright header:
 //
 // Copyright (C) 2020-2025  MACESW developers
 //
-// This file is part of MACESW, Muonium-to-Antimuonium Conversion
-// Experiment (MACE) offline software.
+// This file is part of MACESW, Muonium-to-Antimuonium Conversion Experiment
+// offline software.
 //
 // MACESW is free software: you can redistribute it and/or modify it under the
 // terms of the GNU General Public License as published by the Free Software
@@ -159,6 +158,7 @@ All files must begin with a standard copyright header:
 //
 // You should have received a copy of the GNU General Public License along with
 // MACESW. If not, see <https://www.gnu.org/licenses/>.
+
 ```
 
 ### Header Guards and Structure
