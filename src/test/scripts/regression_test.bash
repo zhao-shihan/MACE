@@ -2,7 +2,7 @@
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 build_dir=$script_dir/..
-test_dir=$script_dir/test_$(date "+%Y%m%d-%H%M")
+test_dir=$script_dir/test_$(date --utc +%Y%m%d-%H%M%S)
 
 mkdir "$test_dir" && cd "$test_dir"
 echo "Working directory: $(pwd)"
@@ -28,21 +28,21 @@ run_command() {
         echo "################################################################################"
         echo "# ❌ \"$command\" failed with exit code $exit_code"
         echo "################################################################################"
-        
+
         end_time=$(date +%s)
         total_time=$((end_time - start_time))
         hours=$((total_time / 3600))
         minutes=$(( (total_time % 3600) / 60 ))
         seconds=$((total_time % 60))
-        
-        echo "################################################################################"
-        echo "Start at: $(date -d @$start_time "+%Y-%m-%d %H:%M:%S")"
-        echo "End at: $(date -d @$end_time "+%Y-%m-%d %H:%M:%S")"
-        echo "Total running time: ${hours}h ${minutes}m ${seconds}s"
-        echo "❌ Command failed! Stopping execution."
-        echo "Details in $test_dir"
-        echo "################################################################################"
-        
+
+        echo "#################################################################################"
+        echo "# Start at: $(date --iso-8601=seconds -d @$start_time)"
+        echo "# End at: $(date --iso-8601=seconds -d @$end_time)"
+        echo "# Total running time: ${hours}h ${minutes}m ${seconds}s"
+        echo "# ❌ Command failed! Stopping execution."
+        echo "# Details in $test_dir"
+        echo "#################################################################################"
+
         exit $exit_code
     fi
 }
@@ -85,11 +85,11 @@ minutes=$(( (total_time % 3600) / 60 ))
 seconds=$((total_time % 60))
 
 echo "################################################################################"
-echo "Start at: $(date -d @$start_time "+%Y-%m-%d %H:%M:%S")"
-echo "End at: $(date -d @$end_time "+%Y-%m-%d %H:%M:%S")"
-echo "Total running time: ${hours}h ${minutes}m ${seconds}s"
-echo "✅ All commands completed successfully!"
-echo "Details in $test_dir"
+echo "# Start at: $(date --iso-8601=seconds -d @$start_time)"
+echo "# End at: $(date --iso-8601=seconds -d @$end_time)"
+echo "# Total running time: ${hours}h ${minutes}m ${seconds}s"
+echo "# ✅ All commands completed successfully!"
+echo "# Details in $test_dir"
 echo "################################################################################"
 
 exit 0
