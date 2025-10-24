@@ -98,7 +98,7 @@ auto MakeGeometry::Main(int argc, char* argv[]) const -> int {
 
     [[maybe_unused]] auto& ecalField{fWorld->NewDaughter<ECALField>(fCheckOverlap)};
     [[maybe_unused]] auto& ecalShield{fWorld->NewDaughter<ECALShield>(fCheckOverlap)};
-    // [[maybe_unused]] auto& shieldingWall{fWorld->NewDaughter<ShieldingWall>(fCheckOverlap)};
+    [[maybe_unused]] auto& shieldingWall{fWorld->NewDaughter<ShieldingWall>(fCheckOverlap)};
     [[maybe_unused]] auto& solenoidFieldS1{fWorld->NewDaughter<SolenoidFieldS1>(fCheckOverlap)};
     [[maybe_unused]] auto& solenoidFieldS2{fWorld->NewDaughter<SolenoidFieldS2>(fCheckOverlap)};
     [[maybe_unused]] auto& solenoidFieldS3{fWorld->NewDaughter<SolenoidFieldS3>(fCheckOverlap)};
