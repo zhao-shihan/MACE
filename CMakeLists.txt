@@ -99,6 +99,9 @@ else()
     message(NOTICE "***Notice: Offline data installation disabled, offline data need to be installed manually")
 endif()
 
+# test data
+include(${MACE_PROJECT_CMAKE_DIR}/LookForMACETestData.cmake)
+
 # =============================================================================
 # Let's go!
 # =============================================================================

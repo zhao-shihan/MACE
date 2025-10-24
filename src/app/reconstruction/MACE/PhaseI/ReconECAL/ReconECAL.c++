@@ -62,12 +62,11 @@ auto ReconECAL::Main(int argc, char* argv[]) const -> int {
     }
 
     const auto& ecal{MACE::Detector::Description::ECAL::Instance()};
-    const auto& faceList{ecal.Mesh().fFaceList};
-    const auto& clusterMap{ecal.Mesh().fClusterMap};
+    const auto& faceList{ecal.Mesh().faceList};
 
     std::map<int, CLHEP::Hep3Vector> centroidMap;
 
-    for (int i{}; auto&& [centroid, _1, _2] : std::as_const(faceList)) {
+    for (int i{}; auto&& [centroid, _1, _2, _3, _4] : std::as_const(faceList)) {
         centroidMap[i] = centroid;
         i++;
     }
@@ -126,11 +125,11 @@ auto ReconECAL::Main(int argc, char* argv[]) const -> int {
                                         std::vector<short>::iterator seedIt) {
                 const auto addClusterLayers = [&](short module) {
                     set.insert(module);
-                    for (auto&& neighbor : clusterMap.at(module)) {
+                    for (auto&& neighbor : faceList[module].neighborModuleID) {
                         set.insert(neighbor);
-                        for (auto&& secondNeighbor : clusterMap.at(neighbor)) {
+                        for (auto&& secondNeighbor : faceList[neighbor].neighborModuleID) {
                             set.insert(secondNeighbor);
-                            set.insert(clusterMap.at(secondNeighbor).begin(), clusterMap.at(secondNeighbor).end());
+                            set.insert(faceList[secondNeighbor].neighborModuleID.begin(), faceList[secondNeighbor].neighborModuleID.end());
                         }
                     }
                 };

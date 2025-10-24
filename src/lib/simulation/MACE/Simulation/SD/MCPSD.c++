@@ -34,11 +34,9 @@ using namespace Mustard::LiteralUnit::Energy;
 
 MCPSD::MCPSD(const G4String& sdName) :
     G4VSensitiveDetector{sdName},
-    fIonizingEnergyDepositionThreshold{20_eV},
     fEfficiency{},
     fSplitHit{},
-    fHitsCollection{},
-    fMessengerRegister{this} {
+    fHitsCollection{} {
     collectionName.insert(sdName + "HC");
 
     const auto& mcp{Detector::Description::MCP::Instance()};
@@ -67,7 +65,7 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     assert(0 <= step.GetNonIonizingEnergyDeposit());
     assert(step.GetNonIonizingEnergyDeposit() <= eDep);
-    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) {
+    if (eDep == step.GetNonIonizingEnergyDeposit()) {
         return false;
     }
 
