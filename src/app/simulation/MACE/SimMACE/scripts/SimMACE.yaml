@@ -134,44 +134,6 @@ MMSShield:
   WindowRadius: 250
   BeamSlantAngle: 0
   MaterialName: G4_Fe
-PDSVeto:
-  NModuleOfAType:
-    - 1
-    - 2
-    - 4
-    - 4
-  NLayerPerModuleOfAType:
-    - 3
-    - 2
-    - 2
-    - 2
-  NStripPerLayerOfAType:
-    - 12
-    - 16
-    - 5
-    - 8
-  StripLengthOfAType:
-    - 1450
-    - 1400
-    - 1800
-    - 350
-  PSWidth: 100
-  PSThickness: 20
-  FiberRadius: 0.69999999999999996
-  FiberHoleRadius: 0.75
-  PSFiberCurvatureRadius: 130
-  InterPSGap: 1
-  PerpendicularModuleGap: 5
-  ReflectiveFilmThickness: 0.40000000000000002
-  ModuleOffset: 10
-  AlAbsorberThickness: 6
-  SiPMThickness: 0.20000000000000001
-  SiPMCathodeThickness: 0.10000000000000001
-  SiPMCouplerThickness: 0.10000000000000001
-  SiPMSize: 3
-  SolenoidWindowRadius: 140
-  FiberNum: 4
-  SelectedType: -1
 ShieldingWall:
   Enabled: true
   Thickness: 500

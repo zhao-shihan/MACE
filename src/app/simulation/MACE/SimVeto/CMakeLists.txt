@@ -1,7 +1,0 @@
-file(GLOB SimVeto_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/scripts/*)
-foreach(_scripts ${SimVeto_SCRIPTS})
-    set(SimVeto_SCRIPTS_COPY_DIR SimVeto)
-    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${SimVeto_SCRIPTS_COPY_DIR})
-    configure_file(${_scripts} ${CMAKE_BINARY_DIR}/${SimVeto_SCRIPTS_COPY_DIR} COPYONLY)
-    install(FILES ${_scripts} DESTINATION ${MACE_DATAROOTDIR}/${SimVeto_SCRIPTS_COPY_DIR})
-endforeach()

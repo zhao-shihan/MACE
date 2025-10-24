@@ -43,7 +43,6 @@
 #include "MACE/Detector/Definition/SolenoidT2.h++"
 #include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
-#include "MACE/Detector/Definition/PDSVeto.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/MakeGeometry/MakeGeometry.h++"
 
@@ -148,9 +147,6 @@ auto MakeGeometry::Main(int argc, char* argv[]) const -> int {
     [[maybe_unused]] auto& beamMonitor{acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap)};
     [[maybe_unused]] auto& target{acceleratorField.NewDaughter<Target>(fCheckOverlap)};
 
-    // 5
-    [[maybe_unused]] auto& veto{fWorld->NewDaughter<PDSVeto>(fCheckOverlap)};
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,7 +177,7 @@ auto MakeGeometry::Main(int argc, char* argv[]) const -> int {
                  ecalShield,
                  mms.Get<MMSMagnet>(),
                  mms.Get<MMSShield>(),
-                //  shieldingWall,
+                 shieldingWall,
                  solenoidT1,
                  solenoidT2,
                  solenoidS1,

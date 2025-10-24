@@ -12,7 +12,6 @@
 #include "MACE/SimPTS/SimPTS.h++"
 #include "MACE/SimTTC/SimTTC.h++"
 #include "MACE/SimTarget/SimTarget.h++"
-#include "MACE/SimVeto/SimVeto.h++"
 #include "MACE/SmearMACE/SmearMACE.h++"
 
 #include "Mustard/Application/SubprogramLauncher.h++"
@@ -34,6 +33,5 @@ auto main(int argc, char* argv[]) -> int {
     launcher.AddSubprogram<MACE::SimTarget::SimTarget>();
     launcher.AddSubprogram<MACE::SimTTC::SimTTC>();
     launcher.AddSubprogram<MACE::SmearMACE::SmearMACE>();
-    launcher.AddSubprogram<MACE::SimVeto::SimVeto>();
     return launcher.LaunchMain(argc, argv);
 }
