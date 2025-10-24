@@ -19,7 +19,6 @@
 #include "MACE/Detector/Definition/MMSField.h++"
 #include "MACE/Detector/Definition/MMSMagnet.h++"
 #include "MACE/Detector/Definition/MMSShield.h++"
-#include "MACE/Detector/Definition/PDSVeto.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidBeamPipeS1.h++"
 #include "MACE/Detector/Definition/SolenoidBeamPipeS2.h++"
@@ -126,7 +125,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& solenoidFieldS3{fWorld->NewDaughter<Detector::Definition::SolenoidFieldS3>(fCheckOverlap)};
     auto& solenoidFieldT1{fWorld->NewDaughter<Detector::Definition::SolenoidFieldT1>(fCheckOverlap)};
     auto& solenoidFieldT2{fWorld->NewDaughter<Detector::Definition::SolenoidFieldT2>(fCheckOverlap)};
-    // auto& veto{fWorld->NewDaughter<Detector::Definition::PDSVeto>(fCheckOverlap)};
 
     // 2
 

@@ -17,7 +17,6 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/MMSMagnet.h++"
 #include "MACE/Detector/Description/MMSShield.h++"
-#include "MACE/Detector/Description/PDSVeto.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/TTC.h++"
@@ -68,7 +67,6 @@ public:
                    Detector::Description::ECALShield,
                    Detector::Description::MCP,
                    Detector::Description::MCPChamber,
-                   Detector::Description::PDSVeto,
                    Detector::Description::ShieldingWall,
                    Detector::Description::Solenoid,
                    Detector::Description::Target,

@@ -18,10 +18,4 @@ using ECALPMRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<short, "ModID", "Hit module ID">,
     Mustard::Data::Value<double, "t", "Optical photon hit time">>;
 
-using VetoPMRawHit = Mustard::Data::TupleModel<
-    Mustard::Data::Value<short, "StripID", "Hit strip ID">,
-    Mustard::Data::Value<double, "t", "Optical photon hit time">,
-    Mustard::Data::Value<short, "LocalSiPMID", "Hitted SiPM ID in a strip">>;
-
-
 } // namespace MACE::Data

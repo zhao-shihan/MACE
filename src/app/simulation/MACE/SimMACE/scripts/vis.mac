@@ -70,18 +70,6 @@
 /vis/geometry/set/visibility SolenoidFieldT2      0 no
 /vis/geometry/set/visibility TTCVirtualBox       -1 no
 /vis/geometry/set/visibility TTCScintillator      0 yes
-/vis/geometry/set/visibility VetoModuleBox_0                -1          no
-/vis/geometry/set/visibility VetoModuleBox_1                -1          no
-/vis/geometry/set/visibility VetoModuleBox_2                -1          no
-/vis/geometry/set/visibility VetoModuleBox_3                -1          no
-/vis/geometry/set/visibility VetoStripBox_0                  0          yes
-/vis/geometry/set/visibility VetoStripBox_1                  0          yes
-/vis/geometry/set/visibility VetoStripBox_2                  0          yes
-/vis/geometry/set/visibility VetoStripBox_3                  0          yes
-/vis/geometry/set/visibility VetoAlAbsorber_0                0          yes
-/vis/geometry/set/visibility VetoAlAbsorber_1                0          yes
-/vis/geometry/set/visibility VetoAlAbsorber_2                0          yes
-/vis/geometry/set/visibility VetoAlAbsorber_3                0          yes
 
 # Colors
 /vis/geometry/set/colour Accelerator                   0     1     1     1     0.1
@@ -152,16 +140,6 @@
 /vis/geometry/set/colour TTCVirtualBox                 0     1     1     1     0.05
 /vis/geometry/set/colour TTCWindow                     0     1     1     1     0.05
 /vis/geometry/set/colour World                         0     1     1     1     0.001
-/vis/geometry/set/colour VetoStripBox_0                0     1     1     1     0.005
-/vis/geometry/set/colour VetoStripBox_1                0     1     1     1     0.005
-/vis/geometry/set/colour VetoStripBox_2                0     1     1     1     0.005
-/vis/geometry/set/colour VetoStripBox_3                0     1     1     1     0.005
-/vis/geometry/set/colour VetoAlAbsorber_0              0     1     1     1     0.01
-/vis/geometry/set/colour VetoAlAbsorber_1              0     1     1     1     0.01
-/vis/geometry/set/colour VetoAlAbsorber_2              0     1     1     1     0.01
-/vis/geometry/set/colour VetoAlAbsorber_3              0     1     1     1     0.01
-
-
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 10 cm

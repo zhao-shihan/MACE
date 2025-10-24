@@ -34,14 +34,12 @@ run_command() {
 echo "Start simulation..."
 n_physical_core=$(echo "$(nproc) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
 run_command mpiexec -n $n_physical_core $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
-run_command mpiexec -n $n_physical_core $build_dir/MACE SimVeto $build_dir/SimVeto/run_hit_partial.mac
 run_command mpiexec -n $n_physical_core $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac
 run_command mpiexec -n $n_physical_core $build_dir/MACE SimMACE $build_dir/SimMACE/run_signal.mac
 
 echo "Merging results..."
 run_command hadd -ff SimMMS_em_flat_sample.root SimMMS_em_flat_test/*
 run_command hadd -ff SimTTC_em_flat_sample.root SimTTC_em_flat_test/*
-run_command hadd -ff SimVeto_hit_partial_sample.root SimVeto_hit_partial_test/*
 run_command hadd -ff SimMACE_signal_sample.root SimMACE_signal_test/*
 
 echo "Generating regression histograms..."
@@ -54,7 +52,6 @@ fi
 echo "Draw & save regression histograms..."
 run_command root -l -q "$script_dir/ReadCDCSimHit.cxx(\"SimMMS_em_flat\",\"SimMMS_em_flat_sample.root\",\"$script_dir/mace_regression_data.root\")"
 run_command root -l -q "$script_dir/ReadMMSSimTrack.cxx(\"SimMMS_em_flat\",\"SimMMS_em_flat_sample.root\",\"$script_dir/mace_regression_data.root\")"
-run_command root -l -q "$script_dir/ReadVetoSimHit.cxx(\"SimVeto_hit_partial\",\"SimVeto_hit_partial_sample.root\",\"$script_dir/mace_regression_data.root\")"
 run_command root -l -q "$script_dir/ReadTTCSimHit.cxx(\"SimTTC_em_flat\",\"SimTTC_em_flat_sample.root\",\"$script_dir/mace_regression_data.root\")"
 run_command root -l -q "$script_dir/ReadMCPSimHit.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
 run_command root -l -q "$script_dir/ReadTTCSimHit.cxx(\"SimMACE_signal\",\"SimMACE_signal_sample.root\",\"$script_dir/mace_regression_data.root\")"
