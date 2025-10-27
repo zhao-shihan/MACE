@@ -23,7 +23,7 @@ project(MACESW VERSION 0.0.0
 # Dirs
 set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 set(MACE_PROJECT_CMAKE_DIR ${MACE_PROJECT_ROOT_DIR}/cmake)
-set(PROJECT_SOURCE_DIR ${MACE_PROJECT_ROOT_DIR}/src)
+set(MACE_PROJECT_SOURCE_DIR ${MACE_PROJECT_ROOT_DIR}/src)
 set(MACE_PROJECT_3RDPARTY_DIR ${MACE_PROJECT_ROOT_DIR}/thirdparty)
 
 # Install dirs
@@ -36,25 +36,22 @@ set(MACE_DATAROOTDIR ${CMAKE_INSTALL_DATAROOTDIR}/MACE)
 
 include(CMakeDependentOption)
 
-# Basic
-# Options (ON/OFF)
+# Options (in alphabetical order) (ON/OFF)
 option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." ON)
 option(MACE_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if GenFit is built-in." ON)
 option(MACE_BUILTIN_MACE_OFFLINE_DATA "Use built-in offline data (network or pre-downloaded data are required)." OFF)
 option(MACE_BUILTIN_MUSTARD "Use built-in Mustard (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is required)." OFF)
-option(MACE_INSTALL_OFFLINE_DATA "Install offline data. If disabled, offline data need to be installed manually." ON)
-
-# Advance
-# Options (ON/OFF)
+option(MACE_CLANG_FORMAT "Requires source code to be formatted by clang-format before compile (requires clang-format)" ON)
 option(MACE_ENABLE_ASAN_IN_DEBUG_BUILD "Enable AddressSanitizer in debug build" OFF)
-option(MACE_ENABLE_IPO "Build MACE with interprocedural optimization" ON)
+option(MACE_ENABLE_IPO "Build MACESW with interprocedural optimization" ON)
 option(MACE_ENABLE_UBSAN_IN_DEBUG_BUILD "Enable UndefinedBehaviorSanitizer in debug build" ON)
-option(MACE_FULL_UNITY_BUILD "Building MACE use unity build technique COMPLETELY." OFF)
+option(MACE_FULL_UNITY_BUILD "Building MACESW use unity build technique COMPLETELY." OFF)
+option(MACE_INSTALL_OFFLINE_DATA "Install offline data. If disabled, offline data need to be installed manually." ON)
 option(MACE_SHOW_EVEN_MORE_COMPILER_WARNINGS "Add compiler flag to show even more compiler warnings (GCC: -Weffc++, Clang: -Weverything, MSVC: /Wall)." OFF)
 option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try flip this." ON)
 option(MACE_WITH_DEBUG_INFO "Always add debugging information" OFF)
-cmake_dependent_option(MACE_ENABLE_UNITY_BUILD "Build MACE with unity build technique." OFF "NOT MACE_FULL_UNITY_BUILD" ON)
+cmake_dependent_option(MACE_ENABLE_UNITY_BUILD "Build MACESW with unity build technique." OFF "NOT MACE_FULL_UNITY_BUILD" ON)
 cmake_dependent_option(MACE_SHOW_MORE_COMPILER_WARNINGS "Show compiler warnings raise from external dependencies." OFF "NOT MACE_SHOW_EVEN_MORE_COMPILER_WARNINGS" ON)
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Build using shared libraries")
 set(MACE_BUILTIN_MACE_OFFLINE_DATA_VERSION 0.0.1 CACHE STRING "Set built-in offline data version (if required).")
@@ -100,14 +97,35 @@ else()
 endif()
 
 # Config for MACESW
-include(${MACE_PROJECT_CMAKE_DIR}/MACECompileConfig.cmake)
+include(${MACE_PROJECT_CMAKE_DIR}/MACESWCompileConfig.cmake)
+
+# Format MACESW source code
+if(MACE_CLANG_FORMAT)
+    find_program(CLANG_FORMAT_EXE clang-format REQUIRED)
+    file(GLOB_RECURSE MACESW_CXX_FILE ${MACE_PROJECT_SOURCE_DIR}/*.c++
+                                      ${MACE_PROJECT_SOURCE_DIR}/*.h++
+                                      ${MACE_PROJECT_SOURCE_DIR}/*.inl
+                                      ${MACE_PROJECT_ROOT_DIR}/MACE.c++)
+    add_custom_command(
+        OUTPUT macesw-clang-format-source-done
+        COMMAND ${CLANG_FORMAT_EXE}
+            --fail-on-incomplete-format
+            --style=file:${MACE_PROJECT_ROOT_DIR}/.clang-format
+            -i ${MACESW_CXX_FILE}
+        COMMENT "Formatting MACESW source code with clang-format..."
+        VERBATIM)
+    add_custom_target(macesw-clang-format-source ALL DEPENDS macesw-clang-format-source-done)
+    message(STATUS "MACESW source code will be formatted by clang-format")
+else()
+    message(WARNING "MACESW source code will not be formatted by clang-format")
+endif()
 
 # =============================================================================
 # Let's go!
 # =============================================================================
 
 # libraries
-add_subdirectory(${PROJECT_SOURCE_DIR})
+add_subdirectory(${MACE_PROJECT_SOURCE_DIR})
 # main program
 add_executable(MACE MACE.c++)
 target_link_libraries(MACE AppMACEPhaseI
