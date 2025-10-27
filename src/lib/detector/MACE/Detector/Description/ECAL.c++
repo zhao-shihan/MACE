@@ -366,56 +366,6 @@ auto ECAL::CalculateMeshInformation() const -> MeshInformation {
         it = range.second;
     }
 
-    // std::map<std::vector<float>, std::vector<int>> edgeLengthSet;
-
-    // for (int moduleID{};
-    //      auto&& [centroid, _1, vertexIndex,_2,_3] : std::as_const(faceList)) { // module types and clusters sorting
-    //     // sort by edge length
-    //     std::vector<float> edgeLength; // magic conversion (double to float)
-    //     std::vector<G4ThreeVector> xV{vertexIndex.size()};
-
-    // std::ranges::transform(vertexIndex, xV.begin(),
-    //                        [&](const auto& i) { return vertexList[i]; });
-
-    // for (int i{}; i < std::ssize(xV); ++i) {
-    //     edgeLength.emplace_back(i != std::ssize(xV) - 1 ? (xV[i + 1] - xV[i]).mag() :
-    //                                                       (xV[0] - xV[i]).mag());
-    // };
-
-    // std::ranges::sort(edgeLength);
-    // edgeLengthSet[edgeLength].emplace_back(moduleID);
-
-    // // sort by centroid distance to other faces
-    // std::pair<float, int> clusterInfo; //<distance,relativeCentroidID>
-
-    // auto cmp = [](
-    //                const std::pair<float, int>& p,
-    //                const std::pair<float, int>& q) { return p.first > q.first; };
-
-    // std::priority_queue<std::pair<float, int>,
-    //                     std::vector<std::pair<float, int>>,
-    //                     decltype(cmp)>
-    //     centroidPriority(cmp);
-
-    // for (int i{}; auto&& [adjacentCentroid, _1, _2,_3,_4] : std::as_const(faceList)) {
-    //     if (centroid == adjacentCentroid) {
-    //         i++;
-    //         continue;
-    //     }
-    //     clusterInfo.first = (centroid - adjacentCentroid).mag();
-    //     clusterInfo.second = i;
-    //     centroidPriority.push(clusterInfo);
-    //     i++;
-    // }
-
-    // for (int i{}; i < std::ssize(vertexIndex); ++i) {
-    //     auto top = centroidPriority.top();
-    //     if (top.first > 0.2) { continue; }
-    //     clusterMap[moduleID].emplace_back(top.second);
-    //     centroidPriority.pop();
-    // }
-    // moduleID++;
-    // }
     if (Mustard::Env::VerboseLevelReach<'V'>()) {
         int typeID{};
         Mustard::MasterPrintLn(">>--->>edgeLengthsMap");
