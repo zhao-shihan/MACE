@@ -187,4 +187,4 @@ private:
     Simple<std::vector<double>> fCathodeSurface;
 };
 
-} // namespace MACE::Detector::Description
+} // namespace MACE::PhaseI::Detector::Description

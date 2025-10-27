@@ -4,10 +4,10 @@
 #include "MACE/PhaseI/Simulation/Hit/MRPCHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiSiPMRawHit.h++"
-#include "MACE/Simulation/Hit/TTCHit.h++"
-#include "MACE/Simulation/Hit/TTCSiPMHit.h++"
 #include "MACE/Simulation/Hit/ECALHit.h++"
 #include "MACE/Simulation/Hit/ECALPMHit.h++"
+#include "MACE/Simulation/Hit/TTCHit.h++"
+#include "MACE/Simulation/Hit/TTCSiPMHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Geant4X/Utility/ConvertGeometry.h++"
