@@ -2,7 +2,7 @@
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 build_dir=$script_dir/..
-regression_data_dir=$script_dir/regression_data_$(date --utc +%Y%m%d-%H%M%S)$(date --utc +%Y%m%d-%H%M%S)
+regression_data_dir=$script_dir/regression_data_$(date --utc +%Y%m%d-%H%M%S)
 
 mkdir "$regression_data_dir" && cd "$regression_data_dir"
 echo "Working directory: $(pwd)"
