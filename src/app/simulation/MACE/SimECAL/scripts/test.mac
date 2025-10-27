@@ -19,10 +19,6 @@
 
 /MACE/Analysis/FilePath test.root
 /MACE/Analysis/FileMode RECREATE
-#/run/beamOn 1000
-# for test benchmark
 /run/beamOn 10000
-# for test
-#/run/beamOn 1000
 
 /Mustard/Run/PrintRunSummary

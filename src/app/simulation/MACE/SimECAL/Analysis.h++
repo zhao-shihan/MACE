@@ -27,7 +27,7 @@ class MCPHit;
 
 namespace MACE::SimECAL {
 
-class Analysis final : public Mustard::Simulation::AnalysisBase<Analysis,"SimECAL"> {
+class Analysis final : public Mustard::Simulation::AnalysisBase<Analysis, "SimECAL"> {
 public:
     Analysis();
 

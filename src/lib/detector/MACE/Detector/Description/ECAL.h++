@@ -105,22 +105,9 @@ public:
         };
         std::vector<HepGeom::Point3D<double>> vertexList;
         std::vector<Module> faceList;
-        // std::vector<int> typeMap; // moduleID -> typeID
-        // std::vector<std::vector<int>> clusterMap; // moduleID -> neighbor moduleIDs
     };
 
 private:
-    // class MeshManager {
-    // public:
-    //     auto SetOutdated() -> void { fOutdated = true; }
-    //     auto Get(const ECAL* ecal) -> const MeshInformation&;
-
-    // private:
-    //     bool fOutdated = true;
-    //     MeshInformation fMesh;
-    // };
-
-    // inline auto SetGeometryOutdated() const -> void;
     auto CalculateMeshInformation() const -> MeshInformation;
 
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -165,4 +152,3 @@ private:
 
 } // namespace MACE::Detector::Description
 
-// #include "MACE/Detector/Description/ECAL.inl"
