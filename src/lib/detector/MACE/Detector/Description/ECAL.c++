@@ -356,8 +356,8 @@ auto ECAL::CalculateMeshInformation() const -> MeshInformation {
         ++moduleID;
     }
 
+    int typeID{};
     for (auto it{edgeLengthsMap.begin()}; it != edgeLengthsMap.end();) {
-        int typeID{};
         auto range{edgeLengthsMap.equal_range(it->first)};
         for (auto aPolygon{range.first}; aPolygon != range.second; aPolygon = std::next(aPolygon)) {
             faceList[aPolygon->second].typeID = typeID;
