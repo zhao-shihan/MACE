@@ -11,7 +11,7 @@ if(NOT MACE_BUILTIN_MUSTARD)
 endif()
 
 if(MACE_BUILTIN_MUSTARD)
-    message(STATUS "MACE will use built-in Mustard")
+    message(STATUS "MACESW will use built-in Mustard")
     # check built-in version
     if(MACE_BUILTIN_MUSTARD_VERSION VERSION_LESS MACE_MUSTARD_MINIMUM_REQUIRED)
         message(NOTICE "***Notice: Provided MACE_BUILTIN_MUSTARD_VERSION is ${MACE_BUILTIN_MUSTARD_VERSION}, which is less than the requirement (${MACE_MUSTARD_MINIMUM_REQUIRED}). Changing to ${MACE_MUSTARD_MINIMUM_REQUIRED}")

@@ -23,7 +23,7 @@ if(NOT MACE_BUILTIN_<LIB_NAME>)
 endif()
 
 if(MACE_BUILTIN_<LIB_NAME>)
-    message(STATUS "MACE will use built-in <lib_cmake_name>")
+    message(STATUS "MACESW will use built-in <lib_cmake_name>")
     # check built-in version
     if(MACE_BUILTIN_<LIB_NAME>_VERSION VERSION_LESS MACE_<LIB_NAME>_MINIMUM_REQUIRED)
         message(NOTICE "***Notice: Provided MACE_BUILTIN_<LIB_NAME>_VERSION is ${MACE_BUILTIN_<LIB_NAME>_VERSION}, which is less than the requirement (${MACE_<LIB_NAME>_MINIMUM_REQUIRED}). Changing to ${MACE_<LIB_NAME>_MINIMUM_REQUIRED}")

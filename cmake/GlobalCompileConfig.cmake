@@ -1,7 +1,7 @@
 # This file is included before "find_package"s and "LookFor"s.
 
 # =============================================================================
-# MACE build type
+# MACESW build type
 # =============================================================================
 
 if(DEFINED CMAKE_CONFIGURATION_TYPES)
@@ -20,7 +20,7 @@ else()
         set(CMAKE_BUILD_TYPE "Release")
     endif()
     string(TOLOWER ${CMAKE_BUILD_TYPE} LOWERCASED_CMAKE_BUILD_TYPE)
-    message(STATUS "MACE build type: ${CMAKE_BUILD_TYPE}")
+    message(STATUS "MACESW build type: ${CMAKE_BUILD_TYPE}")
 endif()
 
 # =============================================================================

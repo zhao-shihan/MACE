@@ -11,7 +11,7 @@ if(NOT MACE_BUILTIN_GENFIT)
 endif()
 
 if(MACE_BUILTIN_GENFIT)
-    message(STATUS "MACE will use built-in GenFit")
+    message(STATUS "MACESW will use built-in GenFit")
     # set download dest and URL
     set(MACE_BUILTIN_GENFIT_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/GenFit-02-00-01")
     set(MACE_BUILTIN_GENFIT_URL "https://github.com/zhao-shihan/GenFit/archive/refs/heads/master.zip")

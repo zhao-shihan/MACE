@@ -1,15 +1,15 @@
 # This file is included after "find_package"s and "LookFor"s.
 
 # =============================================================================
-# MACE at C++20
+# MACESW at C++20
 # =============================================================================
 
 set(CMAKE_CXX_STANDARD 20 CACHE STRING "C++ standard.")
 if(CMAKE_CXX_STANDARD LESS 20)
-    message(FATAL_ERROR "MACE should be built, at least, with C++20")
+    message(FATAL_ERROR "MACESW should be built, at least, with C++20")
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
+message(STATUS "MACESW will be compiled with C++${CMAKE_CXX_STANDARD}")
 
 # =============================================================================
 # By default, no C++ extensions available for MACE
@@ -29,9 +29,9 @@ if(MACE_ENABLE_UNITY_BUILD)
         set(CMAKE_UNITY_BUILD_BATCH_SIZE 8)
     endif()
     if(CMAKE_UNITY_BUILD_BATCH_SIZE GREATER 0)
-        message(STATUS "Unity build enabled for MACE (batch size: ${CMAKE_UNITY_BUILD_BATCH_SIZE})")
+        message(STATUS "Unity build enabled for MACESW (batch size: ${CMAKE_UNITY_BUILD_BATCH_SIZE})")
     else()
-        message(STATUS "Unity build enabled for MACE (batch size: unlimited)")
+        message(STATUS "Unity build enabled for MACESW (batch size: unlimited)")
     endif()
 endif()
 

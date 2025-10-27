@@ -13,8 +13,8 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-project(MACE VERSION 0.0.0
-             LANGUAGES C CXX)
+project(MACESW VERSION 0.0.0
+               LANGUAGES C CXX)
 
 # =============================================================================
 # Variables
@@ -99,12 +99,13 @@ else()
     message(NOTICE "***Notice: Offline data installation disabled, offline data need to be installed manually")
 endif()
 
+# Config for MACESW
+include(${MACE_PROJECT_CMAKE_DIR}/MACECompileConfig.cmake)
+
 # =============================================================================
 # Let's go!
 # =============================================================================
 
-# Config for MACE
-include(${MACE_PROJECT_CMAKE_DIR}/MACECompileConfig.cmake)
 # libraries
 add_subdirectory(${PROJECT_SOURCE_DIR})
 # main program

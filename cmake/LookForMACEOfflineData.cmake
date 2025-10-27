@@ -11,7 +11,7 @@ if(NOT MACE_BUILTIN_MACE_OFFLINE_DATA)
 endif()
 
 if(MACE_BUILTIN_MACE_OFFLINE_DATA)
-    message(STATUS "MACE will use built-in mace_offline_data")
+    message(STATUS "MACESW will use built-in mace_offline_data")
     # check built-in version
     if(MACE_BUILTIN_MACE_OFFLINE_DATA_VERSION VERSION_LESS MACE_MACE_OFFLINE_DATA_MINIMUM_REQUIRED)
         message(NOTICE "***Notice: Provided MACE_BUILTIN_MACE_OFFLINE_DATA_VERSION is ${MACE_BUILTIN_MACE_OFFLINE_DATA_VERSION}, which is less than the requirement (${MACE_MACE_OFFLINE_DATA_MINIMUM_REQUIRED}). Changing to ${MACE_MACE_OFFLINE_DATA_MINIMUM_REQUIRED}")
