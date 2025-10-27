@@ -36,7 +36,7 @@ Analysis::Analysis() :
     fMCPHit{},
     fMessengerRegister{this} {}
 
-auto Analysis::RunBeginUserAction(G4int runID) -> void {
+auto Analysis::RunBeginUserAction(int runID) -> void {
     if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) {
         fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID));
     }
