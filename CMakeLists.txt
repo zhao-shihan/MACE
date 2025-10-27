@@ -42,7 +42,8 @@ option(MACE_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if G
 option(MACE_BUILTIN_MACE_OFFLINE_DATA "Use built-in offline data (network or pre-downloaded data are required)." OFF)
 option(MACE_BUILTIN_MUSTARD "Use built-in Mustard (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is required)." OFF)
-option(MACE_CLANG_FORMAT "Requires source code to be formatted by clang-format before compile (requires clang-format)" ON)
+option(MACE_CLANG_FORMAT "Requires source code format to be checked by clang-format (requires clang-format)" ON)
+option(MACE_CLANG_FORMAT_WERROR "Let clang-format treat warnings as errors (only takes effect when MACE_CLANG_FORMAT=ON)" OFF)
 option(MACE_ENABLE_ASAN_IN_DEBUG_BUILD "Enable AddressSanitizer in debug build" OFF)
 option(MACE_ENABLE_IPO "Build MACESW with interprocedural optimization" ON)
 option(MACE_ENABLE_UBSAN_IN_DEBUG_BUILD "Enable UndefinedBehaviorSanitizer in debug build" ON)
@@ -100,24 +101,29 @@ endif()
 include(${MACE_PROJECT_CMAKE_DIR}/MACESWCompileConfig.cmake)
 
 # Format MACESW source code
+file(GLOB_RECURSE MACESW_CXX_FILE ${MACE_PROJECT_SOURCE_DIR}/*.c++
+                                  ${MACE_PROJECT_SOURCE_DIR}/*.h++
+                                  ${MACE_PROJECT_SOURCE_DIR}/*.inl
+                                  ${MACE_PROJECT_ROOT_DIR}/MACE.c++)
 if(MACE_CLANG_FORMAT)
     find_program(CLANG_FORMAT_EXE clang-format REQUIRED)
-    file(GLOB_RECURSE MACESW_CXX_FILE ${MACE_PROJECT_SOURCE_DIR}/*.c++
-                                      ${MACE_PROJECT_SOURCE_DIR}/*.h++
-                                      ${MACE_PROJECT_SOURCE_DIR}/*.inl
-                                      ${MACE_PROJECT_ROOT_DIR}/MACE.c++)
-    add_custom_command(
-        OUTPUT macesw-clang-format-source-done
-        COMMAND ${CLANG_FORMAT_EXE}
+    add_custom_target(macesw-clang-format-check ALL
+        ${CLANG_FORMAT_EXE}
             --fail-on-incomplete-format
             --style=file:${MACE_PROJECT_ROOT_DIR}/.clang-format
-            -i ${MACESW_CXX_FILE}
-        COMMENT "Formatting MACESW source code with clang-format..."
-        VERBATIM)
-    add_custom_target(macesw-clang-format-source ALL DEPENDS macesw-clang-format-source-done)
-    message(STATUS "MACESW source code will be formatted by clang-format")
+            --dry-run
+            $<$<BOOL:${MACE_CLANG_FORMAT_WERROR}>:--Werror>
+            ${MACESW_CXX_FILE}
+        COMMENT "Checking MACESW source code format with ${CLANG_FORMAT_EXE}"
+        VERBATIM
+        COMMAND_EXPAND_LISTS)
+    if(MACE_CLANG_FORMAT_WERROR)
+        message(STATUS "MACESW source code format will be checked by ${CLANG_FORMAT_EXE} (warnings as errors)")
+    else()
+        message(STATUS "MACESW source code format will be checked by ${CLANG_FORMAT_EXE}")
+    endif()
 else()
-    message(WARNING "MACESW source code will not be formatted by clang-format")
+    message(WARNING "MACESW source code format will not be checked by clang-format")
 endif()
 
 # =============================================================================
