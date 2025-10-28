@@ -1,0 +1,27 @@
+find_program(CLANG_TIDY_EXE clang-tidy)
+if(NOT CLANG_TIDY_EXE)
+    set(MACE_CLANG_TIDY OFF)
+    message(NOTICE "***Notice: clang-tidy not found. For the time turning off MACE_CLANG_TIDY")
+endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES IntelLLVM)
+    set(MACE_CLANG_TIDY OFF)
+    message(NOTICE "***Notice: Using Intel LLVM compiler. For the time turning off MACE_CLANG_TIDY")
+endif()
+
+if(MACE_CLANG_TIDY)
+    set(MACE_CLANG_TIDY_FULL_COMMAND
+            ${CLANG_TIDY_EXE}
+                --config-file=${MACE_PROJECT_ROOT_DIR}/.clang-tidy
+                --header-filter=${MACE_PROJECT_SOURCE_DIR}/.*)
+    if(MACE_CLANG_FORMAT_WERROR)
+        list(APPEND MACE_CLANG_TIDY_FULL_COMMAND --warnings-as-errors=*)
+    endif()
+    set(CMAKE_CXX_CLANG_TIDY ${MACE_CLANG_TIDY_FULL_COMMAND})
+    if(MACE_CLANG_TIDY_WERROR)
+        message(STATUS "MACESW source code will be linted by ${CLANG_TIDY_EXE} (warnings as errors)")
+    else()
+        message(STATUS "MACESW source code will be linted by ${CLANG_TIDY_EXE}")
+    endif()
+else()
+    message(WARNING "MACESW source code will not be linted by clang-tidy")
+endif()

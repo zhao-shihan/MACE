@@ -44,6 +44,8 @@ option(MACE_BUILTIN_MUSTARD "Use built-in Mustard (network or pre-downloaded sou
 option(MACE_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is required)." OFF)
 option(MACE_CLANG_FORMAT "Requires source code format to be checked by clang-format (requires clang-format)" ON)
 option(MACE_CLANG_FORMAT_WERROR "Let clang-format treat warnings as errors (only takes effect when MACE_CLANG_FORMAT=ON)" OFF)
+option(MACE_CLANG_TIDY "Requires source code to be linted by clang-tidy (requires clang-tidy)" ON)
+option(MACE_CLANG_TIDY_WERROR "Let clang-tidy treat warnings as errors (only takes effect when MACE_CLANG_TIDY=ON)" OFF)
 option(MACE_ENABLE_ASAN_IN_DEBUG_BUILD "Enable AddressSanitizer in debug build" OFF)
 option(MACE_ENABLE_IPO "Build MACESW with interprocedural optimization" ON)
 option(MACE_ENABLE_UBSAN_IN_DEBUG_BUILD "Enable UndefinedBehaviorSanitizer in debug build" ON)
@@ -56,7 +58,7 @@ cmake_dependent_option(MACE_ENABLE_UNITY_BUILD "Build MACESW with unity build te
 cmake_dependent_option(MACE_SHOW_MORE_COMPILER_WARNINGS "Show compiler warnings raise from external dependencies." OFF "NOT MACE_SHOW_EVEN_MORE_COMPILER_WARNINGS" ON)
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Build using shared libraries")
 set(MACE_BUILTIN_MACE_OFFLINE_DATA_VERSION 0.0.1 CACHE STRING "Set built-in offline data version (if required).")
-set(MACE_BUILTIN_MUSTARD_VERSION 0.25.1015 CACHE STRING "Set built-in Mustard version (if required).")
+set(MACE_BUILTIN_MUSTARD_VERSION 0.25.1023 CACHE STRING "Set built-in Mustard version (if required).")
 set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in pmp version (if required).")
 
 # =============================================================================
@@ -97,34 +99,18 @@ else()
     message(NOTICE "***Notice: Offline data installation disabled, offline data need to be installed manually")
 endif()
 
+# =============================================================================
+# MACESW configs
+# =============================================================================
+
 # Config for MACESW
 include(${MACE_PROJECT_CMAKE_DIR}/MACESWCompileConfig.cmake)
 
 # Format MACESW source code
-file(GLOB_RECURSE MACESW_CXX_FILE ${MACE_PROJECT_SOURCE_DIR}/*.c++
-                                  ${MACE_PROJECT_SOURCE_DIR}/*.h++
-                                  ${MACE_PROJECT_SOURCE_DIR}/*.inl
-                                  ${MACE_PROJECT_ROOT_DIR}/MACE.c++)
-if(MACE_CLANG_FORMAT)
-    find_program(CLANG_FORMAT_EXE clang-format REQUIRED)
-    add_custom_target(macesw-clang-format-check ALL
-        ${CLANG_FORMAT_EXE}
-            --fail-on-incomplete-format
-            --style=file:${MACE_PROJECT_ROOT_DIR}/.clang-format
-            --dry-run
-            $<$<BOOL:${MACE_CLANG_FORMAT_WERROR}>:--Werror>
-            ${MACESW_CXX_FILE}
-        COMMENT "Checking MACESW source code format with ${CLANG_FORMAT_EXE}"
-        VERBATIM
-        COMMAND_EXPAND_LISTS)
-    if(MACE_CLANG_FORMAT_WERROR)
-        message(STATUS "MACESW source code format will be checked by ${CLANG_FORMAT_EXE} (warnings as errors)")
-    else()
-        message(STATUS "MACESW source code format will be checked by ${CLANG_FORMAT_EXE}")
-    endif()
-else()
-    message(WARNING "MACESW source code format will not be checked by clang-format")
-endif()
+include(${MACE_PROJECT_CMAKE_DIR}/MACESWClangFormat.cmake)
+
+# Lint MACESW source code
+include(${MACE_PROJECT_CMAKE_DIR}/MACESWClangTidy.cmake)
 
 # =============================================================================
 # Let's go!
