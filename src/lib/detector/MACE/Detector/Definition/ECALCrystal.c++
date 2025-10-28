@@ -31,8 +31,6 @@ using namespace Mustard::LiteralUnit;
 using namespace Mustard::MathConstant;
 using namespace Mustard::PhysicalConstant;
 
-// namespace MACE::Detector::Definition
-
 auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto& ecal{Description::ECAL::Instance()};
     const auto name{ecal.Name()};
