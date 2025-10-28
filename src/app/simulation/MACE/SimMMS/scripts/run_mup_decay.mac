@@ -10,7 +10,7 @@
 #/MACE/Physics/UseOpticalPhysics
 
 /run/initialize
- #/process/optical/scintillation/setFiniteRiseTime true
+#/process/optical/scintillation/setFiniteRiseTime true
 
 /MACE/Generator/SwitchToGPSX
 /gps/particle                         mu+
