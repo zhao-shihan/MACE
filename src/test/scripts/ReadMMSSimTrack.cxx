@@ -4,12 +4,11 @@
 #include "TH1.h"
 
 #include <algorithm>
+#include <any>
 #include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <any>
-
 
 const auto nBinsValueType{100};
 auto DataTupleName{"MMSSimTrack"};
@@ -51,14 +50,14 @@ auto ReadMMSSimTrack(auto moduleName, auto srcFileName, auto dstFileName) -> int
         {"Ek0",    0.,               df.Max("Ek0")   },
         {"r0",     0.,               df.Max("r0")    },
         {"t0",     0.,               df.Max("t0")    },
-        {"p0_0",    df.Min("p0_0"),    df.Max("p0_0")   },
-        {"p0_1",    df.Min("p0_1"),    df.Max("p0_1")   },
-        {"p0_2",    df.Min("p0_2"),    df.Max("p0_2")   },
-        {"x0_0",    df.Min("x0_0"),    df.Max("x0_0")   },
-        {"x0_1",    df.Min("x0_1"),    df.Max("x0_1")   },
-        {"x0_2",    df.Min("x0_2"),    df.Max("x0_2")   },
-        {"c0_0",    df.Min("c0_0"),    df.Max("c0_0")   },
-        {"c0_1",    df.Min("c0_1"),    df.Max("c0_1")   }
+        {"p0_0",   df.Min("p0_0"),   df.Max("p0_0")  },
+        {"p0_1",   df.Min("p0_1"),   df.Max("p0_1")  },
+        {"p0_2",   df.Min("p0_2"),   df.Max("p0_2")  },
+        {"x0_0",   df.Min("x0_0"),   df.Max("x0_0")  },
+        {"x0_1",   df.Min("x0_1"),   df.Max("x0_1")  },
+        {"x0_2",   df.Min("x0_2"),   df.Max("x0_2")  },
+        {"c0_0",   df.Min("c0_0"),   df.Max("c0_0")  },
+        {"c0_1",   df.Min("c0_1"),   df.Max("c0_1")  }
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

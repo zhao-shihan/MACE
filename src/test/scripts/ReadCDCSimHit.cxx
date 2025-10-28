@@ -4,11 +4,11 @@
 #include "TH1.h"
 
 #include <algorithm>
+#include <any>
 #include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <any>
 
 const auto nBinsValueType{100};
 auto DataTupleName{"CDCSimHit"};
@@ -33,10 +33,9 @@ auto ReadCDCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
     dstFile->cd();
     dstDir->cd();
 
-
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
-        {"d",      0.,            df.Max("d")                                                                         },
-        {"Edep",   0.,            std::function([&]() -> double { return *df.Mean("Edep") + 5 * *df.StdDev("Edep"); })},
+        {"d",    0., df.Max("d")                                                                         },
+        {"Edep", 0., std::function([&]() -> double { return *df.Mean("Edep") + 5 * *df.StdDev("Edep"); })},
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;

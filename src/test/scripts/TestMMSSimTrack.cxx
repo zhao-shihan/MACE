@@ -13,9 +13,9 @@ const std::string dataTupleName{"MMSSimTrack"};
 
 const void Judge(double pValue) {
     const std::string boldInvert{"\x1B[1m\x1B[7m"};
-    const std::string boldRedInvert{boldInvert+"\x1B[38;5;9m"};
-    const std::string boldYellowInvert{boldInvert+"\x1B[38;5;11m"};
-    const std::string boldGreenInvert{boldInvert+"\x1B[38;5;10m"};
+    const std::string boldRedInvert{boldInvert + "\x1B[38;5;9m"};
+    const std::string boldYellowInvert{boldInvert + "\x1B[38;5;11m"};
+    const std::string boldGreenInvert{boldInvert + "\x1B[38;5;10m"};
     const std::string reset{"\x1B[0m"};
 
     auto normQuantile2End{TMath::NormQuantile(1 - pValue / 2)};
@@ -23,7 +23,7 @@ const void Judge(double pValue) {
         std::cout << boldRedInvert << "FAILED" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     } else if (normQuantile2End > 3) {
         std::cout << boldYellowInvert << "SUSPICIOUS" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
-    }  else if (normQuantile2End > 0) {
+    } else if (normQuantile2End > 0) {
         std::cout << boldGreenInvert << "PASSED" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;
     } else {
         std::cout << boldGreenInvert << "IDENTICAL" << reset << "( Z = " << normQuantile2End << "sigma )" << std::endl;

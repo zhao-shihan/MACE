@@ -4,12 +4,11 @@
 #include "TH1.h"
 
 #include <algorithm>
+#include <any>
 #include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <any>
-
 
 const auto nBinsValueType{100};
 auto DataTupleName{"ECALSimHit"};
@@ -46,15 +45,15 @@ auto ReadECALSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int 
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
         {"ModID", 0.,                                                                               640.                                                                                  },
-        {"x_0",    df.Min("x_0"),                                                                     df.Max("x_0")                                                                          },
-        {"x_1",    df.Min("x_1"),                                                                     df.Max("x_1")                                                                          },
-        {"x_2",    df.Min("x_2"),                                                                     df.Max("x_2")                                                                          },
-        {"p_0",    df.Min("p_0"),                                                                     df.Max("p_0")                                                                          }, // for SimECAL
-        {"p_1",    df.Min("p_1"),                                                                     df.Max("p_1")                                                                          }, // for SimECAL
-        {"p_2",    df.Min("p_2"),                                                                     df.Max("p_2")                                                                          }, // for SimECAL
-        {"p0_0",   df.Min("p0_0"),                                                                    df.Max("p0_0")                                                                         }, // for SimECAL
-        {"p0_1",   df.Min("p0_1"),                                                                    df.Max("p0_1")                                                                         }, // for SimECAL
-        {"p0_2",   df.Min("p0_2"),                                                                    df.Max("p0_2")                                                                         }, // for SimECAL
+        {"x_0",   df.Min("x_0"),                                                                    df.Max("x_0")                                                                         },
+        {"x_1",   df.Min("x_1"),                                                                    df.Max("x_1")                                                                         },
+        {"x_2",   df.Min("x_2"),                                                                    df.Max("x_2")                                                                         },
+        {"p_0",   df.Min("p_0"),                                                                    df.Max("p_0")                                                                         }, // for SimECAL
+        {"p_1",   df.Min("p_1"),                                                                    df.Max("p_1")                                                                         }, // for SimECAL
+        {"p_2",   df.Min("p_2"),                                                                    df.Max("p_2")                                                                         }, // for SimECAL
+        {"p0_0",  df.Min("p0_0"),                                                                   df.Max("p0_0")                                                                        }, // for SimECAL
+        {"p0_1",  df.Min("p0_1"),                                                                   df.Max("p0_1")                                                                        }, // for SimECAL
+        {"p0_2",  df.Min("p0_2"),                                                                   df.Max("p0_2")                                                                        }, // for SimECAL
         {"t",     0.,                                                                               std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })        },
         {"t0",    0.,                                                                               std::function([&]() -> double { return *df.Mean("t0") + 3 * *df.StdDev("t0"); })      },
         {"TrkID", 0.,                                                                               std::function([&]() -> double { return *df.Mean("TrkID") + 2 * *df.StdDev("TrkID"); })},

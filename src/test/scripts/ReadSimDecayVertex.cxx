@@ -4,11 +4,11 @@
 #include "TH1.h"
 
 #include <algorithm>
+#include <any>
 #include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <any>
 
 const auto nBinsValueType{100};
 auto DataTupleName{"SimDecayVertex"};
@@ -37,7 +37,7 @@ auto ReadSimDecayVertex(auto moduleName, auto srcFileName, auto dstFileName) -> 
                 .Define("x_1", "x[1]")
                 .Define("x_2", "x[2]")};
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
-        {"t",  0.,                                                                               std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })  },
+        {"t",   0.,                                                                                 std::function([&]() -> double { return *df.Mean("t") + 3 * *df.StdDev("t"); })    },
         {"x_0", std::function([&]() -> double { return *df.Mean("x_0") - 3 * *df.StdDev("x_0"); }), std::function([&]() -> double { return *df.Mean("x_0") + 3 * *df.StdDev("x_0"); })},
         {"x_1", std::function([&]() -> double { return *df.Mean("x_1") - 3 * *df.StdDev("x_1"); }), std::function([&]() -> double { return *df.Mean("x_1") + 3 * *df.StdDev("x_1"); })},
         {"x_2", std::function([&]() -> double { return *df.Mean("x_2") - 3 * *df.StdDev("x_2"); }), std::function([&]() -> double { return *df.Mean("x_2") + 3 * *df.StdDev("x_2"); })}

@@ -4,11 +4,11 @@
 #include "TH1.h"
 
 #include <algorithm>
+#include <any>
 #include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <any>
 
 const auto nBinsValueType{100};
 auto DataTupleName{"TTCSimHit"};
@@ -48,7 +48,7 @@ auto ReadTTCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
 
     std::vector<std::tuple<std::string, std::any, std::any>> histParameterList{
         // {"TileID",  0.,            4000.                                                                                     },
-        {"Ek",      0.,            df.Max("Ek")                                                                              },
+        {"Ek",   0., df.Max("Ek")                                                                        },
         // {"Ek0",     0.,            df.Max("Ek0")                                                                             },
         // {"x_0",      df.Min("x_0"),  df.Max("x_0")                                                                              },
         // {"x_1",      df.Min("x_1"),  df.Max("x_1")                                                                              },
@@ -61,7 +61,7 @@ auto ReadTTCSimHit(auto moduleName, auto srcFileName, auto dstFileName) -> int {
         // {"p0_2",     df.Min("p0_2"), df.Max("p0_2")                                                                             },
         // {"t",       0,             std::function([&]() -> double { return *df.Mean("t") + 5 * *df.StdDev("t"); })            },
         // {"nOptPho", 0,             std::function([&]() -> double { return *df.Mean("nOptPho") + 5 * *df.StdDev("nOptPho"); })},
-        {"Edep",    0.,            std::function([&]() -> double { return *df.Mean("Edep") + 5 * *df.StdDev("Edep"); })      }
+        {"Edep", 0., std::function([&]() -> double { return *df.Mean("Edep") + 5 * *df.StdDev("Edep"); })}
     };
 
     std::vector<ROOT::RDF::RResultPtr<TH1>> histList;
