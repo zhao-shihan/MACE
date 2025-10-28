@@ -431,8 +431,6 @@ auto ECAL::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fMPPCEfficiency, "MPPCEfficiency");
     ImportValue(node, fModuleSelection, "ModuleSelection");
     ImportValue(node, fWaveformIntegralTime, "WaveformIntegralTime");
-
-    // SetGeometryOutdated();
 }
 
 auto ECAL::ExportAllValue(YAML::Node& node) const -> void {
