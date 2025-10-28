@@ -144,7 +144,6 @@ private:
     Simple<std::vector<double>> fMPPCEnergyBin;
     Simple<std::vector<double>> fMPPCEfficiency;
     
-    // mutable MeshManager fMeshManager;
     Cached<MeshInformation> fMesh;
     Simple<std::vector<int>> fModuleSelection;
     Simple<double> fWaveformIntegralTime;
