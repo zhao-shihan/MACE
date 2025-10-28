@@ -16,6 +16,7 @@
 **/*.root
 **/*.so*
 **/*.swp
+**/*.tar
 **/build*/
 **/GPATH
 **/GRTAGS
@@ -31,4 +32,3 @@ document/doxygen/rtf/
 document/doxygen/xml/
 install/
 thirdparty/
-*.tar
