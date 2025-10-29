@@ -22,7 +22,7 @@ using namespace Mustard::PhysicalConstant;
 
 TTCSiPMSD::TTCSiPMSD(const G4String& sdName, const Type type) :
     G4VSensitiveDetector{sdName},
-    type{type},
+    fType{type},
     fHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
@@ -40,7 +40,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
-    const auto& nSiPM{(type == TTCSiPMSD::Type::MACE) ? MACE::Detector::Description::TTC::Instance().NSiPM() : MACE::PhaseI::Detector::Description::TTC::Instance().NSiPM()};
+    const auto& nSiPM{(fType == TTCSiPMSD::Type::MACE) ? MACE::Detector::Description::TTC::Instance().NSiPM() : MACE::PhaseI::Detector::Description::TTC::Instance().NSiPM()};
 
     if (&particle != G4OpticalPhoton::Definition()) {
         return false;
@@ -60,7 +60,7 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"TileID">(*hit) = tileID;
     Get<"SiPMID">(*hit) = tileID * nSiPM - siPMLocalID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
-    Get<"x">(*hit) = {position.x(), position.z()};
+    Get<"x">(*hit) = {static_cast<float>(position.x()), static_cast<float>(position.z())};
     Get<"k">(*hit) = preStepPoint.GetTouchable()->GetHistory()->GetTopTransform().TransformAxis(preStepPoint.GetMomentumDirection()) / hbar_Planck;
     fHit[tileID].emplace_back(std::move(hit));
 

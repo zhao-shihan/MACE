@@ -16,7 +16,8 @@
 **/*.root
 **/*.so*
 **/*.swp
-**/build/
+**/*.tar
+**/build*/
 **/GPATH
 **/GRTAGS
 **/GTAGS

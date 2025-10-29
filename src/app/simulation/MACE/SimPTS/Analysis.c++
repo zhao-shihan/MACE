@@ -82,13 +82,13 @@ auto Analysis::RunEnd(Option_t* option) -> void {
         fDecayVertexOutput->Write();
     }
     fVirtualHitOutput->Write();
-    // close file
-    fFile->Close(option);
-    delete fFile;
     // reset output
     fPrimaryVertexOutput.reset();
     fDecayVertexOutput.reset();
     fVirtualHitOutput.reset();
+    // close file
+    fFile->Close(option);
+    delete fFile;
 }
 
 } // namespace MACE::SimPTS
