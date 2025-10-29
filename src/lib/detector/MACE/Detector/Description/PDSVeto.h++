@@ -10,7 +10,7 @@ class PDSVeto final : public Mustard::Detector::Description::DescriptionBase<PDS
 
 private:
     PDSVeto();
-    ~PDSVeto() = default;
+    ~PDSVeto() override = default;
 
 public:
     // Geometry

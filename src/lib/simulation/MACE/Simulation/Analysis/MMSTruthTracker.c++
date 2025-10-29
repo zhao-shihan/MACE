@@ -26,7 +26,7 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
         return {};
     }
 
-    constexpr auto ByTrackID{
+    constexpr auto byTrackID{
         [](const auto& hit1, const auto& hit2) {
             return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
         }};
@@ -40,7 +40,7 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
     mmsTrackData.reserve(cdcHitHC.size() / fTrackFinder.MinNHit());
 
     std::ranges::subrange trackTTCHit{ttcHitHC.cbegin(), ttcHitHC.cbegin()};
-    const auto trackCDCHitFirst{std::ranges::lower_bound(cdcHitHC, ttcHitHC.front(), ByTrackID)};
+    const auto trackCDCHitFirst{std::ranges::lower_bound(cdcHitHC, ttcHitHC.front(), byTrackID)};
     std::ranges::subrange trackCDCHit{trackCDCHitFirst, trackCDCHitFirst};
 
     muc::flat_hash_set<short> tileHit;
@@ -48,8 +48,8 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
 
     while (trackTTCHit.end() != ttcHitHC.cend() and
            trackCDCHit.end() != cdcHitHC.cend()) {
-        trackTTCHit = {trackTTCHit.end(), std::ranges::upper_bound(trackTTCHit.end(), ttcHitHC.cend(), *trackTTCHit.end(), ByTrackID)};
-        trackCDCHit = {trackCDCHit.end(), std::ranges::upper_bound(trackCDCHit.end(), cdcHitHC.cend(), trackTTCHit.front(), ByTrackID)};
+        trackTTCHit = {trackTTCHit.end(), std::ranges::upper_bound(trackTTCHit.end(), ttcHitHC.cend(), *trackTTCHit.end(), byTrackID)};
+        trackCDCHit = {trackCDCHit.end(), std::ranges::upper_bound(trackCDCHit.end(), cdcHitHC.cend(), trackTTCHit.front(), byTrackID)};
 
         if (std::ranges::ssize(trackTTCHit) < fMinNTTCHitForQualifiedTrack or
             std::ranges::ssize(trackCDCHit) < fTrackFinder.MinNHit() or

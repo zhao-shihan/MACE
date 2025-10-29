@@ -107,9 +107,8 @@ auto CLIModule::DatasetIndexRange() const -> std::pair<gsl::index, gsl::index> {
     assert(var.size() == 1 or var.size() == 2);
     if (var.size() == 1) {
         return {0, var.front()};
-    } else {
-        return {var.front(), var.back()};
     }
+    return {var.front(), var.back()};
 }
 
 auto CLIModule::OutputFilePath() const -> std::filesystem::path {

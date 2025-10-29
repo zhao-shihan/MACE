@@ -70,7 +70,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or fECALHit->size() > 0};
+    const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or not fECALHit->empty()};
     const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or std::ranges::any_of(*fMCPHit, [](auto&& hit) { return Get<"Trig">(*hit); })};
     if (ecalPassed and mcpPassed) {
         if (fPrimaryVertex and fPrimaryVertexOutput) {

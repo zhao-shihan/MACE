@@ -38,14 +38,14 @@ namespace MACE::inline Simulation::inline SD {
 
 TTCSD::TTCSD(const G4String& sdName, const Type type, const TTCSiPMSD* ttcSiPMSD) :
     G4VSensitiveDetector{sdName},
-    type{type},
+    fType{type},
     fTTCSiPMSD{ttcSiPMSD},
     fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
 
-    const auto& EnergyThreshold{
+    const auto& energyThreshold{
         [](auto& ttc) {
             assert(ttc.ScintillationComponent1EnergyBin().size() == ttc.ScintillationComponent1().size());
             std::vector<double> dE(ttc.ScintillationComponent1EnergyBin().size());
@@ -61,11 +61,11 @@ TTCSD::TTCSD(const G4String& sdName, const Type type, const TTCSiPMSD* ttcSiPMSD
 
     if (type == TTCSD::Type::MACE) {
         const auto& ttc{Detector::Description::TTC::Instance()};
-        fEnergyDepositionThreshold = EnergyThreshold(ttc);
+        fEnergyDepositionThreshold = energyThreshold(ttc);
         fSplitHit.reserve(ttc.NAlongPhi() * ttc.Width().size());
     } else {
         const auto& ttc{PhaseI::Detector::Description::TTC::Instance()};
-        fEnergyDepositionThreshold = EnergyThreshold(ttc);
+        fEnergyDepositionThreshold = energyThreshold(ttc);
         fSplitHit.reserve(muc::ranges::reduce(ttc.NAlongPhi()));
     }
 }

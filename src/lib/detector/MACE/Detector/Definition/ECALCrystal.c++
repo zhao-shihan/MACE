@@ -114,12 +114,12 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
         // loop over all ECAL face
         // centroid here refer to the face 'center' of normalized ball
 
-        if ((not moduleSelection.empty()) and std::find(moduleSelection.begin(), moduleSelection.end(), moduleID) == moduleSelection.end()) {
+        if ((not moduleSelection.empty()) and std::ranges::find(moduleSelection, moduleID) == moduleSelection.end()) {
             moduleID++;
             continue;
         }
 
-        const auto SolidCrystal{
+        const auto solidCrystal{
             [&, &centroid = centroid, &vertexIndex = vertexIndex](const auto& name) {
                 const auto innerCentroid{innerRadius * centroid};
                 std::vector<G4ThreeVector> innerVertex(vertexIndex.size());
@@ -192,14 +192,14 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
 
         const auto logicCrystal{
             Make<G4LogicalVolume>(
-                SolidCrystal(fmt::format("ECALCrystal_{}", moduleID)),
+                solidCrystal(fmt::format("{}Crystal_{}", name, moduleID)),
                 lyso,
-                "ECALCrystal")};
+                name + "Crystal")};
         const auto physicalCrystal{
             Make<G4PVPlacement>(
                 G4Transform3D{},
                 logicCrystal,
-                fmt::format("ECALCrystal_{}", moduleID),
+                fmt::format("{}Crystal_{}", name, moduleID),
                 Mother().LogicalVolume(),
                 true,
                 moduleID,
@@ -222,7 +222,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",
                                        physicalCrystal,
-                                       ecalPMCoupler->PhysicalVolume("ECALPMCoupler", moduleID),
+                                       ecalPMCoupler->PhysicalVolume(name + "PMCoupler", moduleID),
                                        couplerSurface};
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }

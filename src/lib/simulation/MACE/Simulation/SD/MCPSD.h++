@@ -15,14 +15,14 @@ namespace MACE::inline Simulation::inline SD {
 
 class MCPSD : public G4VSensitiveDetector {
 public:
-    MCPSD(const G4String& sdName);
-    ~MCPSD();
+    explicit MCPSD(const G4String& sdName);
+    ~MCPSD() override;
 
     auto IonizingEnergyDepositionThreshold(double e) -> void { fIonizingEnergyDepositionThreshold = std::max(0., e); }
 
-    virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
-    virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
-    virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
+    auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
+    auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
+    auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
 protected:
     double fIonizingEnergyDepositionThreshold;

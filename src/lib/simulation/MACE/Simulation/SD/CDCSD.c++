@@ -80,7 +80,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto xWire{Mustard::VectorCast<G4TwoVector>(cellInfo.position)};
     const auto tWire{Mustard::VectorCast<G4ThreeVector>(cellInfo.direction)};
     // calculate drift distance
-    double driftDistance;
+    double driftDistance{};
     if (const auto pHat{muc::midpoint(preStepPoint.GetMomentumDirection(), postStepPoint.GetMomentumDirection())};
         not pHat.isParallel(tWire)) {
         const auto n{tWire.cross(pHat)};

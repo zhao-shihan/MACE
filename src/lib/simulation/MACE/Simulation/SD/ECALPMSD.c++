@@ -82,7 +82,7 @@ auto ECALPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
 auto ECALPMSD::NOpticalPhotonHit() const -> muc::flat_hash_map<int, int> {
     muc::flat_hash_map<int, int> nHit;
     for (auto&& [modID, hit] : fHit) {
-        if (hit.size() > 0) {
+        if (not hit.empty()) {
             nHit[modID] = hit.size();
         }
     }

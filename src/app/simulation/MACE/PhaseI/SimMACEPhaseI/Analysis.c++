@@ -67,8 +67,8 @@ auto Analysis::RunBeginUserAction(int runID) -> void {
 }
 
 auto Analysis::EventEndUserAction() -> void {
-    const auto mrpcPassed{not fCoincidenceWithMRPC or fMRPCHit == nullptr or fMRPCHit->size() > 0};
-    const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or fECALHit->size() > 0};
+    const auto mrpcPassed{not fCoincidenceWithMRPC or fMRPCHit == nullptr or not fMRPCHit->empty()};
+    const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or not fECALHit->empty()};
     if (mrpcPassed and ecalPassed) {
         if (fPrimaryVertex and fPrimaryVertexOutput) {
             fPrimaryVertexOutput->Fill(*fPrimaryVertex);

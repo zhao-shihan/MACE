@@ -75,7 +75,7 @@ auto SciFiSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     }
     const auto preStepPoint{*step.GetPreStepPoint()};
 
-    const auto x{preStepPoint.GetPosition()};
+    const auto& x{preStepPoint.GetPosition()};
     const auto fiberID{preStepPoint.GetTouchable()->GetReplicaNumber(1)};
     const auto creatorProcess{track.GetCreatorProcess()};
     const auto vertexEk{track.GetVertexKineticEnergy()};
@@ -107,7 +107,7 @@ auto SciFiSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                 [](auto&& count, auto&& cellHit) {
                                     return count + cellHit.second.size();
                                 }));
-    constexpr auto ByTrackID{
+    constexpr auto byTrackID{
         [](const auto& hit1, const auto& hit2) {
             return Get<"EvtID">(*hit1) < Get<"EvtID">(*hit2);
         }};
@@ -142,7 +142,7 @@ auto SciFiSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                                        return Get<"t">(*hit) <= windowClosingTime;
                                                                    })};
                 // find top hit
-                auto& topHit{*std::ranges::min_element(cluster, ByTrackID)};
+                auto& topHit{*std::ranges::min_element(cluster, byTrackID)};
 
                 // construct real hit
                 Get<"HitID">(*topHit) = hitID++;

@@ -17,7 +17,7 @@ class ECAL final : public Mustard::Detector::Description::DescriptionBase<ECAL> 
 
 private:
     ECAL();
-    ~ECAL() = default;
+    ~ECAL() override = default;
 
 public:
     auto NSubdivision() const -> auto { return fNSubdivision; }
@@ -51,7 +51,7 @@ public:
 
     auto Mesh() const -> const auto& { return fMeshManager.Get(this); }
     auto NUnit() const -> auto { return Mesh().fFaceList.size(); }
-    auto ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D;
+    auto ComputeTransformToOuterSurfaceWithOffset(int moduleID, double offsetInNormalDirection) const -> HepGeom::Transform3D;
 
     auto ModuleSelection() const -> const auto& { return fModuleSelection; }
     auto WaveformIntegralTime() const -> auto { return fWaveformIntegralTime; }

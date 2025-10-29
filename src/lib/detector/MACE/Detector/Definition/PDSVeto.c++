@@ -160,7 +160,7 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
     Make<G4PVPlacement>(cap2Module3Transform, logicCap2Module, "cap2Module3Box", Mother().LogicalVolume(), false, 3, checkOverlaps);
     // ModuleBox are virtual, do not exist actually
 
-    const auto AssembleStrip{[&](G4String name,
+    const auto assembleStrip{[&](const G4String& name,
                                  int totalLayer,
                                  int totalStripALayer,
                                  double moduleThickness,
@@ -186,7 +186,6 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
         // clang-format on
 
         // material wls
-        // TODO
         const auto wls{nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE")};
 
         // pre define solids and logical volumes
@@ -278,14 +277,14 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
             for (int sideCount{}; sideCount < 2; ++sideCount) {                         // nest loop by one pairs' 2 sides
                 const auto readBoxRotation{G4RotateX3D(pow(-1., sideCount) * pi / 2.)}; // SiPM&coupler
 
-                const auto SiPMPosZ{(stripBoxHalfLength - veto.SiPMThickness() / 2)};
+                const auto siPmPosZ{(stripBoxHalfLength - veto.SiPMThickness() / 2)};
                 const auto couplerPosZ{stripBoxHalfLength - veto.SiPMThickness() - veto.SiPMCouplerThickness() / 2};
 
                 G4Transform3D couplerTransform{readBoxRotation.getRotation(), G4ThreeVector(pairBoxCenterX, 0, couplerPosZ * pow(-1., sideCount))};
-                G4Transform3D SiPMTransform{readBoxRotation.getRotation(), G4ThreeVector(pairBoxCenterX, 0, SiPMPosZ * pow(-1., sideCount))};
+                G4Transform3D siPmTransform{readBoxRotation.getRotation(), G4ThreeVector(pairBoxCenterX, 0, siPmPosZ * pow(-1., sideCount))};
 
                 Make<G4PVPlacement>(couplerTransform, logicSiPMCoupler, name + "SiPMCoupler", logicStripBox, false, sideCount, checkOverlaps);
-                Make<G4PVPlacement>(SiPMTransform, logicSiPM, name + "SiPM", logicStripBox, false, sideCount, checkOverlaps);
+                Make<G4PVPlacement>(siPmTransform, logicSiPM, name + "SiPM", logicStripBox, false, sideCount, checkOverlaps);
             }
         }
         // fiber positions, most unsafe?
@@ -361,7 +360,7 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
     const auto logicTopStripBox{Make<G4LogicalVolume>(solidTopStripBox,
                                                       air,
                                                       "TopStripBox")};
-    AssembleStrip("Top",
+    assembleStrip("Top",
                   veto.TopLayer(),
                   topPSaLayerCount,
                   topModuleThickness,
@@ -377,7 +376,7 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
     const auto logicSideStripBox{Make<G4LogicalVolume>(solidSideStripBox,
                                                        air,
                                                        "SideStripBox")};
-    AssembleStrip("Side",
+    assembleStrip("Side",
                   veto.SideLayer(),
                   sidePSaLayerCount,
                   sideModuleThickness,
@@ -393,7 +392,7 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
     const auto logicCap1StripBox{Make<G4LogicalVolume>(solidCap1StripBox,
                                                        air,
                                                        "Cap1StripBox")};
-    AssembleStrip("Cap1",
+    assembleStrip("Cap1",
                   veto.CapLayer(),
                   cap1PSaLayerCount,
                   capModuleThickness,
@@ -409,7 +408,7 @@ auto PDSVeto::Construct(G4bool checkOverlaps) -> void {
     const auto logicCap2StripBox{Make<G4LogicalVolume>(solidCap2StripBox,
                                                        air,
                                                        "Cap2StripBox")};
-    AssembleStrip("Cap2",
+    assembleStrip("Cap2",
                   veto.CapLayer(),
                   cap2PSaLayerCount,
                   capModuleThickness,

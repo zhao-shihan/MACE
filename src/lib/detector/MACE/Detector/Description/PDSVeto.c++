@@ -10,6 +10,7 @@ PDSVeto::PDSVeto() :
     DescriptionBase{"PDSVeto"},
     // Geometry
     fTopPSLength{145_cm},
+    fBottomPSLength{145_cm},
     fSidePSLength{140_cm},
     fCap1PSLength{180_cm},
     fCap2PSLength{35_cm},
