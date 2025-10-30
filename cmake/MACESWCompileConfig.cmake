@@ -21,7 +21,7 @@ set(CMAKE_CXX_EXTENSIONS OFF CACHE INTERNAL "Boolean specifying whether compiler
 # Unity build for MACE
 # =============================================================================
 
-if(MACESW_ENABLE_UNITY_BUILD)
+if(MACESW_UNITY_BUILD)
     set(CMAKE_UNITY_BUILD ON)
     if(MACESW_FULL_UNITY_BUILD)
         set(CMAKE_UNITY_BUILD_BATCH_SIZE 0)
