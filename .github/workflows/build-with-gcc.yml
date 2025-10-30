@@ -4,6 +4,7 @@ on:
   push:
     branches: ["**"]
     paths:
+      - ".github/workflows/build-with-gcc.yml"
       - "src/**"
       - "MACE.c\\+\\+"
       - "**/CMakeLists.txt"
@@ -11,6 +12,7 @@ on:
   pull_request:
     branches: ["**"]
     paths:
+      - ".github/workflows/build-with-gcc.yml"
       - "src/**"
       - "MACE.c\\+\\+"
       - "**/CMakeLists.txt"
