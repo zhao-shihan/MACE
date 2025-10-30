@@ -2,9 +2,19 @@ name: Build (AMD64 GNU/Linux GCC)
 
 on:
   push:
-    branches: ["*"]
+    branches: ["**"]
+    paths:
+      - "**.c\\+\\+"
+      - "**.h\\+\\+"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
   pull_request:
-    branches: ["*"]
+    branches: ["**"]
+    paths:
+      - "**.c\\+\\+"
+      - "**.h\\+\\+"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
 
 jobs:
   build-with-gcc:

@@ -2,9 +2,19 @@ name: Regression test (AMD64 GNU/Linux Clang)
 
 on:
   push:
-    branches: [main, rc]
+    branches: ["**"]
+    paths:
+      - "**.c\\+\\+"
+      - "**.h\\+\\+"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
   pull_request:
-    branches: [main, rc]
+    branches: ["**"]
+    paths:
+      - "**.c\\+\\+"
+      - "**.h\\+\\+"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
 
 jobs:
   test-with-clang:

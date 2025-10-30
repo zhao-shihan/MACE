@@ -2,9 +2,23 @@ name: Static code analysis (AMD64 GNU/Linux Clang, ClangFormat, ClangTidy)
 
 on:
   push:
-    branches: ["*"]
+    branches: ["**"]
+    paths:
+      - "**.c\\+\\+"
+      - "**.h\\+\\+"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
+      - ".clang-format"
+      - ".clang-tidy"
   pull_request:
-    branches: ["*"]
+    branches: ["**"]
+    paths:
+      - "**.c\\+\\+"
+      - "**.h\\+\\+"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
+      - ".clang-format"
+      - ".clang-tidy"
 
 jobs:
   clang-format-tidy:
