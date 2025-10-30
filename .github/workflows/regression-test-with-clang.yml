@@ -2,7 +2,7 @@ name: Regression test (AMD64 GNU/Linux Clang)
 
 on:
   push:
-    branches: ["**"]
+    branches: ["main", "rc"]
     paths:
       - "src/**"
       - "test/**"
@@ -10,7 +10,7 @@ on:
       - "**/CMakeLists.txt"
       - "**.cmake"
   pull_request:
-    branches: ["**"]
+    branches: ["main", "rc"]
     paths:
       - "src/**"
       - "test/**"
