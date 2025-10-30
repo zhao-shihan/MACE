@@ -52,7 +52,7 @@ This document explains how to report issues, propose changes, and prepare contri
 ## Pull request checklist
 Before requesting review, ensure:
 - [ ] I have read the [contributing guidelines](CONTRIBUTING.md)
-- [ ] The PR targets the `main` branch.
+- [ ] The PR will merge a working branch (other than `main`) into the `main` branch.
 - [ ] I linked related issues and provided context in the PR description.
 - [ ] I have run the code formatter and linter (see [this section](STYLE_GUIDE.md#tooling) for instructions).
 - [ ] I cleared all compiler warnings, formatter warnings, and linter warnings.
