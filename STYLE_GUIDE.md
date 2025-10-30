@@ -147,7 +147,7 @@ We use [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html) to automat
 # Debian-based systems
 sudo apt install clang-format
 ```
-The CMake option `MACE_CLANG_FORMAT` controls whether to validate code formatting during build. This option is enabled (`ON`) by default.
+The CMake option `MACESW_CLANG_FORMAT` controls whether to validate code formatting during build. This option is enabled (`ON`) by default.
 
 ### Code Linter
 We use [`clang-tidy`](https://clang.llvm.org/extra/clang-tidy/) for static code analysis and linting. Install it using your system package manager:
@@ -155,7 +155,7 @@ We use [`clang-tidy`](https://clang.llvm.org/extra/clang-tidy/) for static code 
 # Debian-based systems
 sudo apt install clang-tidy
 ```
-The CMake option `MACE_CLANG_TIDY` controls static analysis during build. This option is disabled (`OFF`) by default. Enable it by setting the option to `ON`, and clean the build tree then rebuild the entire project to perform static code analysis.
+The CMake option `MACESW_CLANG_TIDY` controls static analysis during build. This option is disabled (`OFF`) by default. Enable it by setting the option to `ON`, and clean the build tree then rebuild the entire project to perform static code analysis.
 
 ## File Organization and Structure
 

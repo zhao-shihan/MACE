@@ -34,5 +34,5 @@ jobs:
             -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_C_FLAGS='-Werror -march=native' \
             -DCMAKE_CXX_FLAGS='-Werror -march=native' \
-            -DMACE_FULL_UNITY_BUILD=ON
+            -DMACESW_FULL_UNITY_BUILD=ON
           ninja

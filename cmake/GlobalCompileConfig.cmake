@@ -27,8 +27,8 @@ endif()
 # Select MSVC runtime library
 # =============================================================================
 
-# Respect to MACE_USE_SHARED_MSVC_RT
-if(MACE_USE_SHARED_MSVC_RT)
+# Respect to MACESW_USE_SHARED_MSVC_RT
+if(MACESW_USE_SHARED_MSVC_RT)
     set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>DLL)
 else()
     set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>)
@@ -38,7 +38,7 @@ endif()
 # AddressSanitizer
 # =============================================================================
 
-if(MACE_ENABLE_ASAN_IN_DEBUG_BUILD)
+if(MACESW_ENABLE_ASAN_IN_DEBUG_BUILD)
     if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|IntelLLVM)$")
         add_compile_options($<$<CONFIG:Debug>:-fsanitize=undefined>
                             $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
@@ -64,7 +64,7 @@ endif()
 # UndefinedBehaviorSanitizer
 # =============================================================================
 
-if(MACE_ENABLE_UBSAN_IN_DEBUG_BUILD)
+if(MACESW_ENABLE_UBSAN_IN_DEBUG_BUILD)
     if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|IntelLLVM)$")
         add_compile_options($<$<CONFIG:Debug>:-fsanitize=undefined> $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
                             $<$<CONFIG:RelWithDebInfo>:-fsanitize=undefined>)
@@ -86,7 +86,7 @@ endif()
 # Add debug information
 # =============================================================================
 
-if(MACE_WITH_DEBUG_INFO)
+if(MACESW_WITH_DEBUG_INFO)
     add_compile_options($<$<C_COMPILER_ID:GNU,Clang>:-g>   
                         $<$<CXX_COMPILER_ID:GNU,Clang>:-g> 
                         $<$<C_COMPILER_ID:MSVC>:/Zi> 

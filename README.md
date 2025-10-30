@@ -105,12 +105,13 @@ For advanced users or developers building from source or contributing to MACESW:
 
 The following dependencies are optional. If they are not found on your system during configuration, CMake will automatically download and build them.
 
-| Library                                                                     | Min version | Description                                                               |
-| :-------------------------------------------------------------------------- | :---------- | :------------------------------------------------------------------------ |
-| [**Mustard**](https://github.com/zhao-shihan/Mustard)                       | 0.25.1023   | A modern, high-performance offline software framework for HEP experiments |
-| [**zhao-shihan/GenFit**](https://github.com/zhao-shihan/GenFit)             | main        | A generic track-fitting toolkit                                           |
-| [**PMP Library**](https://www.pmp-library.org/)                             | 3.0.0       | The Polygon Mesh Processing Library                                       |
-| [**mace_offline_data**](https://code.ihep.ac.cn/zhaoshh7/mace_offline_data) | main        | MACE Offline Data                                                         |
+| Library                                                                         | Min version   | Description                                                               |
+| :------------------------------------------------------------------------------ | :------------ | :------------------------------------------------------------------------ |
+| [**macesw_offline_data**](https://code.ihep.ac.cn/zhaoshh7/macesw_offline_data) | 0.25.103013   | MACESW offline data                                                       |
+| [**macesw_test_data**](https://code.ihep.ac.cn/zhaoshh7/macesw_test_data)       | 0.25.10301318 | MACESW test data                                                          |
+| [**Mustard**](https://github.com/zhao-shihan/Mustard)                           | 0.25.1023     | A modern, high-performance offline software framework for HEP experiments |
+| [**PMP Library**](https://www.pmp-library.org/)                                 | 3.0.0         | The Polygon Mesh Processing Library                                       |
+| [**zhao-shihan/GenFit**](https://github.com/zhao-shihan/GenFit)                 | main          | A generic track-fitting toolkit                                           |
 
 ## Citation
 

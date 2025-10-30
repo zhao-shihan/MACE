@@ -36,7 +36,7 @@ jobs:
             -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_C_FLAGS='-march=native' \
             -DCMAKE_CXX_FLAGS='-march=native' \
-            -DMACE_FULL_UNITY_BUILD=ON
+            -DMACESW_FULL_UNITY_BUILD=ON
           ninja
 
       - name: Run regression test

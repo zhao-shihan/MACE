@@ -113,7 +113,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
 
         const auto solidCrystal{
             [&, &centroid = centroid, &vertexIndex = vertexIndex](const auto& name) {
-                const auto ComputeIntersection{[](G4ThreeVector vertexPlane, G4ThreeVector normPlane, G4ThreeVector vertexLine, G4ThreeVector direcLine) {
+                const auto computeIntersection{[](G4ThreeVector vertexPlane, G4ThreeVector normPlane, G4ThreeVector vertexLine, G4ThreeVector direcLine) {
                     double lambda{normPlane.dot(vertexPlane - vertexLine) / normPlane.dot(direcLine)};
                     return vertexLine + direcLine * lambda;
                 }};
@@ -123,7 +123,7 @@ auto ECALCrystal::Construct(G4bool checkOverlaps) -> void {
                 std::vector<G4ThreeVector> outerVertexes(vertexIndex.size());
                 // outer face cut vertex lines
                 std::ranges::transform(vertexIndex, outerVertexes.begin(),
-                                       [&](const auto& i) { return ComputeIntersection(outerCentroid, normal, vertex[i], vertex[i]); });
+                                       [&](const auto& i) { return computeIntersection(outerCentroid, normal, vertex[i], vertex[i]); });
                 // consider package thickness
                 std::ranges::transform(outerVertexes, outerVertexes.begin(),
                                        [&](const auto& aVertex) { return outerCentroid + (aVertex - outerCentroid).unit() * ((aVertex - outerCentroid).mag() - ecal.CrystalPackageThickness()); });
