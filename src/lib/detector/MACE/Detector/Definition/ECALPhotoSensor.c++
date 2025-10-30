@@ -14,12 +14,9 @@
 #include "G4LogicalSkinSurface.hh"
 #include "G4NistManager.hh"
 #include "G4OpticalSurface.hh"
-#include "G4PVParameterised.hh"
 #include "G4PVPlacement.hh"
-#include "G4SubtractionSolid.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
-#include "G4VPVParameterisation.hh"
 
 #include "fmt/format.h"
 
@@ -89,9 +86,9 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     siliconeGreasePropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, {100_cm, 100_cm});
     siliconeGrease->SetMaterialPropertiesTable(siliconeGreasePropertiesTable);
 
-    const auto windowPropertiesTable{new G4MaterialPropertiesTable};
-    windowPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.57, 1.57});
-    epoxy->SetMaterialPropertiesTable(windowPropertiesTable);
+    const auto epoxyPropertiesTable{new G4MaterialPropertiesTable};
+    epoxyPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.57, 1.57});
+    epoxy->SetMaterialPropertiesTable(epoxyPropertiesTable);
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", {minPhotonEnergy, maxPhotonEnergy}, {1., 1.});
 
@@ -106,17 +103,17 @@ auto ECALPhotoSensor::ConstructMPPC(G4bool checkOverlaps) -> void {
     /////////////////////////////////////////////
     // Construct Volumes
     /////////////////////////////////////////////
-    const auto& typeMap{ecal.Mesh().fTypeMap};
+    const auto& faceList{ecal.Mesh().faceList};
     const auto& moduleSelection{ecal.ModuleSelection()};
     std::map<int, std::vector<int>> idListOfType;
-    for (auto&& [moduleID, type] : typeMap) {
-        idListOfType[type].emplace_back(moduleID);
+    for (int moduleID{};moduleID<std::ssize(faceList);++moduleID) {
+        idListOfType[faceList.at(moduleID).typeID].emplace_back(moduleID);
     }
 
     std::vector<int> chosenType;
     chosenType.reserve(moduleSelection.size());
     for (auto&& chosen : moduleSelection) {
-        chosenType.emplace_back(typeMap.at(chosen));
+        chosenType.emplace_back(faceList.at(chosen).typeID);
     }
     for (auto&& [type, moduleIDList] : idListOfType) { // loop over type(10 total)
         if ((not chosenType.empty()) and (std::ranges::find(chosenType, type) == chosenType.end())) {
@@ -242,9 +239,9 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     siliconeGreasePropertiesTable->AddProperty("ABSLENGTH", {minPhotonEnergy, maxPhotonEnergy}, {100_cm, 100_cm});
     siliconeGrease->SetMaterialPropertiesTable(siliconeGreasePropertiesTable);
 
-    const auto windowPropertiesTable{new G4MaterialPropertiesTable};
-    windowPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.49, 1.49});
-    glass->SetMaterialPropertiesTable(windowPropertiesTable);
+    const auto epoxyPropertiesTable{new G4MaterialPropertiesTable};
+    epoxyPropertiesTable->AddProperty("RINDEX", {minPhotonEnergy, maxPhotonEnergy}, {1.49, 1.49}); // ET 9269B 9956B
+    glass->SetMaterialPropertiesTable(epoxyPropertiesTable);
 
     const std::vector<G4double>& cathodeSurfacePropertiesEnergy{pmtEnergyBin};
     const std::vector<G4double>& cathodeSurfacePropertiesEfficiency{pmtQuantumEfficiency};
@@ -263,17 +260,17 @@ auto ECALPhotoSensor::ConstructPMT(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
-    const auto& typeMap{ecal.Mesh().fTypeMap};
+    const auto& faceList{ecal.Mesh().faceList};
     const auto& moduleSelection{ecal.ModuleSelection()};
     std::map<int, std::vector<int>> idListOfType;
-    for (auto&& [moduleID, type] : typeMap) {
-        idListOfType[type].emplace_back(moduleID);
+    for (auto moduleID{0};moduleID<std::ssize(faceList);++moduleID) {
+        idListOfType[faceList.at(moduleID).typeID].emplace_back(moduleID);
     }
 
     std::vector<int> chosenType;
     chosenType.reserve(moduleSelection.size());
     for (auto&& chosen : moduleSelection) {
-        chosenType.emplace_back(typeMap.at(chosen));
+        chosenType.emplace_back(faceList.at(chosen).typeID);
     }
     const auto& pmtDimensions{ecal.PMTDimensions()};
     for (auto&& [typeID, moduleIDList] : std::as_const(idListOfType)) {

@@ -38,8 +38,8 @@ namespace MACE::inline Simulation::inline SD {
 
 TTCSD::TTCSD(const G4String& sdName, const Type type, const TTCSiPMSD* ttcSiPMSD) :
     G4VSensitiveDetector{sdName},
-    fType{type},
     fTTCSiPMSD{ttcSiPMSD},
+    fType{type},
     fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {

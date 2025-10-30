@@ -1,0 +1,38 @@
+name: Build (AMD64 GNU/Linux Clang, unity build)
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  build-with-clang:
+    name: Build with Clang
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - url: ghcr.io/zhao-shihan/rgb-docker:mpich
+          - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
+    container: ${{ matrix.image.url }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          . /environment
+          mkdir build && cd build
+          cmake -G Ninja .. \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=clang \
+            -DCMAKE_CXX_COMPILER=clang++ \
+            -DCMAKE_C_FLAGS='-Werror -march=native' \
+            -DCMAKE_CXX_FLAGS='-Werror -march=native' \
+            -DMACE_FULL_UNITY_BUILD=ON
+          ninja
