@@ -4,15 +4,17 @@ on:
   push:
     branches: ["**"]
     paths:
-      - "**.c\\+\\+"
-      - "**.h\\+\\+"
+      - "src/**"
+      - "test/**"
+      - "MACE.c\\+\\+"
       - "**/CMakeLists.txt"
       - "**.cmake"
   pull_request:
     branches: ["**"]
     paths:
-      - "**.c\\+\\+"
-      - "**.h\\+\\+"
+      - "src/**"
+      - "test/**"
+      - "MACE.c\\+\\+"
       - "**/CMakeLists.txt"
       - "**.cmake"
 

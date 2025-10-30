@@ -4,30 +4,32 @@ on:
   push:
     branches: ["**"]
     paths:
-      - "**.c\\+\\+"
-      - "**.h\\+\\+"
+      - "src/**"
+      - "test/**"
+      - "MACE.c\\+\\+"
       - "**/CMakeLists.txt"
       - "**.cmake"
   pull_request:
     branches: ["**"]
     paths:
-      - "**.c\\+\\+"
-      - "**.h\\+\\+"
+      - "src/**"
+      - "test/**"
+      - "MACE.c\\+\\+"
       - "**/CMakeLists.txt"
       - "**.cmake"
 
 jobs:
   test-with-clang:
     name: Test with Clang
-    runs-on: ubuntu-latest
     timeout-minutes: 180
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         image:
           - url: ghcr.io/zhao-shihan/rgb-docker:mpich
-            artifact-name: Regression test report (AMD64 GNU-Linux Clang, MPICH) 
+            artifact-name: Regression test report (AMD64 GNU-Linux Clang, MPICH)
           - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
-            artifact-name: Regression test report (AMD64 GNU-Linux Clang, OpenMPI) 
+            artifact-name: Regression test report (AMD64 GNU-Linux Clang, OpenMPI)
     container: ${{ matrix.image.url }}
     defaults:
       run:
