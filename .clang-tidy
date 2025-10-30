@@ -113,7 +113,6 @@ Checks:
   - -hicpp-multiway-paths-covered
   # Suppressions in miscellaneous
   - -misc-const-correctness
-  - -misc-header-include-cycle # FIXME
   - -misc-include-cleaner # FIXME?
   - -misc-misplaced-const
   - -misc-non-private-member-variables-in-classes
