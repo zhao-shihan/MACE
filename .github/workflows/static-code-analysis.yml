@@ -53,6 +53,7 @@ jobs:
             -DMACESW_CLANG_FORMAT_WERROR=ON \
             -DMACESW_CLANG_TIDY=ON \
             -DMACESW_CLANG_TIDY_WERROR=ON \
+            -DMACESW_UNITY_BUILD=ON \
             -DMACESW_FULL_UNITY_BUILD=ON
           ninja
           cd ..

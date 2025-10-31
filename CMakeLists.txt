@@ -36,8 +36,6 @@ set(MACESW_DATAROOTDIR ${CMAKE_INSTALL_DATAROOTDIR}/MACE)
 # Options
 # =============================================================================
 
-include(CMakeDependentOption)
-
 # Options (in alphabetical order) (ON/OFF)
 option(MACESW_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." ON)
 option(MACESW_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if GenFit is built-in." ON)
@@ -56,11 +54,11 @@ option(MACESW_ENABLE_UBSAN_IN_DEBUG_BUILD "Enable UndefinedBehaviorSanitizer in 
 option(MACESW_FULL_UNITY_BUILD "Building MACESW use unity build technique COMPLETELY." OFF)
 option(MACESW_INSTALL_OFFLINE_DATA "Install offline data. If disabled, offline data need to be installed manually." ON)
 option(MACESW_SHOW_EVEN_MORE_COMPILER_WARNINGS "Add compiler flag to show even more compiler warnings (GCC: -Weffc++, Clang: -Weverything, MSVC: /Wall)." OFF)
+option(MACESW_SHOW_MORE_COMPILER_WARNINGS "Show compiler warnings raise from external dependencies." OFF)
+option(MACESW_UNITY_BUILD "Build MACESW with unity build technique." OFF)
 option(MACESW_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try flip this." ON)
 option(MACESW_WERROR "Treat MACESW compilation warnings as errors." OFF)
 option(MACESW_WITH_DEBUG_INFO "Always add debugging information" OFF)
-cmake_dependent_option(MACESW_UNITY_BUILD "Build MACESW with unity build technique." OFF "NOT MACESW_FULL_UNITY_BUILD" ON)
-cmake_dependent_option(MACESW_SHOW_MORE_COMPILER_WARNINGS "Show compiler warnings raise from external dependencies." OFF "NOT MACESW_SHOW_EVEN_MORE_COMPILER_WARNINGS" ON)
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Build using shared libraries")
 set(MACESW_BUILTIN_MACESW_OFFLINE_DATA_VERSION 0.25.103013 CACHE STRING "Set built-in offline data version (if required).")
 set(MACESW_BUILTIN_MACESW_TEST_DATA_VERSION 0.25.10301318 CACHE STRING "Set built-in test data version (if required).")

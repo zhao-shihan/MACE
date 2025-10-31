@@ -50,7 +50,8 @@ jobs:
             -DCMAKE_CXX_COMPILER=g++ \
             -DCMAKE_C_FLAGS='-march=native' \
             -DCMAKE_CXX_FLAGS='-march=native'\
-            -DMACESW_FULL_UNITY_BUILD=ON           
+            -DMACESW_UNITY_BUILD=ON \
+            -DMACESW_FULL_UNITY_BUILD=ON
           ninja
 
       - name: Run regression test

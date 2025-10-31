@@ -47,5 +47,6 @@ jobs:
             -DCMAKE_C_FLAGS='-march=native' \
             -DCMAKE_CXX_FLAGS='-march=native' \
             -DMACESW_WERROR=ON \
+            -DMACESW_UNITY_BUILD=ON \
             -DMACESW_FULL_UNITY_BUILD=ON
           ninja
