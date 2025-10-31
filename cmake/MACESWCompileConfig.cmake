@@ -45,7 +45,7 @@ if(MACESW_ENABLE_IPO)
                         OUTPUT MACESW_IPO_SUPPORTED_ERROR)
     if(MACESW_ENABLE_IPO_SUPPORTED)
         set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
-        message(STATUS "LTO/IPO enabled for MACE")
+        message(STATUS "LTO/IPO enabled for MACESW")
     else()
         set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE OFF)
         message(NOTICE "***Notice: LTO/IPO not supported. Turning off CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE")
@@ -53,7 +53,7 @@ if(MACESW_ENABLE_IPO)
 endif()
 
 # =============================================================================
-# Compile options and definitions for MACE
+# Compile options and definitions for MACESW
 # =============================================================================
 
 set(MACESW_COMPILE_OPTIONS "")
