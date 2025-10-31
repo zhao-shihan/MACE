@@ -75,6 +75,6 @@ Before requesting review, ensure:
 - If you need assistance getting started, open an issue prefixed with `Help:` and maintainers or developers will try to help.
 
 ## Maintainer
-@zhao-shihan
+[**@zhao-shihan**](https://github.com/zhao-shihan)
 
 Thank you for helping improve MACESW!
