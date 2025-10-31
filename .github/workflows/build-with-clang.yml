@@ -41,10 +41,9 @@ jobs:
           . /environment
           mkdir build && cd build
           cmake -G Ninja .. \
-            -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER=clang \
-            -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_C_FLAGS='-march=native' \
+            -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_CXX_FLAGS='-march=native' \
             -DMACESW_WERROR=ON \
             -DMACESW_UNITY_BUILD=ON \

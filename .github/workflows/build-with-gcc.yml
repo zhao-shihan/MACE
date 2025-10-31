@@ -41,10 +41,9 @@ jobs:
           . /environment
           mkdir build && cd build
           cmake -G Ninja .. \
-            -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER=gcc \
-            -DCMAKE_CXX_COMPILER=g++ \
             -DCMAKE_C_FLAGS='-march=x86-64-v2' \
+            -DCMAKE_CXX_COMPILER=g++ \
             -DCMAKE_CXX_FLAGS='-march=x86-64-v2'\
             -DMACESW_WERROR=ON
           ninja
