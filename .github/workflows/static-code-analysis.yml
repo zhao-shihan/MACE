@@ -46,8 +46,9 @@ jobs:
           cmake -G Ninja .. \
             -DCMAKE_C_COMPILER=clang \
             -DCMAKE_CXX_COMPILER=clang++ \
-            -DCMAKE_C_FLAGS='-Werror -march=native' \
-            -DCMAKE_CXX_FLAGS='-Werror -march=native' \
+            -DCMAKE_C_FLAGS='-march=native' \
+            -DCMAKE_CXX_FLAGS='-march=native' \
+            -DMACESW_WERROR=ON \
             -DMACESW_CLANG_FORMAT=ON \
             -DMACESW_CLANG_FORMAT_WERROR=ON \
             -DMACESW_CLANG_TIDY=ON \
@@ -59,8 +60,9 @@ jobs:
           cmake -G Ninja .. \
             -DCMAKE_C_COMPILER=gcc \
             -DCMAKE_CXX_COMPILER=g++ \
-            -DCMAKE_C_FLAGS='-Werror -march=x86-64-v2' \
-            -DCMAKE_CXX_FLAGS='-Werror -march=x86-64-v2' \
+            -DCMAKE_C_FLAGS='-march=x86-64-v2' \
+            -DCMAKE_CXX_FLAGS='-march=x86-64-v2' \
+            -DMACESW_WERROR=ON \
             -DMACESW_CLANG_FORMAT=ON \
             -DMACESW_CLANG_FORMAT_WERROR=ON \
             -DMACESW_CLANG_TIDY=ON \

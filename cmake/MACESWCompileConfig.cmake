@@ -12,13 +12,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message(STATUS "MACESW will be compiled with C++${CMAKE_CXX_STANDARD}")
 
 # =============================================================================
-# By default, no C++ extensions available for MACE
+# By default, no C++ extensions available for MACESW
 # =============================================================================
 
 set(CMAKE_CXX_EXTENSIONS OFF CACHE INTERNAL "Boolean specifying whether compiler specific extensions are requested.")
 
 # =============================================================================
-# Unity build for MACE
+# Unity build for MACESW
 # =============================================================================
 
 if(MACESW_UNITY_BUILD)
@@ -36,7 +36,7 @@ if(MACESW_UNITY_BUILD)
 endif()
 
 # =============================================================================
-# LTO/IPO for MACE
+# LTO/IPO for MACESW
 # =============================================================================
 
 if(MACESW_ENABLE_IPO)
@@ -60,7 +60,7 @@ set(MACESW_COMPILE_OPTIONS "")
 set(MACESW_COMPILE_DEFINITIONS "")
 
 # =============================================================================
-# Compile warnings for MACE
+# Compile warnings for MACESW
 # =============================================================================
 
 # Surpress some, if required
@@ -86,6 +86,7 @@ if(NOT MACESW_SHOW_MORE_COMPILER_WARNINGS)
         # # Eigen (operator 'operator-name': deprecated between enumerations of different types)
         # list(APPEND MACESW_COMPILE_OPTIONS /wd5054)
     endif()
+
 # Even more warnings, if required
 elseif(MACESW_SHOW_EVEN_MORE_COMPILER_WARNINGS)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -94,6 +95,15 @@ elseif(MACESW_SHOW_EVEN_MORE_COMPILER_WARNINGS)
         list(APPEND MACESW_COMPILE_OPTIONS -Weverything)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         list(APPEND MACESW_COMPILE_OPTIONS /Wall)
+    endif()
+endif()
+
+# Warnings as errors, if required
+if(MACESW_WERROR)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|IntelLLVM)$")
+        list(APPEND MACESW_COMPILE_OPTIONS -Werror)
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        list(APPEND MACESW_COMPILE_OPTIONS /WX)
     endif()
 endif()
 
