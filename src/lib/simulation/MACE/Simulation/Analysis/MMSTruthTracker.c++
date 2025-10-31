@@ -2,10 +2,8 @@
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Simulation/Analysis/MMSTruthTracker.h++"
 
-#include "muc/algorithm"
-#include "muc/hash_set"
+#include "gsl/gsl"
 
-#include <cassert>
 #include <utility>
 
 namespace MACE::inline Simulation::Analysis {
@@ -31,8 +29,8 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
             return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
         }};
 
-    assert(std::ranges::is_sorted(cdcHitHC, ByTrackID));
-    assert(std::ranges::is_sorted(ttcHitHC, ByTrackID));
+    Expects(std::ranges::is_sorted(cdcHitHC, byTrackID));
+    Expects(std::ranges::is_sorted(ttcHitHC, byTrackID));
 
     // find CDC hits coincidence with TTC hits
 

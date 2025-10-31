@@ -14,7 +14,7 @@
 #include "G4Track.hh"
 #include "G4VTouchable.hh"
 
-#include <cassert>
+#include "gsl/gsl"
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -72,7 +72,7 @@ auto TTCSiPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
          auto&& [tileID, hitOfDetector] : fHit) {
         for (auto&& hit : hitOfDetector) {
             Get<"HitID">(*hit) = hitID++;
-            assert(Get<"TileID">(*hit) == tileID);
+            Ensures(Get<"TileID">(*hit) == tileID);
             fHitsCollection->insert(hit.release());
         }
     }

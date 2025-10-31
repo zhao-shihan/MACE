@@ -2,7 +2,6 @@
 #include "MACE/Simulation/SD/MCPSD.h++"
 
 #include "Mustard/IO/PrettyLog.h++"
-#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4DataInterpolation.hh"
 #include "G4Event.hh"
@@ -13,15 +12,14 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
-#include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
-#include "G4VTouchable.hh"
 #include "Randomize.hh"
 
 #include "muc/algorithm"
 
-#include <cassert>
+#include "gsl/gsl"
+
 #include <cmath>
 #include <ranges>
 #include <stdexcept>
@@ -29,8 +27,6 @@
 #include <tuple>
 
 namespace MACE::inline Simulation::inline SD {
-
-using namespace Mustard::LiteralUnit::Energy;
 
 MCPSD::MCPSD(const G4String& sdName) :
     G4VSensitiveDetector{sdName},
@@ -65,8 +61,8 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto eDep{step.GetTotalEnergyDeposit()};
 
-    assert(0 <= step.GetNonIonizingEnergyDeposit());
-    assert(step.GetNonIonizingEnergyDeposit() <= eDep);
+    Expects(0 <= step.GetNonIonizingEnergyDeposit());
+    Expects(step.GetNonIonizingEnergyDeposit() <= eDep);
     if (eDep == step.GetNonIonizingEnergyDeposit()) {
         return false;
     }
@@ -115,7 +111,7 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
     } break;
     default: {
         const auto timeResolutionFWHM{Detector::Description::MCP::Instance().TimeResolutionFWHM()};
-        assert(timeResolutionFWHM >= 0);
+        Expects(timeResolutionFWHM >= 0);
         // sort hit by time
         muc::timsort(fSplitHit,
                      [](const auto& hit1, const auto& hit2) {

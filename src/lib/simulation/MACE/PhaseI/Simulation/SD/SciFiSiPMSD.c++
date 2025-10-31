@@ -10,8 +10,6 @@
 #include "G4Track.hh"
 #include "G4VTouchable.hh"
 
-#include <cassert>
-
 namespace MACE::PhaseI::inline Simulation::inline SD {
 
 SciFiSiPMSD::SciFiSiPMSD(const G4String& sdName) :
