@@ -28,6 +28,9 @@ jobs:
         image:
           - url: ghcr.io/zhao-shihan/rgb-docker:mpich
           - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
+        build-type:
+          - string: Debug
+          - string: Release
     container: ${{ matrix.image.url }}
     defaults:
       run:
@@ -45,6 +48,7 @@ jobs:
             -DCMAKE_C_FLAGS='-march=native' \
             -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_CXX_FLAGS='-march=native' \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build-type.string }} \
             -DMACESW_WERROR=ON \
             -DMACESW_UNITY_BUILD=ON \
             -DMACESW_FULL_UNITY_BUILD=ON

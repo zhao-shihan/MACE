@@ -28,6 +28,9 @@ jobs:
         image:
           - url: ghcr.io/zhao-shihan/rgb-docker:mpich
           - url: ghcr.io/zhao-shihan/rgb-docker:openmpi
+        build-type:
+          - string: Debug
+          - string: Release
     container: ${{ matrix.image.url }}
     defaults:
       run:
@@ -45,5 +48,6 @@ jobs:
             -DCMAKE_C_FLAGS='-march=x86-64-v2' \
             -DCMAKE_CXX_COMPILER=g++ \
             -DCMAKE_CXX_FLAGS='-march=x86-64-v2'\
+            -DCMAKE_BUILD_TYPE=${{ matrix.build-type.string }} \
             -DMACESW_WERROR=ON
           ninja
