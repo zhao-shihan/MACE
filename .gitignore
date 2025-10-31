@@ -33,3 +33,4 @@ document/doxygen/rtf/
 document/doxygen/xml/
 install/
 thirdparty/
+tooling/clang-tidy-fix-*.yml

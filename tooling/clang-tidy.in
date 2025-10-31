@@ -143,6 +143,7 @@ Checks:
   - -readability-redundant-access-specifiers
   - -readability-redundant-member-init
   - -readability-static-accessed-through-instance
+  @MACESW_CLANG_TIDY_FIX_OPTION_1@
 CheckOptions:
   - key: bugprone-empty-catch.IgnoreCatchWithKeywords
     value: "@TODO;@FIXME;@EXCEPTIONS_INTENTIONALLY_IGNORED"

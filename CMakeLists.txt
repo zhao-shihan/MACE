@@ -23,8 +23,10 @@ project(MACESW VERSION 0.0.0
 # Dirs
 set(MACESW_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 set(MACESW_PROJECT_CMAKE_DIR ${MACESW_PROJECT_ROOT_DIR}/cmake)
+set(MACESW_PROJECT_DOCS_DIR ${MACESW_PROJECT_ROOT_DIR}/docs)
 set(MACESW_PROJECT_SOURCE_DIR ${MACESW_PROJECT_ROOT_DIR}/src)
 set(MACESW_PROJECT_3RDPARTY_DIR ${MACESW_PROJECT_ROOT_DIR}/thirdparty)
+set(MACESW_PROJECT_TOOL_DIR ${MACESW_PROJECT_ROOT_DIR}/tooling)
 
 # Install dirs
 include(GNUInstallDirs)
@@ -46,6 +48,7 @@ option(MACESW_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is
 option(MACESW_CLANG_FORMAT "Requires source code format to be checked by clang-format (requires clang-format)" ON)
 option(MACESW_CLANG_FORMAT_WERROR "Let clang-format treat warnings as errors (only takes effect when MACESW_CLANG_FORMAT=ON)" OFF)
 option(MACESW_CLANG_TIDY "Requires source code to be analysed by clang-tidy (requires clang-tidy)" OFF)
+option(MACESW_CLANG_TIDY_AMEND_UNITY_BUILD "Amend unity-build-missed clang-tidy checks in normal build (only takes effect when both MACESW_CLANG_TIDY=ON and MACESW_UNITY_BUILD=OFF)" OFF)
 option(MACESW_CLANG_TIDY_WERROR "Let clang-tidy treat warnings as errors (only takes effect when MACESW_CLANG_TIDY=ON)" OFF)
 option(MACESW_ENABLE_ASAN_IN_DEBUG_BUILD "Enable AddressSanitizer in debug build" OFF)
 option(MACESW_ENABLE_IPO "Build MACESW with interprocedural optimization" ON)

@@ -42,9 +42,8 @@ jobs:
       - name: Static code analysis
         run: |
           . /environment
-          mkdir build && cd build
+          mkdir unity-build-clang && cd unity-build-clang
           cmake -G Ninja .. \
-            -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER=clang \
             -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_C_FLAGS='-Werror -march=native' \
@@ -52,5 +51,19 @@ jobs:
             -DMACESW_CLANG_FORMAT=ON \
             -DMACESW_CLANG_FORMAT_WERROR=ON \
             -DMACESW_CLANG_TIDY=ON \
+            -DMACESW_CLANG_TIDY_WERROR=ON \
+            -DMACESW_FULL_UNITY_BUILD=ON
+          ninja
+          cd ..
+          mkdir build-gcc && cd build-gcc
+          cmake -G Ninja .. \
+            -DCMAKE_C_COMPILER=gcc \
+            -DCMAKE_CXX_COMPILER=g++ \
+            -DCMAKE_C_FLAGS='-Werror -march=x86-64-v2' \
+            -DCMAKE_CXX_FLAGS='-Werror -march=x86-64-v2' \
+            -DMACESW_CLANG_FORMAT=ON \
+            -DMACESW_CLANG_FORMAT_WERROR=ON \
+            -DMACESW_CLANG_TIDY=ON \
+            -DMACESW_CLANG_TIDY_AMEND_UNITY_BUILD=ON \
             -DMACESW_CLANG_TIDY_WERROR=ON
           ninja
