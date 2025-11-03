@@ -1,15 +1,6 @@
 name: Regression test (AMD64 GNU/Linux Clang)
 
 on:
-  push:
-    branches: ["main", "rc"]
-    paths:
-      - ".github/workflows/regression-test-with-clang.yml"
-      - "src/**"
-      - "test/**"
-      - "MACE.c\\+\\+"
-      - "**/CMakeLists.txt"
-      - "**.cmake"
   pull_request:
     branches: ["main", "rc"]
     paths:

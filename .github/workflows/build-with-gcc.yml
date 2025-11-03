@@ -9,14 +9,6 @@ on:
       - "MACE.c\\+\\+"
       - "**/CMakeLists.txt"
       - "**.cmake"
-  pull_request:
-    branches: ["**"]
-    paths:
-      - ".github/workflows/build-with-gcc.yml"
-      - "src/**"
-      - "MACE.c\\+\\+"
-      - "**/CMakeLists.txt"
-      - "**.cmake"
 
 jobs:
   build-with-gcc:
