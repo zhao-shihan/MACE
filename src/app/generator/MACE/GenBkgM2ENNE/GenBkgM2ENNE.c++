@@ -1,12 +1,11 @@
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/TTC.h++"
-#include "MACE/GenM2ENNE/GenM2ENNE.h++"
+#include "MACE/GenBkgM2ENNE/GenBkgM2ENNE.h++"
 #include "MACE/Utility/InitialStateCLIModule.h++"
 #include "MACE/Utility/MCMCGeneratorCLI.h++"
 #include "MACE/Utility/WriteAutocorrelationFunction.h++"
 
-#include "Mustard/CLHEPX/Random/Xoshiro.h++"
 #include "Mustard/Data/GeneratedEvent.h++"
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Env/MPIEnv.h++"
@@ -24,25 +23,20 @@
 #include "muc/numeric"
 #include "muc/utility"
 
-#include <cmath>
-#include <string>
-#include <type_traits>
-
-namespace MACE::GenM2ENNE {
+namespace MACE::GenBkgM2ENNE {
 
 using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::MathConstant;
 using namespace Mustard::PhysicalConstant;
 using namespace std::string_literals;
 
-GenM2ENNE::GenM2ENNE() :
-    Subprogram{"GenM2ENNE", "Generate muonium decay (M -> e+ nu nu e-)."} {}
+GenBkgM2ENNE::GenBkgM2ENNE() :
+    Subprogram{"GenBkgM2ENNE", "Generate muonium decay with hard photon exchange (M -> e+ nu nu e-)."} {}
 
-auto GenM2ENNE::Main(int argc, char* argv[]) const -> int {
+auto GenBkgM2ENNE::Main(int argc, char* argv[]) const -> int {
     MCMCGeneratorCLI<InitialStateCLIModule<"unpolarized", "muonium">> cli;
     cli.DefaultOutput("m2enne.root");
     cli.DefaultOutputTree("m2enne");
-    cli->add_argument("--ir-cut").help("IR cut for final-state electron.").default_value(10 * electron_mass_c2).required().nargs(1).scan<'g', double>();
     auto& biasCLI{cli->add_mutually_exclusive_group()};
     biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
     biasCLI.add_argument("--ep-ek-bias").help("Apply soft upper bound for positron kinetic energy.").flag();
@@ -53,7 +47,7 @@ auto GenM2ENNE::Main(int argc, char* argv[]) const -> int {
     Mustard::Env::MPIEnv env{argc, argv, cli};
     Mustard::UseXoshiro<256> random{cli};
 
-    Mustard::M2ENNEGenerator generator("muonium", cli.Momentum(), cli->get<double>("--ir-cut"),
+    Mustard::M2ENNEGenerator generator("muonium", cli.Momentum(),
                                        cli->present<double>("--thinning-ratio"), cli->present<unsigned>("--acf-sample-size"));
 
     if (cli["--mace-bias"] == true) {
@@ -69,9 +63,9 @@ auto GenM2ENNE::Main(int argc, char* argv[]) const -> int {
                               scEk = muc::soft_cmp{cli->get<double>("--ep-ek-softening-factor")}](auto&& momenta) {
             // .         e+ n   n   e-
             const auto& [p0, _1, _2, p3]{momenta};
-            const auto p3Seen{scPxy(p3.perp()) > scPxy(outPxyCut) and scCos(muc::abs(p3.cosTheta())) < scCos(cosCut)};
             const auto p0Low{scEk(p0.e() - electron_mass_c2) < scEk(epEkCut)};
-            return p3Seen and p0Low;
+            const auto p3Seen{scPxy(p3.perp()) > scPxy(outPxyCut) and scCos(muc::abs(p3.cosTheta())) < scCos(cosCut)};
+            return p0Low and p3Seen;
         });
     } else if (cli["--ep-ek-bias"] == true) {
         generator.Acceptance([epEkCut = cli->get<double>("--ep-ek-soft-upper-bound"),
@@ -127,4 +121,4 @@ auto GenM2ENNE::Main(int argc, char* argv[]) const -> int {
     return EXIT_SUCCESS;
 }
 
-} // namespace MACE::GenM2ENNE
+} // namespace MACE::GenBkgM2ENNE
