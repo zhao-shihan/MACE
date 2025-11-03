@@ -35,7 +35,7 @@ GenBkgM2ENNE::GenBkgM2ENNE() :
 
 auto GenBkgM2ENNE::Main(int argc, char* argv[]) const -> int {
     MCMCGeneratorCLI<InitialStateCLIModule<"unpolarized", "muonium">> cli;
-    cli.DefaultOutput("m2enne.root");
+    cli.DefaultOutput("m2enne_bkg.root");
     cli.DefaultOutputTree("m2enne");
     auto& biasCLI{cli->add_mutually_exclusive_group()};
     biasCLI.add_argument("--mace-bias").help("Enable MACE detector signal region importance sampling.").flag();
