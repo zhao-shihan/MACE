@@ -1,4 +1,5 @@
 # add_subdirectory(analysis)
+add_subdirectory(generator)
 add_subdirectory(phaseI)
 add_subdirectory(reconstruction)
 add_subdirectory(simulation)

@@ -62,7 +62,7 @@ option(MACESW_WITH_DEBUG_INFO "Always add debugging information" OFF)
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Build using shared libraries")
 set(MACESW_BUILTIN_MACESW_OFFLINE_DATA_VERSION 0.25.103013 CACHE STRING "Set built-in offline data version (if required).")
 set(MACESW_BUILTIN_MACESW_TEST_DATA_VERSION 0.25.10301318 CACHE STRING "Set built-in test data version (if required).")
-set(MACESW_BUILTIN_MUSTARD_VERSION 0.25.1030 CACHE STRING "Set built-in Mustard version (if required).")
+set(MACESW_BUILTIN_MUSTARD_VERSION 0.25.1103 CACHE STRING "Set built-in Mustard version (if required).")
 set(MACESW_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in pmp version (if required).")
 
 # =============================================================================
@@ -127,7 +127,8 @@ include(${MACESW_PROJECT_CMAKE_DIR}/MACESWClangTidy.cmake)
 add_subdirectory(${MACESW_PROJECT_SOURCE_DIR})
 # main program
 add_executable(MACE MACE.c++)
-target_link_libraries(MACE AppMACEPhaseI
+target_link_libraries(MACE AppMACEGenerator
+                           AppMACEPhaseI
                            AppMACEReconstruction
                            AppMACESimulation
                            AppMACEUtility
