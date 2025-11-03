@@ -18,6 +18,9 @@ on:
       - "**/CMakeLists.txt"
       - "**.cmake"
 
+permissions:
+  contents: read
+
 jobs:
   build-with-clang:
     name: Build with Clang

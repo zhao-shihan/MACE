@@ -20,6 +20,9 @@ on:
       - "**/CMakeLists.txt"
       - "**.cmake"
 
+permissions:
+  contents: read
+
 jobs:
   test-with-gcc:
     name: Test with GCC

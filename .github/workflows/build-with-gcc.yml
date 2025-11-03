@@ -18,6 +18,9 @@ on:
       - "**/CMakeLists.txt"
       - "**.cmake"
 
+permissions:
+  contents: read
+
 jobs:
   build-with-gcc:
     name: Build with GCC
