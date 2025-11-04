@@ -12,6 +12,9 @@ on:
       - ".clang-format"
       - ".clang-tidy"
 
+permissions:
+  contents: read
+
 jobs:
   clang-format-tidy:
     name: Clang, ClangFormat, ClangTidy
