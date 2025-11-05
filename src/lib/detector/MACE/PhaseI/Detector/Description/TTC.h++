@@ -125,6 +125,8 @@ public:
     auto AirPaintReflectivity(std::vector<double> val) -> void { fAirPaintReflectivity = std::move(val); }
     auto CathodeSurface(std::vector<double> val) -> void { fCathodeSurface = std::move(val); }
 
+    auto UseOptics() const -> bool { return *fUseOptics; }
+
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
     auto ExportAllValue(YAML::Node& node) const -> void override;
@@ -185,6 +187,9 @@ private:
     Simple<std::vector<double>> fCouplerTransmittance;
     Simple<std::vector<double>> fAirPaintReflectivity;
     Simple<std::vector<double>> fCathodeSurface;
+
+    //Option
+    Simple<bool> fUseOptics;
 };
 
 } // namespace MACE::Detector::Description
