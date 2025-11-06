@@ -208,4 +208,4 @@ auto TTC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fUseOptics, "UseOptics");
 }
 
-} // namespace MACE::Detector::Description
+} // namespace MACE::PhaseI::Detector::Description

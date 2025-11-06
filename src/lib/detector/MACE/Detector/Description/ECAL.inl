@@ -2,7 +2,7 @@ namespace MACE::Detector::Description {
 
 inline auto ECAL::MeshManager::Get(const ECAL* ecal) -> const MeshInformation& {
     if (fOutdated) {
-        fMesh = ecal->ComputeMesh();
+        fMesh = ecal->CalculateMeshInformation();
         fOutdated = false;
     }
     return fMesh;

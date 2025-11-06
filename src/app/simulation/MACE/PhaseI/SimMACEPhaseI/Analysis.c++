@@ -4,10 +4,10 @@
 #include "MACE/PhaseI/Simulation/Hit/MRPCHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiHit.h++"
 #include "MACE/PhaseI/Simulation/Hit/SciFiSiPMRawHit.h++"
-#include "MACE/Simulation/Hit/TTCHit.h++"
-#include "MACE/Simulation/Hit/TTCSiPMHit.h++"
 #include "MACE/Simulation/Hit/ECALHit.h++"
 #include "MACE/Simulation/Hit/ECALPMHit.h++"
+#include "MACE/Simulation/Hit/TTCHit.h++"
+#include "MACE/Simulation/Hit/TTCSiPMHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Geant4X/Utility/ConvertGeometry.h++"
@@ -31,6 +31,10 @@ Analysis::Analysis() :
     fMRPCSimHitOutput{},
     fECALSimHitOutput{},
     fECALPMHitOutput{},
+    fSciFiHitOutput{},
+    fSciFiSiPMHitOutput{},
+    fTTCSimHitOutput{},
+    fTTCSiPMHitOutput{},
     fPrimaryVertex{},
     fDecayVertex{},
     fMRPCHit{},
@@ -38,8 +42,6 @@ Analysis::Analysis() :
     fECALPMHit{},
     fSciFiHit{},
     fSciFiSiPMHit{},
-    fTTCSimHitOutput{},
-    fTTCSiPMHitOutput{},
     fTTCHit{},
     fTTCSiPMHit{},
     fMessengerRegister{this} {}
@@ -61,8 +63,8 @@ auto Analysis::RunBeginUserAction(int runID) -> void {
 }
 
 auto Analysis::EventEndUserAction() -> void {
-    const auto mrpcPassed{not fCoincidenceWithMRPC or fMRPCHit == nullptr or fMRPCHit->size() > 0};
-    const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or fECALHit->size() > 0};
+    const auto mrpcPassed{not fCoincidenceWithMRPC or fMRPCHit == nullptr or not fMRPCHit->empty()};
+    const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or not fECALHit->empty()};
     if (mrpcPassed and ecalPassed) {
         if (fPrimaryVertex and fPrimaryVertexOutput) {
             fPrimaryVertexOutput->Fill(*fPrimaryVertex);

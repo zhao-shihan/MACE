@@ -1,7 +1,8 @@
 #include "MACE/PhaseI/Detector/Definition/TTC.h++"
 #include "MACE/PhaseI/Detector/Description/TTC.h++"
 
-#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
+#include "Mustard/Utility/PhysicalConstant.h++"
 #include "Mustard/Utility/VectorCast.h++"
 
 #include "G4Box.hh"
@@ -10,7 +11,6 @@
 #include "G4NistManager.hh"
 #include "G4OpticalSurface.hh"
 #include "G4PVPlacement.hh"
-#include "G4PhysicalConstants.hh"
 #include "G4Transform3D.hh"
 
 #include "gsl/gsl"
@@ -22,7 +22,8 @@
 
 namespace MACE::PhaseI::Detector::Definition {
 
-using namespace Mustard::LiteralUnit::MathConstantSuffix;
+using namespace Mustard::MathConstant;
+using namespace Mustard::PhysicalConstant;
 
 auto TTC::Construct(G4bool checkOverlaps) -> void {
     const auto& ttc{Description::TTC::Instance()};
@@ -48,7 +49,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
 
     // Construct Detector
     int tileID{};
-    const auto nCircle{ttc.NAlongPhi().size()};
+    const auto nCircle{ssize(ttc.NAlongPhi())};
 
     // set up the PCB
     const auto ttcPCBSolid{Make<G4Box>(
@@ -101,7 +102,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         ttcVirtualBoxSolid,
         ttcVirtualBoxMaterial,
         "TTCVirtualBox")};
-    for (gsl::index i{}; i < nCircle; ++i) {
+    for (int i{}; i < nCircle; ++i) {
         auto deltaPhi{2 * pi / ttc.NAlongPhi()[i]};
         // set the position of air mother box
         const auto transform{/*G4RotateZ3D{Mustard::Math::IsEven(i) ? 0 : deltaPhi / 2} **/
