@@ -45,8 +45,6 @@ public:
 
     auto CoincidenceWithMRPC(G4bool val) -> void { fCoincidenceWithMRPC = val; }
     auto CoincidenceWithECAL(G4bool val) -> void { fCoincidenceWithECAL = val; }
-    auto SaveTTCHitData(bool val) -> void { fSaveTTCHitData = val; }
-    auto SaveTTCSiPMHitData(bool val) -> void { fSaveTTCSiPMHitData = val; }
 
     auto SubmitPrimaryVertexData(const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimPrimaryVertex>>& data) -> void { fPrimaryVertex = &data; }
     auto SubmitDecayVertexData(const muc::unique_ptrvec<Mustard::Data::Tuple<MACE::Data::SimDecayVertex>>& data) -> void { fDecayVertex = &data; }
