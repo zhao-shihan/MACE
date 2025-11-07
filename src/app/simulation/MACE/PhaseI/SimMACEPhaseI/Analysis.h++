@@ -65,8 +65,6 @@ public:
 private:
     G4bool fCoincidenceWithMRPC;
     G4bool fCoincidenceWithECAL;
-    bool fSaveTTCHitData;
-    bool fSaveTTCSiPMHitData;
 
     std::optional<Mustard::Data::Output<MACE::Data::SimPrimaryVertex>> fPrimaryVertexOutput;
     std::optional<Mustard::Data::Output<MACE::Data::SimDecayVertex>> fDecayVertexOutput;
