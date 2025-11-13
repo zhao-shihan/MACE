@@ -9,7 +9,7 @@ on:
       - ".github/workflows/regression-test-with-clang.yml"
       - "src/**"
       - "test/**"
-      - "MACE.c\\+\\+"
+      - "MACE.c++"
       - "**/CMakeLists.txt"
       - "**.cmake"
 

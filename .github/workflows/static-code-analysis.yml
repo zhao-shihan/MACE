@@ -8,9 +8,11 @@ on:
     paths:
       - ".github/workflows/static-code-analysis.yml"
       - "src/**"
-      - "MACE.c\\+\\+"
+      - "MACE.c++"
       - "**/CMakeLists.txt"
       - "**.cmake"
+      - ".clang-format"
+      - ".clang-tidy"
 
   pull_request:
     branches:
@@ -19,7 +21,7 @@ on:
     paths:
       - ".github/workflows/static-code-analysis.yml"
       - "src/**"
-      - "MACE.c\\+\\+"
+      - "MACE.c++"
       - "**/CMakeLists.txt"
       - "**.cmake"
       - ".clang-format"
