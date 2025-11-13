@@ -6,7 +6,7 @@ on:
       - main
       - rc
     paths:
-      - ".github/workflows/build-with-clang.yml"
+      - ".github/workflows/static-code-analysis.yml"
       - "src/**"
       - "MACE.c\\+\\+"
       - "**/CMakeLists.txt"
