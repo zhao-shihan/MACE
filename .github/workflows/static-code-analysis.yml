@@ -2,7 +2,20 @@ name: Static code analysis
 
 on:
   push:
-    branches: ["**"]
+    branches-ignore:
+      - main
+      - rc
+    paths:
+      - ".github/workflows/build-with-clang.yml"
+      - "src/**"
+      - "MACE.c\\+\\+"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
+
+  pull_request:
+    branches:
+      - main
+      - rc
     paths:
       - ".github/workflows/static-code-analysis.yml"
       - "src/**"
