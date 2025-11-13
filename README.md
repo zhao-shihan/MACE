@@ -51,9 +51,7 @@ The recommended approach for basic user to build MACESW is using the RGB Apptain
 
 Download and install Apptainer from the [official releases](https://github.com/apptainer/apptainer/releases). For Debian-based systems:
 ```bash
-# Replace the version as needed; see the Apptainer releases page for the latest version and links
-wget https://github.com/apptainer/apptainer/releases/download/v1.4.3/apptainer_1.4.3_amd64.deb -O apptainer.deb
-sudo apt install ./apptainer.deb
+sudo apt install apptainer
 ```
 
 #### 2. Download RGB image
@@ -118,44 +116,44 @@ The following dependencies are optional. If they are not found on your system du
 
 If you use MACESW in your research, please cite the following papers:
 
-**BAI Ai-Yu, CAI Hanjie, CHEN Chang-Lin, et al (MACE working group).**  
-**Conceptual Design of the Muonium-to-Antimuonium Conversion Experiment (MACE)** [DB/OL].  
-*arXiv preprint*, 2024: 2410.18817 [hep-ex].  
+**BAI Ai-Yu, CAI Hanjie, CHEN Chang-Lin, et al (MACE working group).**
+**Conceptual Design of the Muonium-to-Antimuonium Conversion Experiment (MACE)** [DB/OL].
+*arXiv preprint*, 2024: 2410.18817 [hep-ex].
 https://arxiv.org/abs/2410.18817.
 
 ## Literatures list (sort by disclosure date)
 
-**LU Guihao, ZHAO Shihan, CHEN Siyuan, et al.**  
-**Positron Transport System for Muonium-to-Antimuonium Conversion Experiment** [DB/OL].  
-*arXiv preprint*, 2025: 2508.07922 [hep-ex].  
+**LU Guihao, ZHAO Shihan, CHEN Siyuan, et al.**
+**Positron Transport System for Muonium-to-Antimuonium Conversion Experiment** [DB/OL].
+*arXiv preprint*, 2025: 2508.07922 [hep-ex].
 https://arxiv.org/abs/2508.07922.
 
-**AN FengPeng, BAI Dong, CHEN Siyuan, et al.**  
-**High-Precision Physics Experiments at Huizhou Large-Scale Scientific Facilities** [DB/OL].  
-*arXiv preprint*, 2025: 2504.21050 [hep-ph].  
+**AN FengPeng, BAI Dong, CHEN Siyuan, et al.**
+**High-Precision Physics Experiments at Huizhou Large-Scale Scientific Facilities** [J].
+*Chin. Phys. Lett.*, 2025, 42(11): 110102. DOI: 10.1088/0256-307X/42/11/110102.
 https://arxiv.org/abs/2504.21050.
 
-**BAI Ai-Yu, CAI Hanjie, CHEN Chang-Lin, et al. (MACE working group).**  
-**Conceptual Design of the Muonium-to-Antimuonium Conversion Experiment (MACE)** [DB/OL].  
-*arXiv preprint*, 2024: 2410.18817 [hep-ex].  
+**BAI Ai-Yu, CAI Hanjie, CHEN Chang-Lin, et al. (MACE working group).**
+**Conceptual Design of the Muonium-to-Antimuonium Conversion Experiment (MACE)** [DB/OL].
+*arXiv preprint*, 2024: 2410.18817 [hep-ex].
 https://arxiv.org/abs/2410.18817.
 
-**CHEN Siyuan, ZHAO Shihan, XIONG Weizhi, et al.**  
-**Design of a CsI(Tl) calorimeter for muonium-to-antimuonium conversion experiment** [J].  
-*Front. Phys.*, 2025, 20: 035202. DOI: 10.15302/frontphys.2025.035202. arXiv: 2408.17114 [physics.ins-det].  
+**CHEN Siyuan, ZHAO Shihan, XIONG Weizhi, et al.**
+**Design of a CsI(Tl) calorimeter for muonium-to-antimuonium conversion experiment** [J].
+*Front. Phys.*, 2025, 20: 035202. DOI: 10.15302/frontphys.2025.035202. arXiv: 2408.17114 [physics.ins-det].
 https://doi.org/10.15302/frontphys.2025.035202.
 
-**ZHAO Shihan, TANG Jian.**  
-**Progress of muonium-to-antimuonium conversion experiment** [J].  
-*Nucl. Part. Phys. Proc.*, 2024, 345: 24-28. DOI: 10.1016/j.nuclphysbps.2024.05.005.  
+**ZHAO Shihan, TANG Jian.**
+**Progress of muonium-to-antimuonium conversion experiment** [J].
+*Nucl. Part. Phys. Proc.*, 2024, 345: 24-28. DOI: 10.1016/j.nuclphysbps.2024.05.005.
 https://doi.org/10.1016/j.nuclphysbps.2024.05.005.
 
-**CORRODI S., OKSUZIAN Y., EDMONDS A., et al.**  
-**Workshop on a future muon program at FNAL** [C].  
-*arXiv preprint*, 2023: 2309.05933 [hep-ex].  
+**CORRODI S., OKSUZIAN Y., EDMONDS A., et al.**
+**Workshop on a future muon program at FNAL** [C].
+*arXiv preprint*, 2023: 2309.05933 [hep-ex].
 https://arxiv.org/abs/2309.05933.
 
-**BAI Ai-Yu, CHEN Yu, CHEN Yukai, et al. (MACE working group).**  
-**Snowmass2021 Whitepaper: Muonium to Antimuonium Conversion** [DB/OL].  
-*arXiv preprint*, 2022: 2203.11406 [hep-ph].  
+**BAI Ai-Yu, CHEN Yu, CHEN Yukai, et al. (MACE working group).**
+**Snowmass2021 Whitepaper: Muonium to Antimuonium Conversion** [DB/OL].
+*arXiv preprint*, 2022: 2203.11406 [hep-ph].
 https://arxiv.org/abs/2203.11406.
