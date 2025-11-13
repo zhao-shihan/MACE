@@ -17,8 +17,8 @@ permissions:
   contents: read
 
 jobs:
-  test-with-clang:
-    name: Test with Clang
+  regression-test-with-clang:
+    name: Regression test (Clang)
     timeout-minutes: 180
     runs-on: ubuntu-latest
     strategy:

@@ -28,8 +28,8 @@ permissions:
 
 jobs:
   build-with-gcc:
-    name: Build with GCC
-    timeout-minutes: 30
+    name: Build (GCC)
+    timeout-minutes: 45
     runs-on: ubuntu-latest
     strategy:
       matrix:

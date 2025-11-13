@@ -17,8 +17,8 @@ permissions:
   contents: read
 
 jobs:
-  test-with-gcc:
-    name: Test with GCC
+  regression-test-with-gcc:
+    name: Regression test (GCC)
     timeout-minutes: 180
     runs-on: ubuntu-latest
     strategy:
