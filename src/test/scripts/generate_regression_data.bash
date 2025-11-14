@@ -6,7 +6,6 @@ for arg in "$@"; do
     case $arg in
         --use-hwthreads)
             use_hwthreads=true
-            shift
             ;;
         *)
             ;;
@@ -50,7 +49,14 @@ if $use_hwthreads; then
     n_proc=$(nproc)
 else
     # Use physical cores (default)
-    n_proc=$(echo "$(nproc) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
+    threads_per_core=$(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')
+    if [[ -z "$threads_per_core" || "$threads_per_core" -eq 0 ]]; then
+        threads_per_core=1  # Fallback to assuming 1 thread per core
+    fi
+    n_proc=$(echo "$(nproc) / $threads_per_core" | bc)
+    if [[ "$n_proc" -lt 1 ]]; then
+        n_proc=1  # Ensure at least 1 core
+    fi
 fi
 run_command mpiexec -n $n_proc $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
 run_command mpiexec -n $n_proc $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac

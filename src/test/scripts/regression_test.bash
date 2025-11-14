@@ -6,7 +6,6 @@ for arg in "$@"; do
     case $arg in
         --use-hwthreads)
             use_hwthreads=true
-            shift
             ;;
         *)
             ;;
@@ -70,7 +69,14 @@ parexec() {
         fi
     else
         # Use physical cores (default)
-        local n_physical_cores=$(echo "$(nproc) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
+        local threads_per_core=$(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')
+        if [[ -z "$threads_per_core" || "$threads_per_core" -eq 0 ]]; then
+            threads_per_core=1  # Fallback to assuming 1 thread per core
+        fi
+        local n_physical_cores=$(echo "$(nproc) / $threads_per_core" | bc)
+        if [[ "$n_physical_cores" -lt 1 ]]; then
+            n_physical_cores=1  # Ensure at least 1 core
+        fi
         if [[ -n "$(echo $(mpiexec --version 2>/dev/null) | grep "Open MPI")" ]]; then
             mpiexec --allow-run-as-root -n $n_physical_cores $@
         else
