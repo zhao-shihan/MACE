@@ -101,12 +101,7 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                             *Get<"EvtID">(*siPMHitData.back()) = *Get<"EvtID">(*siPMHitRange[j]);
                             *Get<"SiPMID">(*siPMHitData.back()) = *Get<"SiPMID">(*siPMHitRange[j]);
 
-                            while ([&] {
-                                if ((j) >= std::ssize(siPMHitRange)) {
-                                    return false;
-                                }
-                                return ((j) < std::ssize(siPMHitRange) and *Get<"t">(*siPMHitRange[j]) < endTime);
-                            }()) {
+                            while (j < std::ssize(siPMHitRange) and *Get<"t">(*siPMHitRange[j]) < endTime) {
                                 count++;
                                 j++;
                             }
@@ -118,22 +113,14 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                             }
                         }
                     } else if (j < std::ssize(siPMHitRange)) {
-                        while ([&] {
-                            if ((j) >= std::ssize(siPMHitRange)) {
-                                return false;
-                            }
-                            return ((j) < std::ssize(siPMHitRange) and *Get<"t">(*siPMHitRange[j]) < endTime);
-                        }()) {
-                            if (j < std::ssize(siPMHitRange)) {
-                                j++;
-                            }
+                        while (*Get<"t">(*siPMHitRange[j]) < endTime) {
+                            j++;
                         }
 
-                        if (j < std::ssize(siPMHitRange)) {
-                            if (initialTime < *Get<"t">(*siPMHitRange[j])) {
-                                initialTime = *Get<"t">(*siPMHitRange[j]);
-                            }
+                        if (initialTime < *Get<"t">(*siPMHitRange[j])) {
+                            initialTime = *Get<"t">(*siPMHitRange[j]);
                         }
+
                         endTime = initialTime + sciFiTracker.ThresholdTime();
                         count = 0;
                     } else {

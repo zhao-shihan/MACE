@@ -90,19 +90,19 @@ public:
             double radius{};
             double pitch{};
         };
-        int firstID;
-        int lastID;
-        int fiberNumber;
+        int firstID{};
+        int lastID{};
+        int fiberNumber{};
         FiberConfiguration fiber;
     };
 
     struct FiberInformation {
-        int layerID;
-        int localID;
-        std::string layerType;
-        double radius;
-        double pitch;
-        double rotationAngle;
+        int layerID{};
+        int localID{};
+        std::string layerType{};
+        double radius{};
+        double pitch{};
+        double rotationAngle{};
     };
 
 private:
