@@ -2,7 +2,20 @@ name: Build (AMD64 GNU/Linux Clang, unity build)
 
 on:
   push:
-    branches: ["**"]
+    branches-ignore:
+      - main
+      - rc
+    paths:
+      - ".github/workflows/build-with-clang.yml"
+      - "src/**"
+      - "MACE.c\\+\\+"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
+
+  pull_request:
+    branches:
+      - main
+      - rc
     paths:
       - ".github/workflows/build-with-clang.yml"
       - "src/**"
@@ -15,8 +28,8 @@ permissions:
 
 jobs:
   build-with-clang:
-    name: Build with Clang
-    timeout-minutes: 30
+    name: Build (Clang, unity build)
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     strategy:
       matrix:

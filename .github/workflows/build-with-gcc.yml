@@ -2,7 +2,20 @@ name: Build (AMD64 GNU/Linux GCC)
 
 on:
   push:
-    branches: ["**"]
+    branches-ignore:
+      - main
+      - rc
+    paths:
+      - ".github/workflows/build-with-gcc.yml"
+      - "src/**"
+      - "MACE.c\\+\\+"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
+
+  pull_request:
+    branches:
+      - main
+      - rc
     paths:
       - ".github/workflows/build-with-gcc.yml"
       - "src/**"
@@ -15,8 +28,8 @@ permissions:
 
 jobs:
   build-with-gcc:
-    name: Build with GCC
-    timeout-minutes: 30
+    name: Build (GCC)
+    timeout-minutes: 45
     runs-on: ubuntu-latest
     strategy:
       matrix:
