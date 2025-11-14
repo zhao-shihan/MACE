@@ -113,7 +113,7 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                             }
                         }
                     } else if (j < std::ssize(siPMHitRange)) {
-                        while (*Get<"t">(*siPMHitRange[j]) < endTime) {
+                        while (j < std::ssize(siPMHitRange) and *Get<"t">(*siPMHitRange[j]) < endTime) {
                             j++;
                         }
 
