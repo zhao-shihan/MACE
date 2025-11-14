@@ -23,9 +23,9 @@ auto ReadSimDecayVertex(auto moduleName, auto srcFileName, auto dstFileName) -> 
     }
     auto dstDir{moduleDir->mkdir(DataTupleName)};
     if (!dstDir) {
-        std::cout << "Make TDirectory " << DataTupleName << " Failed. ";
+        std::cerr << "Make TDirectory " << DataTupleName << " Failed. ";
         if (moduleDir->Get(DataTupleName)) {
-            std::cout << "Already exist." << std::endl;
+            std::cerr << "Already exist." << std::endl;
             return 1;
         }
     }
