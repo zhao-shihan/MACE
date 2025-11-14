@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+# Parse command line arguments
+use_hwthreads=false
+for arg in "$@"; do
+    case $arg in
+        --use-hwthreads)
+            use_hwthreads=true
+            shift
+            ;;
+        *)
+            ;;
+    esac
+done
+
 script_dir="$(dirname "$(readlink -f "$0")")"
 build_dir=$script_dir/..
 test_dir=$script_dir/test_$(date --utc +%Y%m%d-%H%M%S)
@@ -48,10 +61,21 @@ run_command() {
 }
 
 parexec() {
-    if [[ -n "$(echo $(mpiexec --version 2>/dev/null) | grep "Open MPI")" ]]; then
-        mpiexec --allow-run-as-root --use-hwthread-cpus $@
+    if $use_hwthreads; then
+        # Use hardware threads (hyperthreading included)
+        if [[ -n "$(echo $(mpiexec --version 2>/dev/null) | grep "Open MPI")" ]]; then
+            mpiexec --allow-run-as-root --use-hwthread-cpus $@
+        else
+            mpiexec -n $(nproc) $@
+        fi
     else
-        mpiexec -n $(nproc) $@
+        # Use physical cores (default)
+        local n_physical_cores=$(echo "$(nproc) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
+        if [[ -n "$(echo $(mpiexec --version 2>/dev/null) | grep "Open MPI")" ]]; then
+            mpiexec --allow-run-as-root -n $n_physical_cores $@
+        else
+            mpiexec -n $n_physical_cores $@
+        fi
     fi
 }
 

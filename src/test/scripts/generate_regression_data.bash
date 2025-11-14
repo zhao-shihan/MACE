@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+# Parse command line arguments
+use_hwthreads=false
+for arg in "$@"; do
+    case $arg in
+        --use-hwthreads)
+            use_hwthreads=true
+            shift
+            ;;
+        *)
+            ;;
+    esac
+done
+
 script_dir="$(dirname "$(readlink -f "$0")")"
 build_dir=$script_dir/..
 regression_data_dir=$script_dir/regression_data_$(date --utc +%Y%m%d-%H%M%S)
@@ -32,10 +45,16 @@ run_command() {
 }
 
 echo "Start simulation..."
-n_physical_core=$(echo "$(nproc) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
-run_command mpiexec -n $n_physical_core $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
-run_command mpiexec -n $n_physical_core $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac
-run_command mpiexec -n $n_physical_core $build_dir/MACE SimMACE $build_dir/SimMACE/run_signal.mac
+if $use_hwthreads; then
+    # Use hardware threads (hyperthreading included)
+    n_cores=$(nproc)
+else
+    # Use physical cores (default)
+    n_cores=$(echo "$(nproc) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
+fi
+run_command mpiexec -n $n_cores $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
+run_command mpiexec -n $n_cores $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac
+run_command mpiexec -n $n_cores $build_dir/MACE SimMACE $build_dir/SimMACE/run_signal.mac
 
 echo "Merging results..."
 run_command hadd -ff SimMMS_em_flat_sample.root SimMMS_em_flat_test/*
