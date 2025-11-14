@@ -43,13 +43,13 @@ public:
     auto SiPMEnergyBin() const -> const auto& { return fSiPMEnergyBin; }
     auto SiPMQuantumEfficiency() const -> const auto& { return fSiPMQuantumEfficiency; }
     // Reconstruction
-    auto SiPMOpticalPhotonCountThreshold() const -> const auto { return fSiPMOpticalPhotonCountThreshold; }
-    auto ClusterLength() const -> const auto { return fClusterLength; }
-    auto ThresholdTime() const -> const auto { return fThresholdTime; }
-    auto TimeWindow() const -> const auto { return fTimeWindow; }
-    auto SiPMDeadTime() const -> const auto { return fSiPMDeadTime; }
-    auto CentroidThetaThreshold() const -> const auto { return fCentroidThetaThreshold; }
-    auto CentroidZThreshold() const -> const auto { return fCentroidZThreshold; }
+    auto SiPMOpticalPhotonCountThreshold() const -> auto { return fSiPMOpticalPhotonCountThreshold; }
+    auto ClusterLength() const -> auto { return fClusterLength; }
+    auto ThresholdTime() const -> auto { return fThresholdTime; }
+    auto TimeWindow() const -> auto { return fTimeWindow; }
+    auto SiPMDeadTime() const -> auto { return fSiPMDeadTime; }
+    auto CentroidThetaThreshold() const -> auto { return fCentroidThetaThreshold; }
+    auto CentroidZThreshold() const -> auto { return fCentroidZThreshold; }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
