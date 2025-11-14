@@ -47,14 +47,14 @@ run_command() {
 echo "Start simulation..."
 if $use_hwthreads; then
     # Use hardware threads (hyperthreading included)
-    n_cores=$(nproc)
+    n_proc=$(nproc)
 else
     # Use physical cores (default)
-    n_cores=$(echo "$(nproc) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
+    n_proc=$(echo "$(nproc) / $(env LC_ALL=C lscpu | grep "Thread(s) per core" | awk '{print $4}')" | bc)
 fi
-run_command mpiexec -n $n_cores $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
-run_command mpiexec -n $n_cores $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac
-run_command mpiexec -n $n_cores $build_dir/MACE SimMACE $build_dir/SimMACE/run_signal.mac
+run_command mpiexec -n $n_proc $build_dir/MACE SimMMS $build_dir/SimMMS/run_em_flat.mac
+run_command mpiexec -n $n_proc $build_dir/MACE SimTTC $build_dir/SimTTC/run_em_flat.mac
+run_command mpiexec -n $n_proc $build_dir/MACE SimMACE $build_dir/SimMACE/run_signal.mac
 
 echo "Merging results..."
 run_command hadd -ff SimMMS_em_flat_sample.root SimMMS_em_flat_test/*
