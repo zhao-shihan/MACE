@@ -36,7 +36,7 @@ This document explains how to report issues, propose changes, and prepare contri
   - How you tested the change and instructions to reproduce the test.
 
 ## Code style and tests
-- Follow the project's existing style. If the repository contains a linter or style guide, run it before submitting.
+- Follow the project's [coding style guide](STYLE_GUIDE.md). Always run code formatter and linter before submitting code.
 - Add unit or integration tests for new features and bug fixes where applicable.
 - If the project uses a code formatter (black, clang-format, etc.), run it before committing.
 - Ensure all tests pass locally.
@@ -51,12 +51,16 @@ This document explains how to report issues, propose changes, and prepare contri
 
 ## Pull request checklist
 Before requesting review, ensure:
-- [ ] The PR targets the `main` branch.
-- [ ] Documentation (README, Doxygen comment blocks) is updated if relevant.
-- [ ] The code is formatted and linted.
-- [ ] Tests covering the change are added or updated.
+- [ ] I have read the [contributing guidelines](CONTRIBUTING.md)
+- [ ] The PR will merge a working branch (other than `main`) into the `main` branch.
+- [ ] I linked related issues and provided context in the PR description.
+- [ ] I have run the code formatter and linter (see [this section](STYLE_GUIDE.md#tooling) for instructions).
+- [ ] I cleared all compiler warnings, formatter warnings, and linter warnings.
+- [ ] My code follows the project's [coding style guide](STYLE_GUIDE.md).
+- [ ] I added/updated unit tests where applicable.
+- [ ] I updated relevant documentation (README, Doxygen, or design docs).
+- [ ] I ran the test-suite locally and all tests pass.
 - [ ] All CI checks pass.
-- [ ] Descriptive PR title and body, with linked issues if any.
 
 ## Reviewing and maintaining
 - Be responsive to review comments: update your branch, push changes, and add replies explaining choices.
@@ -71,6 +75,6 @@ Before requesting review, ensure:
 - If you need assistance getting started, open an issue prefixed with `Help:` and maintainers or developers will try to help.
 
 ## Maintainer
-@zhao-shihan
+[**@zhao-shihan**](https://github.com/zhao-shihan)
 
 Thank you for helping improve MACESW!

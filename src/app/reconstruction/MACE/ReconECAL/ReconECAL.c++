@@ -37,11 +37,11 @@ using namespace Mustard::LiteralUnit::Time;
 using namespace Mustard::MathConstant;
 using namespace Mustard::PhysicalConstant;
 
-auto smear(float e) -> float {
+auto Smear(float e) -> float {
     e *= 1000;
     constexpr auto a = -7.47073293;
     constexpr auto b = 2.76377561;
-    auto fwhm = a + b * sqrt(e);
+    auto fwhm = a + b * std::sqrt(e);
     auto smearedEnergy = gRandom->Gaus(e, fwhm / 2.35482);
     return smearedEnergy / 1000;
 }
@@ -58,12 +58,11 @@ auto ReconECAL::Main(int argc, char* argv[]) const -> int {
     }
 
     const auto& ecal{Detector::Description::ECAL::Instance()};
-    const auto& faceList{ecal.Mesh().fFaceList};
-    const auto& clusterMap{ecal.Mesh().fClusterMap};
+    const auto& faceList{ecal.Mesh().faceList};
 
     std::map<int, CLHEP::Hep3Vector> centroidMap;
 
-    for (int i{}; auto&& [centroid, _1, _2] : std::as_const(faceList)) {
+    for (int i{}; auto&& [centroid, _1, _2, _3, _4] : std::as_const(faceList)) {
         centroidMap[i] = centroid;
         i++;
     }
@@ -109,13 +108,13 @@ auto ReconECAL::Main(int argc, char* argv[]) const -> int {
             auto firstSeedModule = potentialSeedModule.begin();
             auto secondSeedModule = std::ranges::next(potentialSeedModule.begin());
 
-            const auto Clustering = [&](std::unordered_set<short>& set, std::vector<short>::iterator it) {
+            const auto clustering = [&](std::unordered_set<short>& set, std::vector<short>::iterator it) {
                 set.insert(*it); // add seed module
-                for (auto&& m : clusterMap.at(*it)) {
+                for (auto&& m : faceList[*it].neighborModuleID) {
                     set.insert(m); // add 1st layer
-                    for (auto&& n : clusterMap.at(m)) {
-                        set.insert(n);                                                // add 2nd layer
-                        set.insert(clusterMap.at(n).begin(), clusterMap.at(n).end()); // add 3rd layer
+                    for (auto&& n : faceList[m].neighborModuleID) {
+                        set.insert(n);                                                                        // add 2nd layer
+                        set.insert(faceList[n].neighborModuleID.begin(), faceList[n].neighborModuleID.end()); // add 3rd layer
                     }
                 }
 
@@ -124,13 +123,13 @@ auto ReconECAL::Main(int argc, char* argv[]) const -> int {
                     if (not hitDict.contains(m) or Get<"Edep">(*hitDict.at(m)) < 50_keV) {
                         continue;
                     }
-                    energy += smear(Get<"Edep">(*hitDict.at(m)));
+                    energy += Smear(Get<"Edep">(*hitDict.at(m)));
                 }
                 return energy;
             };
 
-            auto firstClusterEnergy = Clustering(firstCluster, firstSeedModule);
-            auto secondClusterEnergy = Clustering(secondCluster, secondSeedModule);
+            auto firstClusterEnergy = clustering(firstCluster, firstSeedModule);
+            auto secondClusterEnergy = clustering(secondCluster, secondSeedModule);
 
             if (firstClusterEnergy > 590_keV or secondClusterEnergy > 590_keV) {
                 return;

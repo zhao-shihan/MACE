@@ -12,10 +12,11 @@ Thank you for using MACE offline software — please fill out the template below
 A one-line summary of the problem or question.
 
 ### Environment
-- OS (name and version):
-- Compiler and version (e.g., g++ 11.3):
-- CMake version:
-- Branch / commit SHA:
+- OS & version: e.g. Debian 14
+- Compiler & version: e.g. GCC 17.2 / Clang 24
+- CMake version: e.g. 4.2
+- Tag / commit SHA:
+- Build type: Debug/Release
 - Any relevant hardware or special configuration:
 
 ### What I tried

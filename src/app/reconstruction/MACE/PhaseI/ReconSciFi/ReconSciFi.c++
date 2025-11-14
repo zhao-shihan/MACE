@@ -91,7 +91,7 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                 double initialTime = *Get<"t">(**siPMHitRange.begin());
                 double endTime = initialTime + sciFiTracker.ThresholdTime();
                 for (int j{}; j < std::ssize(siPMHitRange); ++j) {
-                    if (*Get<"t">(*siPMHitRange[j]) >= initialTime && *Get<"t">(*siPMHitRange[j]) < endTime) {
+                    if (*Get<"t">(*siPMHitRange[j]) >= initialTime and *Get<"t">(*siPMHitRange[j]) < endTime) {
                         initialTime = *Get<"t">(*siPMHitRange[j]);
                         count++;
                         if (count == sciFiTracker.SiPMOpticalPhotonCountThreshold()) {
@@ -104,9 +104,8 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                             while ([&] {
                                 if ((j) >= std::ssize(siPMHitRange)) {
                                     return false;
-                                } else {
-                                    return ((j) < std::ssize(siPMHitRange) && *Get<"t">(*siPMHitRange[j]) < endTime);
                                 }
+                                return ((j) < std::ssize(siPMHitRange) and *Get<"t">(*siPMHitRange[j]) < endTime);
                             }()) {
                                 count++;
                                 j++;
@@ -122,9 +121,8 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                         while ([&] {
                             if ((j) >= std::ssize(siPMHitRange)) {
                                 return false;
-                            } else {
-                                return ((j) < std::ssize(siPMHitRange) && *Get<"t">(*siPMHitRange[j]) < endTime);
                             }
+                            return ((j) < std::ssize(siPMHitRange) and *Get<"t">(*siPMHitRange[j]) < endTime);
                         }()) {
                             if (j < std::ssize(siPMHitRange)) {
                                 j++;
@@ -132,8 +130,9 @@ auto ReconSciFi::Main(int argc, char* argv[]) const -> int {
                         }
 
                         if (j < std::ssize(siPMHitRange)) {
-                            if (initialTime < *Get<"t">(*siPMHitRange[j]))
+                            if (initialTime < *Get<"t">(*siPMHitRange[j])) {
                                 initialTime = *Get<"t">(*siPMHitRange[j]);
+                            }
                         }
                         endTime = initialTime + sciFiTracker.ThresholdTime();
                         count = 0;

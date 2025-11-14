@@ -71,10 +71,10 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
     // Construct Material Optical Properties Tables
     //////////////////////////////////////////////////
 
-    constexpr auto fLambda_min = 200_nm;
-    constexpr auto fLambda_max = 700_nm;
-    std::vector<G4double> fEnergyPair{h_Planck * c_light / fLambda_max,
-                                      h_Planck * c_light / fLambda_min};
+    constexpr auto fLambdaMin = 200_nm;
+    constexpr auto fLambdaMax = 700_nm;
+    std::vector<G4double> fEnergyPair{h_Planck * c_light / fLambdaMax,
+                                      h_Planck * c_light / fLambdaMin};
 
     std::vector<G4double> scintillationEnergyBin(sciFiTracker.ScintillationWaveLengthBin().size());
     std::ranges::transform(sciFiTracker.ScintillationWaveLengthBin(),
