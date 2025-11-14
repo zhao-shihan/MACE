@@ -351,7 +351,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
     int sipmNumber{};
     const auto layerConfig{sciFiTracker.DetectorLayerConfiguration()};
     const auto fiberInformation{sciFiTracker.DetectorFiberInformation()};
-    auto HelicalPlacement{
+    auto helicalPlacement{
         [&](auto helicalRadius, auto logicalFiber, auto logicalLightGuide, auto nFiber, auto pitch) {
             for (int i{}; i < nFiber; i++) {
                 Make<G4PVPlacement>(
@@ -416,7 +416,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             }
         }};
 
-    auto TransversePlacement{
+    auto transversePlacement{
         [&](auto radius, auto logicalFiber, auto logicalLightGuide, auto nFiber) {
             for (int i{}; i < nFiber; i++) {
                 Make<G4PVPlacement>(
@@ -502,7 +502,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 sciFiTracker.FiberCoreWidth(),
                 layerConfig[i].fiber.pitch)};
 
-            HelicalPlacement(layerConfig[i].fiber.radius,
+            helicalPlacement(layerConfig[i].fiber.radius,
                              logicalLHelicalFiber,
                              logicalLHelicalLightGuide,
                              layerConfig[i].fiberNumber,
@@ -520,7 +520,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 sciFiTracker.FiberCoreWidth(),
                 layerConfig[i].fiber.pitch)};
 
-            HelicalPlacement(layerConfig[i].fiber.radius,
+            helicalPlacement(layerConfig[i].fiber.radius,
                              logicalRHelicalFiber,
                              logicalRHelicalLightGuide,
                              layerConfig[i].fiberNumber,
@@ -536,7 +536,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 sciFiTracker.FiberCoreWidth(),
                 sciFiTracker.TransverseLightGuideLength())};
 
-            TransversePlacement(layerConfig[i].fiber.radius,
+            transversePlacement(layerConfig[i].fiber.radius,
                                 logicalTFiber,
                                 logicalTLightGuide,
                                 layerConfig[i].fiberNumber);

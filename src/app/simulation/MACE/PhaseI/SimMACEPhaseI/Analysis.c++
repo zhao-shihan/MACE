@@ -33,7 +33,7 @@ Analysis::Analysis() :
     fMRPCSimHitOutput{},
     fECALSimHitOutput{},
     fECALPMHitOutput{},
-    fSciFiHitOutput{},
+    fSciFiSimHitOutput{},
     fSciFiSiPMHitOutput{},
     fTTCSimHitOutput{},
     fTTCSiPMHitOutput{},

@@ -97,11 +97,11 @@ SciFiTracker::SciFiTracker() : // clang-format off
 auto SciFiTracker::CalculateLayerPitch() const -> std::vector<double> {
     std::vector<double> pitch;
     for (int i{}; i < fNLayer; i++) {
-        if (fTypeOfLayer->at(i) == "LHelical") {
-            pitch.push_back(std::atan(fFiberLength / (2_pi * fRLayer->at(i))));
-        } else if (fTypeOfLayer->at(i) == "RHelical") {
-            pitch.push_back(-std::atan(fFiberLength / (2_pi * fRLayer->at(i))));
-        } else if (fTypeOfLayer->at(i) == "Transverse") {
+        if (fLayerType->at(i) == "LHelical") {
+            pitch.push_back(std::atan(fFiberLength / (2_pi * fLayerRadius->at(i))));
+        } else if (fLayerType->at(i) == "RHelical") {
+            pitch.push_back(-std::atan(fFiberLength / (2_pi * fLayerRadius->at(i))));
+        } else if (fLayerType->at(i) == "Transverse") {
             pitch.push_back(0);
         }
     }
