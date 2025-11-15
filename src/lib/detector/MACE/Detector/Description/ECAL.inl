@@ -17,7 +17,6 @@
 // You should have received a copy of the GNU General Public License along with
 // MACESW. If not, see <https://www.gnu.org/licenses/>.
 
-
 namespace MACE::Detector::Description {
 
 inline auto ECAL::MeshManager::Get(const ECAL* ecal) -> const MeshInformation& {
