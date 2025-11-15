@@ -17,7 +17,6 @@
 // You should have received a copy of the GNU General Public License along with
 // MACESW. If not, see <https://www.gnu.org/licenses/>.
 
-
 namespace MACE::inline Utility {
 
 template<int M, int N, typename A>
