@@ -30,7 +30,6 @@ const void Judge(double pValue) {
     }
 }
 
-// int main()
 auto TestTTCSimHit(std::string moduleName, std::string testFileName, std::string sampleFileName) {
     gROOT->SetBatch(kTRUE);
 
