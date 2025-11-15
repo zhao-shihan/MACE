@@ -214,13 +214,13 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
         checkOverlaps);
 
     auto logicalHelicalFiber{
-        [&](auto helicalRadius, auto fiberCladdingWidth, auto fiberCoreWidth, auto pitch) {
+        [&](auto helicalRadius, auto fiberCladdingWidth, auto fiberCoreWidth, auto pitch, auto id) {
             const auto solidHelicalFiberCladding{Make<Mustard::Geant4X::HelicalBox>(
-                scifiName + "HelicalFiber",
+                fmt::format("{}HelicalFiber_{}", scifiName, id),
                 helicalRadius,
                 fiberCladdingWidth,
                 pitch,
-                0,
+                id,
                 2_pi,
                 true,
                 true,
@@ -230,11 +230,11 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 pmma,
                 scifiName + "HelicalFiber")};
             const auto solidHelicalFiberCore{Make<Mustard::Geant4X::HelicalBox>(
-                scifiName + "HelicalFiberCore",
+                fmt::format("{}HelicalFiberCore_{}", scifiName, id),
                 helicalRadius,
                 fiberCoreWidth,
                 pitch,
-                0,
+                id,
                 2_pi,
                 true,
                 true,
@@ -255,9 +255,9 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
         }};
 
     auto logicalHelicalLightGuide{
-        [&](auto helicalRadius, auto fiberCladdingWidth, auto fiberCoreWidth, auto pitch) {
+        [&](auto helicalRadius, auto fiberCladdingWidth, auto fiberCoreWidth, auto pitch, auto id) {
             const auto solidHelicalLightGuideCladding{Make<Mustard::Geant4X::HelicalBox>(
-                scifiName + "HelicalLightGuide",
+                fmt::format("{}HelicalLightGuide_{}", scifiName, id),
                 helicalRadius,
                 fiberCladdingWidth,
                 pitch,
@@ -268,7 +268,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 0.001)};
 
             const auto solidHelicalLightGuideCore{Make<Mustard::Geant4X::HelicalBox>(
-                scifiName + "HelicalLightGuideCore",
+                fmt::format("{}HelicalLightGuideCore_{}", scifiName, id),
                 helicalRadius,
                 fiberCoreWidth,
                 pitch,
@@ -299,9 +299,9 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             return logicalHelicalLightGuideCladding;
         }};
 
-    auto logicalTransverseFiber{[&](auto transverseFiberCladdingWidth, auto transverseFiberCoreWidth, auto fiberLength) {
+    auto logicalTransverseFiber{[&](auto transverseFiberCladdingWidth, auto transverseFiberCoreWidth, auto fiberLength, auto id) {
         const auto solidTransverseFiber{Make<G4Box>(
-            scifiName + "TransverseFiber",
+            fmt::format("{}TransverseFiber_{}", scifiName, id),
             transverseFiberCladdingWidth / 2,
             transverseFiberCladdingWidth / 2,
             fiberLength / 2)};
@@ -311,7 +311,7 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             pmma,
             scifiName + "TransverseFiber")};
         const auto solidTransverseCore{Make<G4Box>(
-            scifiName + "TransverseFiberCore",
+            fmt::format("{}TransverseFiberCore_{}", scifiName, id),
             transverseFiberCoreWidth / 2,
             transverseFiberCoreWidth / 2,
             fiberLength / 2)};
@@ -331,15 +331,15 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
         return logicalTransverseFiber;
     }};
 
-    auto logicalTransverseLightGuide{[&](auto transverseLightGuideCladdingWidth, auto transverseLightGuideCoreWidth, auto lightGuideLength) {
+    auto logicalTransverseLightGuide{[&](auto transverseLightGuideCladdingWidth, auto transverseLightGuideCoreWidth, auto lightGuideLength, auto id) {
         const auto solidTransverseLightGuideCladding{Make<G4Box>(
-            scifiName + "TransverseLightGuide",
+            fmt::format("{}TransverseLightGuide_{}", scifiName, id),
             transverseLightGuideCladdingWidth / 2,
             transverseLightGuideCladdingWidth / 2,
             lightGuideLength / 2)};
 
         const auto solidTransverseLightGuideCore{Make<G4Box>(
-            scifiName + "TransverseLightGuide",
+            fmt::format("{}TransverseLightGuideCore_{}", scifiName, id),
             transverseLightGuideCoreWidth / 2,
             transverseLightGuideCoreWidth / 2,
             lightGuideLength / 2)};
@@ -513,13 +513,13 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 layerConfig[i].fiber.radius,
                 sciFiTracker.FiberCladdingWidth(),
                 sciFiTracker.FiberCoreWidth(),
-                layerConfig[i].fiber.pitch)};
+                layerConfig[i].fiber.pitch, fiberNumber)};
 
             auto logicalLHelicalLightGuide{logicalHelicalLightGuide(
                 layerConfig[i].fiber.radius,
                 sciFiTracker.FiberCladdingWidth(),
                 sciFiTracker.FiberCoreWidth(),
-                layerConfig[i].fiber.pitch)};
+                layerConfig[i].fiber.pitch, fiberNumber)};
 
             helicalPlacement(layerConfig[i].fiber.radius,
                              logicalLHelicalFiber,
@@ -531,13 +531,13 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
                 layerConfig[i].fiber.radius,
                 sciFiTracker.FiberCladdingWidth(),
                 sciFiTracker.FiberCoreWidth(),
-                layerConfig[i].fiber.pitch)};
+                layerConfig[i].fiber.pitch, fiberNumber)};
 
             auto logicalRHelicalLightGuide{logicalHelicalLightGuide(
                 layerConfig[i].fiber.radius,
                 sciFiTracker.FiberCladdingWidth(),
                 sciFiTracker.FiberCoreWidth(),
-                layerConfig[i].fiber.pitch)};
+                layerConfig[i].fiber.pitch, fiberNumber)};
 
             helicalPlacement(layerConfig[i].fiber.radius,
                              logicalRHelicalFiber,
@@ -548,12 +548,12 @@ auto SciFiTracker::Construct(G4bool checkOverlaps) -> void {
             auto logicalTFiber{logicalTransverseFiber(
                 sciFiTracker.FiberCladdingWidth(),
                 sciFiTracker.FiberCoreWidth(),
-                sciFiTracker.FiberLength())};
+                sciFiTracker.FiberLength(), fiberNumber)};
 
             auto logicalTLightGuide{logicalTransverseLightGuide(
                 sciFiTracker.FiberCladdingWidth(),
                 sciFiTracker.FiberCoreWidth(),
-                sciFiTracker.TransverseLightGuideLength())};
+                sciFiTracker.TransverseLightGuideLength(), fiberNumber)};
 
             transversePlacement(layerConfig[i].fiber.radius,
                                 logicalTFiber,
