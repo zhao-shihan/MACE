@@ -2,7 +2,9 @@ name: Regression test (AMD64 GNU/Linux GCC)
 
 on:
   pull_request:
-    branches: ["main", "rc"]
+    branches:
+      - main
+      - rc
     paths:
       - ".github/workflows/regression-test-with-gcc.yml"
       - "src/**"
@@ -15,8 +17,8 @@ permissions:
   contents: read
 
 jobs:
-  test-with-gcc:
-    name: Test with GCC
+  regression-test-with-gcc:
+    name: Regression test (GCC)
     timeout-minutes: 180
     runs-on: ubuntu-latest
     strategy:
@@ -50,7 +52,7 @@ jobs:
       - name: Run regression test
         run: |
           . /environment
-          bash build/test/regression_test.bash
+          bash build/test/regression_test.bash --use-hwthreads
 
       - name: Restore regression report
         uses: actions/upload-artifact@v4
