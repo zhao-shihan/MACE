@@ -40,8 +40,7 @@ If you need to test a new datatuple or a new model, refer to the section [Add Re
     - $[min(x), max(x)]$ if the distribution is a broad spectrum.
     - $[\bar{x}-a\sigma_x, \bar{x}+a\sigma_x]$ if the distribution is a characteristic peak.
     - A fixed interger set if the data is limited interger.(e.g. unitID)
-- Write a `Read<datatuple_name>.cxx` macro file for generating golden data and a `Test<datatuple_name>.cxx` macro file for testing in directory `src/test/scripts/`, based on the provided template file `ReadSomeDataTuple.cxx` and `TestSomeDataTuple.cxx`.
-
+- Write a `Read<datatuple_name>.cxx` macro file for generating golden data and a `Test<datatuple_name>.cxx` macro file for testing in directory `src/test/scripts/`, based on the provided template file `ReadSomeDataTuple.cxx.template` and `TestSomeDataTuple.cxx.template` (*copy the template file and modify according to the guide text in it*).
 
 ### Test a new model
 - If the datatuples you want to test in this new model are already provided, just add extra `Read*.cxx(...)` lines in file `src/test/scripts/generate_regression_data.bash` and `Test*.cxx(...)` lines in file `src/test/scripts/regression_test.bash`.
