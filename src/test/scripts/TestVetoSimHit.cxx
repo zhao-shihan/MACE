@@ -30,7 +30,6 @@ const void Judge(double pValue) {
     }
 }
 
-// int main()
 auto TestVetoSimHit(std::string moduleName, std::string testFileName, std::string sampleFileName) {
     gROOT->SetBatch(kTRUE);
 
